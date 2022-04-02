@@ -1,0 +1,20 @@
+.container {
+    background-color: white;
+    min-height: 90vh;
+    max-width: 857px;
+}
+
+.error {
+    background-color: #b91f1f;
+    color: white;
+}
+
+.policyDOB {
+    width: 310%;
+}
+
+.btn-primary-update {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
