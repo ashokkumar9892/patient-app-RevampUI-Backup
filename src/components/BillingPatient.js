@@ -60,6 +60,20 @@ const BillingPatient = (props) => {
       editable: false,
       width: 250,
     },
+    {
+      field: "RPM Mins",
+      headerName: "RPM Mins",
+      type: "number",
+      editable: false,
+      width: 150,
+    },
+    {
+      field: "CCM Mins",
+      headerName: "CCM Mins",
+      type: "number",
+      editable: false,
+      width: 150,
+    },
     
 
   ];

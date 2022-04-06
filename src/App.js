@@ -370,7 +370,7 @@ function App() {
                   <Route
                     exact
                     path="/device-info"
-                    component={Pages.Deviceinfo}
+                    component={Testing}
                   />{" "}
                   <Route exact path="/covid">
                     <Covidform />

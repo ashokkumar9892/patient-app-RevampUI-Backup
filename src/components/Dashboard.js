@@ -38,6 +38,11 @@ const Dashboard = (props) => {
   const Billing=[];
   const ccm=[];
   const rpm=[];
+  const RPM16=[];
+  const RPM11=[];
+  const RPM6=[];
+  const RPM1=[];
+  const RPM0=[];
   
   const months = [ "January", "February", "March", "April", "May", "June",
 "July", "August", "September", "October", "November", "December" ];
@@ -136,6 +141,8 @@ const Dashboard = (props) => {
     localStorage.setItem("B_patient", JSON.stringify(p));
   };
 
+
+
   const renderTimeLogs = () => {
     if (coreContext.patients.length == 0) {
       return (
@@ -156,12 +163,61 @@ const Dashboard = (props) => {
       localStorage.setItem("patient_list",JSON.stringify(coreContext.patients))
       
       coreContext.patients.map((curr) => {
+        
         let patientTimelog = coreContext.AlltimeLogData.filter(
-          (app) => app.UserId == curr.userId && Number(app.performedOn.substring(5,7))==Number(month)+1
+          (app) => app.UserId == curr.userId && Number(app.performedOn.substring(5,7))==Number(month)+1 && Number(app.performedOn.substring(0,4))==2022
+        );
+        let BP = coreContext.bloodpressureData.filter(
+          (app) => app.UserId == curr.userId && Number(app.sortDateColumn.substring(5,7))==Number(month)+1 && Number(app.sortDateColumn.substring(0,4))==2022
+        );
+        let BG = coreContext.bloodglucoseData.filter(
+          (app) => app.userId == curr.userId && Number(app.sortDateColumn.substring(5,7))==Number(month)+1 && Number(app.sortDateColumn.substring(0,4))==2022
+        );
+        let WS = coreContext.weightData.filter(
+          (app) => app.userId == curr.userId && Number(app.sortDateColumn.substring(5,7))==Number(month)+1 && Number(app.sortDateColumn.substring(0,4))==2022
         );
         // let patientTimelog = patientTimelogAll.filter(
         //   (app) => Number(app.performedOn.substring(5,7))==Number(month)+1       );
-        console.log(patientTimelog,"patienttimelog")
+        console.log(patientTimelog,BP,BG,WS,"patienttimelog")
+        let bpdates=[];
+
+        BP.map((bpcurr)=>{
+          if(!bpdates.includes(Moment(bpcurr.CreatedDate).format("YYYY-MM-DD"))){
+            bpdates.push(Moment(bpcurr.CreatedDate).format("YYYY-MM-DD"))
+          }
+
+
+        })
+        BG.map((bgcurr)=>{
+          if(!bpdates.includes(Moment(bgcurr.CreatedDate).format("YYYY-MM-DD"))){
+            bpdates.push(Moment(bgcurr.CreatedDate).format("YYYY-MM-DD"))
+          }
+
+
+        })
+        WS.map((wscurr)=>{
+          if(!bpdates.includes(Moment(wscurr.CreatedDate).format("YYYY-MM-DD"))){
+            bpdates.push(Moment(wscurr.CreatedDate).format("YYYY-MM-DD"))
+          }
+
+
+        })
+        console.log("check days",bpdates)
+        if(bpdates.length>=16){
+          RPM16.push(curr.userId)
+        }
+        if(bpdates.length>=11 && bpdates.length<=15){
+          RPM11.push(curr.userId)
+        }
+        if(bpdates.length>=6 && bpdates.length<=10){
+          RPM6.push(curr.userId)
+        }
+        if(bpdates.length>=1 && bpdates.length<=5){
+          RPM1.push(curr.userId)
+        }
+        if(bpdates.length<1){
+          RPM0.push(curr.userId)
+        }
         
         if (patientTimelog.length > 0) {
           let totalTimeLog = 0;
@@ -175,7 +231,7 @@ const Dashboard = (props) => {
             totalTimeLogForDataReview = Number(timelog.timeAmount) + totalTimeLogForDataReview;
           });
          
-          console.log("checking timelog", totalTimeLogForDataReview,curr);
+          console.log("checking timelog", totalTimeLogForDataReview,curr,totalTimeLog);
           if (totalTimeLog >= 0 && totalTimeLog <= 60) {
             zero.push(curr.userId);
           } else if (totalTimeLog > 60 && totalTimeLog <= 600) {
@@ -213,7 +269,7 @@ const Dashboard = (props) => {
             // setOnetonine(onetonine+1)
             thirtynine1.push(curr.userId);
             if(Billing.length<1){
-              Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20})
+              Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60})
             }
             else{
               let count=0
@@ -224,7 +280,7 @@ const Dashboard = (props) => {
                 }
               })
               if (count===0){
-                Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20})
+                Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60})
                 
               }
             }
@@ -232,7 +288,7 @@ const Dashboard = (props) => {
             // setOnetonine(onetonine+1)
             fiftynine1.push(curr.userId);
             if(Billing.length<1){
-              Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20})
+              Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60})
             }
             else{
               let count=0
@@ -243,7 +299,7 @@ const Dashboard = (props) => {
                 }
               })
               if (count===0){
-                Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20})
+                Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60})
                 
               }
             }
@@ -255,7 +311,8 @@ const Dashboard = (props) => {
             console.log("sixty1",curr)
             sixty1.push(curr.userId);
             if(Billing.length<1){
-              Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20})
+              Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60})
+            console.log("ridlley 5764",Math.floor(totalTimeLogForDataReview/60)%20,Math.floor(totalTimeLogForDataReview/60),totalTimeLogForDataReview,totalTimeLogForDataReview/60)
             }
             else{
               let count=0
@@ -266,8 +323,8 @@ const Dashboard = (props) => {
                 }
               })
               if (count===0){
-                Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20})
-                
+                Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60})
+                console.log("ridlley 5764",Math.floor(totalTimeLogForDataReview/60)%20,Math.floor(totalTimeLogForDataReview/60),totalTimeLogForDataReview,totalTimeLogForDataReview/60)
               }
             }
             //Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20})
@@ -277,6 +334,11 @@ const Dashboard = (props) => {
           inactive.push(curr.userId);
         }
         
+      
+      
+      
+      
+        console.log(Billing,"billing")
       });
     }
   };
@@ -521,10 +583,10 @@ const Dashboard = (props) => {
 <th width="20%">Patients with Devices	</th>
 <th width="20%">Patients taking Readings</th>
 <th width="20%">Qualified Supplied Device</th>
-<th width="8%">40+ Mins</th>
-<th  width="8%">20-39 Mins</th>
-<th width="8%">1-19 Mins</th>
-<th  width="8%">0 Mins</th>
+<th width="8%">16+ Days</th>
+<th  width="8%">11-15 Days</th>
+<th width="8%">6-10 Days</th>
+<th  width="8%">1-5 Days</th>
 <th width="8%">Inactive
 </th>
 </tr>
@@ -540,11 +602,11 @@ const Dashboard = (props) => {
 <td><a href="/verifieddevices">
                  {v_devices !== undefined ? v_devices.length : 0}
                </a></td>
-<td> <a href="/Patients">2</a></td>
-<td> <a href="/Patients">2</a></td>
-<td> <a href="/Patients">2</a></td>
-<td> <a href="/Patients">2</a></td>
-<td> <a href="/Patients">2</a></td>
+<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM16)],"hello")}>{[...new Set(RPM16)].length}</a></td>
+<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM11)],"hello")}>{[...new Set(RPM11)].length}</a></td>
+<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM6)],"hello")}>{[...new Set(RPM6)].length}</a></td>
+<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM1)],"hello")}>{[...new Set(RPM1)].length}</a></td>
+<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM0)],"hello")}>{[...new Set(RPM0)].length}</a></td>
 </tr>
 
 </tbody>

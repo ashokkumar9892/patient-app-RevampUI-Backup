@@ -144,7 +144,7 @@ date.setHours(0,0,0,0)
         //     sortModel={[{ field: "deviceID", sort: "asc" }]}
         //   />
         // </div>
-        <DataGridComponent rows={rows} columns={columns} sortModal={[{ field: "deviceID", sort: "asc" }]}/>
+        <DataGridComponent rows={rows} columns={columns} sortModal={[{ field: "status", sort: "asc" }]}/>
       );
     } else {
       return (

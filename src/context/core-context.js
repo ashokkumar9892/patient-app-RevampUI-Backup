@@ -73,7 +73,7 @@ export const CoreContextProvider = (props) => {
   const [result, setResult] = useState([]);
 
   const [apiUrl, setApiUrl] = useState(
-    "http://54.183.129.168/api"
+    "https://appapi.apatternplus.com/api"
   );
   const [userTable, setuserTable] = useState("UserDetailsDemo");
 
@@ -2700,10 +2700,12 @@ export const CoreContextProvider = (props) => {
             bgdata.sortDateColumn = bg.MeasurementDateTime.s;
             //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
           }
+          
           if (bg.CreatedDate !== undefined) {
             bgdata.CreatedDate = bg.CreatedDate.s;
             bgdata.CreatedDate = new Date(bgdata.CreatedDate);
-            // bgdata.CreatedDate =Moment(bgdata.CreatedDate).format('MMM-DD-YYYY hh:mm A');
+            bgdata.sortDateColumn = Moment(bg.CreatedDate.s).format('YYYY-MM-DD hh:mm');
+            // bgdata.CreatedDate =Moment(bgdata.CreatedDate);
           }
 
           if (bg.SK !== undefined) {
