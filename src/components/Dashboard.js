@@ -602,11 +602,11 @@ const Dashboard = (props) => {
 <td><a href="/verifieddevices">
                  {v_devices !== undefined ? v_devices.length : 0}
                </a></td>
-<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM16)],"hello")}>{[...new Set(RPM16)].length}</a></td>
-<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM11)],"hello")}>{[...new Set(RPM11)].length}</a></td>
-<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM6)],"hello")}>{[...new Set(RPM6)].length}</a></td>
-<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM1)],"hello")}>{[...new Set(RPM1)].length}</a></td>
-<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM0)],"hello")}>{[...new Set(RPM0)].length}</a></td>
+<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM16)],"Patient's Information")}>{[...new Set(RPM16)].length}</a></td>
+<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM11)],"Patient's Information")}>{[...new Set(RPM11)].length}</a></td>
+<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM6)],"Patient's Information")}>{[...new Set(RPM6)].length}</a></td>
+<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM1)],"Patient's Information")}>{[...new Set(RPM1)].length}</a></td>
+<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM0)],"Patient's Information")}>{[...new Set(RPM0)].length}</a></td>
 </tr>
 
 </tbody>
