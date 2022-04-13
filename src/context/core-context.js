@@ -54,6 +54,10 @@ export const CoreContextProvider = (props) => {
 
   const handleProviderModalClose = () => setShowProviderModal(false);
   const handleProviderModalShow = () => setShowProviderModal(true);
+  const [showForgotModal, setShowForgotModal] = useState(false);
+
+  const handleForgotModalClose = () => setShowForgotModal(false);
+  const handleForgotModalShow = () => setShowForgotModal(true);
 
   const [showPatientConfirmationModal, setShowPatientConfirmationModal] =
     useState(false);
@@ -165,6 +169,44 @@ export const CoreContextProvider = (props) => {
           //  window.location.assign();
 
           userDetails(email, url);
+        }
+      });
+  };
+  const ForgotPassword = (email) => {
+    setShowLoader(true);
+    axios
+      .post(apiUrl + "/forgotpassword", { Username: email})
+      .then((response) => {
+        if (response.data.includes("Password reset code sent to")) {
+          handleForgotModalShow();
+          setShowLoader(false)
+        } else {
+          alert("some error")
+          setShowLoader(false);
+          // localStorage.setItem("userType", response[0].UserType.s);
+
+          //  window.location.assign();
+
+          
+        }
+      });
+  };
+  const verifyForgotPassword = (email,code,newpassword) => {
+    setShowLoader(true);
+    axios
+      .post(apiUrl + "/confirmforgotpassword", { Username: email,newpassword:newpassword,ConfirmationCode:code})
+      .then((response) => {
+        if (response.data.includes("successfully")) {
+          handleForgotModalClose();
+          swal("success","password changes successfully");
+          relogin();
+        } else {
+          alert("there is some error")
+          // localStorage.setItem("userType", response[0].UserType.s);
+
+          //  window.location.assign();
+
+          
         }
       });
   };
@@ -3410,6 +3452,9 @@ export const CoreContextProvider = (props) => {
         SubmitIntakeRequest,
         getTab1data,
         result,
+        showForgotModal,
+        handleForgotModalClose,
+        handleForgotModalShow,
         genderOptions,
         languageOptions,
         adminthresold,
@@ -3417,6 +3462,8 @@ export const CoreContextProvider = (props) => {
         userinfo,
         AddNotification,
         FetchNotification,
+        ForgotPassword,
+        verifyForgotPassword,
         notifications,
         cleanup,setdefault
       }}>

@@ -3,14 +3,25 @@ import { useForm } from "react-hook-form";
 import { Form, Badge } from "react-bootstrap";
 import { CoreContext } from "../context/core-context";
 import Input from "./common/Input";
+import {
+  Navbar,
+  Nav,
+  NavDropdown,
+  Button,
+  Modal,
+  Col,
+  FormControl,
+} from "react-bootstrap";
 
 const ResetPassword = (props) => {
   const coreContext = useContext(CoreContext);
   const login = () => {
-    coreContext.resetPassword(email, "/dashboard");
+    coreContext.ForgotPassword(email);
   };
 
   const [email, setEmail] = useState("");
+  const [newpassword, setnewpassword] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
 
   const onEmailChangedHandler = (e) => {
     setEmail(e.target.value);
@@ -95,7 +106,51 @@ const ResetPassword = (props) => {
           </div>
         </div>
       </div>
+      <Modal
+          show={coreContext.showForgotModal}
+          onHide={coreContext.handleForgotModalClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Set New Password</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Confirmation Code</p>
+            <input
+              type="text"
+              className="form-control"
+              value={verificationCode}
+              label="code"
+              onChange={(e) => setVerificationCode(e.target.value)}
+            />
+            <p>New Password</p>
+            <input
+              type="password"
+              className="form-control"
+              value={newpassword}
+              label="code"
+              onChange={(e) => setnewpassword(e.target.value)}
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="primary"
+              onClick={() =>
+                coreContext.verifyForgotPassword(
+                  email,
+                  verificationCode,
+                  newpassword
+                )
+              }>
+              Submit
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={coreContext.handleForgotModalClose}>
+              Cancel
+            </Button>
+          </Modal.Footer>
+        </Modal>
     </div>
+
   );
 };
 

@@ -17,7 +17,10 @@ const Menu = ({getenduser}) => {
     const coreContext = useContext(CoreContext);
     
     useEffect(() => {
-      coreContext.fetchPatientListfromApi("doctor",localStorage.getItem("userId"))
+        if(localStorage.getItem("userType")==="doctor"){
+            coreContext.fetchPatientListfromApi("doctor",localStorage.getItem("userId"))
+        }
+      
     }, []);
     const renderpatient=()=>{
       if (coreContext.patients.length === 0) {
