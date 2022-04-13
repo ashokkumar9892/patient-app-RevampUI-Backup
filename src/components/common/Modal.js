@@ -47,8 +47,8 @@ const Modal2 = ({getenduser}) => {
   }
     
     return (
-        <div>
-            <div style={{textAlign:"right"}}>
+      <>
+            <div className="col-md-1"style={{textAlign:"right"}}>
             <Button color="secondary" variant="contained" onClick={handleOpen}>Chat</Button>
             </div>
             <Modal
@@ -82,7 +82,7 @@ const Modal2 = ({getenduser}) => {
       </Modal>
      
             
-        </div>
+        </>
     )
 }
 

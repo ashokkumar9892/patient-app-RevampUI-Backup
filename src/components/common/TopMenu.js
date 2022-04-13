@@ -763,7 +763,7 @@ const handlechangeprovider=(p)=>{
 <div className="nav-content d-flex">
 <div class="logo position-relative">
 <a href="/dashboard">
-<div class="img">A Pattern Plus</div>
+<div><img src="https://www.linkpicture.com/q/WhatsApp_Image_2022-04-12_at_10.41.03_AM-removebg-preview.png" style={{width:"70px"}}/></div>
 </a>
 </div>
 

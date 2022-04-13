@@ -130,8 +130,22 @@ const Dashboard = (props) => {
   // useEffect(fetchdpatient, []);
   const setPatient = (p,description) => {
     console.log("sahil", p);
+    
+    let k=[];
+    p.map((curr)=>{
+      if(curr.includes(",")){
+        k.push(curr.substring(0,curr.indexOf(",")))
+      }
+      else{
+        k.push(curr)
+      }
+
+    })
+
+
     //   coreContext.setPatient(p);
-    localStorage.setItem("d_patient", JSON.stringify(p));
+    localStorage.setItem("d_patient", JSON.stringify(k));
+    localStorage.setItem("d_days", JSON.stringify(p));
     localStorage.setItem("month", month);
     localStorage.setItem("DInformaion", description);
   };
@@ -204,19 +218,19 @@ const Dashboard = (props) => {
         })
         console.log("check days",bpdates)
         if(bpdates.length>=16){
-          RPM16.push(curr.userId)
+          RPM16.push(curr.userId+","+bpdates.length)
         }
         if(bpdates.length>=11 && bpdates.length<=15){
-          RPM11.push(curr.userId)
+          RPM11.push(curr.userId+","+bpdates.length)
         }
         if(bpdates.length>=6 && bpdates.length<=10){
-          RPM6.push(curr.userId)
+          RPM6.push(curr.userId+","+bpdates.length)
         }
         if(bpdates.length>=1 && bpdates.length<=5){
-          RPM1.push(curr.userId)
+          RPM1.push(curr.userId+","+bpdates.length)
         }
         if(bpdates.length<1){
-          RPM0.push(curr.userId)
+          RPM0.push(curr.userId+","+bpdates.length)
         }
         
         if (patientTimelog.length > 0) {
@@ -269,7 +283,7 @@ const Dashboard = (props) => {
             // setOnetonine(onetonine+1)
             thirtynine1.push(curr.userId);
             if(Billing.length<1){
-              Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60})
+              Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length})
             }
             else{
               let count=0
@@ -280,7 +294,7 @@ const Dashboard = (props) => {
                 }
               })
               if (count===0){
-                Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60})
+                Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length})
                 
               }
             }
@@ -288,7 +302,7 @@ const Dashboard = (props) => {
             // setOnetonine(onetonine+1)
             fiftynine1.push(curr.userId);
             if(Billing.length<1){
-              Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60})
+              Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length})
             }
             else{
               let count=0
@@ -299,7 +313,7 @@ const Dashboard = (props) => {
                 }
               })
               if (count===0){
-                Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60})
+                Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length})
                 
               }
             }
@@ -311,7 +325,7 @@ const Dashboard = (props) => {
             console.log("sixty1",curr)
             sixty1.push(curr.userId);
             if(Billing.length<1){
-              Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60})
+              Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length})
             console.log("ridlley 5764",Math.floor(totalTimeLogForDataReview/60)%20,Math.floor(totalTimeLogForDataReview/60),totalTimeLogForDataReview,totalTimeLogForDataReview/60)
             }
             else{
@@ -323,7 +337,7 @@ const Dashboard = (props) => {
                 }
               })
               if (count===0){
-                Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60})
+                Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length})
                 console.log("ridlley 5764",Math.floor(totalTimeLogForDataReview/60)%20,Math.floor(totalTimeLogForDataReview/60),totalTimeLogForDataReview,totalTimeLogForDataReview/60)
               }
             }

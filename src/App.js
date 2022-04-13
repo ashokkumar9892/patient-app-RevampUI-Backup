@@ -57,8 +57,8 @@ const socket = io("https://demoapi.apatternplus.com/", {
 function App() {
   const { register, errors } = useForm();
   const [enduser, setenduser] = useState();
-  // const [open, setOpen] = React.useState(false);
-  // const handleOpen = () => {setOpen(true);coreContext.fetchPatientListfromApi("doctor",localStorage.getItem("userId"))}
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => {setOpen(true);coreContext.fetchPatientListfromApi("doctor",localStorage.getItem("userId"))}
   // const handleClose = () => setOpen(false);
   const isAuth = localStorage.getItem("app_isAuth");
   const [sidebar, setSidebar] = useState(true);
@@ -304,11 +304,11 @@ function App() {
           <React.Fragment>
             
               {" "}
-              {sidebar === true ? <Menu /> : <Menu2 />}{" "}
+              {sidebar === true ?<> <Menu getenduser={getenduser} />  </>: <Menu2 />}{" "}
               
            
            
-            {/* {(localStorage.getItem("userType")==="doctor")?<Modal getenduser={getenduser}/>:""} */}
+           
             
               <Router>
                 <Switch>

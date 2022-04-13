@@ -141,6 +141,7 @@ const DPatients = (props) => {
        
       ),
     },
+    
     {
       field: "RPM",
       headerName: "RPM Mins",
@@ -151,6 +152,17 @@ const DPatients = (props) => {
 
        
       ),
+    },
+    {
+      field: "Days Reading",
+      headerName: "Days Reading",
+      editable: false,
+      width: 150,
+      // renderCell: (params) => (
+      //   <div>          {String(Math.floor(params.value/60))+":"+('0' + String(params.value%60)).slice(-2)}</div>
+
+       
+      // ),
     },
    
   
@@ -223,8 +235,11 @@ const DPatients = (props) => {
   // const classes = useStyles();
   const checktimelog=()=>{
     const d_pat = [... new Set(JSON.parse(localStorage.getItem("d_patient")))]
+    const d_days = [... new Set(JSON.parse(localStorage.getItem("d_days")))]
     const patients = [... new Set(JSON.parse(localStorage.getItem("patient_list")))]
     const month = localStorage.getItem("month");
+    console.log(d_days,"d+daus")
+    
     const dashboardPatient=[];
     d_pat.map((curr,index)=>{
       let patientTimelog = coreContext.AlltimeLogData.filter(
@@ -232,6 +247,14 @@ const DPatients = (props) => {
       );
       var totalTimeLog = 0;
       var totalTimeLogForDataReview = 0;
+      var days;
+      d_days.map((k)=>{
+        if(k.includes(curr)){
+          days=k.substring(k.indexOf(",")+1,k.length)
+          
+        }
+      })
+      
       if (patientTimelog.length > 0) {
     
   
@@ -244,7 +267,7 @@ const DPatients = (props) => {
         });
       }
       const p=patients.filter((app)=>app.userId===curr)
-      dashboardPatient.push({"id":index,"name":p[0].name,"providerName":p[0].ProviderName,"diagnosisId":p[0].diagnosisId,"userId":curr,"CCM":totalTimeLog,"RPM":totalTimeLogForDataReview})
+      dashboardPatient.push({"id":index,"name":p[0].name,"providerName":p[0].ProviderName,"diagnosisId":p[0].diagnosisId,"userId":curr,"CCM":totalTimeLog,"RPM":totalTimeLogForDataReview,"Days Reading":days})
     })
     setRows(dashboardPatient)
     console.log(dashboardPatient,"dashba")
