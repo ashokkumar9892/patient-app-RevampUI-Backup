@@ -27,12 +27,11 @@ const renderChat=()=>{
     const userType = localStorage.getItem("userType");
     if(userType==="doctor"){
         return(
-        <li className="border-bottom">
-<a href="#" onClick={handleOpen}>
-<i className="icon bi-heart-half"></i>
-<span className="label"> Chat</span>
-</a>
-</li>)
+     
+<a className="btn btn-primary d-block rounded-0 text-start mt-1"  onClick={handleOpen} href="#">
+<i className="icon bi-bag-fill"></i>
+<span className="label">  Chat</span>
+</a>)
 
 
     }
@@ -190,6 +189,7 @@ const renderChat=()=>{
 <i className="icon bi-bag-fill"></i>
 <span className="label">  Orders</span>
 </a>:""}
+{renderChat()}
 	</div>
 {/* 
 <li className="border-bottom">
@@ -210,7 +210,7 @@ const renderChat=()=>{
 <span className="label"> Weight</span>
 </a>
 </li> */}
-{renderChat()}
+
 
          {/* {(localStorage.getItem("userType")==="admin")?<>
          		<li className="border-bottom">

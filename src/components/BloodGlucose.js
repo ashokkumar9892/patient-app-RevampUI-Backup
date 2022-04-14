@@ -232,7 +232,9 @@ const BloodGlucose = (props) => {
       coreContext.bloodglucoseData.length > 0 &&
       coreContext.bloodglucoseData[0].UserName !== undefined
     ) {
-      //coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
+      const id=coreContext.patients.map((curr)=>curr.userId)
+      const rows=coreContext.bloodglucoseData.filter((curr)=>id.includes(curr.userId))
+      console.log(rows,"bith data")
       return (
         // <div style={{ height: 680, width: "100%" }}>
         //   {/* {coreContext.bloodglucoseData} */}
@@ -245,7 +247,7 @@ const BloodGlucose = (props) => {
         //     sortModel={[{ field: "MeasurementDateTime", sort: "desc" }]}
         //   />
         // </div>
-        <DataGridComponent rows={coreContext.bloodglucoseData} columns={dgcolumns} sortModal={[{ field: "MeasurementDateTime", sort: "desc" }]}/>
+        <DataGridComponent rows={rows} columns={dgcolumns} sortModal={[{ field: "MeasurementDateTime", sort: "desc" }]}/>
       );
     } else {
       return (

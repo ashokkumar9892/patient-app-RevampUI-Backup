@@ -198,6 +198,9 @@ const Weight = (props) => {
       }
       
         if (coreContext.weightData.length > 0 &&coreContext.weightData[0].UserName!==undefined){
+          const id=coreContext.patients.map((curr)=>curr.userId)
+      const rows=coreContext.weightData.filter((curr)=>id.includes(curr.userId))
+      console.log(rows,"bith data")
         //  coreContext.weightData  = coreContext.weightData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
         return (
             // <div style={{ height: 680, width: '100%' }}>
@@ -209,7 +212,7 @@ const Weight = (props) => {
             //     sortModel={[{ field: 'MeasurementDateTime', sort: 'desc' }]}
             //   />
             // </div>
-            <DataGridComponent rows={coreContext.weightData} columns={dgcolumns} sortModal={[{ field: "MeasurementDateTime", sort: "desc" }]}/>
+            <DataGridComponent rows={rows} columns={dgcolumns} sortModal={[{ field: "MeasurementDateTime", sort: "desc" }]}/>
           );
         }
         else{

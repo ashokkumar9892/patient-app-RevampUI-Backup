@@ -338,7 +338,9 @@ const BloodPressure = (props) => {
       coreContext.bloodpressureData[0].UserName !== undefined
     ) {
       //coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
-      console.log("coreContext.bloodpressureData",coreContext.bloodpressureData)
+      const id=coreContext.patients.map((curr)=>curr.userId)
+      const rows1=coreContext.bloodpressureData.filter((curr)=>id.includes(curr.UserId))
+      console.log(rows,"bith data")
       return (
         // <div style={{ height: 680, width: "100%" }}>
         //   <DataGrid
@@ -357,7 +359,7 @@ const BloodPressure = (props) => {
         //     }}
         //   />
         // </div>
-        <DataGridComponent rows={rows} columns={dgcolumns} sortModal={[{ field: "MeasurementDateTime", sort: "desc" }]}/>
+        <DataGridComponent rows={rows1} columns={dgcolumns} sortModal={[{ field: "MeasurementDateTime", sort: "desc" }]}/>
       );
     } else {
       return (

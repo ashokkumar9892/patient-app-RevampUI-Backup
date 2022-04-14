@@ -5,6 +5,7 @@ import { PencilSquare, Trash } from "react-bootstrap-icons";
 import { useForm } from "react-hook-form";
 import Input from "./common/Input";
 import swal from "sweetalert";
+import Loader from "react-loader-spinner";
 import DataGridComponent from "./common/DataGridComponent";
 
 import {
@@ -124,6 +125,22 @@ const Coach = (props) => {
   };
 
   const renderCoach = () => {
+    if (coreContext.coachData.length == 0) {
+      return (
+        <div
+          style={{
+            height: 680,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px",
+            alignItems: "center",
+          }}
+        >
+          <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+        </div>
+      );
+    }
     if (coreContext.coachData.length > 0) {
       return (
         // <div style={{ height: 680, width: "100%" }}>
@@ -140,87 +157,7 @@ const Coach = (props) => {
   };
 
   return (
-    <div className="col">
-    <div className="page-title-container mb-3">
-    <div className="row">
-    <div className="col mb-2">
-    <h1 className="mb-2 pb-0 display-4" id="title">Coach Information
-    </h1>
-    </div>
-    </div>
-    </div>
-    
-    <div className="row">
-    <div className="col-xl-12">
-   
-    <div className="card mb-3">	
-    
-    <div className="card-body">
-    <div className="row">
-    <div className="col-xl-12">
-    <div className="table-responsive-sm mb-0">
-    <form class="form-inline">
-          <input
-            type="text"
-            className="form-control"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            class="form-control mb-2 mr-sm-2"
-            placeholder="Coach Name"
-          />
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            class="form-control mb-2 mr-sm-2"
-            placeholder="Enter email"
-          />
-          <input
-            type="text"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            class="form-control mb-2 mr-sm-2"
-            placeholder="Enter phone"
-          />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            class="form-control mb-2 mr-sm-2"
-            placeholder="Enter password"
-          />
-          <input
-            type="password"
-            value={confirmpassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            class="form-control mb-2 mr-sm-2"
-            placeholder="Confirm Enter password"
-          />
-
-          <button
-            type="button"
-            class="btn btn-primary mb-2"
-            onClick={() => coreContext.addCoach(name, email, phone, password)}>
-            Add Coach
-          </button>
-        </form>
-      {renderCoach()}
-    
-    </div>
-      
-    
-      
-    </div>
-      
-    
-    
-    
-    </div>
-    
-    </div>
-      </div>
-    </div>
-    </div>
+    <>
     
       <Modal
         show={coreContext.showProviderModal}
@@ -314,7 +251,117 @@ const Coach = (props) => {
           </center>
         </Modal.Body>
       </Modal>
-    </div>
+    
+
+
+<div className="col">
+        <div className="page-title-container mb-3">
+          <div className="row">
+            <div className="col mb-2">
+              <h1 className="mb-2 pb-0 display-4" id="title">
+                Coach Information
+              </h1>
+            </div>
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-xl-12">
+            <div className="card mb-3">
+              <div className="card-body">
+                <div className="row">
+                  <div class="col-xl-4">
+                    <div class="form-floating mb-3">
+                    <input
+            type="text"
+            className="form-control"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            class="form-control mb-2 mr-sm-2"
+            placeholder="Coach Name"
+          />
+
+                      <label>Coach Name</label>
+                    </div>
+                  </div>
+                  <div class="col-xl-4">
+                    <div class="form-floating mb-3">
+                    <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            class="form-control mb-2 mr-sm-2"
+            placeholder="Enter email"
+          />
+                      <label>Enter Email</label>
+                    </div>
+                  </div>
+                  <div class="col-xl-4">
+                    <div class="form-floating mb-3">
+                    <input
+            type="text"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            class="form-control mb-2 mr-sm-2"
+            placeholder="Enter phone"
+          />
+                      <label>Enter Phone</label>
+                    </div>
+                  </div>
+                  <div class="col-xl-4">
+                    <div class="form-floating mb-3">
+                    <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            class="form-control mb-2 mr-sm-2"
+            placeholder="Enter password"
+          />
+                      <label>Enter Password</label>
+                    </div>
+                  </div>
+                  <div class="col-xl-4">
+                    <div class="form-floating mb-3">
+                    <input
+            type="password"
+            value={confirmpassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            class="form-control mb-2 mr-sm-2"
+            placeholder="Confirm Enter password"
+          />
+                      <label>Confirm Password</label>
+                    </div>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-xl-4">
+                    <button
+                      type="button"
+                      class="btn btn-md btn-info mb-2"
+                      onClick={() => coreContext.addCoach(name, email, phone, password)}
+                    >
+                      Add Coach
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="card mb-3">
+              <div className="card-body">
+                <div className="row">
+                  <div className="col-xl-12">
+                    <div className="table-responsive-sm mb-0">
+                      {renderCoach()}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </>
+
   );
 };
 
