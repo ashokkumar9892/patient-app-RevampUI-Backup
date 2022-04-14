@@ -2988,10 +2988,10 @@ html[data-dimension=mobile] .side-menu-container{display:none}
 .side-menu a{color:var(--body);padding-top:.5rem;padding-bottom:.5rem;display:block}
 .side-menu a.active,.side-menu a:hover{color:var(--primary)}
 .side-menu a.active .label,.side-menu a:hover .label{color:var(--primary)}
-.side-menu a .icon{width:17px;height:17px;display:inline-block!important}
+.side-menu a .icon{width:17px;height:17px;display:inline-block!important;font-size: 17px; line-height: 17px;}
 .side-menu a[data-bs-target]{color:#393636;font-size:.85rem!important;line-height:1.1rem!important;font-weight:initial!important;text-transform:uppercase;padding-bottom:.5rem;cursor:initial!important;pointer-events:none}
 .side-menu a[data-bs-target] .icon{display:none!important}
-.side-menu .icon{width:20px;vertical-align:middle;margin-right:10px;color:var(--alternate)}
+.side-menu .icon{width:20px;vertical-align:inherit;margin-right:10px;color:var(--alternate)}
 .side-menu .label{vertical-align:middle;color:var(--body)}
 .side-menu.primary a{color:var(--alternate)}
 .side-menu.primary a.active,.side-menu.primary a:hover{color:var(--primary)}
@@ -3156,7 +3156,11 @@ html[data-show=true] .settings-button{opacity:1}
 		margin-bottom: 10px !important;
 	}
 }
-
+@media(max-width:767px){
+	.mt-10-mobile{
+		margin-top: 10px !important;
+	}
+}
 .login-bg{
 	background-color: #fff;
 	margin: 0px auto;
@@ -3222,3 +3226,46 @@ html[data-show=true] .settings-button{opacity:1}
 .slider.round:before {
   border-radius: 50%;
 }
+.login-margin{
+	margin-top:20%;	
+}
+@media (max-width:767px){
+	.login-margin{
+	margin-top:20px;	
+}
+}
+.sidemenu-collaspe{
+	width:100%
+}
+.sidemenu-collaspe ul{
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+}
+.sidemenu-collaspe ul li{
+	padding: 10px;
+	background-color:#eee;
+	border-bottom: solid 1px #ccc
+}
+.sidemenu-collaspe ul li:hover{
+	padding: 10px;
+	background-color:#ccc;
+	border-bottom: solid 1px #ccc;
+	color:#000
+}
+.sidemenu-collaspe ul li a{
+	font-size: 14px;
+	color:#0d71c3
+}
+.sidemenu-collaspe ul li a:hover{
+	font-size: 14px;
+	color:#000
+}
+.sidemenu-collaspe ul li i{
+	font-size: 16px;
+	margin-right: 10px;
+}
+.table>thead {
+    vertical-align: top !important;
+}
+

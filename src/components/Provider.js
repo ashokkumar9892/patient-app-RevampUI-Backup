@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import Input from "./common/Input";
 import Switch from "@material-ui/core/Switch";
 import swal from "sweetalert";
+import Loader from "react-loader-spinner";
 import DataGridComponent from "./common/DataGridComponent";
 
 
@@ -232,6 +233,21 @@ useEffect(fetchProviders, [checked]);
   };
 
   const renderProviders = () => {
+    if (coreContext.providerData.length == 0) {
+      return (
+        <div
+          style={{
+            height: 680,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px",
+            alignItems: "center",
+          }}>
+          <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+        </div>
+      );
+    }
     if (coreContext.providerData.length > 0) {
       return (
         // <div style={{ height: 680, width: "100%" }}>
@@ -257,6 +273,7 @@ useEffect(fetchProviders, [checked]);
   useEffect(renderProviders, [JSON.stringify(coreContext.providerData)]);
 
   return (
+    <>
     <div className="col">
     <div className="page-title-container mb-3">
     <div className="row">
@@ -274,72 +291,100 @@ useEffect(fetchProviders, [checked]);
     
     <div className="card-body">
     <div className="row">
-    <div className="col-xl-12">
-    <div className="table-responsive-sm mb-0">
-    <form class="form-inline">
-          <input
+  
+          				    <div class="col-xl-4">
+                                              
+                                              <div class="form-floating mb-3">
+                                              <input
             type="email"
             value={email}
             onChange={onEmailChangedHandler}
             class="form-control mb-2 mr-sm-2"
             placeholder="Enter email"
           />
-          <input
+                                           <label>Enter email</label>
+                                             </div> 
+                                    
+                                       </div>		
+<div class="col-xl-4">
+                                          
+                                              <div class="form-floating mb-3">
+                                              <input
             type="text"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             class="form-control mb-2 mr-sm-2"
             placeholder="Enter phone"
           />
-          <input
+                                           <label>Enter phone</label>
+                                             </div> 
+                                     
+                                       </div>		
+<div class="col-xl-4">
+                                          
+                                              <div class="form-floating mb-3">
+                                              <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             class="form-control mb-2 mr-sm-2"
             placeholder="Enter password"
           />
-          <input
+                                           <label>Enter password</label>
+                                             </div> 
+                                     
+                                       </div>		
+             <div class="col-xl-4">
+                               <div class="form-floating mb-3">
+                               <input
             type="password"
             value={confirmpassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             class="form-control mb-2 mr-sm-2"
             placeholder="Confirm Enter password"
           />
-          <input
+                                           <label>Confirm Password</label>
+                                             </div> 
+                                    
+                                       </div>		
+<div class="col-xl-4">
+                                           
+                                              <div class="form-floating mb-3">
+                                              <input
             type="text"
             readOnly={true}
             value={name}
             class="form-control mb-2 mr-sm-2"
             placeholder="Enter User Name"
           />
-
-          <button
-            type="button"
-            class="btn btn-primary mb-2"
-            onClick={() =>
+                                           <label>Enter User Name</label>
+                                             </div> 
+                                      
+                                       </div>			
+        </div>
+        <div className="row">
+				    <div className="col-xl-4">
+	<button type="button" class="btn btn-md btn-info mb-2" onClick={() =>
               coreContext.addProvider(name, email, phone, password)
-            }>
-            Add Provider
-          </button>
-        </form>
-        {/* <span className="float-right mr-5">
-            Active
-            <Switch
-              color="primary"
-              checked={checked}
-              //onChange={(event)=>setChecked(event.target.checked)}
-              onChange={onToggleChangeActiveUsers}
-              // inputProps={{ 'aria-label': 'controlled' }}
-            />
-            All
-          </span> */}
-      {renderProviders()}
+            }>Add Provider</button>
+	</div>
+</div>
+     
     
     </div>
-      
+      </div>
+      <div className="card mb-3">	
+
+<div className="card-body">
+<div className="row">
+<div className="col-xl-12">
+<div className="table-responsive-sm mb-0">
+{renderProviders()}
+</div>
+</div></div></div></div>
     
       
-    </div>
+   
       
     
     
@@ -348,8 +393,7 @@ useEffect(fetchProviders, [checked]);
     
     </div>
       </div>
-    </div>
-    </div>
+    
      
 
       <Modal
@@ -444,7 +488,9 @@ useEffect(fetchProviders, [checked]);
           </center>
         </Modal.Body>
       </Modal>
-    </div>
+      
+    
+    </>
   );
 };
 
