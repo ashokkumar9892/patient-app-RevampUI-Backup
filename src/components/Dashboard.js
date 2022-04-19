@@ -55,7 +55,7 @@ const Dashboard = (props) => {
     coreContext.userDetails(email);
     const userType = localStorage.getItem("userType");
     const userId = localStorage.getItem("userId");
-    console.log("check ysertype from dashboard", userType);
+    
 
     if (userType === "admin") {
       coreContext.fetchPatientListfromApi("admin");

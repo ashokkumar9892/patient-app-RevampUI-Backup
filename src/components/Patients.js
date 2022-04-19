@@ -721,6 +721,8 @@ const Patients = (props) => {
             noValidate>
             <div className="row">
               <div className="col-md-6">
+              <label for="html">First Name</label>
+
                 <Input
                   label="First Name*"
                   elementType="text"
@@ -733,7 +735,7 @@ const Patients = (props) => {
                   errors={errors}
                   maxLength={50}
                 />
-
+<label for="html">Phone</label>
                 <Input
                   label="Phone*"
                   elementType="text"
@@ -747,7 +749,7 @@ const Patients = (props) => {
                   name="phone"
                   value={phone}
                 />
-
+<label for="html">Date of Birth</label>
                 <Input
                   label="Date of Birth*"
                   elementType="date"
@@ -778,6 +780,7 @@ const Patients = (props) => {
                         /> */}
                 {console.log(birthDate)}
                 {/* <input type="date"/> */}
+                <label for="html">Height</label>
                 <Input
                   label="Height (Inch)*"
                   elementType="number"
@@ -791,6 +794,7 @@ const Patients = (props) => {
                   register={register}
                   errors={errors}
                 />
+                <label for="html">Gender</label>
 
                 <Input
                   label="Gender*"
@@ -803,7 +807,7 @@ const Patients = (props) => {
                   options={coreContext.genderOptions}
                   onChange={(e) => setGender(e.target.value)}
                 />
-
+<label for="html">Mobile Phone</label>
                 <Input
                   label="Mobile Phone*"
                   name="mobilePhone"
@@ -815,7 +819,7 @@ const Patients = (props) => {
                   maxLength={50}
                   onChange={(e) => setMobilePhone(e.target.value)}
                 />
-
+<label for="html">Mailing Address</label>
                 <Input
                   label="Mailing address"
                   name="street"
@@ -827,7 +831,7 @@ const Patients = (props) => {
                   value={street}
                   onChange={(e) => setStreet(e.target.value)}
                 />
-
+<label for="html">City</label>
                 <Input
                   label="City"
                   name="city"
@@ -854,6 +858,7 @@ const Patients = (props) => {
                     placeholder="Enter Diagnosis ID"
                   
                   /> */}
+                  <label for="html">Diagnosis</label>
                 
                   <Input
                   label="Diagnosis"
@@ -882,7 +887,7 @@ const Patients = (props) => {
               <div className="col-md-6">
                 {console.log("sssss", provider)}
                 {/* <Input label='Height (Inch)' placeholder='Enter height' onChange={e => setHeight(e.target.value)} name='height' value={provider} required={true} register={register} errors={errors} /> */}
-
+                <label for="html">Last Name</label>
                 <Input
                   label="Last Name*"
                   elementType="text"
@@ -895,7 +900,7 @@ const Patients = (props) => {
                   maxLength={50}
                   errors={errors}
                 />
-
+<label for="html">Provider</label>
                 <Input
                   label="Provider"
                   name="provider"
@@ -909,6 +914,7 @@ const Patients = (props) => {
                   onChange={(e) => setProvider(e.target.value)}
                 />
                 {/* {console.log(coreContext.careCoordinatorOptions,coreContext.coachOptions)} */}
+                <label for="html">Care Coordinator</label>
                 <Input
                   label="Care Coordinator"
                   name="coordinator"
@@ -921,7 +927,7 @@ const Patients = (props) => {
                   options={coreContext.careCoordinatorOptions}
                   onChange={(e) => setCoordinator(e.target.value)}
                 />
-
+<label for="html">Coach Name</label>
                 <Input
                   label="Coach Name"
                   name="coach"
@@ -934,7 +940,7 @@ const Patients = (props) => {
                   options={coreContext.coachOptions}
                   onChange={(e) => setCoach(e.target.value)}
                 />
-
+<label for="html">Language</label>
                 <Input
                   label="Language*"
                   name="language"
@@ -947,7 +953,7 @@ const Patients = (props) => {
                   options={coreContext.languageOptions}
                   onChange={(e) => setLanguage(e.target.value)}
                 />
-
+<label for="html">Work Phone</label>
                 <Input
                   label="Work Phone"
                   name="workPhone"
@@ -959,7 +965,7 @@ const Patients = (props) => {
                   maxLength={50}
                   onChange={(e) => setWorkPhone(e.target.value)}
                 />
-
+<label for="html">Zip Code</label>
                 <Input
                   label="Zip Code"
                   name="zip"
@@ -971,7 +977,7 @@ const Patients = (props) => {
                   value={zip}
                   onChange={(e) => setZip(e.target.value)}
                 />
-
+<label for="html">State</label>
                 <Input
                   label="State"
                   name="State"
@@ -981,6 +987,7 @@ const Patients = (props) => {
                   maxLength={50}
                   elementType="text"
                   value={state}
+                 
                   onChange={(e) => setState(e.target.value)}
                 />
               </div>
