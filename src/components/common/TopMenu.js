@@ -151,6 +151,12 @@ const TopMenu = ({ changestyle, showSidebar }) => {
   const [patientName, setPatientName] = useState("");
   const [notificationValue,setNotificationValue]=useState([]);
   const [open, setOpen] = React.useState(false);
+  const today=new Date();
+  today.setDate(today.getDate() - 7);
+  
+  const to=Moment(new Date()).format('YYYY-MM-DD')
+  const from=Moment(today).format('YYYY-MM-DD')
+  console.log(to,from,"tofrom")
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -178,8 +184,8 @@ const TopMenu = ({ changestyle, showSidebar }) => {
       "ADMIN_PATIENT",
       "patient"
     );
-    coreContext.fetchBloodPressure(patientId, userType);
-    coreContext.fetchBloodGlucose(patientId, userType);
+    coreContext.fetchBloodPressureForNotification(patientId, userType,from,to);
+    coreContext.fetchBloodGlucoseForNotification(patientId, userType,from,to);
     coreContext.fetchWSData(patientId,userType);
     coreContext.fetchPatientListfromApi(userType, patientId);
   }
@@ -212,7 +218,7 @@ date.setDate(date.getDate() - 7);
 date.setHours(0,0,0,0)
 
     coreContext.patients.map((patient)=>{
-      coreContext.bloodpressureData.filter((data)=>data.MeasurementDateTime>date).map((bp)=>{
+      coreContext.bloodpressureDataForNotification.filter((data)=>data.MeasurementDateTime>date).map((bp)=>{
         if(patient.userId===bp.UserId){
           coreContext.thresoldData.map((td)=>{
             if(td.UserId.includes(patient.userId)){
@@ -269,7 +275,7 @@ date.setHours(0,0,0,0)
     date.setDate(date.getDate() - 7);
     date.setHours(0,0,0,0)
     coreContext.patients.map((patient)=>{
-      coreContext.bloodglucoseData.filter((data)=>data.MeasurementDateTime>date).map((bg)=>{
+      coreContext.bloodglucoseDataForNotification.filter((data)=>data.MeasurementDateTime>date).map((bg)=>{
         if(patient.userId===bg.userId){
           coreContext.thresoldData.map((td)=>{
             if(td.UserId.includes(patient.userId)){
@@ -304,23 +310,23 @@ date.setHours(0,0,0,0)
     })
   }
   useEffect(()=>{
-    // console.log(coreContext.thresoldData,coreContext.patients,coreContext.bloodglucoseData,"checking threshold from top menu")
-    if(coreContext.thresoldData.length>0 && coreContext.patients.length>0 && coreContext.bloodglucoseData.length>0 &&  window.location.href.indexOf("patient-summary") <0 && coreContext.notifications.length>0){
+    // console.log(coreContext.thresoldData,coreContext.patients,coreContext.bloodglucoseDataForNotification,"checking threshold from top menu")
+    if(coreContext.thresoldData.length>0 && coreContext.patients.length>0 && coreContext.bloodglucoseDataForNotification.length>0 &&  window.location.href.indexOf("patient-summary") <0 && coreContext.notifications.length>0){
       
       FetchNotificationForBG();
       
     }
-  },[coreContext.thresoldData.length,coreContext.patients.length,coreContext.bloodglucoseData.length,notificationValue  ,coreContext.notifications.length])
+  },[coreContext.thresoldData.length,coreContext.patients.length,coreContext.bloodglucoseDataForNotification.length,notificationValue  ,coreContext.notifications.length])
 
 
   useEffect(()=>{
-    // console.log(coreContext.thresoldData,coreContext.patients,coreContext.bloodglucoseData,"checking threshold from top menu")
-    if(coreContext.thresoldData.length>0 && coreContext.patients.length>0 && coreContext.bloodpressureData.length>0 &&  window.location.href.indexOf("patient-summary") <= 0 && coreContext.notifications.length>0){
+    // console.log(coreContext.thresoldData,coreContext.patients,coreContext.bloodglucoseDataForNotification,"checking threshold from top menu")
+    if(coreContext.thresoldData.length>0 && coreContext.patients.length>0 && coreContext.bloodpressureDataForNotification.length>0 &&  window.location.href.indexOf("patient-summary") <= 0 && coreContext.notifications.length>0){
       FetchNotificationForBP();
       
       
     }
-  },[coreContext.thresoldData.length,coreContext.patients.length,coreContext.bloodpressureData.length,notificationValue,coreContext.notifications.length])
+  },[coreContext.thresoldData.length,coreContext.patients.length,coreContext.bloodpressureDataForNotification.length,notificationValue,coreContext.notifications.length])
   
   const { register, handleSubmit, errors } = useForm({
     mode: "onSubmit",

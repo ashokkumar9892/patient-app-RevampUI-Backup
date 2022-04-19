@@ -23,6 +23,8 @@ export const CoreContextProvider = (props) => {
   const [AlltimeLogData, setAllTimeLogData] = useState([]);
   const [bloodpressureData, setbloodpressureData] = useState([]);
   const [bloodglucoseData, setbloodglucoseData] = useState([]);
+  const [bloodglucoseDataForNotification, setbloodglucoseDataForNotification] = useState([]);
+  const [bloodpressureDataForNotification, setbloodpressureDataForNotification] = useState([]);
 
   const [deviceData, setdeviceData] = useState([]);
   const [patientWDevice, setPatientWDevice] = useState([]);
@@ -2432,6 +2434,150 @@ export const CoreContextProvider = (props) => {
     return strTime;
   }
 
+  const fetchBloodPressureForNotification = (userid, usertype,from,to) => {
+    const token = localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
+    let data = "";
+    if (usertype === "patient") {
+      data = {
+        TableName: userTable,
+        ProjectionExpression:
+          "PK,SK,UserId,UserName,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken, ActiveStatus,Notes",
+        IndexName: "Patient-Doctor-Device-Index",
+        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
+        KeyConditionExpression: "GSI1PK = :v_PK",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "DEVICE_BP_" + userid },
+          ":v_ActiveStatus": { S: "Deactive" },
+        },
+      };
+    }
+
+    if (usertype === "doctor") {
+      // var titleObject = {
+      //   :v_GSI1PK1" : {"S": "DEVICE_BP_PATIENT_121524123727622"},
+      //     ":v_GSI1PK2" : {"S": "DEVICE_BP_PATIENT_121524123727622"},
+      // };
+      data = {
+        TableName: userTable,
+        ProjectionExpression:
+          "PK,SK,UserId,UserName,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken,GSI1PK,ActiveStatus,Notes",
+        KeyConditionExpression: "PK = :v_PK",
+        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "DEVICE_BP_READING" },
+          ":v_ActiveStatus": { S: "Deactive" },
+        },
+      };
+    }
+
+    if (usertype === "admin") {
+      data = {
+        TableName: userTable,
+        ProjectionExpression:
+          "PK,SK,UserId,UserName,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken,GSI1PK,ActiveStatus,Notes",
+        KeyConditionExpression: "PK = :v_PK",
+        
+        FilterExpression: "ActiveStatus <> :v_ActiveStatus AND CreatedDate between :val1 and :val2",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "DEVICE_BP_READING" },
+          ":v_ActiveStatus": { S: "Deactive" },
+          ":val1" : { S: from},
+          ":val2" : { S:to}
+        },
+      };
+    }
+
+    axios
+      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          // "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+        const bloodpressureData = response.data;
+        
+        const dataSetbp = [];
+        if (bloodpressureData.length === 0) {
+          dataSetbp.push("No Data Found");
+        }
+
+        bloodpressureData.forEach((bp, index) => {
+          //   console.log('p' + index, bg);
+          let bpdata = {};
+          bpdata.id = index;
+          if (bp.GSI1PK !== undefined) {
+            bpdata.gSI1PK = bp.GSI1PK.s;
+            bpdata.UserId = bp.GSI1PK.s.split("_").pop();
+           
+          }
+         
+          if (bp.UserName !== undefined) {
+            bpdata.UserName = bp.UserName.s;
+          }
+
+          if (bp.irregular !== undefined) {
+            bpdata.irregular = bp.irregular.n;
+          }
+          if (bp.systolic !== undefined) {
+            bpdata.systolic = parseFloat(bp.systolic.n).toFixed(0);
+          }
+          if (bp.diastolic !== undefined) {
+            bpdata.diastolic = parseFloat(bp.diastolic.n).toFixed(0);
+          }
+          if (bp.pulse !== undefined) {
+            bpdata.Pulse = bp.pulse.n;
+          }
+          if (bp.TimeSlots !== undefined) {
+            bpdata.timeSlots = bp.TimeSlots.s;
+          }
+          if (bp.MeasurementDateTime !== undefined) {
+            bpdata.MeasurementDateTime = bp.MeasurementDateTime.s;
+            bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
+            bpdata.sortDateColumn = bp.MeasurementDateTime.s;
+            //  bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MM-DD-YYYY hh:mm A');
+          }
+
+          if (bp.CreatedDate !== undefined) {
+            bpdata.CreatedDate = bp.CreatedDate.s;
+            bpdata.CreatedDate = new Date(bpdata.CreatedDate);
+            //bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MM-DD-YYYY hh:mm A');
+          }
+
+          // bpdata.date_recorded = bp.date_recorded.s;
+
+          if (bp.DeviceId !== undefined) {
+            bpdata.DeviceId = bp.DeviceId.s;
+          }
+
+          if (bp.IMEI !== undefined) {
+            bpdata.DeviceId = bp.IMEI.s;
+          }
+
+          if (bp.SK !== undefined) {
+            bpdata.readingId = bp.SK.s.split("_").pop();
+          }
+
+          if (bp.ActionTaken !== undefined) {
+            bpdata.actionTaken = bp.ActionTaken.s;
+          }
+
+          dataSetbp.push(bpdata);
+        });
+
+        setbloodpressureDataForNotification(dataSetbp);
+      });
+  };
   const fetchBloodPressure = (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
@@ -2483,7 +2629,7 @@ export const CoreContextProvider = (props) => {
         ProjectionExpression:
           "PK,SK,UserId,UserName,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken,GSI1PK,ActiveStatus,Notes",
         KeyConditionExpression: "PK = :v_PK",
-        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
+        FilterExpression: "ActiveStatus <> :v_ActiveStatus ",
         ExpressionAttributeValues: {
           ":v_PK": { S: "DEVICE_BP_READING" },
           ":v_ActiveStatus": { S: "Deactive" },
@@ -2668,10 +2814,10 @@ export const CoreContextProvider = (props) => {
       data = {
         TableName: userTable,
         KeyConditionExpression: "PK = :v_PK",
-        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
+        FilterExpression: "ActiveStatus <> :v_ActiveStatus ",
         ExpressionAttributeValues: {
           ":v_PK": { S: "DEVICE_BG_READING" },
-          ":v_ActiveStatus": { S: "Deactive" },
+          ":v_ActiveStatus": { S: "Deactive" }
         },
       };
     }
@@ -2686,6 +2832,7 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         const bloodglucoseData = response.data;
+        console.log(response.data,"response.data")
         const dataSetbg = [];
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
@@ -2756,6 +2903,193 @@ export const CoreContextProvider = (props) => {
         });
 
         setbloodglucoseData(dataSetbg);
+      });
+  };
+  const fetchBloodGlucoseForNotification = (userid, usertype,from,to) => {
+    const token = localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
+    let data = "";
+
+    // if (usertype === "patient") {
+    //   data = {
+    //     TableName: userTable,
+    //     KeyConditionExpression: "PK = :v_PK",
+    //     FilterExpression:
+    //       "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+    //     ExpressionAttributeValues: {
+    //       ":v_PK": { S: "DEVICE_BG_READING" },
+    //       ":v_GSI1SK": { S: "DEVICE_BG_" + userid },
+    //       ":v_ActiveStatus": { S: "Deactive" },
+    //     },
+    //   };
+    // }
+    if (usertype === "patient") {
+      data = {
+        TableName: userTable,
+        IndexName: "Patient-Doctor-Device-Index",
+        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
+        KeyConditionExpression: "GSI1PK = :v_PK",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "DEVICE_BG_" + userid },
+          ":v_ActiveStatus": { S: "Deactive" },
+        },
+      };
+    }
+
+    if (usertype === "doctor") {
+      // data = {
+      //   TableName: userTable,
+      //   KeyConditionExpression: "PK = :v_PK",
+      //   FilterExpression:
+      //     "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+      //   ExpressionAttributeValues: {
+      //     ":v_PK": { S: "DEVICE_BG_READING" },
+      //     ":v_GSI1SK": { S: "DEVICE_BG_" + userid },
+      //     ":v_ActiveStatus": { S: "Deactive" },
+      //   },
+      // };
+
+      data = {
+        TableName: userTable,
+        KeyConditionExpression: "PK = :v_PK",
+        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "DEVICE_BG_READING" },
+          ":v_ActiveStatus": { S: "Deactive" },
+        },
+      };
+    }
+    if (usertype === "coach") {
+      data = {
+        TableName: userTable,
+        KeyConditionExpression: "PK = :v_PK",
+        FilterExpression:
+          "CoachId = :v_CoachId AND ActiveStatus <> :v_ActiveStatus",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "DEVICE_BG_READING" },
+          ":v_CoachId": { S: +userid },
+          ":v_ActiveStatus": { S: "Deactive" },
+        },
+      };
+    }
+    if (usertype === "carecoordinator") {
+      data = {
+        TableName: userTable,
+        KeyConditionExpression: "PK = :v_PK",
+        FilterExpression:
+          "GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2) AND ActiveStatus <> :v_ActiveStatus",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "DEVICE_BG_READING" },
+          ":v_GSI1PK1": { S: "DEVICE_BG_PATIENT_1201117191624936" },
+          ":v_GSI1PK2": { S: "DEVICE_BG_PATIENT_121229133714481" },
+          ":v_ActiveStatus": { S: "Deactive" },
+        },
+      };
+    }
+
+    if (usertype === "admin") {
+      data = {
+        TableName: userTable,
+        KeyConditionExpression: "PK = :v_PK",
+        FilterExpression: "ActiveStatus <> :v_ActiveStatus AND CreatedDate between :val1 and :val2",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "DEVICE_BG_READING" },
+          ":v_ActiveStatus": { S: "Deactive" },
+          ":val1" : { S: from},
+          ":val2" : { S:to}
+        },
+      };
+    }
+
+    axios
+      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          // "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+        const bloodglucoseData = response.data;
+        console.log(response.data,"response.data")
+        const dataSetbg = [];
+        if (bloodglucoseData.length === 0) {
+          dataSetbg.push("No Data Found");
+        }
+    
+
+        bloodglucoseData.forEach((bg, index) => {
+          //   console.log('p' + index, bg);
+          let bgdata = {};
+          bgdata.id = index;
+          if (bg.GSI1PK !== undefined) {
+            bgdata.gSI1PK = bg.GSI1PK.s;
+            bgdata.userId = bg.GSI1PK.s.split("_").pop();
+          }
+          if (bg.UserName !== undefined) {
+            bgdata.UserName = bg.UserName.s;
+            if (bgdata.UserName == "Dale Cadwallader") {
+              let test = "";
+            }
+          }
+
+          if (bg.bloodglucosemmol !== undefined) {
+            bgdata.bloodglucosemmol = parseFloat(bg.bloodglucosemmol.n).toFixed(
+              0
+            );
+          }
+
+          if (bg.bloodglucosemgdl !== undefined) {
+            bgdata.bloodglucosemgdl = parseFloat(bg.bloodglucosemgdl.n).toFixed(
+              0
+            );
+          }
+
+          if (bg.before_meal !== undefined) {
+            if (bg.before_meal.bool) bgdata.meal = "Before Meal";
+            if (!bg.before_meal.bool) bgdata.meal = "After Meal";
+          }
+
+          if (bg.battery !== undefined) {
+            bgdata.battery = bg.battery.n;
+          }
+          if (bg.TimeSlots !== undefined) {
+            bgdata.timeSlots = bg.TimeSlots.s;
+          }
+          if (bg.MeasurementDateTime !== undefined) {
+            bgdata.MeasurementDateTime = bg.MeasurementDateTime.s;
+            bgdata.MeasurementDateTime = new Date(bgdata.MeasurementDateTime);
+            bgdata.sortDateColumn = bg.MeasurementDateTime.s;
+            //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
+          }
+          
+          if (bg.CreatedDate !== undefined) {
+            bgdata.CreatedDate = bg.CreatedDate.s;
+            bgdata.CreatedDate = new Date(bgdata.CreatedDate);
+            bgdata.sortDateColumn = Moment(bg.CreatedDate.s).format('YYYY-MM-DD hh:mm');
+            // bgdata.CreatedDate =Moment(bgdata.CreatedDate);
+          }
+
+          if (bg.SK !== undefined) {
+            bgdata.readingId = bg.SK.s.split("_").pop();
+          }
+
+          if (bg.DeviceId !== undefined) {
+            bgdata.DeviceId = bg.DeviceId.s;
+          }
+
+          dataSetbg.push(bgdata);
+        });
+
+        setbloodglucoseDataForNotification(dataSetbg);
       });
   };
 
@@ -3459,7 +3793,9 @@ export const CoreContextProvider = (props) => {
         ForgotPassword,
         verifyForgotPassword,
         notifications,
-        cleanup,setdefault
+        cleanup,setdefault,
+        fetchBloodGlucoseForNotification,bloodglucoseDataForNotification,
+        bloodpressureDataForNotification,fetchBloodPressureForNotification
       }}>
       {props.children}
     </CoreContext.Provider>
