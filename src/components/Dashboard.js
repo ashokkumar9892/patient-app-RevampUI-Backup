@@ -549,23 +549,23 @@ const Dashboard = (props) => {
                 {[...new Set(sixty1)].length}
                </a></td>
 <td>
-<a href="/dpatients" onClick={() => setPatient(fiftynine,`${months[month]} 2022 40-60 Mins Logs(RPM)`)}>
-                {fiftynine.length}
+<a href="/dpatients" onClick={() => setPatient([...new Set(fiftynine1)],`${months[month]} 2022 40-60 Mins Logs(RPM)`)}>
+                {[...new Set(fiftynine1)].length}
               </a></td>
-<td> <a href="/dpatients" onClick={() => setPatient(thirtynine,`${months[month]} 2022 20-40 Mins Logs(RPM)`)}>
-                {thirtynine.length}
+<td> <a href="/dpatients" onClick={() => setPatient([...new Set(thirtynine1)],`${months[month]} 2022 20-40 Mins Logs(RPM)`)}>
+                {[...new Set(thirtynine1)].length}
               </a></td>
-<td><a href="/dpatients" onClick={() => setPatient(nineteen,`${months[month]} 2022 10-20 Mins Logs(RPM)`)}>
-                {nineteen.length}
+<td><a href="/dpatients" onClick={() => setPatient([...new Set(nineteen1)],`${months[month]} 2022 10-20 Mins Logs(RPM)`)}>
+                {[...new Set(nineteen1)].length}
               </a></td>
-<td> <a href="/dpatients" onClick={() => setPatient(nine,`${months[month]} 2022 1-10 Mins Logs(RPM)`)}>
-                {nine.length}
+<td> <a href="/dpatients" onClick={() => setPatient([...new Set(nine1)],`${months[month]} 2022 1-10 Mins Logs(RPM)`)}>
+                {[...new Set(nine1)].length}
               </a></td>
-<td><a href="/dpatients" onClick={() => setPatient(zero,`${months[month]} 2022 0-1 Mins Logs(RPM)`)}>
-                {zero.length}
+<td><a href="/dpatients" onClick={() => setPatient([...new Set(zero1)],`${months[month]} 2022 0-1 Mins Logs(RPM)`)}>
+                {[...new Set(zero1)].length}
               </a></td>
-<td> <a href="/dpatients" onClick={() => setPatient(inactive,`${months[month]} 2022 0 Mins Logs(RPM)`)}>
-                {inactive.length}
+<td> <a href="/dpatients" onClick={() => setPatient([...new Set(inactive)],`${months[month]} 2022 0 Mins Logs(RPM)`)}>
+                {[...new Set(inactive)].length}
               </a></td>
 <td>0</td>
 </tr>
