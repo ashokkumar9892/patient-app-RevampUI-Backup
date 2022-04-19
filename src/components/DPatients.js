@@ -275,7 +275,7 @@ const DPatients = (props) => {
   }
   useEffect(() => {
     checktimelog();
-    coreContext.fetchAllTimeLog();
+    
   }, [coreContext.AlltimeLogData.length>1]);
   useEffect(() => {
    

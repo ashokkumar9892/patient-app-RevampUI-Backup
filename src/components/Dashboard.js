@@ -43,6 +43,10 @@ const Dashboard = (props) => {
   const RPM6=[];
   const RPM1=[];
   const RPM0=[];
+  const today=new Date();
+  today.setDate(today.getDate() - 7);
+  
+  
   
   const months = [ "January", "February", "March", "April", "May", "June",
 "July", "August", "September", "October", "November", "December" ];
@@ -53,6 +57,7 @@ const Dashboard = (props) => {
   const fetchPatients = () => {
     const email = localStorage.getItem("app_userEmail");
     coreContext.userDetails(email);
+
     const userType = localStorage.getItem("userType");
     const userId = localStorage.getItem("userId");
     
@@ -70,6 +75,36 @@ const Dashboard = (props) => {
   const fetchWeight = () => {
     let userType = localStorage.getItem("userType");
     let patientId = localStorage.getItem("userId");
+    const today=new Date();
+  
+  
+    var to=Moment(new Date()).format('YYYY-MM-DD')
+    var from=Moment(today).format('YYYY-MM-DD')
+      if(month===String(Currmonth)){
+        to=Moment(new Date()).format('YYYY-MM-DD');
+        today.setDate(today.getDate()-today.getDate()+1)
+  
+        from=Moment(today).format('YYYY-MM-DD')
+  
+      }else{
+        today.setMonth(month)
+        const Days30=[3,5,8,10]
+        const Days31=[0,2,4,6,7,9,12]
+        const Days28=[1]
+        if(Days31.includes(Number(month))){
+          today.setDate(31)
+        }else 
+        if(Days30.includes(Number(month))){
+          today.setDate(30)
+        }else 
+        if(Days28.includes(Number(month))){
+          today.setDate(28)
+        }
+        to=Moment(today).format('YYYY-MM-DD');
+        today.setDate(1)
+        from=Moment(today).format("YYYY-MM-DD")
+        console.log(from,to,"form")
+      }
     // check page if left side menu.
     if (window.location.href.substring("weight") > 0) {
     }
@@ -81,10 +116,11 @@ const Dashboard = (props) => {
     }
     setUserType(userType);
     coreContext.fetchWSData(patientId, userType);
-    coreContext.fetchBloodGlucose(patientId, userType);
-    coreContext.fetchBloodPressure(patientId, userType);
+    coreContext.fetchBloodGlucoseForDashboard(patientId, userType,from,to);
+    coreContext.fetchBloodPressureForDashboard(patientId, userType,from,to);
   };
-  useEffect(fetchWeight, [coreContext.weightData.length]);
+
+  useEffect(fetchWeight, [coreContext.weightData.length,month]);
   const renderSelect=()=>{
     return(<>
      
@@ -108,25 +144,20 @@ const Dashboard = (props) => {
   const selectmonth=React.useMemo(()=>renderSelect(),[month])
   
 
-  console.log("sahilwight", coreContext.weightData);
+  
   const wd = coreContext.weightData
     .map((curr) => curr.userId)
     .filter((item, i, ar) => ar.indexOf(item) === i);
   const bp = coreContext.bloodpressureData
     .map((curr) => curr.userId)
     .filter((item, i, ar) => ar.indexOf(item) === i);
-  const bg = coreContext.bloodglucoseData
+  const bg = coreContext.bloodglucoseDataForDashboard
     .map((curr) => curr.userId)
     .filter((item, i, ar) => ar.indexOf(item) === i);
   const reading = [...wd, ...bp, ...bg];
 
-  console.log(reading);
-  const fetchdpatient = (p) => {
-    coreContext.getdp(p);
-    //console.log(coreContext.dpatient)
-    alert(p);
-    alert(coreContext.patientWDevice);
-  };
+  
+  
   // useEffect(fetchdpatient, []);
   const setPatient = (p,description) => {
     console.log("sahil", p);
@@ -181,10 +212,10 @@ const Dashboard = (props) => {
         let patientTimelog = coreContext.AlltimeLogData.filter(
           (app) => app.UserId == curr.userId && Number(app.performedOn.substring(5,7))==Number(month)+1 && Number(app.performedOn.substring(0,4))==2022
         );
-        let BP = coreContext.bloodpressureData.filter(
+        let BP = coreContext.bloodpressureDataForDashboard.filter(
           (app) => app.UserId == curr.userId && Number(app.sortDateColumn.substring(5,7))==Number(month)+1 && Number(app.sortDateColumn.substring(0,4))==2022
         );
-        let BG = coreContext.bloodglucoseData.filter(
+        let BG = coreContext.bloodglucoseDataForDashboard.filter(
           (app) => app.userId == curr.userId && Number(app.sortDateColumn.substring(5,7))==Number(month)+1 && Number(app.sortDateColumn.substring(0,4))==2022
         );
         let WS = coreContext.weightData.filter(
