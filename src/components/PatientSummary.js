@@ -534,10 +534,10 @@ return String(ttt[0].bg_high)
     );
   };
   const fetchbp = () => {
-    coreContext.fetchBloodPressure(localStorage.getItem("ehrId"), "patient");
+    coreContext.fetchBloodPressureForPatient(localStorage.getItem("ehrId"), "patient");
   };
   const fetchbg = () => {
-    coreContext.fetchBloodGlucose(localStorage.getItem("ehrId"), "patient");
+    coreContext.fetchBloodGlucoseForPatient(localStorage.getItem("ehrId"), "patient");
   };
   const fetchTd = () => {
     coreContext.fetchThresold(
@@ -548,8 +548,8 @@ return String(ttt[0].bg_high)
   const fetchadmintd=()=>{
     coreContext.fetchadminThresold("ADMIN_"+localStorage.getItem("userId"), "admin")
   }
-  useEffect(fetchbp, [coreContext.bloodpressureData.length]);
-  useEffect(fetchbg, [coreContext.bloodglucoseData.length]);
+  useEffect(fetchbp, [coreContext.bloodpressureDataForPatient.length]);
+  useEffect(fetchbg, [coreContext.bloodglucoseDataForPatient.length]);
   useEffect(fetchTd, [JSON.stringify(coreContext.thresoldData)]);
   useEffect(fetchadmintd, [JSON.stringify(coreContext.adminthresold)]);
 console.log("check admin thresold from patient",coreContext.thresoldData)
@@ -613,7 +613,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
   }, [slider]);
 
   const getbpdata = (index) => {
-    if (coreContext.bloodpressureData.length == 0) {
+    if (coreContext.bloodpressureDataForPatient.length == 0) {
       return (
         <>
           <div
@@ -631,12 +631,12 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
       );
     }
     console.log(
-      coreContext.bloodpressureData[0].UserName,
-      "coreContext.bloodpressureData[0].UserName"
+      coreContext.bloodpressureDataForPatient[0].UserName,
+      "coreContext.bloodpressureDataForPatient[0].UserName"
     );
     if (
-      coreContext.bloodpressureData.length > 0 &&
-      coreContext.bloodpressureData[0].UserName !== "undefined"
+      coreContext.bloodpressureDataForPatient.length > 0 &&
+      coreContext.bloodpressureDataForPatient[0].UserName !== "undefined"
     ) {
       if (to.getDate() !== from.getDate()) {
 
@@ -645,7 +645,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
         console.log(
           "checking date of from and to",to,from
         );
-        var finaldata = coreContext.bloodpressureData.filter(
+        var finaldata = coreContext.bloodpressureDataForPatient.filter(
           (date) => date.MeasurementDateTime >= from && date.MeasurementDateTime <= to
         );
       } else {
@@ -677,7 +677,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
         today.setHours(0,0,0,0)
         let bfr = today.setDate(today.getDate() - SliderDays);
         console.log(bfr,"bfring")
-        var finaldata = coreContext.bloodpressureData.filter(
+        var finaldata = coreContext.bloodpressureDataForPatient.filter(
           (date) => date.MeasurementDateTime >= new Date(bfr)
         );
         
@@ -996,7 +996,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
   // const getbpdata2 = useMemo(() => getbpdata(2), []);
 
   const renderBloodGlucose = (index) => {
-    if (coreContext.bloodglucoseData.length == 0) {
+    if (coreContext.bloodglucoseDataForPatient.length == 0) {
       return (
         <div
           style={{
@@ -1013,11 +1013,11 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
     }
 
     if (
-      coreContext.bloodglucoseData.length > 0 &&
-      coreContext.bloodglucoseData[0].UserName !== "undefined"
+      coreContext.bloodglucoseDataForPatient.length > 0 &&
+      coreContext.bloodglucoseDataForPatient[0].UserName !== "undefined"
     ) {
       if (slider === 100) {
-        var finalbgdata = coreContext.bloodglucoseData.filter(
+        var finalbgdata = coreContext.bloodglucoseDataForPatient.filter(
           (date) => date.MeasurementDateTime >= from && date.MeasurementDateTime <= to
         );
       } else {
@@ -1047,14 +1047,14 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
         today.setHours(0,0,0,0)
         let bfr = today.setDate(today.getDate() - SliderDays);
         
-          console.log(coreContext.bloodglucoseData.filter(
+          console.log(coreContext.bloodglucoseDataForPatient.filter(
             (date) => date.MeasurementDateTime >= new Date(bfr)
           ),new Date(bfr),new Date(today.setHours(0,0,0,0)),"ngdatachecking")
-        var finalbgdata = coreContext.bloodglucoseData.filter(
+        var finalbgdata = coreContext.bloodglucoseDataForPatient.filter(
           (date) => date.MeasurementDateTime >= new Date(bfr)
         );
       }
-      console.log("finalbgdata",coreContext.bloodglucoseData)
+      console.log("finalbgdata",coreContext.bloodglucoseDataForPatient)
             let bg = [];
       let bgbefore = [];
       let bgafter = [];
@@ -1586,7 +1586,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
         
         );
       }
-      //coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
+      //coreContext.bloodpressureDataForPatient  = coreContext.bloodpressureDataForPatient.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
     } else {
       return (
         <div
