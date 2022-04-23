@@ -267,15 +267,16 @@ function App() {
 
   let content = (
     <>
+   
       {" "}
       {/**/}{" "}
       {isAuth ? (
         <>
-          <TopMenu
+          {/* <TopMenu
             isAuth={isAuth}
             changestyle={changestyle}
             showSidebar={showSidebar}
-          />
+          /> */}
           
           {/* <Button onClick={handleOpen}>Open modal</Button> */}
           
@@ -298,20 +299,29 @@ function App() {
                               <button onClick={() => setSidebarOpen(true)}>
                                 Open sidebar
                               </button> */}
+                              
+                             
         {isAuth ? (
+          <React.Fragment>
+          <Router>
+          <TopMenu
+          isAuth={isAuth}
+          changestyle={changestyle}
+          showSidebar={showSidebar}
+        />
           <main>
             <Row>
-          <React.Fragment>
+          
             
+          
+                
               {" "}
               {sidebar === true ?<> <Menu getenduser={getenduser} />  </>: <Menu2 />}{" "}
               
            
-           
+              <Switch>
            
             
-              <Router>
-                <Switch>
                   <Route exact path="/provider" component={Pages.Provider} />{" "}
                   <Route
                     exact
@@ -381,12 +391,14 @@ function App() {
                   <Redirect exact from="/login" to="/patients" />
                   <Redirect exact from="/" to="/patients" />
                 </Switch>{" "}
-              </Router>{" "}
+            
            
             
-          </React.Fragment>
+          
           </Row>
           </main>
+          </Router>{" "}
+          </React.Fragment>
         ) : (
           <>
             <Router>
@@ -407,10 +419,11 @@ function App() {
   return (
     <>
       {" "}
-      {content}{" "}
-      
       <Router>
         <Switch>
+      
+      {content}{" "}
+      
           <Route exact path="/covid">
             <Covidform />
           </Route>{" "}

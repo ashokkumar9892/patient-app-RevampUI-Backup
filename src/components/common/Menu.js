@@ -10,6 +10,13 @@ import { GiCook, GiAbstract071, GiAcid, GiWeight, GiAerialSignal, GiOrangeSlice,
 import { PersonFill } from 'react-bootstrap-icons';
 import { NavDropdown } from 'react-bootstrap';
 import Footer from './Footer'
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+  Link
+} from "react-router-dom";
 const Menu = ({getenduser}) => {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => {setOpen(true);}
@@ -28,10 +35,10 @@ const renderChat=()=>{
     if(userType==="doctor"){
         return(
      
-<a className="btn btn-primary d-block rounded-0 text-start mt-1"  onClick={handleOpen} href="#">
+<Link className="btn btn-primary d-block rounded-0 text-start mt-1"  onClick={handleOpen} to="#">
 <i className="icon bi-bag-fill"></i>
 <span className="label">  Chat</span>
-</a>)
+</Link>)
 
 
     }
@@ -49,72 +56,72 @@ const renderChat=()=>{
     <div className="col-auto d-none d-lg-flex">
     <ul className="sw-25 side-menu mb-0 primary d-none" id="menuSide">	
 <li>
-<a href="#" data-bs-target="#account">
+<Link to="#" data-bs-target="#account">
 <i className="icon bi-person-circle"></i>
 <span className="label">Care Team</span>
-</a>
+</Link>
 <ul>
 {(userType!=="patient")?
 
 <li>
-<a href="/patients">
+<Link to="/patients">
 <i className="icon bi-person"></i>
 <span className="label"> Patient Information</span>
-</a>
+</Link>
 </li>:""}
 {(userType==="admin")?<>
 <li>
-<a href="/provider">
+<Link to="/provider">
 <i className="icon bi-hdd"></i>
 <span className="label"> Provider</span>
-</a>
+</Link>
 </li>
 <li>
-<a href="/care-coordinator">
+<Link to="/care-coordinator">
 <i className="icon bi-person-badge"></i>
 <span className="label"> Care Coordinator</span>
-</a>
+</Link>
 </li>
 <li>
-<a href="/coach">
+<Link to="/coach">
 <i className="icon bi-person-circle"></i>
 <span className="label"> Coach</span>
-</a>
+</Link>
 </li>
 </>:""}
 </ul>
 </li>
     
 <li>
-<a href="#" data-bs-target="#device">
+<Link to="#" data-bs-target="#device">
 <i className="icon bi-tablet-fill"></i>
 <span className="label"> Devices</span>
-</a>
+</Link>
 <ul>
 <li>
-<a href="/bloodpressure">
+<Link to="/bloodpressure">
 <i className="icon bi-heart-half"></i>
 <span className="label"> Blood Pressure</span>
-</a>
+</Link>
 </li>
 <li>
-<a href="/bloodglucose">
+<Link to="/bloodglucose">
 <i className="icon bi-file-medical"></i>
 <span className="label"> Blood Glucose</span>
-</a>
+</Link>
 </li>
 <li>
-<a href="/weight">
+<Link to="/weight">
 <i className="icon bi-speedometer"></i>
 <span className="label"> Weight</span>
-</a>
+</Link>
 </li>
 {(userType === 'admin')?
 <li>
-<a href="/device-info">
+<Link to="/device-info">
 <i className="icon bi-person-circle"></i>
 <span className="label"> Device Informaion</span>
-</a>
+</Link>
 </li>
 :""}
 </ul>
@@ -122,102 +129,102 @@ const renderChat=()=>{
 
 {(userType === 'admin')?
     <li>
-<a href="/thresold">
+<Link to="/thresold">
 <i className="icon bi-align-bottom"></i>
 <span className="label"> Thresold</span>
-</a>
+</Link>
 </li>:""}
 <li>
-<a href="#">
+<Link to="#">
 <i className="icon bi-bag-fill"></i>
 <span className="label">  Orders</span>
-</a>
+</Link>
 </li>
 
 </ul>
     <div className="d-none d-md-block sw-25">
-	<a className="btn btn-primary d-block rounded-0 text-start" data-bs-toggle="collapse" href="#menu-1" role="button" aria-expanded="false" aria-controls="collapseExample">
+	<Link className="btn btn-primary d-block rounded-0 text-start" data-bs-toggle="collapse" to="#menu-1" role="button" aria-expanded="false" aria-controls="collapseExample">
 <i className="icon bi-person-circle"></i>
 <span className="label">Care Team</span> <i className="bi-caret-down-fill float-end"></i>
-</a>
+</Link>
 <div className="collapse show" id="menu-1">
 <div className="card-body no-shadow mt-0 p-0 sidemenu-collaspe">
 <ul>
 
     {(userType!=="patient")?
-	<li><a href="/patients"><i className="icon bi-person"></i>
-<span className="label"> Patient Information</span></a></li>:""}
+	<li><Link to="/patients"><i className="icon bi-person"></i>
+<span className="label"> Patient Information</span></Link></li>:""}
 {(userType==="admin")?<>
-	<li><a href="/provider"><i className="icon bi-hdd"></i>
+	<li><Link to="/provider"><i className="icon bi-hdd"></i>
 <span className="label"> Provider</span>
-</a></li>
-	<li className="active"><a href="/care-coordinator"><i className="icon bi-person-badge"></i>
-<span className="label"> Care Coordinator</span></a></li>
-	<li><a href="/coach"><i className="icon bi-person-circle"></i>
-<span className="label"> Coach</span></a></li></>:""}
+</Link></li>
+	<li className="active"><Link to="/care-coordinator"><i className="icon bi-person-badge"></i>
+<span className="label"> Care Coordinator</span></Link></li>
+	<li><Link to="/coach"><i className="icon bi-person-circle"></i>
+<span className="label"> Coach</span></Link></li></>:""}
 	
 	</ul>
 </div>
 </div>	
 
-		<a className="btn btn-primary d-block rounded-0 text-start mt-1" data-bs-toggle="collapse" href="#menu-2" role="button" aria-expanded="false" aria-controls="collapseExample">
+		<Link className="btn btn-primary d-block rounded-0 text-start mt-1" data-bs-toggle="collapse" to="#menu-2" role="button" aria-expanded="false" aria-controls="collapseExample">
 <i className="icon bi-tablet-fill"></i>
 <span className="label"> Devices</span> <i className="bi-caret-down-fill float-end"></i>
-</a>
+</Link>
 <div className="collapse show" id="menu-2">
 <div className="card-body no-shadow mt-0 p-0 sidemenu-collaspe">
 <ul>
-	<li><a href="/bloodpressure"><i className="icon bi-heart-half"></i>
-<span className="label"> Blood Pressure</span></a></li>
-	<li><a href="/bloodglucose"><i className="icon bi-file-medical"></i>
+	<li><Link to="/bloodpressure"><i className="icon bi-heart-half"></i>
+<span className="label"> Blood Pressure</span></Link></li>
+	<li><Link to="/bloodglucose"><i className="icon bi-file-medical"></i>
 <span className="label"> Blood Glucose</span>
-</a></li>
-	<li><a href="/weight"><i className="icon bi-speedometer"></i>
-<span className="label"> Weight</span></a></li>	
+</Link></li>
+	<li><Link to="/weight"><i className="icon bi-speedometer"></i>
+<span className="label"> Weight</span></Link></li>	
 {(userType === 'admin')?
-<li><a href="/device-info"><i className="icon bi-speedometer"></i>
-<span className="label"> Device Information</span></a></li>	:""}
+<li><Link to="/device-info"><i className="icon bi-speedometer"></i>
+<span className="label"> Device Information</span></Link></li>	:""}
 	</ul>
 </div>
 </div>	{(userType === 'admin')?
-		<a className="btn btn-primary d-block rounded-0 text-start mt-1" href="/thresold">
+		<Link className="btn btn-primary d-block rounded-0 text-start mt-1" to="/thresold">
 <i className="icon bi-align-bottom"></i>
 <span className="label"> Thresold</span>
-</a>:""}
+</Link>:""}
 {(userType === 'admin' || userType === 'patient')?
-		<a className="btn btn-primary d-block rounded-0 text-start mt-1"  href="#">
+		<Link className="btn btn-primary d-block rounded-0 text-start mt-1"  to="#">
 <i className="icon bi-bag-fill"></i>
 <span className="label">  Orders</span>
-</a>:""}
+</Link>:""}
 {renderChat()}
 	</div>
 {/* 
 <li className="border-bottom">
-<a href="/bloodpressure">
+<Link to="/bloodpressure">
 <i className="icon bi-heart-half"></i>
 <span className="label"> Blood Pressure</span>
-</a>
+</Link>
 </li>
 	<li className="border-bottom">
-<a href="/bloodglucose">
+<Link to="/bloodglucose">
 <i className="icon bi-file-medical"></i>
 <span className="label"> Blood Glucose</span>
-</a>
+</Link>
 </li>
 		<li className="border-bottom">
-<a href="/weight">
+<Link to="/weight">
 <i className="icon bi-speedometer"></i>
 <span className="label"> Weight</span>
-</a>
+</Link>
 </li> */}
 
 
          {/* {(localStorage.getItem("userType")==="admin")?<>
          		<li className="border-bottom">
-<a href="/thresold">
+<Link to="/thresold">
 <i className="icon bi-align-bottom"></i>
 <span className="label"> Thresold</span>
-</a>
+</Link>
 </li> </>:""}
            
 

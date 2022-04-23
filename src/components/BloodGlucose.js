@@ -4,7 +4,15 @@ import { CoreContext } from "../context/core-context";
 import { PencilSquare, Trash } from "react-bootstrap-icons";
 import Loader from "react-loader-spinner";
 import DataGridComponent from "./common/DataGridComponent";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+  Link
+} from "react-router-dom";
 const Moment = require("moment");
+
 
 const BloodGlucose = (props) => {
   const coreContext = useContext(CoreContext);
@@ -40,10 +48,10 @@ const BloodGlucose = (props) => {
       width: 220,
       type: "string",
       renderCell: (params) => (
-        <a href={`/patient-summary/${btoa(params.row.userId)}`}>
+        <Link to={`/patient-summary/${btoa(params.row.userId)}`}>
           {" "}
           {params.row.UserName}{" "}
-        </a>
+        </Link>
       ),
     },
     {
@@ -117,14 +125,14 @@ const BloodGlucose = (props) => {
     //   renderCell: (params) => (
     //     <div>
     //       {" "}
-    //       <a href="#" onClick={() => showEditForm(params.row)}>
+    //       <Link to="#" onClick={() => showEditForm(params.row)}>
     //         {" "}
     //         <PencilSquare />
-    //       </a>
-    //       <a href="#" onClick={() => deletePatient(params.row)}>
+    //       </Link>
+    //       <Link to="#" onClick={() => deletePatient(params.row)}>
     //         {" "}
     //         <Trash />
-    //       </a>
+    //       </Link>
     //     </div>
     //   ),
     // },

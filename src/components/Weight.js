@@ -4,6 +4,13 @@ import { DataGrid } from '@material-ui/data-grid';
 import { PencilSquare, Trash } from 'react-bootstrap-icons';
 import Loader from "react-loader-spinner";
 import DataGridComponent from './common/DataGridComponent';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+  Link
+} from "react-router-dom";
 
 
 
@@ -46,7 +53,7 @@ const Weight = (props) => {
           width: 200 ,  
           type: 'string',
           renderCell: (params) => (
-            <a  href={`/patient-summary/${btoa(params.row.userId)}`}> {params.row.UserName} </a>
+            <Link  to={`/patient-summary/${btoa(params.row.userId)}`}> {params.row.UserName} </Link>
           )
         },
         {
@@ -101,8 +108,8 @@ const Weight = (props) => {
           //   width: 300,
             
           //   renderCell: (params) => (
-          //       <div>  <a href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
-          //       <a href="#" onClick={() => deletePatient(params.row)}>  <Trash /></a>
+          //       <div>  <Link to="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></Link>
+          //       <Link to="#" onClick={() => deletePatient(params.row)}>  <Trash /></Link>
           //       </div>
             
           //    )

@@ -13,6 +13,13 @@ import {
 } from "react-bootstrap";
 import Moment from "moment";
 import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+  Link
+} from "react-router-dom";
+import {
   Envelope,
   ChatLeftText,
   BoxArrowLeft,
@@ -573,22 +580,22 @@ const handlechangeprovider=(p)=>{
         //     </div>
         //   }
         //   id="collasible-nav-dropdown">
-        //   <NavDropdown.Item href="/patients">
+        //   <NavDropdown.Item to="/patients">
         //     <PersonLinesFill /> List
         //   </NavDropdown.Item>
-        //   <NavDropdown.Item href="#" onClick={handleShow}>
+        //   <NavDropdown.Item to="#" onClick={handleShow}>
         //     <PencilSquare /> Add
         //   </NavDropdown.Item>
         // </NavDropdown>
         <li className="list-inline-item mr-10">
 	<div className="btn-group">
 <div className="dropdown pt-4">
-<a className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 <i className="icon text-white bi-person-circle"></i> Patients
-</a>
+</Link>
 <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-<a className="dropdown-item" href="/patients"><i className="icon bi-list-ul"></i> List</a>
-<a className="dropdown-item" href="#" onClick={handleShow}><i className="icon bi-file-plus-fill"></i> Add</a>
+<Link className="dropdown-item" to="/patients"><i className="icon bi-list-ul"></i> List</Link>
+<Link className="dropdown-item" to="#" onClick={handleShow}><i className="icon bi-file-plus-fill"></i> Add</Link>
 </div>
 </div>
 </div>
@@ -607,16 +614,16 @@ const handlechangeprovider=(p)=>{
             </div>
           }
           id="collasible-nav-dropdown">
-          <NavDropdown.Item href="#">
+          <NavDropdown.Item to="#">
             <PersonLinesFill /> Allergies
           </NavDropdown.Item>
-          <NavDropdown.Item href="#">
+          <NavDropdown.Item to="#">
             <PencilSquare /> Lab Results
           </NavDropdown.Item>
-          <NavDropdown.Item href="#">
+          <NavDropdown.Item to="#">
             <PencilSquare /> Medications
           </NavDropdown.Item>
-          {/* <NavDropdown.Item href="#" onClick={handleShow}><PencilSquare /> Vitals</NavDropdown.Item> */}
+          {/* <NavDropdown.Item to="#" onClick={handleShow}><PencilSquare /> Vitals</NavDropdown.Item> */}
         </NavDropdown>
       );
   };
@@ -632,16 +639,16 @@ const handlechangeprovider=(p)=>{
             </div>
           }
           id="collasible-nav-dropdown">
-          <NavDropdown.Item href="/bloodpressure">
+          <NavDropdown.Item to="/bloodpressure">
             <GiAbstract071 size={20} /> Blood Pressure
           </NavDropdown.Item>
-          <NavDropdown.Item href="/bloodglucose">
+          <NavDropdown.Item to="/bloodglucose">
             <GiAcid size={20} /> Blood Glucose
           </NavDropdown.Item>
-          <NavDropdown.Item href="/weight">
+          <NavDropdown.Item to="/weight">
             <GiWeight size={20} /> Weight{" "}
           </NavDropdown.Item>
-          <NavDropdown.Item href="/thresold">
+          <NavDropdown.Item to="/thresold">
             <GiAerialSignal size={20} /> Threshold
           </NavDropdown.Item>
         </NavDropdown>
@@ -705,7 +712,7 @@ const handlechangeprovider=(p)=>{
   const rendernotificationlength=()=>{
     return(
       
-      <Nav.Link href="#" >
+      <Nav.Link to="#" >
               <span className="badge badge-danger" onClick={handleClickOpen}>
                 {notificationValue.length}
                 
@@ -728,7 +735,7 @@ const handlechangeprovider=(p)=>{
 <ul className="list-unstyled border-last-none">
                   {
 
-      notificationValue.sort(function(a,b){
+      [...new Set(notificationValue)].sort(function(a,b){
  
         return new Date(b.date) - new Date(a.date);
       }).map((curr)=>{
@@ -739,7 +746,7 @@ const handlechangeprovider=(p)=>{
                         <li className="mb-2 pb-2 border-bottom border-separator-light d-flex">
 <div className="align-self-left">
 <p className="mb-0">{curr.value.split("~")[0]} has crossed the  threshold with {curr.value.split("~")[4]} reading {curr.value.split("~")[2]} on {curr.value.split("~")[3]}</p>
-	<a href="#" onClick={()=>{coreContext.AddNotification(curr.value,"admin",localStorage.getItem("userId"));notificationValue.splice(notificationValue.findIndex(a => a.value === curr.value) , 1);handleClose1()}}>Mark as read</a>
+	<Link to="#" onClick={()=>{coreContext.AddNotification(curr.value,"admin",localStorage.getItem("userId"));notificationValue.splice(notificationValue.findIndex(a => a.value === curr.value) , 1);handleClose1()}}>Mark as read</Link>
 </div>
 </li>
                  
@@ -768,20 +775,20 @@ const handlechangeprovider=(p)=>{
       <div id="nav" className="nav-container d-flex">
 <div className="nav-content d-flex">
 <div class="logo position-relative">
-<a href="/dashboard">
+<Link to="/dashboard">
 <div><img src="https://www.linkpicture.com/q/WhatsApp_Image_2022-04-12_at_10.41.03_AM-removebg-preview.png" style={{width:"70px"}}/></div>
-</a>
+</Link>
 </div>
 
 <div className="user-container d-flex">
-<a href="#" className="d-flex user position-relative" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<Link to="#" className="d-flex user position-relative" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 <img className="profile" alt="profile" src="https://st2.depositphotos.com/1006318/5909/v/950/depositphotos_59094041-stock-illustration-medical-doctor-profile.jpg"/>
 <div className="name">{
                   localStorage.getItem("userName")
                     ? localStorage.getItem("userName")
                     : "Guest"
                 }</div>
-</a>
+</Link>
 <div className="dropdown-menu dropdown-menu-end user-menu wide">
 
 <div className="row mb-1 ms-0 me-0">
@@ -789,32 +796,32 @@ const handlechangeprovider=(p)=>{
 <div className="col-12 ps-1 pe-1">
 <ul className="list-unstyled">
 <li>
-<a href="/profile">
+<Link to="/profile">
 <i className="icon bi-person-circle"></i>
 <span className="align-middle">My Profile</span>
-</a>
+</Link>
 </li>
 <li>
-<a href="#" onClick={handleShow}>
+<Link to="#" onClick={handleShow}>
 <i className="icon bi-person-fill"></i>
 <span className="align-middle">Create Patient</span>
-</a>
+</Link>
 </li>
 </ul>
 </div>
 <div className="col-12 pe-1 ps-1">
 <ul className="list-unstyled">
 <li>
-<a href="/settings">
+<Link to="/settings">
 <i className="icon bi-gear-fill"></i>
 <span className="align-middle">Settings</span>
-</a>
+</Link>
 </li>
 <li>
-<a href="/logout">
+<Link to="/logout">
 <i className="icon bi-box-arrow-right"></i>
 <span className="align-middle">Logout</span>
-</a>
+</Link>
 </li>
 </ul>
 </div>
@@ -825,12 +832,12 @@ const handlechangeprovider=(p)=>{
 	<li className="list-inline-item mr-10">
 	<div className="btn-group">
 <div className="dropdown pt-4">
-<a className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 <i className="icon text-white bi-envelope"></i> Mailbox
-</a>
+</Link>
 <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-<a className="dropdown-item" href="/inbox"><i className="icon bi-inbox"></i>  Inbox</a>
-<a className="dropdown-item" href="/outbox"><i className="icon bi-envelope-open"></i> Outbox</a>
+<Link className="dropdown-item" to="/inbox"><i className="icon bi-inbox"></i>  Inbox</Link>
+<Link className="dropdown-item" to="/outbox"><i className="icon bi-envelope-open"></i> Outbox</Link>
 </div>
 </div>
 </div>
@@ -838,12 +845,12 @@ const handlechangeprovider=(p)=>{
 	<li className="list-inline-item mr-10">
 	<div className="btn-group">
 <div className="dropdown pt-4">
-<a className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 <i className="icon text-white bi-envelope-open"></i> Messages
-</a>
+</Link>
 <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-	<a className="dropdown-item" href="/telephone"><i className="icon bi-chat-left-dots"></i> Call</a>
-<a className="dropdown-item" href="#" onClick={handleMessageModalShow}><i className="icon bi-envelope-open"></i> SMS</a>
+	<Link className="dropdown-item" to="/telephone"><i className="icon bi-chat-left-dots"></i> Call</Link>
+<Link className="dropdown-item" to="#" onClick={handleMessageModalShow}><i className="icon bi-envelope-open"></i> SMS</Link>
 </div>
 </div>
 </div>
@@ -853,20 +860,20 @@ const handlechangeprovider=(p)=>{
               {renderVitalMenu()}
 	
 <li className="list-inline-item">
-<a href="#" data-bs-toggle="modal"data-bs-target="#searchPagesModal" onClick={()=>handleSearchOpen()}>
+<Link to="#" data-bs-toggle="modal"data-bs-target="#searchPagesModal" onClick={()=>handleSearchOpen()}>
 	<i className="icon text-white bi-search"></i>
-</a>
+</Link>
 </li>
 {/* <li className="list-inline-item">{renderpatientSearch()}</li> */}
 
 {(window.location.href.indexOf("patient-summary") <=0)?
 <li className="list-inline-item">
-<a href="#" data-bs-toggle="dropdown" data-bs-target="#notifications" aria-haspopup="true" aria-expanded="false" className="notification-button">
+<Link to="#" data-bs-toggle="dropdown" data-bs-target="#notifications" aria-haspopup="true" aria-expanded="false" className="notification-button">
 <div className="position-relative d-inline-flex">
 <i className="icon text-white bi-bell"></i>
 <span className="notificaion-show badge bg-danger">{notificationValue.length}</span>
 </div>
-</a>
+</Link>
 {count1}
 </li>:null}
 	
@@ -879,14 +886,14 @@ const handlechangeprovider=(p)=>{
 </ul>
 </div>
 <div className="mobile-buttons-container">
-<a href="#" id="scrollSpyButton" className="spy-button" data-bs-toggle="dropdown">
+<Link to="#" id="scrollSpyButton" className="spy-button" data-bs-toggle="dropdown">
 <i className="icon bi-list text-white display-3"></i>
 	
-</a>
+</Link>
 <div className="dropdown-menu dropdown-menu-end" id="scrollSpyDropdown"></div>
-<a href="#" id="mobileMenuButton" className="menu-button">
+<Link to="#" id="mobileMenuButton" className="menu-button">
 <i className="icon bi-list text-white display-3"></i>
-</a>
+</Link>
 </div>
 </div>
 <div className="nav-shadow"></div>
@@ -1011,13 +1018,13 @@ maxLength="50" size="sm" type="text" onChange={e => setMobilePhone(e.target.valu
                   </div>
                 </header>
                 <div>
-                  <Nav.Link href="#" onClick={handleAddPatient}>
+                  <Nav.Link to="#" onClick={handleAddPatient}>
                     <PersonPlusFill />
                   </Nav.Link>
                 </div>
               </div>
 
-              {/* <Autosuggest
+              {/* <Linkutosuggest
                         suggestions={suggestions}
                         onSuggestionsFetchRequested={onSuggestionsFetchRequested}
                         onSuggestionsClearRequested={onSuggestionsClearRequested}

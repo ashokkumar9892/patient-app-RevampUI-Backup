@@ -229,7 +229,7 @@ const PatientSummary = (props) => {
     //let patientData = JSON.parse(localStorage.getItem('app_patient'));
 
     //setPatient(patientData);
-    coreContext.fetchPatientListfromApi("patient", patientId);
+    coreContext.fetchPatientListfromApiForPatient("patient", patientId);
 
     //coreContext.fetchThresold("ADMIN_PATIENT_" + patientId, userType);
 
@@ -238,7 +238,7 @@ const PatientSummary = (props) => {
 
     //coreContext.fetchTaskTimerUser();
 
-    coreContext.fetchDeviceData("PATIENT_" + patientId, userName, userType);
+    coreContext.fetchDeviceDataForPatient("PATIENT_" + patientId, userName, "patient");
     /// setting default value
     // if (coreContext.thresoldData.length === 0) {
     //   let thdata = {};
@@ -1917,7 +1917,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
   
 
   const renderDeviceData = () => {
-    if (coreContext.deviceData.length === 0) {
+    if (coreContext.deviceDataForPatient.length === 0) {
       return (
         <div
           style={{
@@ -1934,10 +1934,10 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
       );
     }
 
-    if (coreContext.deviceData.length > 0) {
+    if (coreContext.deviceDataForPatient.length > 0) {
     }
     {
-      return coreContext.deviceData.map((deviceData, index) => {
+      return coreContext.deviceDataForPatient.map((deviceData, index) => {
         return (
           <tr>
             <td>{deviceData.DeviceType} </td>
@@ -1962,7 +1962,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
       });
     }
   };
-  useEffect(renderDeviceData, [coreContext.deviceData.length]);
+  useEffect(renderDeviceData, [coreContext.deviceDataForPatient.length]);
 
   const renderThreads = () => {
     if (coreContext.threads.length > 0) {
@@ -2061,7 +2061,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
   };
 
   const renderTopDetails = () => {
-    if (coreContext.patients.length === 0) {
+    if (coreContext.patientsForPatient.length === 0) {
       return (
         <div
           style={{
@@ -2076,41 +2076,41 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
         </div>
       );
     }
-    if (coreContext.patients.length > 0)
+    if (coreContext.patientsForPatient.length > 0)
       return (
         <>
         
          <div className="col-xl-2 mb-1">	
 	<p className="mb-0"><strong>Name</strong></p>
-  {coreContext.patients[0].name}
+  {coreContext.patientsForPatient[0].name}
 </div>
 	<div className="col-xl-4 mb-1">
 		<p className="mb-0"><strong>Email</strong></p>
-    {coreContext.patients[0].email}
+    {coreContext.patientsForPatient[0].email}
 </div>
 <div className="col-xl-2 mb-1">	
 	<p className="mb-0"><strong>DOB</strong></p>
-	{coreContext.patients[0].dob}
+	{coreContext.patientsForPatient[0].dob}
 </div>
 	<div className="col-xl-2 mb-1">	
 	<p className="mb-0"><strong>Gender</strong></p>
-	{coreContext.patients[0].gender === "Male" ? (
+	{coreContext.patientsForPatient[0].gender === "Male" ? (
               <GenderMale />
             ) : (
               <GenderFemale />
             )}
-            {coreContext.patients[0].gender}
+            {coreContext.patientsForPatient[0].gender}
 </div>
 	<div className="col-xl-2 mb-1">	
 	<p className="mb-0"><strong>Diagnosis</strong></p>
-	{coreContext.patients[0].diagnosisId}
+	{coreContext.patientsForPatient[0].diagnosisId}
 </div>
         </>
       );
   };
   const rendertop = React.useMemo(
     () => renderTopDetails(),
-    [coreContext.patients.length===1]
+    [coreContext.patientsForPatient.length===1]
   );
 
   const renderAddModifyFlags = () => {
@@ -2182,8 +2182,8 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
   }, []);
 
   const renderPatientinformation = () => {
-    if (coreContext.patients.length > 0) {
-      coreContext.patient = coreContext.patients[0];
+    if (coreContext.patientsForPatient.length > 0) {
+      coreContext.patient = coreContext.patientsForPatient[0];
     }
     if (coreContext.patient) {
       localStorage.setItem("ehrId", coreContext.patient.ehrId);

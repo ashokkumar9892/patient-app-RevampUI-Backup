@@ -14,6 +14,13 @@ import {
   GridApi,
   GridCellValue,
 } from "@material-ui/data-grid";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+  Link
+} from "react-router-dom";
 
 import Loader from "react-loader-spinner";
 
@@ -110,10 +117,10 @@ const DPatients = (props) => {
       editable: false,
       width: 250,
       renderCell: (params) => (
-        <a href={`/patient-summary/${btoa(params.row.userId)}`}>
+        <Link to={`/patient-summary/${btoa(params.row.userId)}`}>
           {" "}
           {params.value}{" "}
-        </a>
+        </Link>
       ),
     },
     {
@@ -199,27 +206,27 @@ const DPatients = (props) => {
     //   width: 120,
     //   renderCell: (params) => (
     //     <div style={{ width: "100px" }}>
-    //       <a
+    //       <Link
     //         style={{ marginRight: "5px" }}
-    //         href="#"
+    //         to="#"
     //         onClick={() => showEditForm(params.row)}>
     //         {" "}
     //         <PencilSquare />
-    //       </a>
-    //       <a
+    //       </Link>
+    //       <Link
     //         style={{ marginRight: "5px" }}
-    //         href="#"
+    //         to="#"
     //         onClick={() => deletePatient(params.row)}>
     //         {" "}
     //         <Trash />
-    //       </a>
-    //       <a
+    //       </Link>
+    //       <Link
     //         style={{ marginRight: "5px" }}
-    //         href="#"
+    //         to="#"
     //         onClick={() => showAssignDoctor(params.row)}>
     //         {" "}
     //         <Person />
-    //       </a>
+    //       </Link>
     //     </div>
     //   ),
     // },

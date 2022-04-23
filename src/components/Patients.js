@@ -10,6 +10,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useForm } from "react-hook-form";
 import swal from 'sweetalert';
 import DataGridComponent from "./common/DataGridComponent";
+import {
+  BrowserRouter as Router,
+  Route,
+  
+  Redirect,
+  Link
+} from "react-router-dom";
 
 import Input from "./common/Input";
 import * as React from "react";
@@ -332,10 +339,10 @@ const Patients = (props) => {
       width: 150,
       fleex:1,
       renderCell: (params) => (
-        <a href={`/patient-summary/${btoa(params.row.userId)}`}>
+        <Link to={`/patient-summary/${btoa(params.row.userId)}`}>
           {" "}
           {params.value}{" "}
-        </a>
+        </Link>
       ),
     },
     {
@@ -410,31 +417,31 @@ const Patients = (props) => {
       width: 150,
       renderCell: (params) => (
         <div style={{ width: "100px" }}>
-          <a
+          <Link
             style={{ marginRight: "5px" }}
-            href="#"
+            to="#"
             onClick={() => showEditForm(params.row)}>
             {" "}
             <PencilSquare />
-          </a>
+          </Link>
           {/* {console.log("sahil",params.row)} */}
-          <a
+          <Link
             style={{ marginRight: "5px" }}
-            href="#"
+            to="#"
             onClick={() => {
               deletePatient(params.row);
               fetchPatients();
             }}>
             {" "}
             <Trash />
-          </a>
-          <a
+          </Link>
+          <Link
             style={{ marginRight: "5px" }}
-            href="#"
+            to="#"
             onClick={() => showAssignDoctor(params.row)}>
             {" "}
             <Person />
-          </a>
+          </Link>
         </div>
       ),
     },
@@ -446,10 +453,10 @@ const Patients = (props) => {
       headerName: "Patient Name",
       width: 220,
       renderCell: (params) => (
-        <a href={`/patient-summary/${btoa(params.row.userId)}`}>
+        <Link to={`/patient-summary/${btoa(params.row.userId)}`}>
           {" "}
           {params.value}{" "}
-        </a>
+        </Link>
       ),
     },
     {
@@ -524,24 +531,24 @@ const Patients = (props) => {
       width: 120,
       renderCell: (params) => (
         <div style={{ width: "100px" }}>
-          <a
+          <Link
             style={{ marginRight: "5px" }}
-            href="#"
+            to="#"
             onClick={() => showEditForm(params.row)}>
             {" "}
             <PencilSquare />
-          </a>
-          <a
+          </Link>
+          <Link
             style={{ marginRight: "5px" }}
-            href="#"
+            to="#"
             onClick={() => {
               deletePatient(params.row);
               fetchPatients();
             }}>
             {" "}
             <Trash />
-          </a>
-          {/* <a  style={{  marginRight: '5px' }} href="#" onClick={() => showAssignDoctor(params.row)}>  <Person /></a> */}
+          </Link>
+          {/* <Link  style={{  marginRight: '5px' }} to="#" onClick={() => showAssignDoctor(params.row)}>  <Person /></Link> */}
         </div>
       ),
     },
