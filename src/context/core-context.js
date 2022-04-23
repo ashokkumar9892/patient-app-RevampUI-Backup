@@ -9,6 +9,7 @@ export const CoreContext = React.createContext({});
 export const CoreContextProvider = (props) => {
   const [userinfo, setuserinfo] = useState([]);
   const [patients, setPatients] = useState([]);
+  const [patientsForPatient, setPatientsForPatient] = useState([]);
   const [bgData, setbgData] = useState([]);
   const [bpData, setbpData] = useState([]);
   const [wsData, setwsData] = useState([]);
@@ -33,6 +34,7 @@ export const CoreContextProvider = (props) => {
   const [bloodpressureDataForPatient, setbloodpressureDataForPatient] = useState([]);
 
   const [deviceData, setdeviceData] = useState([]);
+  const [deviceDataForPatient, setdeviceDataForPatient] = useState([]);
   const [patientWDevice, setPatientWDevice] = useState([]);
 
   const [providerData, setdoctorData] = useState([]);
@@ -135,7 +137,7 @@ export const CoreContextProvider = (props) => {
     window.location.assign("/login");
   };
   const cleanup=()=>{
-    setPatients([]);
+    //setPatients([]);
   }
 
   const checkLocalAuth = () => {
@@ -620,6 +622,234 @@ export const CoreContextProvider = (props) => {
         });
           
         setPatients(ps);
+      })
+      .catch(() => {
+        relogin();
+      });
+  };
+  const fetchPatientListfromApiForPatient = async (usertype, userId, AllActive) => {
+    setPatientsForPatient([])
+    const token = localStorage.getItem("app_jwt");
+
+    let data = "";
+
+   
+   
+    
+    if (usertype === "patient") {
+      data = {
+        TableName: userTable,
+        ProjectionExpression:
+          "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus,Notes,diagnosisId",
+        KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
+        FilterExpression: "ActiveStatus = :v_status",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "patient" },
+          ":v_SK": { S: "PATIENT_" + userId },
+          ":v_status": { S: "Active" },
+        },
+      };
+    }
+
+    await axios
+      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          // "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+        // setJwt(response.data);
+        //  console.log(response.data);
+        const patients = response.data;
+        // console.log("i need to check the patient",patients.length)
+        const ps = [];
+        if (patients.length === 0) {
+          ps.push("No data found");
+        }
+        
+
+        patients.forEach((p, index) => {
+          let patient = {};
+
+          patient.id = index;
+
+          patient.mobilePhone = "";
+          patient.workPhone = "";
+
+          //console.log("i need to check the patient", patient);
+          if (p.UserId !== undefined) {
+            patient.userId = p.UserId.n;
+          }
+          if (p.UserName !== undefined) {
+            patient.name = p.UserName.s;
+          }
+          if (p.Email !== undefined) {
+            patient.email = p.Email.s;
+          }
+          if (p.diagnosisId !== undefined) {
+            if(p.diagnosisId.s[0]==","){
+              patient.diagnosisId = p.diagnosisId.s.substring(1);  
+            }else{
+              patient.diagnosisId = p.diagnosisId.s;
+            }
+            
+          }
+          if (p.ContactNo !== undefined) {
+            patient.mobile = p.ContactNo.s;
+          }
+          if (p.DOB !== undefined) {
+            patient.dob = Moment(p.DOB.s).format("MMM-DD-YYYY");
+          }
+          if (p.DoctorName !== undefined) {
+            patient.ProviderName = p.DoctorName.s;
+          }
+          if (p.CarecoordinatorName !== undefined) {
+            patient.CareName = p.CarecoordinatorName.s;
+          }
+          if (p.Coach !== undefined) {
+            patient.CoachName = p.Coach.s;
+          }
+          if (p.SK !== undefined) {
+            patient.ehrId = p.SK.s;
+          }
+          patient.pid = window.btoa(p.SK.s);
+          if (p.Height !== undefined) {
+            (p.Height.s!=="undefined")?patient.height = p.Height.s:patient.height = ""
+            
+          }
+          patient.pid = window.btoa(p.SK.s);
+
+          if (p.reading !== undefined) {
+            patient.bg_reading = p.reading.s;
+          }
+          if (p.diastolic !== undefined) {
+            let num = p.diastolic.s;
+            if (num === "") num = 0;
+            patient.diastolic = parseFloat(num).toFixed(2);
+          }
+          if (p.systolic !== undefined) {
+            let num = p.systolic.s;
+            if (num === "") num = 0;
+            patient.systolic = parseFloat(num).toFixed(2);
+          }
+
+          if (p.weight !== undefined) {
+            let num = p.weight.s;
+            if (num === "") num = 0;
+            patient.Weight = parseFloat(num).toFixed(2);
+          }
+          if (p.BMI !== undefined) {
+            let num1 = p.BMI.s;
+            if (num1 === "") num1 = 0;
+            if (parseFloat(num1) > 0) {
+              if (parseFloat(num1).toFixed(2) < 18.5) {
+                patient.BMI =
+                  "Underweight" + " (" + parseFloat(num1).toFixed(2) + ")";
+              }
+              if (
+                parseFloat(num1).toFixed(2) > 18.5 &&
+                parseFloat(num1).toFixed(2) < 24.9
+              ) {
+                patient.BMI =
+                  "Normal" + " (" + parseFloat(num1).toFixed(2) + ")";
+              }
+              if (
+                parseFloat(num1).toFixed(2) > 25 &&
+                parseFloat(num1).toFixed(2) < 29.9
+              ) {
+                patient.BMI =
+                  "Overweight" + " (" + parseFloat(num1).toFixed(2) + ")";
+              }
+              if (parseFloat(num1).toFixed(2) > 30) {
+                patient.BMI =
+                  "Obese" + " (" + parseFloat(num1).toFixed(2) + ")";
+              }
+            }
+          }
+
+          if (p.ActiveStatus !== undefined) {
+            patient.ActiveStatus = p.ActiveStatus.s;
+          }
+
+          if (p.FirstName !== undefined) {
+            patient.firstName = p.FirstName.s;
+          }
+
+          if (p.LastName !== undefined) {
+            patient.lastName = p.LastName.s;
+          }
+
+          // if firstname and lastname undefined then take name from name and put it.
+          if (patient.name !== undefined) {
+            patient.lastName = patient.name.split(",")[0];
+            patient.firstName = patient.name.split(",")[1];
+          }
+
+          if (p.FirstName !== undefined && p.LastName !== undefined) {
+            patient.name = p.LastName.s + "," + "  " + p.FirstName.s;
+          }
+
+          if (p.Gender !== undefined) {
+            patient.gender = p.Gender.s;
+          }
+          if (p.Height !== undefined) {
+            (p.Height.s!=="undefined")?patient.height = p.Height.s:patient.height = ""
+          }else {
+            patient.height = "";
+          }
+
+          if (p.Lang !== undefined) {
+            patient.language = p.Lang.s;
+          } else {
+            patient.language = "";
+          }
+
+          if (p.Street !== undefined) {
+            patient.street = p.Street.s;
+          } else {
+            patient.street = "";
+          }
+
+          if (p.City !== undefined) {
+            patient.city = p.City.s;
+          } else {
+            patient.city = "";
+          }
+
+          if (p.Zip !== undefined) {
+            patient.zip = p.Zip.s;
+          } else {
+            patient.zip = "";
+          }
+
+          if (p.WorkPhone !== undefined) {
+            patient.workPhone = p.WorkPhone.s;
+          } else {
+            patient.workPhone = "";
+          }
+
+          if (p.MobilePhone !== undefined) {
+            patient.mobilePhone = p.MobilePhone.s;
+          } else {
+            patient.mobilePhone = "";
+          }
+
+          if (p.Notes !== undefined) {
+            patient.notes = p.Notes.s;
+           
+          } else {
+            patient.notes = "";
+          }
+
+          // if (patient.userId !== undefined && patient.name) {
+          //     fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
+          // }
+          ps.push(patient);
+        });
+          
+        setPatientsForPatient(ps);
       })
       .catch(() => {
         relogin();
@@ -2255,6 +2485,108 @@ export const CoreContextProvider = (props) => {
 
         if (dataSetdevice[0] !== "no device found") {
           setdeviceData(dataSetdevice);
+        }
+
+        if (type == "Weight") {
+          fetchWSData(patientId, username, usertype, dataSetdevice);
+        }
+        if (type == "Blood Pressure") {
+          fetchBloodPressure(patientId, username, usertype, dataSetdevice);
+        }
+        if (type == "Blood Glucose") {
+        }
+      });
+  };
+  const fetchDeviceDataForPatient = (patientId, username, usertype, type, patient) => {
+    const token = localStorage.getItem("app_jwt");
+
+    let data = {
+      TableName: userTable,
+      KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
+      FilterExpression: "DeviceStatus = :v_status AND GSI1PK = :v_GSI1PK",
+      ExpressionAttributeValues: {
+        ":v_PK": { S: "patient" },
+        ":v_SK": { S: "DEVICE_" },
+        ":v_status": { S: "Active" },
+        ":v_GSI1PK": { S: patientId },
+      },
+    };
+    if (usertype === "admin" || usertype === "doctor") {
+      data = {
+        TableName: userTable,
+        KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
+        FilterExpression:
+          "DeviceStatus = :v_status AND DeviceId <> :v_deviceId",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "patient" },
+          ":v_SK": { S: "DEVICE_" },
+          ":v_status": { S: "Active" },
+          ":v_deviceId": { S: "Null" },
+        },
+      };
+    }
+    else{
+      data = {
+        TableName: userTable,
+        KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
+        FilterExpression:
+          "DeviceStatus = :v_status AND DeviceId <> :v_deviceId",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "patient"+patientId },
+          ":v_SK": { S: "DEVICE_" },
+          ":v_status": { S: "Active" },
+          ":v_deviceId": { S: "Null" },
+        },
+      };
+    }
+    axios
+      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          // "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+        const deviceData = response.data;
+        const dataSetdevice = [];
+        let deviceType = "";
+        if (deviceData.length === 0) {
+          dataSetdevice.push("no device found");
+        }
+
+        //    console.log('deviceData', deviceData);
+        deviceData.forEach((p, index) => {
+          let devicedata = {};
+          devicedata.id = index;
+
+          if (p.DeviceId != undefined) {
+            devicedata.deviceID = p.DeviceId.s;
+          }
+          if (p.DeviceType != undefined) {
+            devicedata.DeviceType = p.DeviceType.s;
+          }
+          if (p.GSI1PK != undefined) {
+            devicedata.patientId = p.GSI1PK.s;
+          }
+          if (p.SK !== undefined) {
+            devicedata.id = p.SK.s;
+
+            if (patients.length > 0) {
+              let patient = patients.filter(
+                (p) => p.ehrId === devicedata.patientId
+              );
+              if (patient.length > 0) devicedata.username = patient[0].name;
+            } else {
+              devicedata.username = username;
+            }
+          }
+
+          if (devicedata.username !== undefined) dataSetdevice.push(devicedata);
+        });
+
+        if (dataSetdevice[0] !== "no device found") {
+          setdeviceDataForPatient(dataSetdevice);
         }
 
         if (type == "Weight") {
@@ -4455,7 +4787,11 @@ export const CoreContextProvider = (props) => {
         fetchBloodPressureForPatient,
         bloodpressureDataForPatient,
         fetchWSDataForPatient,
-        weightDataForPatient
+        weightDataForPatient,
+        fetchPatientListfromApiForPatient,
+        patientsForPatient,
+      fetchDeviceDataForPatient,
+      deviceDataForPatient
       }}>
       {props.children}
     </CoreContext.Provider>
