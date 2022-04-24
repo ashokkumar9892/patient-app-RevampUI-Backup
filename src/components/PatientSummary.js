@@ -339,7 +339,7 @@ const PatientSummary = (props) => {
   }
 
   const pateientvalue = useMemo(() => fetchPatient, []);
-  useEffect(pateientvalue, []);
+  useEffect(fetchPatient, []);
   useEffect(fetchPatient,[adddeviceflag]);
 
   // useEffect(fetchPatient, [coreContext.patient.notes]);

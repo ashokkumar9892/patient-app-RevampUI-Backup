@@ -2511,34 +2511,7 @@ export const CoreContextProvider = (props) => {
         ":v_GSI1PK": { S: patientId },
       },
     };
-    if (usertype === "admin" || usertype === "doctor") {
-      data = {
-        TableName: userTable,
-        KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
-        FilterExpression:
-          "DeviceStatus = :v_status AND DeviceId <> :v_deviceId",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "patient" },
-          ":v_SK": { S: "DEVICE_" },
-          ":v_status": { S: "Active" },
-          ":v_deviceId": { S: "Null" },
-        },
-      };
-    }
-    else{
-      data = {
-        TableName: userTable,
-        KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
-        FilterExpression:
-          "DeviceStatus = :v_status AND DeviceId <> :v_deviceId",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "patient"+patientId },
-          ":v_SK": { S: "DEVICE_" },
-          ":v_status": { S: "Active" },
-          ":v_deviceId": { S: "Null" },
-        },
-      };
-    }
+    
     axios
       .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
         headers: {
