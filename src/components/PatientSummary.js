@@ -9,6 +9,7 @@ import Slider from "@mui/material/Slider";
 import swal from "sweetalert";
 import { Bar, Line, Scatter, Bubble, Stacked } from "react-chartjs-2";
 
+
 import {
   GenderMale,
   GenderFemale,
@@ -16,7 +17,7 @@ import {
   Trash,
 } from "react-bootstrap-icons";
 import DatePicker from "react-datepicker";
-import { ButtonGroup, Button, Form, Modal, TabPane } from "react-bootstrap";
+import { ButtonGroup, Button, Form, Modal,TabPane} from "react-bootstrap";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import "react-datepicker/dist/react-datepicker.css";
@@ -183,7 +184,16 @@ const PatientSummary = (props) => {
   let [provider, setProvider] = useState("");
   let [coach, setCoach] = useState("");
   let [coordinator, setCoordinator] = useState("");
+  const fetchbp = () => {
+    coreContext.fetchBloodPressureForPatient(localStorage.getItem("ehrId"), "patient");
+  };
+  const fetchbg = () => {
+    coreContext.fetchBloodGlucoseForPatient(localStorage.getItem("ehrId"), "patient");
+  };
 
+  useEffect(fetchbp, [coreContext.bloodpressureDataForPatient]);
+  
+  useEffect(fetchbg, [coreContext.bloodglucoseDataForPatient]);
   const fetchCareCoordinator = () => {
     const patientId = props.match.params.patient;
     setPatientId(patientId);
@@ -239,100 +249,7 @@ const PatientSummary = (props) => {
     //coreContext.fetchTaskTimerUser();
 
     coreContext.fetchDeviceDataForPatient("PATIENT_" + patientId, userName, "patient");
-    /// setting default value
-    // if (coreContext.thresoldData.length === 0) {
-    //   let thdata = {};
-    //   const thDatas = [];
-    //   thdata.Element_value = "Blood Glucose";
-    //   thdata.bg_low = 0;
-    //   thdata.bg_high = 0;
-    //   thDatas.push(thdata);
-
-    //   thdata = {};
-    //   thdata.Element_value = "BMI";
-    //   thdata.bmi_low = 0;
-    //   thdata.bmi_high = 0;
-    //   thDatas.push(thdata);
-
-    //   thdata = {};
-    //   thdata.Element_value = "Diastolic";
-    //   thdata.diastolic_low = 0;
-    //   thdata.diastolic_high = 0;
-    //   thDatas.push(thdata);
-
-    //   thdata = {};
-    //   thdata.Element_value = "Systolic";
-    //   thdata.systolic_high = 0;
-    //   thdata.systolic_low = 0;
-    //   thDatas.push(thdata);
-
-    //   thdata = {};
-    //   thdata.Element_value = "Weight";
-    //   thdata.weight_low = 0;
-    //   thdata.weight_high = 10;
-    //   thDatas.push(thdata);
-    //   setThData(thDatas);
-    // } else {
-    //   setThData(coreContext.thresoldData);
-
-    //   var bgdata = coreContext.thresoldData.filter(
-    //     (a) => a.Element_value === "Blood Glucose"
-    //   );
-
-    //   if (bgdata.length > 0) {
-    //     setBgMin(bgdata[0].bg_low);
-    //     setBgMax(bgdata[0].bg_high);
-    //   } else {
-    //     setBgMin(0);
-    //     setBgMax(0);
-    //   }
-
-    //   var bpdata = coreContext.thresoldData.filter(
-    //     (a) => a.Element_value === "BMI"
-    //   );
-    //   if (bpdata.length > 0) {
-    //     setBmiMin(bpdata[0].bmi_low);
-    //     setBmiMax(bpdata[0].bmi_high);
-    //   } else {
-    //     setBmiMin(0);
-    //     setBmiMax(0);
-    //   }
-
-    //   var dialostic = coreContext.thresoldData.filter(
-    //     (a) => a.Element_value === "DIASTOLIC"
-    //   );
-
-    //   if (dialostic.length > 0) {
-    //     setDiastolicMin(dialostic[0].diastolic_low);
-    //     setDiastolicMax(dialostic[0].diastolic_high);
-    //   } else {
-    //     setDiastolicMin(0);
-    //     setDiastolicMax(0);
-    //   }
-
-    //   var systolic = coreContext.thresoldData.filter(
-    //     (a) => a.Element_value === "SYSTOLIC"
-    //   );
-    //   if (systolic.length > 0) {
-    //     setSystolicMin(systolic[0].systolic_low);
-    //     setSystolicMax(systolic[0].systolic_high);
-    //   } else {
-    //     setSystolicMin(0);
-    //     setSystolicMax(0);
-    //   }
-
-    //   var weight = coreContext.thresoldData.filter(
-    //     (a) => a.Element_value === "Weight"
-    //   );
-
-    //   if (weight.length > 0) {
-    //     setWeightMin(weight[0].weight_low);
-    //     setWeightMax(weight[0].weight_high);
-    //   } else {
-    //     setWeightMin(0);
-    //     setWeightMax(0);
-    //   }
-    // }
+    
   };
   const fetchtime =()=>{
     coreContext.fetchTimeLog("PATIENT_" + patientId)
@@ -533,12 +450,7 @@ return String(ttt[0].bg_high)
       </>
     );
   };
-  const fetchbp = () => {
-    coreContext.fetchBloodPressureForPatient(localStorage.getItem("ehrId"), "patient");
-  };
-  const fetchbg = () => {
-    coreContext.fetchBloodGlucoseForPatient(localStorage.getItem("ehrId"), "patient");
-  };
+ 
   const fetchTd = () => {
     coreContext.fetchThresold(
       "ADMIN_" + localStorage.getItem("ehrId"),
@@ -548,8 +460,8 @@ return String(ttt[0].bg_high)
   const fetchadmintd=()=>{
     coreContext.fetchadminThresold("ADMIN_"+localStorage.getItem("userId"), "admin")
   }
-  useEffect(fetchbp, [coreContext.bloodpressureDataForPatient.length]);
-  useEffect(fetchbg, [coreContext.bloodglucoseDataForPatient.length]);
+  
+  
   useEffect(fetchTd, [JSON.stringify(coreContext.thresoldData)]);
   useEffect(fetchadmintd, [JSON.stringify(coreContext.adminthresold)]);
 console.log("check admin thresold from patient",coreContext.thresoldData)
@@ -2859,7 +2771,12 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
         </div></div>
       );
   };
-
+  useEffect(renderTabs, []);
+  useEffect(() => {
+    return ()=>{
+      coreContext.cleanup()
+    }
+  },[]);
   return (
     <div className="col">
       <div className="page-title-container mb-3">
@@ -2949,7 +2866,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
 
       {Prompt}
 
-      <div>
+      
         <React.Fragment>
           <Modal show={showModal} onHide={handleModalClose} size="lg">
             <Modal.Header closeButton>
@@ -2960,9 +2877,9 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                 <h4 className="card-header">Task Timer</h4>
                 <div className="card-body">
                   <div className="row">
-                    <div className="col-md-6">
-                      <div className="row">
-                        Task Type
+                    <div className="col-md-4">
+                      
+                        <label>Task Type</label>
                         {/* //  {setTaskType("CarePlanReconciliation")} */}
                         <select
                           value={t1 === "Other" ? t1 : taskType}
@@ -2992,9 +2909,9 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                             onChange={(e) => setTaskType(e.target.value)}
                           />
                         ) : null}
+                     
                       </div>
-                      <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-md-4">
                           Performed By
                           {/* {renderTaskTimer()} */}
                           <select
@@ -3018,15 +2935,16 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                             })}
                           </select>
                         </div>
-                        <div className="col-md-12">
-                          Performed On
-                          <br />
+                        <div className="col-md-4">
+                         Performed On<br/>
+                         <div className="col-md-12">
                           <DatePicker
-                            className="form-control mt-2"
+                            className="form-control"
                             selected={date}
                             showTimeSelect
                             timeFormat="HH:mm"
                             timeIntervals={15}
+                            label="Performed On"
                             // onChange={(date) => setDate(date)}
                             onChange={(date) => {
                               setDate(date);
@@ -3036,8 +2954,9 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                             placeholderText="Enter a date"
                             dateFormat="MM/dd/yyyy hh:mm:ss aa"
                           />
+                          </div>
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-4">
                           <label for="appt">Enter Total Time:</label>
                           <input
                             className="form-control mb-2 mr-sm-2"
@@ -3048,8 +2967,8 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                           />
                           {/* <input className="form-control mb-2 mr-sm-2" type="time" value={timevalue} onChange={(e)=>{settimevalue(e.target.value);}} step="1"/> */}
                         </div>
-                      </div>
-                    </div>
+                      
+                    
                   </div>
                 </div>
                 <button
@@ -3066,7 +2985,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                     );
                     handleUpdate();
                   }}
-                  className="btn btn-sm btn-success">
+                  className="btn btn-lg btn-success">
                   {" "}
                   Update Time Log
                 </button>
@@ -3074,7 +2993,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
             </Modal.Body>
           </Modal>
         </React.Fragment>
-      </div>
+      
   
         {renderTabs()}
        

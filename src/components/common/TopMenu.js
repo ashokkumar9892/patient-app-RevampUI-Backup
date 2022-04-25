@@ -998,7 +998,7 @@ const handlechangeprovider=(p)=>{
           </Modal.Header>
           <Modal.Body>
             <Form.Group>
-              <Form.Label>Mobile Number*</Form.Label>
+              <label className="mt-2">Mobile Number*</label>
               {/* <Form.Control
 maxLength="50" size="sm" type="text" onChange={e => setMobilePhone(e.target.value)} value={mobilePhone} placeholder="Enter mobile number" /> */}
 
@@ -1034,7 +1034,7 @@ maxLength="50" size="sm" type="text" onChange={e => setMobilePhone(e.target.valu
                     /> */}
             </Form.Group>
             <Form.Group>
-              <Form.Label>Description*</Form.Label>
+              <label className="mt-2">Description*</label>
               <Form.Control
 maxLength="50"
                 type="reset"
@@ -1065,7 +1065,7 @@ maxLength="50"
             <Row>
               <Col>
                 <Form.Group>
-                  <Form.Label>Email*</Form.Label>
+                  <label className="mt-2">Email*</label>
                   <Form.Control
 maxLength="50"
                     size="sm"
@@ -1078,7 +1078,7 @@ maxLength="50"
               </Col>
               <Col>
                 <Form.Group>
-                  <Form.Label>Password*</Form.Label>
+                  <label className="mt-2">Password*</label>
                   <Form.Control
 maxLength="50"
                     size="sm"
@@ -1091,7 +1091,7 @@ maxLength="50"
               </Col>
               <Col>
                 <Form.Group>
-                  <Form.Label>User Name</Form.Label>
+                  <label className="mt-2">User Name</label>
                   <Form.Control
 maxLength="50"
                     size="sm"
@@ -1106,7 +1106,7 @@ maxLength="50"
             <Row>
               <Col>
                 <Form.Group>
-                  <Form.Label>First Name*</Form.Label>
+                  <label className="mt-2">First Name*</label>
                   <Form.Control
 maxLength="50"
                     size="sm"
@@ -1119,7 +1119,7 @@ maxLength="50"
               </Col>
               <Col>
                 <Form.Group>
-                  <Form.Label>Middle Name</Form.Label>
+                  <label className="mt-2">Middle Name</label>
                   <Form.Control
 maxLength="50"
                     size="sm"
@@ -1132,7 +1132,7 @@ maxLength="50"
               </Col>
               <Col>
                 <Form.Group>
-                  <Form.Label>Last Name*</Form.Label>
+                  <label className="mt-2">Last Name*</label>
                   <Form.Control
 maxLength="50"
                     size="sm"
@@ -1147,7 +1147,7 @@ maxLength="50"
             <Row>
               <Col>
                 <Form.Group>
-                  <Form.Label>Date of Birth*</Form.Label>
+                  <label className="mt-2">Date of Birth*</label>
                   <Form.Control
 maxLength="50"
                     size="sm"
@@ -1160,7 +1160,7 @@ maxLength="50"
               </Col>
               <Col>
                 <Form.Group>
-                  <Form.Label>Gender*</Form.Label>
+                  <label className="mt-2">Gender*</label>
                   <Form.Control
 maxLength="50"
                     onChange={(e) => setGender(e.target.value)}
@@ -1175,7 +1175,7 @@ maxLength="50"
               </Col>
               <Col>
                 <Form.Group>
-                  <Form.Label>Language</Form.Label>
+                  <label className="mt-2">Language</label>
                   <Form.Control
 maxLength="50"
                     onChange={(e) => setLanguage(e.target.value)}
@@ -1194,7 +1194,7 @@ maxLength="50"
             <Row>
               <Col>
                 <Form.Group>
-                  <Form.Label>Diagnosis</Form.Label>
+                  <label className="mt-2">Diagnosis</label>
                   {
                   dcount.map((curr,index)=>{
                     return(
@@ -1252,7 +1252,7 @@ maxLength="50"
             <Row>
               <Col>
                 <form>
-                  <Form.Label>Care Coordinator</Form.Label>
+                  <label className="mt-2">Care Coordinator</label>
                   <Input
                     name="coordinator"
                     required={false}
@@ -1264,7 +1264,7 @@ maxLength="50"
                   />
                 </form>
                 {/* <Form.Group>
-                            <Form.Label>Care Coordinator</Form.Label>
+                            <label className="mt-2">Care Coordinator</label>
                             <Form.Control
 maxLength="50" size="sm" as="select" onChange={e => setPcm(e.target.value)} value={pcm}>
                                 <option value=""></option>
@@ -1277,7 +1277,7 @@ maxLength="50" size="sm" as="select" onChange={e => setPcm(e.target.value)} valu
               </Col>
               <Col>
                 <form>
-                  <Form.Label>Provider</Form.Label>
+                  <label className="mt-2">Provider</label>
                   <Input
                     name="provider"
                     required={false}
@@ -1290,7 +1290,7 @@ maxLength="50" size="sm" as="select" onChange={e => setPcm(e.target.value)} valu
                   />
                 </form>
                 {/* <Form.Group>
-                            <Form.Label>Providers</Form.Label>
+                            <label className="mt-2">Providers</label>
                             <Form.Control
 maxLength="50" size="sm" as="select" onChange={e => setPp(e.target.value)} value={pp} options={coreContext.providerOptions} >
                             
@@ -1306,7 +1306,7 @@ maxLength="50" size="sm" as="select" onChange={e => setPp(e.target.value)} value
             <Row>
               <Col>
                 <Form.Group>
-                  <Form.Label>Home Phone</Form.Label>
+                  <label className="mt-2">Home Phone</label>
                   <Form.Control
 maxLength="50"
                     size="sm"
@@ -1319,7 +1319,7 @@ maxLength="50"
               </Col>{" "}
               <Col>
                 <Form.Group>
-                  <Form.Label>Mobile Phone</Form.Label>
+                  <label className="mt-2">Mobile Phone</label>
                   <Form.Control
 maxLength="50"
                     size="sm"
@@ -1332,7 +1332,7 @@ maxLength="50"
               </Col>
               <Col>
                 <Form.Group>
-                  <Form.Label>Work Phone</Form.Label>
+                  <label className="mt-2">Work Phone</label>
                   <Form.Control
 maxLength="50"
                     size="sm"
@@ -1344,10 +1344,12 @@ maxLength="50"
                 </Form.Group>
               </Col>
             </Row>
-            <Form.Group>
-              <Row>
-                <Col>Preferred Phone</Col>
+            <Row>
+                
                 <Col>
+                
+            <Form.Group>
+            <label className="mt-2">Preferred Phone</label>
                   <Form.Control
 maxLength="50"
                     size="sm"
@@ -1359,13 +1361,14 @@ maxLength="50"
                     <option value="Mobile">Mobile</option>
                     <option value="Work">Work</option>
                   </Form.Control>
+                  </Form.Group>
                 </Col>
               </Row>
-            </Form.Group>
+            
             <Row>
               <Col>
                 <Form.Group>
-                  <Form.Label>Phone Notes</Form.Label>
+                  <label className="mt-2">Phone Notes</label>
                   <Form.Control
 maxLength="50"
                     size="sm"
@@ -1399,7 +1402,7 @@ maxLength="50"
             <Row>
               <Col>
                 <Form.Group>
-                  <Form.Label>Mailing address</Form.Label>
+                  <label className="mt-2">Mailing address</label>
                   <Form.Control
 maxLength="50"
                     size="sm"
@@ -1413,7 +1416,7 @@ maxLength="50"
               </Col>
               <Col>
                 <Form.Group>
-                  <Form.Label>Zip Code</Form.Label>
+                  <label className="mt-2">Zip Code</label>
                   <Form.Control
 maxLength="50"
                     size="sm"
@@ -1428,7 +1431,7 @@ maxLength="50"
             <Row>
               <Col>
                 <Form.Group>
-                  <Form.Label>City</Form.Label>
+                  <label className="mt-2">City</label>
                   <Form.Control
 maxLength="50"
                     size="sm"
@@ -1441,7 +1444,7 @@ maxLength="50"
               </Col>
               <Col>
                 <Form.Group>
-                  <Form.Label>State</Form.Label>
+                  <label className="mt-2">State</label>
                   <Form.Control
 maxLength="50"
                     size="sm"
@@ -1461,7 +1464,7 @@ maxLength="50"
             {/* <Row>
                     <Col>
                         <Form.Group>
-                            <Form.Label>POS</Form.Label>
+                            <label className="mt-2">POS</label>
                             <Form.Control
 maxLength="50" size="sm" as="select" onChange={e => setPos(e.target.value)} value={pos}>
                                 <option value=""></option>
@@ -1477,7 +1480,7 @@ maxLength="50" size="sm" as="select" onChange={e => setPos(e.target.value)} valu
                     </Col>
                     <Col>
                         <Form.Group>
-                            <Form.Label>Risk Scope</Form.Label>
+                            <label className="mt-2">Risk Scope</label>
                             <Form.Control
 maxLength="50" size="sm" type="text" placeholder="Enter RAF" onChange={e => setRaf(e.target.value)} value={raf} />
                         </Form.Group>

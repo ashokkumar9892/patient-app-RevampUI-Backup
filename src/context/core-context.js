@@ -138,6 +138,8 @@ export const CoreContextProvider = (props) => {
   };
   const cleanup=()=>{
     //setPatients([]);
+    setbloodglucoseDataForPatient([]);
+    setbloodpressureDataForPatient([]);
   }
 
   const checkLocalAuth = () => {
@@ -3124,6 +3126,7 @@ export const CoreContextProvider = (props) => {
       });
   };
   const fetchBloodPressureForPatient = (userid, usertype) => {
+    
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
@@ -3564,6 +3567,7 @@ export const CoreContextProvider = (props) => {
       });
   };
   const fetchBloodGlucoseForPatient = (userid, usertype) => {
+    
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
