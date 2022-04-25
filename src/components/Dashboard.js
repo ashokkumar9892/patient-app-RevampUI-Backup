@@ -8,6 +8,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import Loader from "react-loader-spinner";
 import Moment from "moment";
 import "../css/dasboard.css";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+  Link
+} from "react-router-dom";
 
 import { Widget } from "react-chat-widget";
 
@@ -43,6 +50,10 @@ const Dashboard = (props) => {
   const RPM6=[];
   const RPM1=[];
   const RPM0=[];
+  const today=new Date();
+  today.setDate(today.getDate() - 7);
+  
+  
   
   const months = [ "January", "February", "March", "April", "May", "June",
 "July", "August", "September", "October", "November", "December" ];
@@ -53,9 +64,10 @@ const Dashboard = (props) => {
   const fetchPatients = () => {
     const email = localStorage.getItem("app_userEmail");
     coreContext.userDetails(email);
+
     const userType = localStorage.getItem("userType");
     const userId = localStorage.getItem("userId");
-    console.log("check ysertype from dashboard", userType);
+    
 
     if (userType === "admin") {
       coreContext.fetchPatientListfromApi("admin");
@@ -70,6 +82,36 @@ const Dashboard = (props) => {
   const fetchWeight = () => {
     let userType = localStorage.getItem("userType");
     let patientId = localStorage.getItem("userId");
+    const today=new Date();
+  
+  
+    var to=Moment(new Date()).format('YYYY-MM-DD')
+    var from=Moment(today).format('YYYY-MM-DD')
+      if(month===String(Currmonth)){
+        to=Moment(new Date()).format('YYYY-MM-DD');
+        today.setDate(today.getDate()-today.getDate()+1)
+  
+        from=Moment(today).format('YYYY-MM-DD')
+  
+      }else{
+        today.setMonth(month)
+        const Days30=[3,5,8,10]
+        const Days31=[0,2,4,6,7,9,12]
+        const Days28=[1]
+        if(Days31.includes(Number(month))){
+          today.setDate(31)
+        }else 
+        if(Days30.includes(Number(month))){
+          today.setDate(30)
+        }else 
+        if(Days28.includes(Number(month))){
+          today.setDate(28)
+        }
+        to=Moment(today).format('YYYY-MM-DD');
+        today.setDate(1)
+        from=Moment(today).format("YYYY-MM-DD")
+        console.log(from,to,"form")
+      }
     // check page if left side menu.
     if (window.location.href.substring("weight") > 0) {
     }
@@ -81,10 +123,11 @@ const Dashboard = (props) => {
     }
     setUserType(userType);
     coreContext.fetchWSData(patientId, userType);
-    coreContext.fetchBloodGlucose(patientId, userType);
-    coreContext.fetchBloodPressure(patientId, userType);
+    coreContext.fetchBloodGlucoseForDashboard(patientId, userType,from,to);
+    coreContext.fetchBloodPressureForDashboard(patientId, userType,from,to);
   };
-  useEffect(fetchWeight, [coreContext.weightData.length]);
+
+  useEffect(fetchWeight, [coreContext.weightData.length,month]);
   const renderSelect=()=>{
     return(<>
      
@@ -108,25 +151,20 @@ const Dashboard = (props) => {
   const selectmonth=React.useMemo(()=>renderSelect(),[month])
   
 
-  console.log("sahilwight", coreContext.weightData);
+  
   const wd = coreContext.weightData
     .map((curr) => curr.userId)
     .filter((item, i, ar) => ar.indexOf(item) === i);
   const bp = coreContext.bloodpressureData
     .map((curr) => curr.userId)
     .filter((item, i, ar) => ar.indexOf(item) === i);
-  const bg = coreContext.bloodglucoseData
+  const bg = coreContext.bloodglucoseDataForDashboard
     .map((curr) => curr.userId)
     .filter((item, i, ar) => ar.indexOf(item) === i);
   const reading = [...wd, ...bp, ...bg];
 
-  console.log(reading);
-  const fetchdpatient = (p) => {
-    coreContext.getdp(p);
-    //console.log(coreContext.dpatient)
-    alert(p);
-    alert(coreContext.patientWDevice);
-  };
+  
+  
   // useEffect(fetchdpatient, []);
   const setPatient = (p,description) => {
     console.log("sahil", p);
@@ -181,10 +219,10 @@ const Dashboard = (props) => {
         let patientTimelog = coreContext.AlltimeLogData.filter(
           (app) => app.UserId == curr.userId && Number(app.performedOn.substring(5,7))==Number(month)+1 && Number(app.performedOn.substring(0,4))==2022
         );
-        let BP = coreContext.bloodpressureData.filter(
+        let BP = coreContext.bloodpressureDataForDashboard.filter(
           (app) => app.UserId == curr.userId && Number(app.sortDateColumn.substring(5,7))==Number(month)+1 && Number(app.sortDateColumn.substring(0,4))==2022
         );
-        let BG = coreContext.bloodglucoseData.filter(
+        let BG = coreContext.bloodglucoseDataForDashboard.filter(
           (app) => app.userId == curr.userId && Number(app.sortDateColumn.substring(5,7))==Number(month)+1 && Number(app.sortDateColumn.substring(0,4))==2022
         );
         let WS = coreContext.weightData.filter(
@@ -478,31 +516,31 @@ const Dashboard = (props) => {
 <tbody>
   {renderTimeLogs()}
 <tr>
-<td> <a href="/dpatients" onClick={() => setPatient([...sixty,...fiftynine,...thirtynine,...nineteen,...nine,...zero,...inactive],`${months[month]} 2022 Logs(CCM)`)}>{coreContext.patients.length}</a>{" "}</td>
-<td>   <a href="/dpatients" onClick={() => setPatient(sixty,`${months[month]} 2022 60+ Mins Logs(CCM)`)}>
+<td> <Link to="/dpatients" onClick={() => setPatient([...sixty,...fiftynine,...thirtynine,...nineteen,...nine,...zero,...inactive],`${months[month]} 2022 Logs(CCM)`)}>{coreContext.patients.length}</Link>{" "}</td>
+<td>   <Link to="/dpatients" onClick={() => setPatient(sixty,`${months[month]} 2022 60+ Mins Logs(CCM)`)}>
                 {sixty.length}
-              </a>
+              </Link>
                </td>
 <td>
-<a href="/dpatients" onClick={() => setPatient(fiftynine,`${months[month]} 2022 40-60 Mins Logs(CCM)`)}>
+<Link to="/dpatients" onClick={() => setPatient(fiftynine,`${months[month]} 2022 40-60 Mins Logs(CCM)`)}>
                 {fiftynine.length}
-              </a>
+              </Link>
 </td>
-<td><a href="/dpatients" onClick={() => setPatient(thirtynine,`${months[month]} 2022 20-40 Mins Logs(CCM)`)}>
+<td><Link to="/dpatients" onClick={() => setPatient(thirtynine,`${months[month]} 2022 20-40 Mins Logs(CCM)`)}>
                 {thirtynine.length}
-              </a></td>
-<td><a href="/dpatients" onClick={() => setPatient(nineteen,`${months[month]} 2022 10-20 Mins Logs(CCM)`)}>
+              </Link></td>
+<td><Link to="/dpatients" onClick={() => setPatient(nineteen,`${months[month]} 2022 10-20 Mins Logs(CCM)`)}>
                 {nineteen.length}
-              </a></td>
-<td> <a href="/dpatients" onClick={() => setPatient(nine,`${months[month]} 2022 1-10 Mins Logs(CCM)`)}>
+              </Link></td>
+<td> <Link to="/dpatients" onClick={() => setPatient(nine,`${months[month]} 2022 1-10 Mins Logs(CCM)`)}>
                 {nine.length}
-              </a></td>
-<td> <a href="/dpatients" onClick={() => setPatient(zero,`${months[month]} 2022 0-1 Mins Logs(CCM)`)}>
+              </Link></td>
+<td> <Link to="/dpatients" onClick={() => setPatient(zero,`${months[month]} 2022 0-1 Mins Logs(CCM)`)}>
                 {zero.length}
-              </a></td>
-<td><a href="/dpatients" onClick={() => setPatient(inactive,`${months[month]} 2022 0 Mins Logs(CCM)`)}>
+              </Link></td>
+<td><Link to="/dpatients" onClick={() => setPatient(inactive,`${months[month]} 2022 0 Mins Logs(CCM)`)}>
                 {inactive.length}
-              </a></td>
+              </Link></td>
 <td>0</td>
 </tr>
 
@@ -544,29 +582,29 @@ const Dashboard = (props) => {
 <tbody>
   {renderTimeLogs()}
 <tr>
-<td> <a href="/dpatients" onClick={() => setPatient([...sixty,...fiftynine,...thirtynine,...nineteen,...nine,...zero,...inactive],`${months[month]} 2022 Logs(RPM)`)}>{coreContext.patients.length}</a>{" "}</td>
-<td>             <a href="/dpatients" onClick={() => setPatient([...new Set(sixty1)],`Patients Information with time log between 60+ Mins of RPM of ${months[month]} month`)}>
+<td> <Link to="/dpatients" onClick={() => setPatient([...sixty,...fiftynine,...thirtynine,...nineteen,...nine,...zero,...inactive],`${months[month]} 2022 Logs(RPM)`)}>{coreContext.patients.length}</Link>{" "}</td>
+<td>             <Link to="/dpatients" onClick={() => setPatient([...new Set(sixty1)],`Patients Information with time log between 60+ Mins of RPM of ${months[month]} month`)}>
                 {[...new Set(sixty1)].length}
-               </a></td>
+               </Link></td>
 <td>
-<a href="/dpatients" onClick={() => setPatient(fiftynine,`${months[month]} 2022 40-60 Mins Logs(RPM)`)}>
-                {fiftynine.length}
-              </a></td>
-<td> <a href="/dpatients" onClick={() => setPatient(thirtynine,`${months[month]} 2022 20-40 Mins Logs(RPM)`)}>
-                {thirtynine.length}
-              </a></td>
-<td><a href="/dpatients" onClick={() => setPatient(nineteen,`${months[month]} 2022 10-20 Mins Logs(RPM)`)}>
-                {nineteen.length}
-              </a></td>
-<td> <a href="/dpatients" onClick={() => setPatient(nine,`${months[month]} 2022 1-10 Mins Logs(RPM)`)}>
-                {nine.length}
-              </a></td>
-<td><a href="/dpatients" onClick={() => setPatient(zero,`${months[month]} 2022 0-1 Mins Logs(RPM)`)}>
-                {zero.length}
-              </a></td>
-<td> <a href="/dpatients" onClick={() => setPatient(inactive,`${months[month]} 2022 0 Mins Logs(RPM)`)}>
-                {inactive.length}
-              </a></td>
+<Link to="/dpatients" onClick={() => setPatient([...new Set(fiftynine1)],`${months[month]} 2022 40-60 Mins Logs(RPM)`)}>
+                {[...new Set(fiftynine1)].length}
+              </Link></td>
+<td> <Link to="/dpatients" onClick={() => setPatient([...new Set(thirtynine1)],`${months[month]} 2022 20-40 Mins Logs(RPM)`)}>
+                {[...new Set(thirtynine1)].length}
+              </Link></td>
+<td><Link to="/dpatients" onClick={() => setPatient([...new Set(nineteen1)],`${months[month]} 2022 10-20 Mins Logs(RPM)`)}>
+                {[...new Set(nineteen1)].length}
+              </Link></td>
+<td> <Link to="/dpatients" onClick={() => setPatient([...new Set(nine1)],`${months[month]} 2022 1-10 Mins Logs(RPM)`)}>
+                {[...new Set(nine1)].length}
+              </Link></td>
+<td><Link to="/dpatients" onClick={() => setPatient([...new Set(zero1)],`${months[month]} 2022 0-1 Mins Logs(RPM)`)}>
+                {[...new Set(zero1)].length}
+              </Link></td>
+<td> <Link to="/dpatients" onClick={() => setPatient([...new Set(inactive)],`${months[month]} 2022 0 Mins Logs(RPM)`)}>
+                {[...new Set(inactive)].length}
+              </Link></td>
 <td>0</td>
 </tr>
 
@@ -608,19 +646,19 @@ const Dashboard = (props) => {
 <tbody>
   {renderRemotePatientMonitor()}
 <tr>
-<td><a href="/Patients">{coreContext.patients.length}</a></td>
-<td><a href="/device-info" onClick={() => setPatient(inactive)}>
+<td><Link to="/Patients">{coreContext.patients.length}</Link></td>
+<td><Link to="/device-info" onClick={() => setPatient(inactive)}>
                  {[...new Set(patientwdevice)].length}
-               </a></td>
-<td><a href="/bloodpressure">{reading.length}</a></td>
-<td><a href="/verifieddevices">
+               </Link></td>
+<td><Link to="/bloodpressure">{reading.length}</Link></td>
+<td><Link to="/verifieddevices">
                  {v_devices !== undefined ? v_devices.length : 0}
-               </a></td>
-<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM16)],"Patient's Information")}>{[...new Set(RPM16)].length}</a></td>
-<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM11)],"Patient's Information")}>{[...new Set(RPM11)].length}</a></td>
-<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM6)],"Patient's Information")}>{[...new Set(RPM6)].length}</a></td>
-<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM1)],"Patient's Information")}>{[...new Set(RPM1)].length}</a></td>
-<td> <a href="/dpatients" onClick={()=>setPatient([...new Set(RPM0)],"Patient's Information")}>{[...new Set(RPM0)].length}</a></td>
+               </Link></td>
+<td> <Link to="/dpatients" onClick={()=>setPatient([...new Set(RPM16)],"Patient's Information")}>{[...new Set(RPM16)].length}</Link></td>
+<td> <Link to="/dpatients" onClick={()=>setPatient([...new Set(RPM11)],"Patient's Information")}>{[...new Set(RPM11)].length}</Link></td>
+<td> <Link to="/dpatients" onClick={()=>setPatient([...new Set(RPM6)],"Patient's Information")}>{[...new Set(RPM6)].length}</Link></td>
+<td> <Link to="/dpatients" onClick={()=>setPatient([...new Set(RPM1)],"Patient's Information")}>{[...new Set(RPM1)].length}</Link></td>
+<td> <Link to="/dpatients" onClick={()=>setPatient([...new Set(RPM0)],"Patient's Information")}>{[...new Set(RPM0)].length}</Link></td>
 </tr>
 
 </tbody>
@@ -655,12 +693,12 @@ const Dashboard = (props) => {
 </thead>
 <tbody>
 <tr>
-<td><a href="/billing" onClick={()=>setBPatient(Billing)}>{checkBills(Billing)}
+<td><Link to="/billing" onClick={()=>setBPatient(Billing)}>{checkBills(Billing)}
               {console.log(Billing,"Billing")}
-               </a></td>
-<td><a href="/billing">2</a></td>
-<td> <a href="/Patients">2</a></td>
-<td><a href="/Patients">2</a></td>
+               </Link></td>
+<td><Link to="/billing">2</Link></td>
+<td> <Link to="/Patients">2</Link></td>
+<td><Link to="/Patients">2</Link></td>
 </tr>
 
 </tbody>

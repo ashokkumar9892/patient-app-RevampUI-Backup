@@ -4,6 +4,13 @@ import { DataGrid } from '@material-ui/data-grid';
 import { PencilSquare, Trash } from 'react-bootstrap-icons';
 import Loader from "react-loader-spinner";
 import DataGridComponent from './common/DataGridComponent';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+  Link
+} from "react-router-dom";
 
 
 
@@ -46,7 +53,7 @@ const Weight = (props) => {
           width: 200 ,  
           type: 'string',
           renderCell: (params) => (
-            <a  href={`/patient-summary/${btoa(params.row.userId)}`}> {params.row.UserName} </a>
+            <Link  to={`/patient-summary/${btoa(params.row.userId)}`}> {params.row.UserName} </Link>
           )
         },
         {
@@ -101,8 +108,8 @@ const Weight = (props) => {
           //   width: 300,
             
           //   renderCell: (params) => (
-          //       <div>  <a href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
-          //       <a href="#" onClick={() => deletePatient(params.row)}>  <Trash /></a>
+          //       <div>  <Link to="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></Link>
+          //       <Link to="#" onClick={() => deletePatient(params.row)}>  <Trash /></Link>
           //       </div>
             
           //    )
@@ -198,6 +205,9 @@ const Weight = (props) => {
       }
       
         if (coreContext.weightData.length > 0 &&coreContext.weightData[0].UserName!==undefined){
+          const id=coreContext.patients.map((curr)=>curr.userId)
+      const rows=coreContext.weightData.filter((curr)=>id.includes(curr.userId))
+      console.log(rows,"bith data")
         //  coreContext.weightData  = coreContext.weightData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
         return (
             // <div style={{ height: 680, width: '100%' }}>
@@ -209,7 +219,7 @@ const Weight = (props) => {
             //     sortModel={[{ field: 'MeasurementDateTime', sort: 'desc' }]}
             //   />
             // </div>
-            <DataGridComponent rows={coreContext.weightData} columns={dgcolumns} sortModal={[{ field: "MeasurementDateTime", sort: "desc" }]}/>
+            <DataGridComponent rows={rows} columns={dgcolumns} sortModal={[{ field: "MeasurementDateTime", sort: "desc" }]}/>
           );
         }
         else{

@@ -266,42 +266,30 @@ const Thresold = (props) => {
     
     <React.Fragment>
       <div className="col">
-    <div className="page-title-container mb-3">
-    <div className="row">
-    <div className="row">
-      <div className="col-md-6">
-        <div className="card">
-          <h4 className="card-header">
-            {" "}
-            Blood Glucose (mg / dl){" "}
-            <span>
-              {userType === "doctor" ||
+    
+    
+    <div className="card-body">
+		<div className="row mb-1">
+		<div className="col-xl-6 mb-1">
+	<div className="card border border-primary">
+			<div className="card-header fs-5">Blood Glucose (mg / dl) <span>{userType === "doctor" ||
               userType === "admin" ||
-              userType === "provider" ? (
-                <button
-                  type="button"
-                  style={{ width: "190px" }}
-                  onClick={() => {
-                    coreContext.UpdateThreshold(
-                      "ADMIN_" + patientId,
-                      "bg",
-                      bgMax,
-                      bgMin,
-                      userType
-                    );
-                    
-                  }}
-                  className="btn btn-primary mb-2 float-right">
-                  {" "}
-                  Update
-                </button>
-              ) : (
-                ""
-              )}
-            </span>
-          </h4>
-          <div className="card-body">
-            <IonRangeSlider
+              userType === "provider" ? <button type="button" className="btn btn-lg btn-danger fs-6 float-end" onClick={() => {
+                coreContext.UpdateThreshold(
+                  "ADMIN_" + patientId,
+                  "bg",
+                  bgMax,
+                  bgMin,
+                  userType
+                );
+                
+              }}> Update</button>:""}</span>
+		</div>
+		<div className="card-body">
+		<div className="row">
+			<div className="col-xl-12">
+			
+      <IonRangeSlider
               disable={disableChart}
               keyboard={true}
               onStart={(e) => onBGChange(e)}
@@ -316,42 +304,31 @@ const Thresold = (props) => {
               grid_margin={true}
               grid_number={5}
             />
-          </div>
-        </div>
-      </div>
 
-      <div className="col-md-6">
-        <div className="card">
-          <h4 className="card-header">
-            {" "}
-            BMI (kg / m2)
-            <span>
-              {userType === "doctor" ||
+			</div>
+			</div>
+		</div>
+			</div>
+		</div>
+		<div className="col-xl-6 mb-1">
+	<div className="card border border-primary">
+			<div className="card-header fs-5"> BMI (kg / m2) <span>{userType === "doctor" ||
               userType === "admin" ||
-              userType === "provider" ? (
-                <button
-                  type="button"
-                  style={{ width: "190px" }}
-                  onClick={() =>
-                    coreContext.UpdateThreshold(
-                      "ADMIN_" + patientId,
-                      "bmi",
-                      bmiMax,
-                      bmiMin,
-                      userType
-                    )
-                  }
-                  class="btn btn-primary mb-2 float-right">
-                  {" "}
-                  Update
-                </button>
-              ) : (
-                ""
-              )}
-            </span>
-          </h4>
-          <div className="card-body">
-            <IonRangeSlider
+              userType === "provider" ? <button type="button"  onClick={() =>
+                coreContext.UpdateThreshold(
+                  "ADMIN_" + patientId,
+                  "bmi",
+                  bmiMax,
+                  bmiMin,
+                  userType
+                )
+              }
+              className="btn btn-lg btn-danger fs-6 float-end"> Update</button>:""}</span>
+		</div>
+		<div className="card-body">
+		<div className="row">
+			<div className="col-xl-12">
+      <IonRangeSlider
               disable={disableChart}
               keyboard={true}
               onFinish={(e) => onBMIChange(e)}
@@ -365,42 +342,31 @@ const Thresold = (props) => {
               grid_margin={true}
               grid_number={5}
             />
-          </div>
-        </div>
-      </div>
-
-      <div className="col-md-6">
-        <div className="card">
-          <h4 className="card-header">
-            {console.log("sahil is id",userType)}
-            Diastolic (mmHg)
-            <span>
-              {userType === "doctor" ||
+			</div>
+			</div>
+		</div>
+			</div>
+		</div>
+			</div>
+		<div className="row mb-1">
+		<div className="col-xl-6 mb-1">
+	<div className="card border border-primary">
+			<div className="card-header fs-5">Diastolic (mmHg) <span>  {userType === "doctor" ||
               userType === "admin" ||
-              userType === "provider" ? (
-                <button
-                  type="button"
-                  style={{ width: "190px" }}
-                  onClick={() =>
-                    coreContext.UpdateThreshold(
-                      "ADMIN_" + patientId,
-                      "Diastolic",
-                      diastolicMax,
-                      diastolicMin,
-                      userType
-                    )
-                  }
-                  class="btn btn-primary mb-2 float-right">
-                  {" "}
-                  Update
-                </button>
-              ) : (
-                ""
-              )}
-            </span>
-          </h4>
-          <div className="card-body">
-            <IonRangeSlider
+              userType === "provider" ?<button type="button" className="btn btn-lg btn-danger fs-6 float-end" onClick={() =>
+                coreContext.UpdateThreshold(
+                  "ADMIN_" + patientId,
+                  "Diastolic",
+                  diastolicMax,
+                  diastolicMin,
+                  userType
+                )
+              }> Update</button>:""}</span>
+		</div>
+		<div className="card-body">
+		<div className="row">
+			<div className="col-xl-12">
+      <IonRangeSlider
               disable={disableChart}
               keyboard={true}
               onFinish={(e) => onDiastolicChange(e)}
@@ -414,42 +380,29 @@ const Thresold = (props) => {
               grid_margin={true}
               grid_number={5}
             />
-          </div>
-        </div>
-      </div>
-
-      <div className="col-md-6">
-        <div className="card">
-          <h4 className="card-header">
-            {" "}
-            Systolic (mmHg)
-            <span>
-              {userType === "doctor" ||
+			</div>
+			</div>
+		</div>
+			</div>
+		</div>
+		<div className="col-xl-6 mb-1">
+	<div className="card border border-primary">
+			<div className="card-header fs-5">Systolic (mmHg) <span>{userType === "doctor" ||
               userType === "admin" ||
-              userType === "provider" ? (
-                <button
-                  type="button"
-                  style={{ width: "190px" }}
-                  onClick={() =>
-                    coreContext.UpdateThreshold(
-                      "ADMIN_" + patientId,
-                      "Systolic",
-                      systolicMax,
-                      systolicMin,
-                      userType
-                    )
-                  }
-                  class="btn btn-primary mb-2 float-right">
-                  {" "}
-                  Update
-                </button>
-              ) : (
-                ""
-              )}
-            </span>
-          </h4>
-          <div className="card-body">
-            <IonRangeSlider
+              userType === "provider" ?<button type="button" className="btn btn-lg btn-danger fs-6 float-end" onClick={() =>
+                coreContext.UpdateThreshold(
+                  "ADMIN_" + patientId,
+                  "Systolic",
+                  systolicMax,
+                  systolicMin,
+                  userType
+                )
+              }> Update</button>:""}</span>
+		</div>
+		<div className="card-body">
+		<div className="row">
+			<div className="col-xl-12">
+      <IonRangeSlider
               disable={disableChart}
               keyboard={true}
               onFinish={(e) => onSystolicChange(e)}
@@ -463,43 +416,30 @@ const Thresold = (props) => {
               grid_margin={true}
               grid_number={5}
             />
-          </div>
-        </div>
-      </div>
 
-      <div className="col-md-6">
-        <div className="card">
-          <h4 className="card-header">
-            {" "}
-            Weight (lb)
-            <span>
-              {console.log(userType)}
-              {userType === "doctor" ||
+			</div>
+			</div>
+		</div>
+			</div>
+		</div>
+    <div className="col-xl-6 mb-1">
+	<div className="card border border-primary">
+			<div className="card-header fs-5"> Weight (lb) <span>{userType === "doctor" ||
               userType === "admin" ||
-              userType === "provider" ? (
-                <button
-                  type="button"
-                  style={{ width: "190px" }}
-                  onClick={() =>
-                    coreContext.UpdateThreshold(
-                      "ADMIN_" + patientId,
-                      "Weight",
-                      weightMax,
-                      weightMin,
-                      userType
-                    )
-                  }
-                  class="btn btn-primary mb-2 float-right">
-                  {" "}
-                  Update
-                </button>
-              ) : (
-                ""
-              )}{" "}
-            </span>{" "}
-          </h4>
-          <div className="card-body">
-            <IonRangeSlider
+              userType === "provider" ?<button type="button" className="btn btn-lg btn-danger fs-6 float-end" onClick={() =>
+                coreContext.UpdateThreshold(
+                  "ADMIN_" + patientId,
+                  "Weight",
+                  weightMax,
+                  weightMin,
+                  userType
+                )
+              }> Update</button>:""}</span>
+		</div>
+		<div className="card-body">
+		<div className="row">
+			<div className="col-xl-12">
+      <IonRangeSlider
               disable={disableChart}
               keyboard={true}
               onFinish={(e) => onWeightChange(e)}
@@ -513,13 +453,16 @@ const Thresold = (props) => {
               grid_margin={true}
               grid_number={5}
             />
-          </div>
-        </div>
-      </div>
-    </div>
+          
+			</div>
+			</div>
+		</div>
+			</div>
+		</div>
+			</div>
+		
+		</div>
     {renderslider()}
-    </div>
-    </div>
     </div>
   </React.Fragment>
 

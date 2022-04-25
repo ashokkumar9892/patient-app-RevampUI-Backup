@@ -108,12 +108,12 @@ date.setHours(0,0,0,0)
       let bpdevice=[];
       let bgdevice=[];
       let wsdevice=[];
-      coreContext.bloodpressureData.filter((data)=>data.MeasurementDateTime>date).map((curr)=>{
+      coreContext.bloodpressureDataForNotification.filter((data)=>data.MeasurementDateTime>date).map((curr)=>{
         if(!bpdevice.includes(curr.DeviceId)){
           bpdevice.push(curr.DeviceId)
         }
       })
-      coreContext.bloodglucoseData.filter((data)=>data.MeasurementDateTime>date).map((curr)=>{
+      coreContext.bloodglucoseDataForNotification.filter((data)=>data.MeasurementDateTime>date).map((curr)=>{
         if(!bgdevice.includes(curr.DeviceId)){
           bgdevice.push(curr.DeviceId)
         }

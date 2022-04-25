@@ -177,9 +177,9 @@ const MyProfile = (props) => {
   });
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-6">
+    <div className="col">
+    <div className="page-title-container mb-3">
+    <div className="row">
           <div className="card">
             <div className="card-title mx-auto">
               <h3>

@@ -7,6 +7,7 @@ import axios from 'axios';
 import CoreContextProvider from './context/core-context';
 import TempContextProvider from './context/temp-context';
 import Footer from '../src/components/common/Footer'
+import './styles.css';
 
 //axios.defaults.baseURL = 'http://patient.local'; // dev
 axios.defaults.baseURL = 'https://patient-api.siddhantait.com'; // production

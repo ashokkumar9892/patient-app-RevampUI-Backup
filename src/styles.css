@@ -979,7 +979,7 @@ img{object-fit:cover}
 .z-index-1{z-index:1}
 .z-index-1000{z-index:1000}
 .basic-transform-transition{-webkit-transition:all .1s ease;transition:all .1s ease;pointer-events:none;-webkit-transform:translate(-50%,0);transform:translate(-50%,0)}
-.fixed-background{background:url("./login-bg.jpg") no-repeat center center fixed;background-size:cover;width:100%;height:100%;position:fixed;top:0;right:0;bottom:0;left:0}
+
 .hover-trigger:hover .visible-hover{visibility:visible!important}
 .cursor-default{cursor:default}
 .cursor-pointer{cursor:pointer}
@@ -2950,7 +2950,7 @@ html[data-navcolor=dark] .nav-container .menu-container .menu a.active,html[data
     min-height: 101px;object-position:left;object-fit:cover;background-repeat:no-repeat}
 html[data-color=dark-blue] .logo .img,html[data-color=dark-green] .logo .img,html[data-color=dark-lime] .logo .img,html[data-color=dark-pink] .logo .img,html[data-color=dark-purple] .logo .img,html[data-color=dark-red] .logo .img,html[data-color=dark-sky] .logo .img,html[data-color=dark-teal] .logo .img,html[data-color=light-blue] .logo .img,html[data-color=light-green] .logo .img,html[data-color=light-lime] .logo .img,html[data-color=light-pink] .logo .img,html[data-color=light-purple] .logo .img,html[data-color=light-red] .logo .img,html[data-color=light-sky] .logo .img,html[data-color=light-teal] .logo .img{color: #fff; font-size: 28px;}
 /*html[data-color=light-sky] .logo-default{background-image:url(../img/logo/logo-sky-light.svg)}*/
-html[data-color=light-blue] .logo-default{background-image:url(./logo-login.png)}
+
 /*html[data-color=light-green] .logo-default{background-image:url(../img/logo/logo-green-light.svg)}
 html[data-color=light-red] .logo-default{background-image:url(../img/logo/logo-red-light.svg)}
 html[data-color=light-pink] .logo-default{background-image:url(../img/logo/logo-pink-light.svg)}

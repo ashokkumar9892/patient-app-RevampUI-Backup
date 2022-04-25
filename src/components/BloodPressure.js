@@ -6,6 +6,13 @@ import { DataGrid } from "@material-ui/data-grid";
 import { PencilSquare, Trash } from "react-bootstrap-icons";
 import Loader from "react-loader-spinner";
 import IconButton from "@material-ui/core/IconButton";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+  Link
+} from "react-router-dom";
 
 import ClearIcon from "@material-ui/icons/Clear";
 import SearchIcon from "@material-ui/icons/Search";
@@ -125,12 +132,12 @@ const BloodPressure = (props) => {
       type: "string",
       headerAlign: 'left',
       renderCell: (params) => (
-        <a
+        <Link
           disable={disablelink}
-          href={`/patient-summary/${btoa(params.row.userId)}`}>
+          to={`/patient-summary/${btoa(params.row.userId)}`}>
           {" "}
           {params.row.UserName}{" "}
-        </a>
+        </Link>
       ),
     },
     {
@@ -209,14 +216,14 @@ const BloodPressure = (props) => {
     //   renderCell: (params) => (
     //     <div>
     //       {" "}
-    //       <a href="#" onClick={() => showEditForm(params.row)}>
+    //       <Link to="#" onClick={() => showEditForm(params.row)}>
     //         {" "}
     //         <PencilSquare />
-    //       </a>
-    //       <a href="#" onClick={() => deletePatient(params.row)}>
+    //       </Link>
+    //       <Link to="#" onClick={() => deletePatient(params.row)}>
     //         {" "}
     //         <Trash />
-    //       </a>
+    //       </Link>
     //     </div>
     //   ),
     // },
@@ -338,7 +345,9 @@ const BloodPressure = (props) => {
       coreContext.bloodpressureData[0].UserName !== undefined
     ) {
       //coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
-      console.log("coreContext.bloodpressureData",coreContext.bloodpressureData)
+      const id=coreContext.patients.map((curr)=>curr.userId)
+      const rows1=coreContext.bloodpressureData.filter((curr)=>id.includes(curr.UserId))
+      console.log(rows,"bith data")
       return (
         // <div style={{ height: 680, width: "100%" }}>
         //   <DataGrid
@@ -357,7 +366,7 @@ const BloodPressure = (props) => {
         //     }}
         //   />
         // </div>
-        <DataGridComponent rows={rows} columns={dgcolumns} sortModal={[{ field: "MeasurementDateTime", sort: "desc" }]}/>
+        <DataGridComponent rows={rows1} columns={dgcolumns} sortModal={[{ field: "MeasurementDateTime", sort: "desc" }]}/>
       );
     } else {
       return (

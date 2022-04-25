@@ -9,6 +9,7 @@ import Slider from "@mui/material/Slider";
 import swal from "sweetalert";
 import { Bar, Line, Scatter, Bubble, Stacked } from "react-chartjs-2";
 
+
 import {
   GenderMale,
   GenderFemale,
@@ -16,7 +17,7 @@ import {
   Trash,
 } from "react-bootstrap-icons";
 import DatePicker from "react-datepicker";
-import { ButtonGroup, Button, Form, Modal, TabPane } from "react-bootstrap";
+import { ButtonGroup, Button, Form, Modal,TabPane} from "react-bootstrap";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import "react-datepicker/dist/react-datepicker.css";
@@ -183,7 +184,16 @@ const PatientSummary = (props) => {
   let [provider, setProvider] = useState("");
   let [coach, setCoach] = useState("");
   let [coordinator, setCoordinator] = useState("");
+  const fetchbp = () => {
+    coreContext.fetchBloodPressureForPatient(localStorage.getItem("ehrId"), "patient");
+  };
+  const fetchbg = () => {
+    coreContext.fetchBloodGlucoseForPatient(localStorage.getItem("ehrId"), "patient");
+  };
 
+  useEffect(fetchbp, [coreContext.bloodpressureDataForPatient]);
+  
+  useEffect(fetchbg, [coreContext.bloodglucoseDataForPatient]);
   const fetchCareCoordinator = () => {
     const patientId = props.match.params.patient;
     setPatientId(patientId);
@@ -229,7 +239,7 @@ const PatientSummary = (props) => {
     //let patientData = JSON.parse(localStorage.getItem('app_patient'));
 
     //setPatient(patientData);
-    coreContext.fetchPatientListfromApi("patient", patientId);
+    coreContext.fetchPatientListfromApiForPatient("patient", patientId);
 
     //coreContext.fetchThresold("ADMIN_PATIENT_" + patientId, userType);
 
@@ -238,108 +248,15 @@ const PatientSummary = (props) => {
 
     //coreContext.fetchTaskTimerUser();
 
-    coreContext.fetchDeviceData("PATIENT_" + patientId, userName, userType);
-    /// setting default value
-    // if (coreContext.thresoldData.length === 0) {
-    //   let thdata = {};
-    //   const thDatas = [];
-    //   thdata.Element_value = "Blood Glucose";
-    //   thdata.bg_low = 0;
-    //   thdata.bg_high = 0;
-    //   thDatas.push(thdata);
-
-    //   thdata = {};
-    //   thdata.Element_value = "BMI";
-    //   thdata.bmi_low = 0;
-    //   thdata.bmi_high = 0;
-    //   thDatas.push(thdata);
-
-    //   thdata = {};
-    //   thdata.Element_value = "Diastolic";
-    //   thdata.diastolic_low = 0;
-    //   thdata.diastolic_high = 0;
-    //   thDatas.push(thdata);
-
-    //   thdata = {};
-    //   thdata.Element_value = "Systolic";
-    //   thdata.systolic_high = 0;
-    //   thdata.systolic_low = 0;
-    //   thDatas.push(thdata);
-
-    //   thdata = {};
-    //   thdata.Element_value = "Weight";
-    //   thdata.weight_low = 0;
-    //   thdata.weight_high = 10;
-    //   thDatas.push(thdata);
-    //   setThData(thDatas);
-    // } else {
-    //   setThData(coreContext.thresoldData);
-
-    //   var bgdata = coreContext.thresoldData.filter(
-    //     (a) => a.Element_value === "Blood Glucose"
-    //   );
-
-    //   if (bgdata.length > 0) {
-    //     setBgMin(bgdata[0].bg_low);
-    //     setBgMax(bgdata[0].bg_high);
-    //   } else {
-    //     setBgMin(0);
-    //     setBgMax(0);
-    //   }
-
-    //   var bpdata = coreContext.thresoldData.filter(
-    //     (a) => a.Element_value === "BMI"
-    //   );
-    //   if (bpdata.length > 0) {
-    //     setBmiMin(bpdata[0].bmi_low);
-    //     setBmiMax(bpdata[0].bmi_high);
-    //   } else {
-    //     setBmiMin(0);
-    //     setBmiMax(0);
-    //   }
-
-    //   var dialostic = coreContext.thresoldData.filter(
-    //     (a) => a.Element_value === "DIASTOLIC"
-    //   );
-
-    //   if (dialostic.length > 0) {
-    //     setDiastolicMin(dialostic[0].diastolic_low);
-    //     setDiastolicMax(dialostic[0].diastolic_high);
-    //   } else {
-    //     setDiastolicMin(0);
-    //     setDiastolicMax(0);
-    //   }
-
-    //   var systolic = coreContext.thresoldData.filter(
-    //     (a) => a.Element_value === "SYSTOLIC"
-    //   );
-    //   if (systolic.length > 0) {
-    //     setSystolicMin(systolic[0].systolic_low);
-    //     setSystolicMax(systolic[0].systolic_high);
-    //   } else {
-    //     setSystolicMin(0);
-    //     setSystolicMax(0);
-    //   }
-
-    //   var weight = coreContext.thresoldData.filter(
-    //     (a) => a.Element_value === "Weight"
-    //   );
-
-    //   if (weight.length > 0) {
-    //     setWeightMin(weight[0].weight_low);
-    //     setWeightMax(weight[0].weight_high);
-    //   } else {
-    //     setWeightMin(0);
-    //     setWeightMax(0);
-    //   }
-    // }
+    coreContext.fetchDeviceDataForPatient("PATIENT_" + patientId, userName, "patient");
+    
   };
   const fetchtime =()=>{
     coreContext.fetchTimeLog("PATIENT_" + patientId)
   }
 
   const pateientvalue = useMemo(() => fetchPatient, []);
-  useEffect(pateientvalue, []);
+  useEffect(fetchPatient, []);
   useEffect(fetchPatient,[adddeviceflag]);
 
   // useEffect(fetchPatient, [coreContext.patient.notes]);
@@ -533,12 +450,7 @@ return String(ttt[0].bg_high)
       </>
     );
   };
-  const fetchbp = () => {
-    coreContext.fetchBloodPressure(localStorage.getItem("ehrId"), "patient");
-  };
-  const fetchbg = () => {
-    coreContext.fetchBloodGlucose(localStorage.getItem("ehrId"), "patient");
-  };
+ 
   const fetchTd = () => {
     coreContext.fetchThresold(
       "ADMIN_" + localStorage.getItem("ehrId"),
@@ -548,8 +460,8 @@ return String(ttt[0].bg_high)
   const fetchadmintd=()=>{
     coreContext.fetchadminThresold("ADMIN_"+localStorage.getItem("userId"), "admin")
   }
-  useEffect(fetchbp, [coreContext.bloodpressureData.length]);
-  useEffect(fetchbg, [coreContext.bloodglucoseData.length]);
+  
+  
   useEffect(fetchTd, [JSON.stringify(coreContext.thresoldData)]);
   useEffect(fetchadmintd, [JSON.stringify(coreContext.adminthresold)]);
 console.log("check admin thresold from patient",coreContext.thresoldData)
@@ -613,7 +525,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
   }, [slider]);
 
   const getbpdata = (index) => {
-    if (coreContext.bloodpressureData.length == 0) {
+    if (coreContext.bloodpressureDataForPatient.length == 0) {
       return (
         <>
           <div
@@ -631,12 +543,12 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
       );
     }
     console.log(
-      coreContext.bloodpressureData[0].UserName,
-      "coreContext.bloodpressureData[0].UserName"
+      coreContext.bloodpressureDataForPatient[0].UserName,
+      "coreContext.bloodpressureDataForPatient[0].UserName"
     );
     if (
-      coreContext.bloodpressureData.length > 0 &&
-      coreContext.bloodpressureData[0].UserName !== "undefined"
+      coreContext.bloodpressureDataForPatient.length > 0 &&
+      coreContext.bloodpressureDataForPatient[0].UserName !== "undefined"
     ) {
       if (to.getDate() !== from.getDate()) {
 
@@ -645,7 +557,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
         console.log(
           "checking date of from and to",to,from
         );
-        var finaldata = coreContext.bloodpressureData.filter(
+        var finaldata = coreContext.bloodpressureDataForPatient.filter(
           (date) => date.MeasurementDateTime >= from && date.MeasurementDateTime <= to
         );
       } else {
@@ -677,7 +589,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
         today.setHours(0,0,0,0)
         let bfr = today.setDate(today.getDate() - SliderDays);
         console.log(bfr,"bfring")
-        var finaldata = coreContext.bloodpressureData.filter(
+        var finaldata = coreContext.bloodpressureDataForPatient.filter(
           (date) => date.MeasurementDateTime >= new Date(bfr)
         );
         
@@ -996,7 +908,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
   // const getbpdata2 = useMemo(() => getbpdata(2), []);
 
   const renderBloodGlucose = (index) => {
-    if (coreContext.bloodglucoseData.length == 0) {
+    if (coreContext.bloodglucoseDataForPatient.length == 0) {
       return (
         <div
           style={{
@@ -1013,11 +925,11 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
     }
 
     if (
-      coreContext.bloodglucoseData.length > 0 &&
-      coreContext.bloodglucoseData[0].UserName !== "undefined"
+      coreContext.bloodglucoseDataForPatient.length > 0 &&
+      coreContext.bloodglucoseDataForPatient[0].UserName !== "undefined"
     ) {
       if (slider === 100) {
-        var finalbgdata = coreContext.bloodglucoseData.filter(
+        var finalbgdata = coreContext.bloodglucoseDataForPatient.filter(
           (date) => date.MeasurementDateTime >= from && date.MeasurementDateTime <= to
         );
       } else {
@@ -1047,14 +959,14 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
         today.setHours(0,0,0,0)
         let bfr = today.setDate(today.getDate() - SliderDays);
         
-          console.log(coreContext.bloodglucoseData.filter(
+          console.log(coreContext.bloodglucoseDataForPatient.filter(
             (date) => date.MeasurementDateTime >= new Date(bfr)
           ),new Date(bfr),new Date(today.setHours(0,0,0,0)),"ngdatachecking")
-        var finalbgdata = coreContext.bloodglucoseData.filter(
+        var finalbgdata = coreContext.bloodglucoseDataForPatient.filter(
           (date) => date.MeasurementDateTime >= new Date(bfr)
         );
       }
-      console.log("finalbgdata",coreContext.bloodglucoseData)
+      console.log("finalbgdata",coreContext.bloodglucoseDataForPatient)
             let bg = [];
       let bgbefore = [];
       let bgafter = [];
@@ -1586,7 +1498,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
         
         );
       }
-      //coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
+      //coreContext.bloodpressureDataForPatient  = coreContext.bloodpressureDataForPatient.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
     } else {
       return (
         <div
@@ -1917,7 +1829,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
   
 
   const renderDeviceData = () => {
-    if (coreContext.deviceData.length === 0) {
+    if (coreContext.deviceDataForPatient.length === 0) {
       return (
         <div
           style={{
@@ -1934,10 +1846,10 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
       );
     }
 
-    if (coreContext.deviceData.length > 0) {
+    if (coreContext.deviceDataForPatient.length > 0) {
     }
     {
-      return coreContext.deviceData.map((deviceData, index) => {
+      return coreContext.deviceDataForPatient.map((deviceData, index) => {
         return (
           <tr>
             <td>{deviceData.DeviceType} </td>
@@ -1962,7 +1874,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
       });
     }
   };
-  useEffect(renderDeviceData, [coreContext.deviceData.length]);
+  useEffect(renderDeviceData, [coreContext.deviceDataForPatient.length]);
 
   const renderThreads = () => {
     if (coreContext.threads.length > 0) {
@@ -2061,7 +1973,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
   };
 
   const renderTopDetails = () => {
-    if (coreContext.patients.length === 0) {
+    if (coreContext.patientsForPatient.length === 0) {
       return (
         <div
           style={{
@@ -2076,41 +1988,41 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
         </div>
       );
     }
-    if (coreContext.patients.length > 0)
+    if (coreContext.patientsForPatient.length > 0)
       return (
         <>
         
          <div className="col-xl-2 mb-1">	
 	<p className="mb-0"><strong>Name</strong></p>
-  {coreContext.patients[0].name}
+  {coreContext.patientsForPatient[0].name}
 </div>
 	<div className="col-xl-4 mb-1">
 		<p className="mb-0"><strong>Email</strong></p>
-    {coreContext.patients[0].email}
+    {coreContext.patientsForPatient[0].email}
 </div>
 <div className="col-xl-2 mb-1">	
 	<p className="mb-0"><strong>DOB</strong></p>
-	{coreContext.patients[0].dob}
+	{coreContext.patientsForPatient[0].dob}
 </div>
 	<div className="col-xl-2 mb-1">	
 	<p className="mb-0"><strong>Gender</strong></p>
-	{coreContext.patients[0].gender === "Male" ? (
+	{coreContext.patientsForPatient[0].gender === "Male" ? (
               <GenderMale />
             ) : (
               <GenderFemale />
             )}
-            {coreContext.patients[0].gender}
+            {coreContext.patientsForPatient[0].gender}
 </div>
 	<div className="col-xl-2 mb-1">	
 	<p className="mb-0"><strong>Diagnosis</strong></p>
-	{coreContext.patients[0].diagnosisId}
+	{coreContext.patientsForPatient[0].diagnosisId}
 </div>
         </>
       );
   };
   const rendertop = React.useMemo(
     () => renderTopDetails(),
-    [coreContext.patients.length===1]
+    [coreContext.patientsForPatient.length===1]
   );
 
   const renderAddModifyFlags = () => {
@@ -2182,8 +2094,8 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
   }, []);
 
   const renderPatientinformation = () => {
-    if (coreContext.patients.length > 0) {
-      coreContext.patient = coreContext.patients[0];
+    if (coreContext.patientsForPatient.length > 0) {
+      coreContext.patient = coreContext.patientsForPatient[0];
     }
     if (coreContext.patient) {
       localStorage.setItem("ehrId", coreContext.patient.ehrId);
@@ -2859,7 +2771,12 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
         </div></div>
       );
   };
-
+  useEffect(renderTabs, []);
+  useEffect(() => {
+    return ()=>{
+      coreContext.cleanup()
+    }
+  },[]);
   return (
     <div className="col">
       <div className="page-title-container mb-3">
@@ -2949,7 +2866,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
 
       {Prompt}
 
-      <div>
+      
         <React.Fragment>
           <Modal show={showModal} onHide={handleModalClose} size="lg">
             <Modal.Header closeButton>
@@ -2960,9 +2877,9 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                 <h4 className="card-header">Task Timer</h4>
                 <div className="card-body">
                   <div className="row">
-                    <div className="col-md-6">
-                      <div className="row">
-                        Task Type
+                    <div className="col-md-4">
+                      
+                        <label>Task Type</label>
                         {/* //  {setTaskType("CarePlanReconciliation")} */}
                         <select
                           value={t1 === "Other" ? t1 : taskType}
@@ -2992,9 +2909,9 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                             onChange={(e) => setTaskType(e.target.value)}
                           />
                         ) : null}
+                     
                       </div>
-                      <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-md-4">
                           Performed By
                           {/* {renderTaskTimer()} */}
                           <select
@@ -3018,15 +2935,16 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                             })}
                           </select>
                         </div>
-                        <div className="col-md-12">
-                          Performed On
-                          <br />
+                        <div className="col-md-4">
+                         Performed On<br/>
+                         <div className="col-md-12">
                           <DatePicker
-                            className="form-control mt-2"
+                            className="form-control"
                             selected={date}
                             showTimeSelect
                             timeFormat="HH:mm"
                             timeIntervals={15}
+                            label="Performed On"
                             // onChange={(date) => setDate(date)}
                             onChange={(date) => {
                               setDate(date);
@@ -3036,8 +2954,9 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                             placeholderText="Enter a date"
                             dateFormat="MM/dd/yyyy hh:mm:ss aa"
                           />
+                          </div>
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-4">
                           <label for="appt">Enter Total Time:</label>
                           <input
                             className="form-control mb-2 mr-sm-2"
@@ -3048,8 +2967,8 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                           />
                           {/* <input className="form-control mb-2 mr-sm-2" type="time" value={timevalue} onChange={(e)=>{settimevalue(e.target.value);}} step="1"/> */}
                         </div>
-                      </div>
-                    </div>
+                      
+                    
                   </div>
                 </div>
                 <button
@@ -3066,7 +2985,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                     );
                     handleUpdate();
                   }}
-                  className="btn btn-sm btn-success">
+                  className="btn btn-lg btn-success">
                   {" "}
                   Update Time Log
                 </button>
@@ -3074,7 +2993,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
             </Modal.Body>
           </Modal>
         </React.Fragment>
-      </div>
+      
   
         {renderTabs()}
        
