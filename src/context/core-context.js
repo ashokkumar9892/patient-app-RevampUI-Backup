@@ -1981,6 +1981,33 @@ export const CoreContextProvider = (props) => {
         }
       });
   };
+  const ActivatePatient = (patientId) => {
+    const token = localStorage.getItem("app_jwt");
+
+    const data = {
+      TableName: userTable,
+      Key: {
+        SK: { S: "PATIENT_" + patientId },
+        PK: { S: "patient" },
+      },
+      UpdateExpression: "SET ActiveStatus = :v_ActiveStatus",
+      ExpressionAttributeValues: { ":v_ActiveStatus": { S: "Active" } },
+    };
+
+    axios
+      .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          // "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+        if (response.data === "Updated") {
+          swal("success", "Patient Activated Successfully.", "success");
+        }
+      });
+  };
 
   const DeleteTimeLog = (timelog) => {
     const token = localStorage.getItem("app_jwt");
@@ -4768,7 +4795,8 @@ export const CoreContextProvider = (props) => {
         fetchPatientListfromApiForPatient,
         patientsForPatient,
       fetchDeviceDataForPatient,
-      deviceDataForPatient
+      deviceDataForPatient,
+      ActivatePatient
       }}>
       {props.children}
     </CoreContext.Provider>

@@ -607,24 +607,20 @@ const handlechangeprovider=(p)=>{
     const userType = localStorage.getItem("userType");
     if (userType === "patient")
       return (
-        <NavDropdown
-          title={
-            <div style={{ display: "inline-block" }}>
-              <FileMedicalFill /> Clinical Data{" "}
-            </div>
-          }
-          id="collasible-nav-dropdown">
-          <NavDropdown.Item to="#">
-            <PersonLinesFill /> Allergies
-          </NavDropdown.Item>
-          <NavDropdown.Item to="#">
-            <PencilSquare /> Lab Results
-          </NavDropdown.Item>
-          <NavDropdown.Item to="#">
-            <PencilSquare /> Medications
-          </NavDropdown.Item>
-          {/* <NavDropdown.Item to="#" onClick={handleShow}><PencilSquare /> Vitals</NavDropdown.Item> */}
-        </NavDropdown>
+        <li className="list-inline-item mr-10">
+        <div className="btn-group">
+      <div className="dropdown pt-4">
+      <Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i className="icon text-white bi-envelope-open"></i> Clinical Data
+      </Link>
+      <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <Link className="dropdown-item" to="#"><i className="icon bi-chat-left-dots"></i> Allergies</Link>
+      <Link className="dropdown-item" to="#"><i className="icon bi-envelope-open"></i> Lab Results</Link>
+      <Link className="dropdown-item" to="#"><i className="icon bi-envelope-open"></i> Medications</Link>
+      </div>
+      </div>
+      </div>
+        </li>
       );
   };
 
@@ -632,26 +628,20 @@ const handlechangeprovider=(p)=>{
     const userType = localStorage.getItem("userType");
     if (userType === "patient")
       return (
-        <NavDropdown
-          title={
-            <div style={{ display: "inline-block" }}>
-              <FileMedical /> Vitals{" "}
-            </div>
-          }
-          id="collasible-nav-dropdown">
-          <NavDropdown.Item to="/bloodpressure">
-            <GiAbstract071 size={20} /> Blood Pressure
-          </NavDropdown.Item>
-          <NavDropdown.Item to="/bloodglucose">
-            <GiAcid size={20} /> Blood Glucose
-          </NavDropdown.Item>
-          <NavDropdown.Item to="/weight">
-            <GiWeight size={20} /> Weight{" "}
-          </NavDropdown.Item>
-          <NavDropdown.Item to="/thresold">
-            <GiAerialSignal size={20} /> Threshold
-          </NavDropdown.Item>
-        </NavDropdown>
+        <li className="list-inline-item mr-10">
+        <div className="btn-group">
+      <div className="dropdown pt-4">
+      <Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i className="icon text-white bi-envelope-open"></i> Vitals
+      </Link>
+      <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <Link className="dropdown-item" to="/bloodpressure"><i className="icon bi-chat-left-dots"></i> Blood Pressure</Link>
+      <Link className="dropdown-item" to="/bloodglucose"><i className="icon bi-envelope-open"></i> Blood Glucose</Link>
+      <Link className="dropdown-item" to="weight"><i className="icon bi-envelope-open"></i> Weight</Link>
+      </div>
+      </div>
+      </div>
+        </li>
       );
   };
 

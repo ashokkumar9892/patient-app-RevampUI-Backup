@@ -383,39 +383,15 @@ const Patients = (props) => {
       editable: false,
       type: "string",
       width: 150,
+    
     },
-    // {
-    //   field: 'Weight',
-    //   headerName: 'Weight',
-    //   type: "number",
-    //   width: 125,
-    //   editable: false,
-    // },
-    // {
-    //   field: 'diastolic',
-    //   headerName: 'Diastolic',
-    //   type: "number",
-    //   width: 140,
-    //   editable: false,
-    // },
-    // {
-    //   field: 'systolic',
-    //   headerName: 'Systolic',
-    //   type: "number",
-    //   width: 140,
-    //   editable: false,
-    // },
-    // {
-    //   field: 'BMI',
-    //   headerName: 'BMI',
-    //   width:175,
-    //   editable: false,
-    // },
+    
     {
       field: "",
       headerName: "Action",
       width: 150,
       renderCell: (params) => (
+        (params.row.ActiveStatus==="Active")?
         <div style={{ width: "100px" }}>
           <Link
             style={{ marginRight: "5px" }}
@@ -424,7 +400,7 @@ const Patients = (props) => {
             {" "}
             <PencilSquare />
           </Link>
-          {/* {console.log("sahil",params.row)} */}
+         
           <Link
             style={{ marginRight: "5px" }}
             to="#"
@@ -442,6 +418,17 @@ const Patients = (props) => {
             {" "}
             <Person />
           </Link>
+        </div>:<div style={{ width: "100px" }}>
+          <Link
+            style={{ marginRight: "5px" }}
+            to="#"
+            onClick={() => coreContext.ActivatePatient(params.row.userId)}>
+            {" "}
+             Activate
+          </Link>
+         
+          
+        
         </div>
       ),
     },
@@ -646,7 +633,8 @@ const Patients = (props) => {
       );
     }
   };
-  useEffect(renderPatients, [JSON.stringify(coreContext.patients),coreContext.patients.length]);
+  useEffect(renderPatients, [JSON.stringify(coreContext.patients)]);
+  useEffect(renderPatients, [coreContext.patients.length]);
 
 
   return (

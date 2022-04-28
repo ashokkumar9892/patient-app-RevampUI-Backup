@@ -40,6 +40,7 @@ import { Widget, addResponseMessage,handleToggle } from "react-chat-widget-2";
 import "react-chat-widget-2/lib/styles.css";
 import { Vdeviceinfo } from "./components/Vdevice";
 import { io } from "socket.io-client";
+import Tutorials from "./components/common/Tutorials";
 const Moment = require("moment");
 
 const socket = io("https://demoapi.apatternplus.com/", {
@@ -381,6 +382,11 @@ function App() {
                     exact
                     path="/device-info"
                     component={Testing}
+                  />
+                  <Route
+                    exact
+                    path="/tutorial"
+                    component={Tutorials}
                   />{" "}
                   <Route exact path="/covid">
                     <Covidform />
