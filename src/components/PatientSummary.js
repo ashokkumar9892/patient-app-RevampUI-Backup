@@ -1799,7 +1799,7 @@ const thresoldbars=React.useMemo(()=>renderthresold(),[JSON.stringify(coreContex
       );
     }
   };
-const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreContext.timeLogData)])
+const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreContext.timeLogData),deleteTimeLog])
   //useEffect(renderTimelogs, [JSON.stringify(coreContext.timeLogData)]);
   useEffect(fetchtime, [JSON.stringify(coreContext.timeLogData)]);
 
@@ -1817,8 +1817,10 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
     })
     .then((willDelete) => {
       if (willDelete) {
-        coreContext.DeleteDeviceData(deviceData.id);
+        coreContext.DeleteDeviceData(deviceData.id,patientId,userName);
         setdeviceflag(adddeviceflag + 1 )
+        
+        
       } else {
         swal("Delete Cancelled");
       }
@@ -1840,14 +1842,13 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
             marginTop: "10px",
             alignItems: "center",
           }}>
-          <h6>no data found</h6>
-          {/* <Loader type="Circles" color="#00BFFF" height={100} width={100} /> */}
+            
+          <Loader type="Circles" color="#00BFFF" height={90} width={90} />
         </div>
       );
     }
 
-    if (coreContext.deviceDataForPatient.length > 0) {
-    }
+    if (coreContext.deviceDataForPatient.length > 0 && coreContext.deviceDataForPatient[0].id!==undefined) 
     {
       return coreContext.deviceDataForPatient.map((deviceData, index) => {
         return (
@@ -1872,6 +1873,9 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
           </tr>
         );
       });
+    }
+    else{
+      return("no device")
     }
   };
   useEffect(renderDeviceData, [coreContext.deviceDataForPatient.length]);
@@ -2538,9 +2542,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                         patientId,
                         userName
                       );
-                      coreContext.fetchTimeLog("PATIENT_" + patientId);
-                      coreContext.fetchTimeLog("PATIENT_" + patientId);
-                      coreContext.fetchTimeLog("PATIENT_" + patientId);
+                      
                       setPristine();
                       
                       setPerformedBy("");
@@ -2549,6 +2551,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                       sett1("");
                       settimevalue("");
                       setTlValue("00:00:00");
+                      
                     }}> Add Time Log</button>
 		</div>
 			</div>
@@ -2727,9 +2730,10 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                         type="button"
                         onClick={() =>{
                           setdeviceflag(adddeviceflag + 1)
-                          coreContext.addDevice(deviceType, deviceId, patientId)
+                          coreContext.addDevice(deviceType, deviceId, patientId,userName)
                           setDeviceId("");
                           setDeviceType("");
+                          
                         }
                         }
                         className="btn btn-primary mb-2">

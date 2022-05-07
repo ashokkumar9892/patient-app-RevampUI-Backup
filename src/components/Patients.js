@@ -83,6 +83,41 @@ const Patients = (props) => {
   const [zip, setZip] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
+  const diagonislist=["D45- Polycythemia vera",
+  "G47.33- Obstructive sleep apnea (adult) (pediatric)",
+  "I10- Essential (primary) hypertension",
+  "I13.10- Hypertensive heart and chronic kidney disease without heart",
+  "failure ",
+  "I509- Heart failure, unspecified",
+  "E03.9- Hypothyroidism, unspecified",
+  "E11.65- Type 2 diabetes mellitus with hyperglycemia",
+  "E11.9- Type 2 diabetes mellitus without complications",
+  "E61.1- Iron deficiency",
+  "E66.3- Overweight",
+  "E66.01- Morbid (severe) obesity due to excess calories",
+  "E66.9- Obesity, unspecified",
+  "E78.5- Hyperlipidemia, unspecified",
+  "F33.2- Major depressive disorder, recurrent severe without psychotic",
+  "features",
+  "F41.1- Generalized anxiety disorder",
+  "H10.9- Unspecified conjunctivitis",
+  "J32.4- Chronic pansinusitis",
+  "J45.40- Moderate persistent asthma, uncomplicated",
+  "J45.41- Moderate persistent asthma with (acute) exacerbation",
+  "K58.2- Mixed irritable bowel syndrome",
+  "M25.562- Pain in left knee",
+  "M54.50- Low back pain, unspecified",
+  "M79.7- Fibromyalgia",
+  "N92.5- Other specified irregular menstruation",
+  "R03.0- Elevated blood-pressure reading, without diagnosis of",
+  "hypertension",
+  "R53.83- Other fatigue",
+  "R73.03- Prediabetes",
+  "Z68.41- Body mass index [BMI] 40.0-44.9, adult",
+  "Z68.44- Body mass index [BMI] 60.0-69.9, adult",
+  "K580- unspecified"
+  ]
+ 
 
   const editPatient = () => {};
   const coreContext = useContext(CoreContext);
@@ -383,39 +418,15 @@ const Patients = (props) => {
       editable: false,
       type: "string",
       width: 150,
+    
     },
-    // {
-    //   field: 'Weight',
-    //   headerName: 'Weight',
-    //   type: "number",
-    //   width: 125,
-    //   editable: false,
-    // },
-    // {
-    //   field: 'diastolic',
-    //   headerName: 'Diastolic',
-    //   type: "number",
-    //   width: 140,
-    //   editable: false,
-    // },
-    // {
-    //   field: 'systolic',
-    //   headerName: 'Systolic',
-    //   type: "number",
-    //   width: 140,
-    //   editable: false,
-    // },
-    // {
-    //   field: 'BMI',
-    //   headerName: 'BMI',
-    //   width:175,
-    //   editable: false,
-    // },
+    
     {
       field: "",
       headerName: "Action",
       width: 150,
       renderCell: (params) => (
+        (params.row.ActiveStatus==="Active")?
         <div style={{ width: "100px" }}>
           <Link
             style={{ marginRight: "5px" }}
@@ -424,7 +435,7 @@ const Patients = (props) => {
             {" "}
             <PencilSquare />
           </Link>
-          {/* {console.log("sahil",params.row)} */}
+         
           <Link
             style={{ marginRight: "5px" }}
             to="#"
@@ -442,6 +453,17 @@ const Patients = (props) => {
             {" "}
             <Person />
           </Link>
+        </div>:<div style={{ width: "100px" }}>
+          <Link
+            style={{ marginRight: "5px" }}
+            to="#"
+            onClick={() => coreContext.ActivatePatient(params.row.userId)}>
+            {" "}
+             Activate
+          </Link>
+         
+          
+        
         </div>
       ),
     },
@@ -646,7 +668,8 @@ const Patients = (props) => {
       );
     }
   };
-  useEffect(renderPatients, [JSON.stringify(coreContext.patients),coreContext.patients.length]);
+  useEffect(renderPatients, [JSON.stringify(coreContext.patients)]);
+  useEffect(renderPatients, [coreContext.patients.length]);
 
 
   return (
@@ -853,18 +876,11 @@ const Patients = (props) => {
                 <div className="row">
                 <div className="col-md-10">
 
-{
+{/* {
                   dcount.map((curr,index)=>{
                     return(
                       <>
-                      {/* <Form.Control
-                    onChange={(e) => }
-                    value={dcount[index]}
-                    size="sm"
-                    type="text"
-                    placeholder="Enter Diagnosis ID"
-                  
-                  /> */}
+                     
                   <label className="mt-2 mb-0">Diagnosis</label>
                 
                   <Input
@@ -884,11 +900,39 @@ const Patients = (props) => {
                  
                   </>
                     )
+                  })} */}
+                    <Form.Group>
+                  <label className="mt-2">Diagnosis</label>
+                  {
+                  dcount.map((curr,index)=>{
+                    return(
+                      <>
+                      
+ <Form.Control
+maxLength="50"
+                    onChange={(e) => handledcount(index,e.target.value)}
+                    value={dcount[index]}
+                    size="sm"
+                    className="mt-1"
+                    as="select">
+                      <option value=""></option>
+                    {   diagonislist.map((curr)=><option value={curr.split("-")[0]}>{curr}</option>)}
+                    
+                    
+                    
+
+                    {/* <option value='Hindi'>Hindi</option> */}
+                  </Form.Control>                 
+                  </>
+                    )
                   })}
+                   <Button className="mt-1 mb-1" onClick={()=>setdcount([...dcount,""])}>+</Button>
+                  
+                </Form.Group>
+               
+                  
                      </div>
-                  <div className="col-md-2 mt-4">
-                  <Button onClick={()=>setdcount([...dcount,""])}>+</Button>
-                  </div>
+                  
                   </div>
               </div>
               <div className="col-md-6">

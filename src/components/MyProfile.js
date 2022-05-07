@@ -6,6 +6,7 @@ import Input from "./common/Input";
 import ImageUploader from "./common/UploadImage";
 import { LockFill } from "react-bootstrap-icons";
 import { DataGrid } from "@material-ui/data-grid";
+import DataGridComponent from "../components/common/DataGridComponent"
 
 const MyProfile = (props) => {
   const coreContext = useContext(CoreContext);
@@ -99,6 +100,7 @@ const MyProfile = (props) => {
 
   const onImagesSelected = (pictures) => {
     setSelectedImages(pictures);
+    console.log(pictures,"  ")
   };
 
   const onEmailChangedHandler = (e) => {
@@ -160,13 +162,9 @@ const MyProfile = (props) => {
     // }
     if (coreContext.deviceData.length > 0) {
       return (
-        <div style={{ height: 680, width: "100%" }}>
-          <DataGrid
-            rows={coreContext.deviceData}
-            columns={columns}
-            pageSize={10}
-          />
-        </div>
+        <DataGridComponent rows={coreContext.deviceData}
+        columns={columns} />
+        
       );
     }
   };
@@ -176,22 +174,34 @@ const MyProfile = (props) => {
     reValidateMode: "onBlur",
   });
 
-  return (
-    <div className="col">
-    <div className="page-title-container mb-3">
-    <div className="row">
-          <div className="card">
-            <div className="card-title mx-auto">
-              <h3>
-                <Badge variant="success">My Profile</Badge>
-              </h3>
-            </div>
-            <div className="card-body">
-              <Form
+  return (<>
+   
+    <div class="col">
+<div class="page-title-container mb-3">
+<div class="row">
+<div class="col mb-2">
+<h1 class="mb-2 pb-0 display-4" id="title">My Profile
+
+
+</h1>
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-xl-12">
+<div class="card mb-3">
+<div class="card-body">
+<Form
                 autoComplete="off"
                 onSubmit={handleSubmit(updateUser)}
                 noValidate>
-                <Input
+<div class="row">
+
+				    <div class="col-xl-4">
+                                              <div class="mb-3">
+						<lable>Name</lable>
+            <Input
                   label="Name"
                   value={userName}
                   elementType="text"
@@ -204,8 +214,14 @@ const MyProfile = (props) => {
                   register={register}
                   errors={errors}
                 />
-
-                <Input
+						</div>                                                  
+                                         
+                                            </div>		
+	 <div class="col-xl-4">
+                         <div class="mb-3">
+						<lable>Email</lable>
+						
+            <Input
                   label="Email"
                   elementType="email"
                   value={email}
@@ -221,8 +237,13 @@ const MyProfile = (props) => {
                     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
                   }
                 />
-
-                <Input
+						</div>                                                  
+                                            </div>	
+	 <div class="col-xl-4">
+                         <div class="mb-3">
+						<lable>Phone</lable>
+						
+            <Input
                   label="Phone"
                   elementType="text"
                   value={phone}
@@ -235,8 +256,16 @@ const MyProfile = (props) => {
                   errors={errors}
                   name="phone"
                 />
+						</div>                                                  
+                                            </div>
+						 </div>
+	<div class="row">
+				    <div class="col-xl-4">
+                                              <div class="mb-3">
+						<lable>Date of Birth</lable>
+												  
 
-                <Input
+            <Input
                   label="Date of Birth"
                   elementType="date"
                   value={birthDate}
@@ -250,7 +279,14 @@ const MyProfile = (props) => {
                   name="dob"
                 />
 
-                <Input
+						</div>                                                  
+                                         
+                                            </div>		
+	 <div class="col-xl-4">
+                         <div class="mb-3">
+						<lable>Height (Inch)</lable>
+						
+            <Input
                   label="Height (Inch)"
                   value={height}
                   elementType="number"
@@ -263,8 +299,12 @@ const MyProfile = (props) => {
                   errors={errors}
                   name="height"
                 />
-
-                <Input
+						</div>                                                  
+                                            </div>	
+	 <div class="col-xl-4">
+                         <div class="mb-3">
+						<lable>Weight (Lob)</lable>
+            <Input
                   label="Weight (Lob)"
                   value={weight}
                   elementType="number"
@@ -278,7 +318,19 @@ const MyProfile = (props) => {
                   name="weight"
                 />
 
-                <Input
+						</div>                                                  
+                                            </div>
+						 </div>
+		<div class="row">
+				    <div class="col-xl-4">
+                                              <div class="mb-3">
+						<lable>BMI</lable>
+												      
+
+
+
+
+            <Input
                   label="BMI"
                   value={bmi}
                   elementType="number"
@@ -291,8 +343,15 @@ const MyProfile = (props) => {
                   errors={errors}
                   name="bmi"
                 />
-
-                <Input
+						</div>                                                  
+                                         
+                                            </div>		
+	 <div class="col-xl-4">
+                         <div class="mb-3">
+						<lable>Time Zone
+</lable>
+						
+<Input
                   label="Time Zone"
                   name="timeZone"
                   required={false}
@@ -304,48 +363,60 @@ const MyProfile = (props) => {
                   onChange={onTimeZoneChangedHandler}
                 />
 
-                {renderImageUploader()}
+						</div>                                                  
+                                            </div>	
 
-                <center> {coreContext.renderLoader()}</center>
-                <center>
+						 </div>
+	<div class="row">
+				    <div class="col-xl-12">
+                                              <div class="mb-3">
+												  
+                                              {renderImageUploader()}
+						</div>                                                  
+                                         
+                                            </div>		
+
+
+						 </div>
+             <center> {coreContext.renderLoader()}</center>
+             <center>
                   {" "}
                   <Input variant="danger" label={message} elementType="label" />
                 </center>
-
-                <Input
+	<div class="row text-center">
+				    <div class="col-xl-12">
+            <Input
                   blockButton={true}
                   value="Save"
                   elementType="button"
-                  variant="primary"
+                  variant="danger"
                 />
-              </Form>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6">
-          <div className="card">
-            <div className="card-title mx-auto">
-              <h3>
-                <Badge variant="success">Device</Badge>
-              </h3>
-            </div>
-            <div className="card-body">
-              <div className="row">
-                <div className="col-md-12">
-                  <h6>
-                    <span class="badge badge-primary">
-                      Provider Registered Devices
-                    </span>
-                  </h6>
-                  {renderDeviceData()}
-                </div>
+	</div>
+  
+</div>
+</Form>
 
-                <div className="col-md-12">
-                  <form>
-                    <h6>
-                      <span class="badge badge-primary"> Add a Device</span>
-                    </h6>
-                    <select
+	
+</div>
+</div>
+<div class="card mb-3">	
+
+<div class="card-body">
+<div class="row">
+<div class="col-xl-6">
+<div class="table-responsive-sm mb-0">
+{renderDeviceData()}
+</div>
+
+	
+</div>
+	
+	<div class="col-xl-6">
+		<div class="row">
+				    <div class="col-xl-6">
+                                              <div class="mb-3">
+						<lable>Select Device</lable>
+            <select
                       value={deviceType}
                       onChange={(e) => setDeviceType(e.target.value)}
                       className="form-control mb-3 mr-sm-2">
@@ -354,29 +425,48 @@ const MyProfile = (props) => {
                       <option value="BG">Blood Glucose</option>
                       <option value="WS">Weight</option>
                     </select>
-                    <input
+						</div>                                                  
+                                         
+                                            </div>		
+	 <div class="col-xl-6">
+                         <div class="mb-3">
+						<lable>Enter Device Id
+</lable>
+<input
                       type="text"
                       value={deviceId}
                       onChange={(e) => setDeviceId(e.target.value)}
                       class="form-control mb-2 mr-sm-2"
                       placeholder="Enter device ID "
                     />
-                    <button
+						</div>                                                  
+                                            </div>	
+
+						 </div>
+		<div class="row text-center">
+				    <div class="col-xl-12">
+            <button
                       type="button"
                       onClick={() =>
                         coreContext.addDevice(deviceType, deviceId, patientid)
                       }
-                      class="btn btn-primary mb-2">
+                      class="btn btn-danger mb-2">
                       Add Device
                     </button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+	</div>
+</div>
+	</div>
+
+
+</div>
+
+</div>
+	</div>
+</div>
+</div>
+	</div>
+	
+    </>
   );
 };
 

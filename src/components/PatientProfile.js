@@ -497,7 +497,10 @@ const PatientProfile = (props) => {
   };
 
   return (
-    <div className="card">
+    <div className="col">
+    <div className="page-title-container mb-3">
+    <div className="row">
+    <div className="col mb-2">
       <div onClick={() => setShowNotesTextBox(false)} className="card-header">
         {renderTopDetails()}
       </div>
@@ -673,6 +676,10 @@ const PatientProfile = (props) => {
         <div className="col-md-12">{renderTabs()}</div>{" "}
       </div>
     </div>
+    </div>
+    </div>
+    </div>
+    
   );
 };
 

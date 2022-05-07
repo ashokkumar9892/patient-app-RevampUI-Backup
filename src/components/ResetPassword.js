@@ -37,7 +37,7 @@ const ResetPassword = (props) => {
       <div className="row">
         <div className="col-md-3"></div>
         <div className="col-md-6">
-          <div className="card">
+          <div className="card mt-5">
             <div className="card-title mx-auto">
               <h5>
                 <Badge variant="success">
@@ -46,10 +46,12 @@ const ResetPassword = (props) => {
               </h5>
             </div>
             <div className="card-body">
+            <h2 class="card-title">Reset-Password</h2>
               <Form
                 autoComplete="off"
                 onSubmit={handleSubmit(login)}
                 noValidate>
+                  
                 <Input
                   label="Email"
                   elementType="email"
@@ -65,13 +67,17 @@ const ResetPassword = (props) => {
                     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
                   }
                 />
-
+<div className="mt-1 ">
+  <center>
                 <Input
                   blockButton={true}
                   value="Send"
                   elementType="button"
                   variant="primary"
+                  
                 />
+                </center>
+                </div>
                 <br />
                 <center> {coreContext.renderLoader()}</center>
                 <center>
