@@ -100,7 +100,7 @@ const MyProfile = (props) => {
 
   const onImagesSelected = (pictures) => {
     setSelectedImages(pictures);
-    console.log(pictures,"  ")
+    console.log(pictures,"SAHILIMAGE")
   };
 
   const onEmailChangedHandler = (e) => {
