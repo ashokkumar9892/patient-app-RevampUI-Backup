@@ -1,36 +1,7 @@
-import React from 'react'
-import Video from './Video'
+ var a= [{name:"sahil",age:"24",place:"ynr"},{name:"sahil1",age:"25",place:"ynr1"},{name:"sahil2",age:"26",place:"ynr2"},{name:"sahil3",age:"29",place:"ynr3"}]
 
-
-const Tutorials = () => {
-  
-  return (
-    <div className="col">
-    <div className="page-title-container mb-3">
-    <div className="row">
-    <div className="col mb-2">
-    <h1 className="mb-2 pb-0 display-4" id="title">Tutorial Videos
-    </h1>
-    </div>
-    </div>
-    </div>
-    
-    <div className="row">
-    <Video link={"https://www.youtube.com/watch?v=IzIk2YQVwRM"}/>
-   
-    <Video link={"https://www.youtube.com/watch?v=EnspRnEA4_c"}/>  
-    
-  
-    <Video link={"https://www.youtube.com/watch?v=hDC9Pd3QnaY"}/>
-   
-   <Video link={"https://www.youtube.com/watch?v=hDC9Pd3QnaY"}/>  
-   
-   
-   
-   
-    </div>
-      </div>
-  )
-}
-
-export default Tutorials
+var b=[];
+a.map((curr)=>{
+  b.push(curr.name)
+})
+console.log(b)
