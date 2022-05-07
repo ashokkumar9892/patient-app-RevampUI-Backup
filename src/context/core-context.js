@@ -137,9 +137,13 @@ export const CoreContextProvider = (props) => {
     window.location.assign("/login");
   };
   const cleanup=()=>{
-    //setPatients([]);
+    // setPatients([]);
     setbloodglucoseDataForPatient([]);
     setbloodpressureDataForPatient([]);
+  }
+  const cleanup1=()=>{
+   setPatients([]);
+ 
   }
 
   const checkLocalAuth = () => {
@@ -1425,7 +1429,8 @@ export const CoreContextProvider = (props) => {
       });
   };
 
-  const addDevice = (deviceType, deviceId, patientId) => {
+  const addDevice = (deviceType, deviceId, patientId,userName) => {
+  setdeviceDataForPatient([]);
     const token = localStorage.getItem("app_jwt");
     const date = new Date();
     const doctorId = "";
@@ -1476,6 +1481,8 @@ export const CoreContextProvider = (props) => {
         if (response.data === "Registered") {
           
           swal("success", "Device Inserted Successfully.", "success");
+          fetchDeviceDataForPatient("PATIENT_" + patientId, userName, "patient");
+          
         }
       });
   };
@@ -2010,6 +2017,7 @@ export const CoreContextProvider = (props) => {
   };
 
   const DeleteTimeLog = (timelog) => {
+    setTimeLogData([]);
     const token = localStorage.getItem("app_jwt");
 
     const data = {
@@ -2069,7 +2077,8 @@ export const CoreContextProvider = (props) => {
         }
       });
   };
-  const DeleteDeviceData = (id) => {
+  const DeleteDeviceData = (id,patientId,userName) => {
+    setdeviceDataForPatient([]);
     const token = localStorage.getItem("app_jwt");
 
     const data = {
@@ -2094,6 +2103,7 @@ export const CoreContextProvider = (props) => {
         if (response.data === "Updated") {
           // alert("");
           swal("success", "Device Deleted Successfully.", "success");
+ fetchDeviceDataForPatient("PATIENT_" + patientId, userName, "patient");
         } else {
           swal("error", "Server Error", "error");
         }
@@ -2234,7 +2244,7 @@ export const CoreContextProvider = (props) => {
     axios
       .post(apiUrl + "/register", data, {
         headers: {
-          Accept: "application/json, text/plain, */*",
+          Accept: "application/json",
           // "Content-Type": "application/json",
           Authorization: "Bearer " + token,
         },
@@ -2279,7 +2289,7 @@ export const CoreContextProvider = (props) => {
                 "&actionType=register",
               {
                 headers: {
-                  Accept: "application/json, text/plain, */*",
+                  Accept: "application/json",
                   // "Content-Type": "application/json",
                   Authorization: "Bearer " + token,
                 },
@@ -2587,9 +2597,9 @@ export const CoreContextProvider = (props) => {
           if (devicedata.username !== undefined) dataSetdevice.push(devicedata);
         });
 
-        if (dataSetdevice[0] !== "no device found") {
+        
           setdeviceDataForPatient(dataSetdevice);
-        }
+        
 
         if (type == "Weight") {
           fetchWSData(patientId, username, usertype, dataSetdevice);
@@ -4393,6 +4403,7 @@ export const CoreContextProvider = (props) => {
     patientId,
     userName
   ) => {
+    setTimeLogData([]);
     const token = localStorage.getItem("app_jwt");
     console.log("dhhgdfsghfsfs", startdate);
     const date = new Date(startdate);
@@ -4460,6 +4471,7 @@ export const CoreContextProvider = (props) => {
         if (response.data === "Registered") {
           console.log(response.data);
           swal("success", "TimeLog has been added successfully", "success");
+          fetchTimeLog("PATIENT_" + patientId);
         }
       });
   };
@@ -4547,6 +4559,7 @@ export const CoreContextProvider = (props) => {
     userName
   ) => {
     const token = localStorage.getItem("app_jwt");
+    setTimeLogData([]);
 
     const data = {
       TableName: userTable,
@@ -4796,7 +4809,8 @@ export const CoreContextProvider = (props) => {
         patientsForPatient,
       fetchDeviceDataForPatient,
       deviceDataForPatient,
-      ActivatePatient
+      ActivatePatient,
+      cleanup1
       }}>
       {props.children}
     </CoreContext.Provider>

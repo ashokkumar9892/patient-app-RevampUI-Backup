@@ -118,8 +118,11 @@ const TopMenu = ({ changestyle, showSidebar }) => {
 
   const [message, setMessage] = useState("");
   const [userName, setUserName] = useState("");
+  const [pwdtype,setpwdtype]=useState("password");
+  const [pwdtype1,setpwdtype1]=useState("password");
   const [showSearch, setShowSearch] = useState(false);
   const [pwd, setpwd] = useState("");
+  const [cnfpwd, setcnfpwd] = useState("");
   const [firstName, setfirstName] = useState("");
   const [middleName, setmiddleName] = useState("");
   const [lastName, setlastName] = useState("");
@@ -160,7 +163,42 @@ const TopMenu = ({ changestyle, showSidebar }) => {
   const [open, setOpen] = React.useState(false);
   const today=new Date();
   today.setDate(today.getDate() - 7);
-  
+  const diagonislist=["D45- Polycythemia vera",
+  "G47.33- Obstructive sleep apnea (adult) (pediatric)",
+  "I10- Essential (primary) hypertension",
+  "I13.10- Hypertensive heart and chronic kidney disease without heart",
+  "failure ",
+  "I509- Heart failure, unspecified",
+  "E03.9- Hypothyroidism, unspecified",
+  "E11.65- Type 2 diabetes mellitus with hyperglycemia",
+  "E11.9- Type 2 diabetes mellitus without complications",
+  "E61.1- Iron deficiency",
+  "E66.3- Overweight",
+  "E66.01- Morbid (severe) obesity due to excess calories",
+  "E66.9- Obesity, unspecified",
+  "E78.5- Hyperlipidemia, unspecified",
+  "F33.2- Major depressive disorder, recurrent severe without psychotic",
+  "features",
+  "F41.1- Generalized anxiety disorder",
+  "H10.9- Unspecified conjunctivitis",
+  "J32.4- Chronic pansinusitis",
+  "J45.40- Moderate persistent asthma, uncomplicated",
+  "J45.41- Moderate persistent asthma with (acute) exacerbation",
+  "K58.2- Mixed irritable bowel syndrome",
+  "M25.562- Pain in left knee",
+  "M54.50- Low back pain, unspecified",
+  "M79.7- Fibromyalgia",
+  "N92.5- Other specified irregular menstruation",
+  "R03.0- Elevated blood-pressure reading, without diagnosis of",
+  "hypertension",
+  "R53.83- Other fatigue",
+  "R73.03- Prediabetes",
+  "Z68.41- Body mass index [BMI] 40.0-44.9, adult",
+  "Z68.44- Body mass index [BMI] 60.0-69.9, adult",
+  "K580- unspecified"
+  ]
+ 
+ 
   const to=Moment(new Date()).format('YYYY-MM-DD')
   const from=Moment(today).format('YYYY-MM-DD')
   console.log(to,from,"tofrom")
@@ -409,6 +447,10 @@ const handlechangeprovider=(p)=>{
     
     if (!userName) {
       alert("Enter user name...");
+      return;
+    }
+    if(pwd!==cnfpwd){
+      alert("Password and confirm password");
       return;
     }
     if (!pwd) {
@@ -1064,6 +1106,7 @@ maxLength="50"
                     onChange={onEmailChangedHandler}
                     value={email}
                   />
+              
                 </Form.Group>
               </Col>
               <Col>
@@ -1072,14 +1115,33 @@ maxLength="50"
                   <Form.Control
 maxLength="50"
                     size="sm"
-                    type="password"
-                    onChange={(e) => setpwd(e.target.value)}
-                    value={pwd}
+                    type={pwdtype}
+                    onChange={(e) => setcnfpwd(e.target.value)}
+                    value={cnfpwd}
                     placeholder="Enter Password"
                   />
+                    <i class="bi bi-eye"onClick={()=>setpwdtype((pwdtype==="password")?"text":"password")}  id="togglePassword" style={{position:"absolute",top:"6%",right:"38%"}}></i>
                 </Form.Group>
               </Col>
               <Col>
+                <Form.Group>
+                  <label className="mt-2" >Confirm Password*</label>
+                  <Form.Control
+maxLength="50"
+                    size="sm"
+                    type={pwdtype1}
+                    onChange={(e) => setpwd(e.target.value)}
+                    value={pwd}
+                    placeholder="Enter Password"
+
+                  />
+                      <i class="bi bi-eye" onClick={()=>setpwdtype1((pwdtype1==="password")?"text":"password")} id="togglePassword" style={{position:"absolute",top:"6%",right:"5%"}}></i>
+                </Form.Group>
+              </Col>
+            
+            </Row>
+            <Row>
+            <Col>
                 <Form.Group>
                   <label className="mt-2">User Name</label>
                   <Form.Control
@@ -1092,8 +1154,6 @@ maxLength="50"
                   />
                 </Form.Group>
               </Col>
-            </Row>
-            <Row>
               <Col>
                 <Form.Group>
                   <label className="mt-2">First Name*</label>
@@ -1120,7 +1180,10 @@ maxLength="50"
                   />
                 </Form.Group>
               </Col>
-              <Col>
+              
+            </Row>
+            <Row>
+            <Col>
                 <Form.Group>
                   <label className="mt-2">Last Name*</label>
                   <Form.Control
@@ -1133,8 +1196,6 @@ maxLength="50"
                   />
                 </Form.Group>
               </Col>
-            </Row>
-            <Row>
               <Col>
                 <Form.Group>
                   <label className="mt-2">Date of Birth*</label>
@@ -1163,7 +1224,10 @@ maxLength="50"
                   </Form.Control>
                 </Form.Group>
               </Col>
-              <Col>
+              
+            </Row>
+            <Row>
+            <Col>
                 <Form.Group>
                   <label className="mt-2">Language</label>
                   <Form.Control
@@ -1180,7 +1244,7 @@ maxLength="50"
                   </Form.Control>
                 </Form.Group>
               </Col>
-            </Row>
+              </Row>
             <Row>
               <Col>
                 <Form.Group>
@@ -1189,20 +1253,26 @@ maxLength="50"
                   dcount.map((curr,index)=>{
                     return(
                       <>
-                      <Form.Control
+                      
+ <Form.Control
 maxLength="50"
                     onChange={(e) => handledcount(index,e.target.value)}
                     value={dcount[index]}
                     size="sm"
-                    type="text"
-                    placeholder="Enter Diagnosis"
-                  
-                  />
-                 
+                    className="mt-1"
+                    as="select">
+                      <option value=""></option>
+                    {   diagonislist.map((curr)=><option value={curr.split("-")[0]}>{curr}</option>)}
+                    
+                    
+                    
+
+                    {/* <option value='Hindi'>Hindi</option> */}
+                  </Form.Control>                 
                   </>
                     )
                   })}
-                   <Button onClick={()=>setdcount([...dcount,""])}>+</Button>
+                   <Button className="mt-1" onClick={()=>setdcount([...dcount,""])}>+</Button>
                   
                 </Form.Group>
               </Col>

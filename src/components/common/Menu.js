@@ -140,6 +140,12 @@ const renderChat=()=>{
 <span className="label">  Orders</span>
 </Link>
 </li>
+<li>
+<Link to="/tutorial">
+<i className="icon bi-bag-fill"></i>
+<span className="label">  Tutorials</span>
+</Link>
+</li>
 
 </ul>
     <div className="d-none d-md-block sw-25">
