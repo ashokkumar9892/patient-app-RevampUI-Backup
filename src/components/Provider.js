@@ -226,6 +226,7 @@ useEffect(fetchProviders, [checked]);
     .then((willDelete) => {
       if (willDelete) {
         coreContext.DeleteCareTeam(patient.doctor_id, "doctor", "Provider");
+        coreContext.setdoctorData([]);
       } else {
         swal("Delete Cancelled");
       }
@@ -475,7 +476,7 @@ useEffect(fetchProviders, [checked]);
             blockButton={true}
             value="Submit"
             onClick={() =>
-              {coreContext.UpdateProvider(name, phone, email, patientId);handleModalClose()}
+              {coreContext.UpdateProvider(name, phone, email, patientId);coreContext.setdoctorData([]);handleModalClose()}
             }
             elementType="button"
             variant="primary"
