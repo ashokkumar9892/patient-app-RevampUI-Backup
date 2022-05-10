@@ -1120,7 +1120,7 @@ maxLength="50"
                     value={cnfpwd}
                     placeholder="Enter Password"
                   />
-                    <i class="bi bi-eye"onClick={()=>setpwdtype((pwdtype==="password")?"text":"password")}  id="togglePassword" style={{position:"absolute",top:"6%",right:"38%"}}></i>
+                    <i class="bi bi-eye"onClick={()=>setpwdtype((pwdtype==="password")?"text":"password")}  id="togglePassword" style={{position:"absolute",top:"7%",right:"38%"}}></i>
                 </Form.Group>
               </Col>
               <Col>
@@ -1135,7 +1135,7 @@ maxLength="50"
                     placeholder="Enter Password"
 
                   />
-                      <i class="bi bi-eye" onClick={()=>setpwdtype1((pwdtype1==="password")?"text":"password")} id="togglePassword" style={{position:"absolute",top:"6%",right:"5%"}}></i>
+                      <i class="bi bi-eye" onClick={()=>setpwdtype1((pwdtype1==="password")?"text":"password")} id="togglePassword" style={{position:"absolute",top:"7%",right:"5%"}}></i>
                 </Form.Group>
               </Col>
             

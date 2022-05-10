@@ -201,6 +201,7 @@ const Coach = (props) => {
         <Modal.Body>
           <div className="row">
             <div className="col-md-6">
+              <label>Name</label>
               <Input
                 label="Name"
                 elementType="text"
@@ -214,10 +215,11 @@ const Coach = (props) => {
                 register={register}
                 errors={errors}
               />
-            </div>
+            
           </div>
-          <div className="row">
+          
             <div className="col-md-6">
+            <label>Phone</label>
               <Input
                 label="Phone"
                 elementType="text"
@@ -233,7 +235,7 @@ const Coach = (props) => {
               />
             </div>
           </div>
-
+<div className="row" style={{marginTop:"1%"}}>
           <Input
             blockButton={true}
             value="Submit"
@@ -243,6 +245,7 @@ const Coach = (props) => {
             elementType="button"
             variant="primary"
           />
+        </div>
           <br />
           <center> {coreContext.renderLoader()}</center>
           <center>

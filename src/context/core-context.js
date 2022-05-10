@@ -4810,7 +4810,8 @@ export const CoreContextProvider = (props) => {
       fetchDeviceDataForPatient,
       deviceDataForPatient,
       ActivatePatient,
-      cleanup1
+      cleanup1,
+      setdoctorData
       }}>
       {props.children}
     </CoreContext.Provider>

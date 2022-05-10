@@ -226,6 +226,7 @@ useEffect(fetchProviders, [checked]);
     .then((willDelete) => {
       if (willDelete) {
         coreContext.DeleteCareTeam(patient.doctor_id, "doctor", "Provider");
+        coreContext.setdoctorData([]);
       } else {
         swal("Delete Cancelled");
       }
@@ -438,6 +439,7 @@ useEffect(fetchProviders, [checked]);
         <Modal.Body>
           <div className="row">
             <div className="col-md-6">
+              <label>Name</label>
               <Input
                 label="Name"
                 elementType="text"
@@ -452,9 +454,10 @@ useEffect(fetchProviders, [checked]);
                 errors={errors}
               />
             </div>
-          </div>
-          <div className="row">
+         
+         
             <div className="col-md-6">
+            <label>Phone</label>
               <Input
                 label="Phone"
                 elementType="text"
@@ -470,16 +473,22 @@ useEffect(fetchProviders, [checked]);
               />
             </div>
           </div>
-
+<div className="row" style={{marginTop:"1%"}}>
+  <div className="col-md-2"></div>
+  
           <Input
             blockButton={true}
             value="Submit"
             onClick={() =>
-              {coreContext.UpdateProvider(name, phone, email, patientId);handleModalClose()}
+              {coreContext.UpdateProvider(name, phone, email, patientId);coreContext.setdoctorData([]);handleModalClose()}
             }
             elementType="button"
             variant="primary"
+            
+            
           />
+          <div className="col-md-2"></div>
+          </div>
           <br />
           <center> {coreContext.renderLoader()}</center>
           <center>
