@@ -170,6 +170,7 @@ const Patients = (props) => {
       state,
       newId.substring(1)
     );
+    coreContext.cleanup1();
   }
 
   useEffect(fetchProviders, []);
@@ -358,6 +359,7 @@ const Patients = (props) => {
     .then((willDelete) => {
       if (willDelete) {
         coreContext.DeletePatient(patient.userId);
+        coreContext.cleanup1();
         fetchPatients();
 
       } else {
@@ -457,7 +459,7 @@ const Patients = (props) => {
           <Link
             style={{ marginRight: "5px" }}
             to="#"
-            onClick={() => coreContext.ActivatePatient(params.row.userId)}>
+            onClick={() => {coreContext.ActivatePatient(params.row.userId);coreContext.cleanup1()}}>
             {" "}
              Activate
           </Link>
