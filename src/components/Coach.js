@@ -118,6 +118,7 @@ const Coach = (props) => {
     .then((willDelete) => {
       if (willDelete) {
         coreContext.DeleteCareTeam(patient.doctor_id, "coach", "Coach");
+        coreContext.setcoachData([]);
       } else {
         swal("Delete Cancelled");
       }
@@ -240,7 +241,7 @@ const Coach = (props) => {
             blockButton={true}
             value="Submit"
             onClick={() =>
-              {coreContext.UpdateCoach(name, phone, email, patientId);handleModalClose()}
+              {coreContext.UpdateCoach(name, phone, email, patientId);handleModalClose();coreContext.setcoachData([]);}
             }
             elementType="button"
             variant="primary"
@@ -341,7 +342,7 @@ const Coach = (props) => {
                     <button
                       type="button"
                       class="btn btn-md btn-info mb-2"
-                      onClick={() => coreContext.addCoach(name, email, phone, password)}
+                      onClick={() => {coreContext.addCoach(name, email, phone, password);coreContext.setcoachData([]);}}
                     >
                       Add Coach
                     </button>

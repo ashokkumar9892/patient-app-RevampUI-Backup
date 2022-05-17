@@ -116,6 +116,7 @@ const CareCoordinator = (props) => {
           "carecoordinator",
           "Care Coordinator"
         );
+        coreContext.setccData([]);
       } else {
         swal("Delete Cancelled");
       }
@@ -238,6 +239,7 @@ const CareCoordinator = (props) => {
             value="Submit"
             onClick={() => {
               coreContext.UpdateCareCoordinator(name, phone, email, patientId);
+              coreContext.setccData([]);
               handleModalClose();
             }}
             elementType="button"
@@ -337,7 +339,7 @@ const CareCoordinator = (props) => {
                       type="button"
                       class="btn btn-md btn-info mb-2"
                       onClick={() =>
-                        coreContext.addCareCoordinator(name, email, phone, password)
+                        {coreContext.addCareCoordinator(name, email, phone, password);coreContext.setccData([]);}
                       }
                     >
                       Add Care Coordinator

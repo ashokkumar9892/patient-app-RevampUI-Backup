@@ -4807,6 +4807,8 @@ export const CoreContextProvider = (props) => {
         weightDataForPatient,
         fetchPatientListfromApiForPatient,
         patientsForPatient,
+        setccData,
+        setcoachData,
       fetchDeviceDataForPatient,
       deviceDataForPatient,
       ActivatePatient,
