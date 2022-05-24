@@ -3414,6 +3414,7 @@ deviceType:patient.deviceType,
       .then((response) => {
         const bloodglucoseData = response.data;
         console.log(response.data,"response.data")
+        
         const dataSetbg = [];
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
@@ -3422,6 +3423,18 @@ deviceType:patient.deviceType,
 
         bloodglucoseData.forEach((bg, index) => {
           //   console.log('p' + index, bg);
+          axios
+    .post(
+      apiUrl2 +
+        "bg",bg,{
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
+         
+        },
+         
+    )
           let bgdata = {};
           bgdata.id = index;
           if (bg.GSI1PK !== undefined) {
