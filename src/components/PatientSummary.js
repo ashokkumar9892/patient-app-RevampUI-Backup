@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, useMemo } from "react";
+import React, { useEffect, useContext, useState, useMemo,useCallback } from "react";
 import axios from "axios";
 //import "../App.css";
 import { makeStyles } from "@material-ui/core/styles";
@@ -907,7 +907,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
   // const getbpdata3 = useMemo(() => getbpdata(3), []);
   // const getbpdata2 = useMemo(() => getbpdata(2), []);
 
-  const renderBloodGlucose = (index) => {
+  const renderBloodGlucose =  useCallback((index) => {
     if (coreContext.bloodglucoseDataForPatient.length == 0) {
       return (
         <div
@@ -1514,7 +1514,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
         </div>
       );
     }
-  };
+  }, [coreContext.bloodglucoseDataForPatient]);
 
   //useEffect(fetchPatient, [coreContext.timeLogData.length]);
 
@@ -1566,6 +1566,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
       headerName: "Task Type",
       width: 190,
       type: "string",
+
       //headerAlign: 'center'
     },
     {
@@ -1602,6 +1603,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
       editable: false,
 
       valueFormatter: (params) => {
+        console.log(params,"baluetime")
         const valueFormatted = Moment(params.value).format(
           "MM-DD-YYYY hh:mm:ss A"
         );
@@ -1763,7 +1765,7 @@ const thresoldbars=React.useMemo(()=>renderthresold(),[JSON.stringify(coreContex
     }
   };
 
-  const renderTimelogs = () => {
+  const renderTimelogs = useCallback( () => {
     if (coreContext.timeLogData.length === 0) {
       return (
         <div
@@ -1783,7 +1785,9 @@ const thresoldbars=React.useMemo(()=>renderthresold(),[JSON.stringify(coreContex
     if (coreContext.timeLogData.length > 0) {
       //  timerLogs  = timerLogs.sort((a,b) => new Moment(b.startDT) - new Moment(a.startDT));
       return (
+        
         <div style={{ height: 500, width: "100%" }}>
+          {console.log(coreContext.timeLogData,"coreContext.timeLogData")}
           <DataGrid
             className={classes.root}
             rows={coreContext.timeLogData}
@@ -1798,7 +1802,7 @@ const thresoldbars=React.useMemo(()=>renderthresold(),[JSON.stringify(coreContex
         </div>
       );
     }
-  };
+  },[coreContext.timeLogData]);
 const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreContext.timeLogData),deleteTimeLog])
   //useEffect(renderTimelogs, [JSON.stringify(coreContext.timeLogData)]);
   useEffect(fetchtime, [JSON.stringify(coreContext.timeLogData)]);

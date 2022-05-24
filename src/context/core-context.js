@@ -89,6 +89,9 @@ export const CoreContextProvider = (props) => {
   const [apiUrl, setApiUrl] = useState(
     "https://appapi.apatternplus.com/api"
   );
+  const [apiUrl2, setApiUrl2] = useState(
+    "https://localhost:44320/"
+  );
   const [userTable, setuserTable] = useState("UserDetailsDemo");
 
   // const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210725100004.azurewebsites.net/api');
@@ -322,89 +325,30 @@ export const CoreContextProvider = (props) => {
 
     let data = "";
 
-    if (usertype === "admin") {
+    if (usertype === "admin"){
       if (AllActive) {
-        data = {
-          TableName: userTable,
-          ProjectionExpression:
-            "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus, Notes,diagnosisId",
-          KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
-          ExpressionAttributeValues: {
-            ":v_PK": { S: "patient" },
-            ":v_SK": { S: "PATIENT_" },
-          },
-        };
+        data={ DoctorId: "ADMIN",ActiveStatus:"Deactive" }
+        
       } else {
-        data = {
-          TableName: userTable,
-          ProjectionExpression:
-            "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus,Notes,diagnosisId",
-          KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
-          FilterExpression: "ActiveStatus = :v_status",
-          ExpressionAttributeValues: {
-            ":v_PK": { S: "patient" },
-            ":v_SK": { S: "PATIENT_" },
-            ":v_status": { S: "Active" },
-          },
-        };
+        data={ DoctorId: "ADMIN",ActiveStatus:"Active" }
       }
     }
 
     if (usertype === "doctor") {
       if (AllActive) {
-        data = {
-          TableName: userTable,
-          ProjectionExpression:
-            "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus,Notes,diagnosisId",
-          KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
-          ExpressionAttributeValues: {
-            ":v_PK": { S: "patient" },
-            ":v_SK": { S: "PATIENT_" },
-          },
-        };
-      } else {
-        data = {
-          TableName: userTable,
-          IndexName: "Patient-Doctor-Device-Index",
-          KeyConditionExpression: "GSI1PK = :v_PK AND GSI1SK =  :v_SK",
-          FilterExpression: "ActiveStatus = :v_status",
-          ExpressionAttributeValues: {
-            ":v_PK": { S: "patient" },
-            ":v_SK": { S: userId },
-            ":v_status": { S: "Active" },
-          },
-        };
-      }
-    }
+        data={ DoctorId: "DOCTOR_"+userId ,ActiveStatus:"Deactive" }
+        }
+       else {
+        data={ DoctorId: "DOCTOR_"+userId ,ActiveStatus:"Active" }
+        }
+  };
+    
 
     if (usertype === "carecoordinator") {
-      data = {
-        TableName: userTable,
-        ProjectionExpression:
-          "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus,Notes,diagnosisId",
-        KeyConditionExpression: "PK = :v_PK ",
-        FilterExpression:
-          "ActiveStatus = :v_status AND CarecoordinatorId = :v_CarecoordinatorId",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "patient" },
-          ":v_CarecoordinatorId": { S: userId },
-          ":v_status": { S: "Active" },
-        },
-      };
+      data={ DoctorId: "DOCTOR_"+userId ,ActiveStatus:"Deactive" }
     }
     if (usertype === "coach") {
-      data = {
-        TableName: userTable,
-        ProjectionExpression:
-          "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus,Notes,diagnosisId",
-        KeyConditionExpression: "PK = :v_PK ",
-        FilterExpression: "ActiveStatus = :v_status AND CoachId = :v_CoachId",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "patient" },
-          ":v_CoachId": { S: userId },
-          ":v_status": { S: "Active" },
-        },
-      };
+      data={ DoctorId: "DOCTOR_"+userId ,ActiveStatus:"Deactive" }
     }
     // if (usertype === "patient" && userName !==undefined) {
     //     data = {
@@ -415,33 +359,28 @@ export const CoreContextProvider = (props) => {
     //     }
     // }
     if (usertype === "patient") {
-      data = {
-        TableName: userTable,
-        ProjectionExpression:
-          "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus,Notes,diagnosisId",
-        KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
-        FilterExpression: "ActiveStatus = :v_status",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "patient" },
-          ":v_SK": { S: "PATIENT_" + userId },
-          ":v_status": { S: "Active" },
-        },
-      };
+      data={ DoctorId: "PATIENT_"+userId ,ActiveStatus:"Deactive" }
     }
 
     await axios
-      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+    .get(
+      apiUrl2 +
+        "patient",
+        { params: data },
+        {
         headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
         },
-      })
+        
+         
+    )
       .then((response) => {
         // setJwt(response.data);
         //  console.log(response.data);
         const patients = response.data;
-        // console.log("i need to check the patient",patients.length)
+        console.log("i need to check the patient",patients)
         const ps = [];
         if (patients.length === 0) {
           ps.push("No data found");
@@ -451,176 +390,118 @@ export const CoreContextProvider = (props) => {
         patients.forEach((p, index) => {
           let patient = {};
 
-          patient.id = index;
+          patient.id = p.id;
+          patient.sk=p.sk;
 
-          patient.mobilePhone = "";
-          patient.workPhone = "";
 
-          //console.log("i need to check the patient", patient);
-          if (p.UserId !== undefined) {
-            patient.userId = p.UserId.n;
-          }
-          if (p.UserName !== undefined) {
-            patient.name = p.UserName.s;
-          }
-          if (p.Email !== undefined) {
-            patient.email = p.Email.s;
-          }
-          if (p.diagnosisId !== undefined) {
-            if(p.diagnosisId.s[0]==","){
-              patient.diagnosisId = p.diagnosisId.s.substring(1);  
+          patient.mobilePhone = p.mobilePhone;
+          patient.workPhone = p.workPhone;
+          patient.userId = p.userId;
+          patient.name = p.lastName+" , "+p.firstName;
+          patient.userName=p.userName;
+          patient.createdDate=p.createdDate;
+          patient.connectionId=p.connectionId;
+          patient.st=p.st;
+         
+          
+            patient.email = p.email;
+            patient.coachId=p.coachId;
+            patient.careId=p.carecoordinatorId;
+          
+          
+            if(p.diagnosisId[0]==","){
+              patient.diagnosisId = p.diagnosisId.substring(1);  
             }else{
-              patient.diagnosisId = p.diagnosisId.s;
+              patient.diagnosisId = p.diagnosisId;
             }
             
-          }
-          if (p.ContactNo !== undefined) {
-            patient.mobile = p.ContactNo.s;
-          }
-          if (p.DOB !== undefined) {
-            patient.dob = Moment(p.DOB.s).format("MMM-DD-YYYY");
-          }
-          if (p.DoctorName !== undefined) {
-            patient.ProviderName = p.DoctorName.s;
-          }
-          if (p.CarecoordinatorName !== undefined) {
-            patient.CareName = p.CarecoordinatorName.s;
-          }
-          if (p.Coach !== undefined) {
-            patient.CoachName = p.Coach.s;
-          }
-          if (p.SK !== undefined) {
-            patient.ehrId = p.SK.s;
-          }
-          patient.pid = window.btoa(p.SK.s);
-          if (p.Height !== undefined) {
-            (p.Height.s!=="undefined")?patient.height = p.Height.s:patient.height = ""
-            
-          }
-          patient.pid = window.btoa(p.SK.s);
-
-          if (p.reading !== undefined) {
-            patient.bg_reading = p.reading.s;
-          }
-          if (p.diastolic !== undefined) {
-            let num = p.diastolic.s;
-            if (num === "") num = 0;
-            patient.diastolic = parseFloat(num).toFixed(2);
-          }
-          if (p.systolic !== undefined) {
-            let num = p.systolic.s;
-            if (num === "") num = 0;
-            patient.systolic = parseFloat(num).toFixed(2);
-          }
+          
+          
+            patient.mobile = p.contactNo;
+          
+          
+            patient.dob = Moment(p.dob).format("MM-DD-YYYY");
+          
+          
+            patient.ProviderName = p.doctorName;
+            patient.ProviderId = p.doctorId;
+          
+          
+            patient.CareName = p.carecoordinatorName;
+          
+          
+            patient.CoachName = p.coach;
+          
+          
+            patient.ehrId = p.sk;
+          
+          patient.pid = window.btoa(p.sk);
+          
+          (p.height.s!=="undefined")?patient.height = p.height:patient.height = ""
+          
+            patient.bg_reading = p.reading;
+          
+          
 
           if (p.weight !== undefined) {
-            let num = p.weight.s;
+            let num = p.weight;
             if (num === "") num = 0;
             patient.Weight = parseFloat(num).toFixed(2);
           }
-          if (p.BMI !== undefined) {
-            let num1 = p.BMI.s;
-            if (num1 === "") num1 = 0;
-            if (parseFloat(num1) > 0) {
-              if (parseFloat(num1).toFixed(2) < 18.5) {
-                patient.BMI =
-                  "Underweight" + " (" + parseFloat(num1).toFixed(2) + ")";
-              }
-              if (
-                parseFloat(num1).toFixed(2) > 18.5 &&
-                parseFloat(num1).toFixed(2) < 24.9
-              ) {
-                patient.BMI =
-                  "Normal" + " (" + parseFloat(num1).toFixed(2) + ")";
-              }
-              if (
-                parseFloat(num1).toFixed(2) > 25 &&
-                parseFloat(num1).toFixed(2) < 29.9
-              ) {
-                patient.BMI =
-                  "Overweight" + " (" + parseFloat(num1).toFixed(2) + ")";
-              }
-              if (parseFloat(num1).toFixed(2) > 30) {
-                patient.BMI =
-                  "Obese" + " (" + parseFloat(num1).toFixed(2) + ")";
-              }
-            }
-          }
+          
+          
+            patient.ActiveStatus = p.activeStatus;
+          
 
-          if (p.ActiveStatus !== undefined) {
-            patient.ActiveStatus = p.ActiveStatus.s;
-          }
-
-          if (p.FirstName !== undefined) {
-            patient.firstName = p.FirstName.s;
-          }
-
-          if (p.LastName !== undefined) {
-            patient.lastName = p.LastName.s;
-          }
-
-          // if firstname and lastname undefined then take name from name and put it.
-          if (patient.name !== undefined) {
-            patient.lastName = patient.name.split(",")[0];
-            patient.firstName = patient.name.split(",")[1];
-          }
-
-          if (p.FirstName !== undefined && p.LastName !== undefined) {
-            patient.name = p.LastName.s + "," + "  " + p.FirstName.s;
-          }
-
-          if (p.Gender !== undefined) {
-            patient.gender = p.Gender.s;
-          }
-          if (p.Height !== undefined) {
-            (p.Height.s!=="undefined")?patient.height = p.Height.s:patient.height = ""
-          }else {
-            patient.height = "";
-          }
-
-          if (p.Lang !== undefined) {
-            patient.language = p.Lang.s;
+          
+            patient.firstName = p.firstName;
+            patient.lastName = p.lastName;
+            patient.gender = p.gender;
+          
+          if (p.lang !== undefined) {
+            patient.language = p.lang;
           } else {
             patient.language = "";
           }
 
-          if (p.Street !== undefined) {
-            patient.street = p.Street.s;
+          if (p.street !== undefined) {
+            patient.street = p.street;
           } else {
             patient.street = "";
           }
 
-          if (p.City !== undefined) {
-            patient.city = p.City.s;
+          if (p.city !== undefined) {
+            patient.city = p.city;
           } else {
             patient.city = "";
           }
 
-          if (p.Zip !== undefined) {
-            patient.zip = p.Zip.s;
+          if (p.zip !== undefined) {
+            patient.zip = p.zip;
           } else {
             patient.zip = "";
           }
 
-          if (p.WorkPhone !== undefined) {
-            patient.workPhone = p.WorkPhone.s;
+          if (p.workPhone !== undefined) {
+            patient.workPhone = p.workPhone;
           } else {
             patient.workPhone = "";
           }
 
-          if (p.MobilePhone !== undefined) {
-            patient.mobilePhone = p.MobilePhone.s;
-          } else {
-            patient.mobilePhone = "";
-          }
-
-          if (p.Notes !== undefined) {
-            patient.notes = p.Notes.s;
+          
+          if (p.notes !== undefined) {
+            patient.notes = p.notes;
            
           } else {
             patient.notes = "";
           }
-
+          patient.diastolic=p.diastolic
+          patient.gsI1PK=p.gsI1PK
+          patient.gsI1SK=p.gsI1SK
+          patient.middleName=p.middleName
+          patient.BMI=p.reading
+          patient.userTimeZone=p.userTimeZone
+          patient.userType=p.userType
           // if (patient.userId !== undefined && patient.name) {
           //     fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
           // }
@@ -629,8 +510,8 @@ export const CoreContextProvider = (props) => {
           
         setPatients(ps);
       })
-      .catch(() => {
-        relogin();
+      .catch((error) => {
+        console.log(error,"errorlogin")
       });
   };
   const fetchPatientListfromApiForPatient = async (usertype, userId, AllActive) => {
@@ -680,6 +561,7 @@ export const CoreContextProvider = (props) => {
           let patient = {};
 
           patient.id = index;
+          patient.sk=p.sk;
 
           patient.mobilePhone = "";
           patient.workPhone = "";
@@ -1301,61 +1183,57 @@ export const CoreContextProvider = (props) => {
       });
   };
 
-  const fetchTimeLog = (userid) => {
-    const token = localStorage.getItem("app_jwt");
-
-    let data = "";
-    data = {
-      TableName: userTable,
-      KeyConditionExpression: "PK = :v_PK",
-      FilterExpression: "GSI1PK = :v_GSI1PK AND ActiveStatus = :v_status",
-      ExpressionAttributeValues: {
-        ":v_PK": { S: "TIMELOG_READING" },
-        ":v_GSI1PK": { S: "TIMELOG_READING_" + userid },
-        ":v_status": { S: "Active" },
-      },
-    };
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+  const fetchTimeLog = async (userid) => {
+    await axios
+    .get(
+      apiUrl2 +
+        "timelog",
+        { params: { GSI1PK: "TIMELOG_READING_" + userid } },
+        {
         headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
         },
-      })
+        
+         
+    )
       .then((response) => {
         const timelogData = response.data;
+        console.log(timelogData,"tilogdata")
        
         const dataSettimeLog = [];
 
         timelogData.forEach((tl, index) => {
           
           let tldata = {};
-          tldata.id = index;
-          if (tl.SK) {
-            tldata.SK = tl.SK.s;
+          if (tl.id) {
+            tldata.id = tl.id;
+          }
+          if (tl.sk) {
+            tldata.SK = tl.sk;
           }
 
-          if (tl.TaskType) {
-            tldata.taskType = tl.TaskType.s;
+          if (tl.taskType) {
+            tldata.taskType = tl.taskType;
           }
-          if (tl.PerformedBy) {
-            tldata.performedBy = tl.PerformedBy.s;
+          if (tl.performedBy) {
+            tldata.performedBy = tl.performedBy;
           }
-          if (tl.PerformedOn) {
-            tldata.performedOn = tl.PerformedOn.s;
+          if (tl.performedOn) {
+            tldata.performedOn = tl.performedOn;
           }
-          if (tl.StartDT) {
-            tldata.startDT = tl.StartDT.s;
+          if (tl.startDT) {
+            tldata.startDT = tl.startDT;
           }
-          if (tl.EndDT) {
-            tldata.endDT = tl.EndDT.s;
+          if (tl.endDT) {
+            tldata.endDT = tl.endDT;
           }
-          if (tl.TimeAmount) {
-            tldata.timeAmount = tl.TimeAmount.s;
+          if (tl.timeAmount) {
+            tldata.timeAmount = tl.timeAmount;
           }
-          if (tl.UserName) {
-            tldata.UserName = tl.UserName.s;
+          if (tl.userName) {
+            tldata.UserName = tl.userName;
           }
 
           dataSettimeLog.push(tldata);
@@ -1367,27 +1245,21 @@ export const CoreContextProvider = (props) => {
       });
   };
 
-  const fetchAllTimeLog = () => {
+  const fetchAllTimeLog = async () => {
     const token = localStorage.getItem("app_jwt");
-    let data = "";
-    data = {
-      TableName: userTable,
-      KeyConditionExpression: "PK = :v_PK",
-      FilterExpression: "ActiveStatus = :v_status",
-      ExpressionAttributeValues: {
-        ":v_PK": { S: "TIMELOG_READING" },
-        ":v_status": { S: "Active" },
-      },
-    };
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+   
+   await axios
+    .get(
+      apiUrl2 +
+        "timelog",{ params: { GSI1PK: "TIMELOG_READING_" } },
+        {
         headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
         },
-      })
-      .then((response) => {
+         
+    )  .then((response) => {
         const timelogData = response.data;
        
         const dataSettimeLog = [];
@@ -1656,7 +1528,7 @@ export const CoreContextProvider = (props) => {
     return ent[0];
   };
 
-  const UpdatePatient = (
+  const UpdatePatient = async(
     fname,
     lname,
     phone,
@@ -1675,7 +1547,7 @@ export const CoreContextProvider = (props) => {
     city,
     state,
     diagnosisId,
-    notes
+    patient
   ) => {
     let providername = fetchNameFromId(provider, providerOptions);
     
@@ -1730,79 +1602,71 @@ export const CoreContextProvider = (props) => {
     if (fname === undefined) fname = "";
     if (lname === undefined) lname = "";
 
-    const data = {
-      TableName: userTable,
-      Key: {
-        PK: { S: "patient" },
-        SK: { S: "PATIENT_" + patientId },
-      },
-      UpdateExpression:
-        "SET DoctorId = :v_ProviderId, DoctorName = :v_ProviderName, FirstName = :v_firstname,LastName = :v_lastname, ContactNo = :v_mobile, DOB = :v_DOB," +
-        "Height = :v_Height,CarecoordinatorName = :v_CarecoordinatorName, CarecoordinatorId = :v_CarecoordinatorId,CoachId = :v_CoachId,Coach = :v_CoachName," +
-        "Gender = :v_Gender, Lang = :v_Language, WorkPhone = :v_WorkPhone, MobilePhone = :v_MobilePhone, Street = :v_Street," +
-        "Zip = :v_Zip, City = :v_City, St = :v_State, Notes = :v_Notes,diagnosisId = :v_diagnosisId,GSI1SK = :v_GSI1SK",
-      ExpressionAttributeValues: {
-        ":v_ProviderId": { S: "" + providername.value + "" },
-        ":v_ProviderName": { S: "" + providername.name + "" },
-        ":v_firstname": { S: fname },
-        ":v_lastname": { S: lname },
-        ":v_mobile": { S: phone },
-        ":v_DOB": { S: "" + birthDate + "" },
-        ":v_Height": { S: "" + height + "" },
-        ":v_CarecoordinatorId": { S: "" + carecoordinatorname.value + "" },
-        ":v_CoachId": { S: "" + coachname.value + "" },
-        ":v_CarecoordinatorName": { S: "" + carecoordinatorname.name + "" },
-        ":v_CoachName": { S: "" + coachname.name + "" },
-        ":v_Gender": { S: "" + gendervalue + "" },
-        ":v_Language": { S: "" + languagevalue + "" },
-        ":v_WorkPhone": { S: "" + workPhone + "" },
-        ":v_MobilePhone": { S: "" + mobilePhone + "" },
-        ":v_Street": { S: "" + street + "" },
-        ":v_Zip": { S: "" + zip + "" },
-        ":v_City": { S: "" + city + "" },
-        ":v_State": { S: "" + state + "" },
-        ":v_Notes": { S: "" + notes + "" },
-        ":v_diagnosisId": { S: "" + diagnosisId + "" },
-        ":v_GSI1SK": { S: "" + providername.value + "" },
-        
-      },
-    };
-
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
+    
+    const data={
+      id: patient.id,
+      activeStatus: "Active",
+carecoordinatorId: carecoordinatorname.value,
+carecoordinatorName: carecoordinatorname.name,
+city: city,
+coach: coachname.name,
+coachId: coachname.value,
+connectionId: "",
+contactNo: phone ,
+createdDate: "",
+deviceId: "",
+deviceStatus: "",
+deviceType: "",
+diagnosisId: diagnosisId,
+diastolic: "71.255",
+dob: birthDate ,
+doctorId: providername.value,
+doctorName: providername.name,
+email: patient.email,
+firstName: fname ,
+gender: gendervalue ,
+gsI1PK: "patient",
+gsI1SK: providername.value,
+height: height ,
+st: state,
+lang: languagevalue,
+lastName: lname ,
+middleName: "",
+mobilePhone: phone ,
+notes: patient.notes,
+otp: "",
+profileImage: "",
+reading: patient.BMI,
+sk: patient.sk,
+st: "undefined",
+street: street,
+systolic: patient.systolic,
+userId: patient.userId,
+userName:patient.userName,
+userTimeZone: patient.userTimeZone,
+userType: patient.userType,
+weight: patient.Weight,
+workPhone: workPhone,
+zip: zip,
+    }
+    
+    await axios
+    .put(
+      apiUrl2 +
+        "patient",data,{
         headers: {
-          Accept: "application/json, text/plain, /",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
+         
         },
-      })
+         
+    )
       .then((response) => {
-        if (response.data === "Updated") {
+        if (response.status === 200) {
           // alert("");
           swal("success", "Patient data Update Successfully.", "success");
-      //  AssignCareTeam(
-      //       provider,
-      //       coordinator,
-      //       coach,
-      //       patientId
-      //     );
-
-          // updating object
-          //fetchPatientListfromApi();
-         
-          let patinet = patients.filter((p) => p.userId == patientId)[0];
-          if (patinet == undefined) return;
-          patinet.height = height;
-          patinet.firstname = fname;
-          patinet.lastname = lname;
-          patinet.phone = phone;
-          patinet.birthDate = birthDate;
-          patinet.phone = phone;
-          patinet.provider = provider;
-          patinet.coordinator = coordinator;
-          patinet.coach = coach;
-          patient.notes = notes;
-          // updating object
+      
         } else {
           //alert("Patient data did not Update  Successfully.");
           swal("error", "Patient data did not Update  Successfully.", "error");
@@ -1961,85 +1825,147 @@ export const CoreContextProvider = (props) => {
       });
   };
 
-  const DeletePatient = (patientId) => {
+  const DeletePatient = async(patient) => {
     const token = localStorage.getItem("app_jwt");
+    const data={
+      id:patient.id,
+sk:patient.sk,
+activeStatus:"Deactive",
+carecoordinatorId:patient.careId,
+carecoordinatorName:patient.CareName,
+city:patient.city,
+coach:patient.CoachName,
+coachId:patient.coachId,
+connectionId:"",
+contactNo:patient.mobile,
+createdDate:patient.createdDate,
+diagnosisId:patient.diagnosisId,
+diastolic:patient.diastolic,
+dob:patient.dob,
+doctorId:patient.ProviderId,
+doctorName:patient.ProviderName,
+email:patient.email,
+firstName:patient.firstName,
+gender:patient.gender,
+gsI1PK:"patient",
+gsI1SK:patient.ProviderId,
+height:patient.height,
+lang:patient.language,
+lastName:patient.lastName,
+middleName:patient.middleName,
+mobilePhone:patient.mobile,
+notes:patient.notes,
+otp:patient.otp,
+profileImage:patient.profileImage,
+reading:patient.BMI,
+st:patient.st,
+street:patient.street,
+systolic:patient.systolic,
+userId:patient.userId,
+userName:patient.userName,
+userTimeZone:patient.userTimeZone,
+userType:patient.userType,
+weight:patient.weight,
+workPhone:patient.workPhone,
+zip:patient.zip,
+deviceId:patient.deviceId,
+deviceStatus:patient.deviceStatus,
+deviceType:patient.deviceType,
+ }
 
-    const data = {
-      TableName: userTable,
-      Key: {
-        SK: { S: "PATIENT_" + patientId },
-        PK: { S: "patient" },
-      },
-      UpdateExpression: "SET ActiveStatus = :v_ActiveStatus",
-      ExpressionAttributeValues: { ":v_ActiveStatus": { S: "Deactive" } },
-    };
-
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
+ await axios
+ .put(
+   apiUrl2 +
+     "patient",data,{
+     headers: {
+       'Content-Type': 'application/json',
+       'accept': 'text/plain'
+      }
+      
+     },
+      
+ )
       .then((response) => {
-        if (response.data === "Updated") {
+        if (response.status === 200) {
           swal("success", "Patient Deleted Successfully.", "success");
         }
       });
   };
-  const ActivatePatient = (patientId) => {
+  const ActivatePatient = async(patient) => {
     const token = localStorage.getItem("app_jwt");
 
-    const data = {
-      TableName: userTable,
-      Key: {
-        SK: { S: "PATIENT_" + patientId },
-        PK: { S: "patient" },
-      },
-      UpdateExpression: "SET ActiveStatus = :v_ActiveStatus",
-      ExpressionAttributeValues: { ":v_ActiveStatus": { S: "Active" } },
-    };
+    const data={
+      id:patient.id,
+sk:patient.sk,
+activeStatus:"Active",
+carecoordinatorId:patient.careId,
+carecoordinatorName:patient.CareName,
+city:patient.city,
+coach:patient.CoachName,
+coachId:patient.coachId,
+connectionId:"",
+contactNo:patient.mobile,
+createdDate:patient.createdDate,
+diagnosisId:patient.diagnosisId,
+diastolic:patient.diastolic,
+dob:patient.dob,
+doctorId:patient.ProviderId,
+doctorName:patient.ProviderName,
+email:patient.email,
+firstName:patient.firstName,
+gender:patient.gender,
+gsI1PK:"patient",
+gsI1SK:patient.ProviderId,
+height:patient.height,
+lang:patient.language,
+lastName:patient.lastName,
+middleName:patient.middleName,
+mobilePhone:patient.mobile,
+notes:patient.notes,
+otp:patient.otp,
+profileImage:patient.profileImage,
+reading:patient.BMI,
+st:patient.st,
+street:patient.street,
+systolic:patient.systolic,
+userId:patient.userId,
+userName:patient.userName,
+userTimeZone:patient.userTimeZone,
+userType:patient.userType,
+weight:patient.weight,
+workPhone:patient.workPhone,
+zip:patient.zip,
+deviceId:patient.deviceId,
+deviceStatus:patient.deviceStatus,
+deviceType:patient.deviceType,
+ }
 
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
+ await axios
+ .put(
+   apiUrl2 +
+     "patient",data,{
+     headers: {
+       'Content-Type': 'application/json',
+       'accept': 'text/plain'
+      }
+      
+     },
+      
+ )
       .then((response) => {
-        if (response.data === "Updated") {
-          swal("success", "Patient Activated Successfully.", "success");
+        if (response.status === 200) {
+        swal("success", "Patient Activated Successfully.", "success");
         }
       });
   };
 
   const DeleteTimeLog = (timelog) => {
     setTimeLogData([]);
-    const token = localStorage.getItem("app_jwt");
+    
 
-    const data = {
-      TableName: userTable,
-      Key: {
-        PK: { S: "TIMELOG_READING" },
-        SK: { S: timelog.SK },
-      },
-      UpdateExpression: "SET ActiveStatus = :v_ActiveStatus",
-      ExpressionAttributeValues: { ":v_ActiveStatus": { S: "Deactive" } },
-    };
-
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
-      .then((response) => {
-        if (response.data === "Updated") {
+    axios.delete(apiUrl2+"timelog", { params: { id: timelog.id } })  .then((response) => {
+      console.log(response,"delete response")
+        if (response.status === 200) {
           // alert("1 Entry of TimeLog Deleted Successfully.");
           swal(
             "success",
@@ -2180,18 +2106,15 @@ export const CoreContextProvider = (props) => {
 
           axios
             .post(
-              apiUrl +
-                "/DynamoDbAPIs/putitem?jsonData=" +
-                data +
-                "&tableName=" +
-                userTable +
-                "&actionType=register",
-              {
+              apiUrl2 +
+                "/Doctor",{
                 headers: {
-                  Accept: "application/json, text/plain, */*",
-                  // "Content-Type": "application/json",
-                  Authorization: "Bearer " + token,
+                  'Content-Type': 'application/json',
+                  'accept': 'text/plain'
+                 }
                 },
+                 {
+               data: data
               }
             )
             .then((putresponse) => {
@@ -3162,7 +3085,7 @@ export const CoreContextProvider = (props) => {
         setbloodpressureDataForDashboard(dataSetbp);
       });
   };
-  const fetchBloodPressureForPatient = (userid, usertype) => {
+  const fetchBloodPressureForPatient = async (userid, usertype) => {
     
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
@@ -3176,33 +3099,26 @@ export const CoreContextProvider = (props) => {
 
     let data = "";
     if (usertype === "patient") {
-      data = {
-        TableName: userTable,
-        ProjectionExpression:
-          "PK,SK,UserId,UserName,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken, ActiveStatus,Notes",
-        IndexName: "Patient-Doctor-Device-Index",
-        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
-        KeyConditionExpression: "GSI1PK = :v_PK",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "DEVICE_BP_" + userid },
-          ":v_ActiveStatus": { S: "Deactive" },
-        },
-      };
+      data = "DEVICE_BP_" + userid;
     }
 
-    
-
-   
-
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+   else{
+    data="DEVICE_BP_";
+   }
+    await axios
+    .get(
+      apiUrl2 +
+        "bp",
+        { params: { GSI1PK: data } },
+        {
         headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
         },
-      })
-      .then((response) => {
+        
+         
+    )      .then((response) => {
         const bloodpressureData = response.data;
         
         const dataSetbp = [];
@@ -3276,7 +3192,7 @@ export const CoreContextProvider = (props) => {
         setbloodpressureDataForPatient(dataSetbp);
       });
   };
-  const fetchBloodPressure = (userid, usertype) => {
+  const fetchBloodPressure = async (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
@@ -3289,62 +3205,29 @@ export const CoreContextProvider = (props) => {
 
     let data = "";
     if (usertype === "patient") {
-      data = {
-        TableName: userTable,
-        ProjectionExpression:
-          "PK,SK,UserId,UserName,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken, ActiveStatus,Notes",
-        IndexName: "Patient-Doctor-Device-Index",
-        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
-        KeyConditionExpression: "GSI1PK = :v_PK",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "DEVICE_BP_" + userid },
-          ":v_ActiveStatus": { S: "Deactive" },
-        },
-      };
+      data = "DEVICE_BP_" + userid;
     }
 
-    if (usertype === "doctor") {
-      // var titleObject = {
-      //   :v_GSI1PK1" : {"S": "DEVICE_BP_PATIENT_121524123727622"},
-      //     ":v_GSI1PK2" : {"S": "DEVICE_BP_PATIENT_121524123727622"},
-      // };
-      data = {
-        TableName: userTable,
-        ProjectionExpression:
-          "PK,SK,UserId,UserName,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken,GSI1PK,ActiveStatus,Notes",
-        KeyConditionExpression: "PK = :v_PK",
-        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "DEVICE_BP_READING" },
-          ":v_ActiveStatus": { S: "Deactive" },
-        },
-      };
-    }
-
-    if (usertype === "admin") {
-      data = {
-        TableName: userTable,
-        ProjectionExpression:
-          "PK,SK,UserId,UserName,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken,GSI1PK,ActiveStatus,Notes",
-        KeyConditionExpression: "PK = :v_PK",
-        FilterExpression: "ActiveStatus <> :v_ActiveStatus ",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "DEVICE_BP_READING" },
-          ":v_ActiveStatus": { S: "Deactive" },
-        },
-      };
-    }
-
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+   else{
+    data="DEVICE_BP_";
+   }
+    await axios
+    .get(
+      apiUrl2 +
+        "bp",
+        { params: { GSI1PK: data } },
+        {
         headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
         },
-      })
+        
+         
+    )
       .then((response) => {
         const bloodpressureData = response.data;
+        console.log(bloodpressureData,"bloodpressureData")
         
         const dataSetbp = [];
         if (bloodpressureData.length === 0) {
@@ -3356,39 +3239,39 @@ export const CoreContextProvider = (props) => {
           let bpdata = {};
           bpdata.id = index;
           if (bp.GSI1PK !== undefined) {
-            bpdata.gSI1PK = bp.GSI1PK.s;
-            bpdata.UserId = bp.GSI1PK.s.split("_").pop();
+            bpdata.gSI1PK = bp.GSI1PK;
+            bpdata.UserId = bp.GSI1PK.split("_").pop();
            
           }
          
           if (bp.UserName !== undefined) {
-            bpdata.UserName = bp.UserName.s;
+            bpdata.UserName = bp.UserName;
           }
 
           if (bp.irregular !== undefined) {
-            bpdata.irregular = bp.irregular.n;
+            bpdata.irregular = bp.irregular;
           }
           if (bp.systolic !== undefined) {
-            bpdata.systolic = parseFloat(bp.systolic.n).toFixed(0);
+            bpdata.systolic = parseFloat(bp.systolic).toFixed(0);
           }
           if (bp.diastolic !== undefined) {
-            bpdata.diastolic = parseFloat(bp.diastolic.n).toFixed(0);
+            bpdata.diastolic = parseFloat(bp.diastolic).toFixed(0);
           }
           if (bp.pulse !== undefined) {
-            bpdata.Pulse = bp.pulse.n;
+            bpdata.Pulse = bp.pulse;
           }
           if (bp.TimeSlots !== undefined) {
-            bpdata.timeSlots = bp.TimeSlots.s;
+            bpdata.timeSlots = bp.TimeSlots;
           }
           if (bp.MeasurementDateTime !== undefined) {
-            bpdata.MeasurementDateTime = bp.MeasurementDateTime.s;
+            bpdata.MeasurementDateTime = bp.MeasurementDateTime;
             bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
-            bpdata.sortDateColumn = bp.MeasurementDateTime.s;
+            bpdata.sortDateColumn = bp.MeasurementDateTime;
             //  bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MM-DD-YYYY hh:mm A');
           }
 
           if (bp.CreatedDate !== undefined) {
-            bpdata.CreatedDate = bp.CreatedDate.s;
+            bpdata.CreatedDate = bp.CreatedDate;
             bpdata.CreatedDate = new Date(bpdata.CreatedDate);
             //bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MM-DD-YYYY hh:mm A');
           }
@@ -3396,19 +3279,19 @@ export const CoreContextProvider = (props) => {
           // bpdata.date_recorded = bp.date_recorded.s;
 
           if (bp.DeviceId !== undefined) {
-            bpdata.DeviceId = bp.DeviceId.s;
+            bpdata.DeviceId = bp.DeviceId;
           }
 
           if (bp.IMEI !== undefined) {
-            bpdata.DeviceId = bp.IMEI.s;
+            bpdata.DeviceId = bp.IMEI;
           }
 
           if (bp.SK !== undefined) {
-            bpdata.readingId = bp.SK.s.split("_").pop();
+            bpdata.readingId = bp.SK.split("_").pop();
           }
 
           if (bp.ActionTaken !== undefined) {
-            bpdata.actionTaken = bp.ActionTaken.s;
+            bpdata.actionTaken = bp.ActionTaken;
           }
 
           dataSetbp.push(bpdata);
@@ -4394,7 +4277,7 @@ export const CoreContextProvider = (props) => {
       });
   };
 
-  const AddTimeLog = (
+  const AddTimeLog = async (
     taskType,
     performedBy,
     performedOn,
@@ -4425,9 +4308,9 @@ export const CoreContextProvider = (props) => {
       return;
     }
 
-    const data = JSON.stringify({
-      id: timeLogData.length + 1,
-      PK: "TIMELOG_READING",
+    const data =  ({
+     
+      
       SK:
         "TIMELOG_READING_" +
         taskType +
@@ -4450,25 +4333,21 @@ export const CoreContextProvider = (props) => {
       EndDT: end,
       ActiveStatus: "Active",
     });
-
-    axios
-      .post(
-        apiUrl +
-          "/DynamoDbAPIs/PutItem?jsonData=" +
-          data +
-          "&tableName=" +
-          userTable +
-          "&actionType=register",
-        {
-          headers: {
-            Accept: "application/json, text/plain, */*",
-            // "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-        }
-      )
+    await axios
+    .post(
+      apiUrl2 +
+        "timelog",data,{
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
+         
+        },
+         
+    )
       .then((response) => {
-        if (response.data === "Registered") {
+        console.log(response,"check response of timelog")
+        if (response.status) {
           console.log(response.data);
           swal("success", "TimeLog has been added successfully", "success");
           fetchTimeLog("PATIENT_" + patientId);
@@ -4549,7 +4428,7 @@ export const CoreContextProvider = (props) => {
   };
 
 
-  const UpdateTimeLog = (
+  const UpdateTimeLog = async(
     timelog,
     taskType,
     performedBy,
@@ -4560,32 +4439,38 @@ export const CoreContextProvider = (props) => {
   ) => {
     const token = localStorage.getItem("app_jwt");
     setTimeLogData([]);
+    
 
-    const data = {
-      TableName: userTable,
-      Key: {
-        PK: { S: "TIMELOG_READING" },
-        SK: { S: timelog.SK },
-      },
-      UpdateExpression:
-        "SET TaskType = :v_TaskType, PerformedBy = :v_PerformedBy, PerformedOn = :v_PerformedOn, TimeAmount = :v_TimeAmount",
-      ExpressionAttributeValues: {
-        ":v_TaskType": { S: "" + taskType + "" },
-        ":v_PerformedBy": { S: "" + performedBy + "" },
-        ":v_PerformedOn": { S: performeddate },
-        ":v_TimeAmount": { S: "" + time + "" },
-      },
-    };
-
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
+    const data =  ({
+     
+      id: timelog.id,
+      SK:timelog.SK,
+      GSI1PK: "TIMELOG_READING_PATIENT_" + patientId,
+      GSI1SK: patientId,
+      CreatedDate: timelog.createdDate,
+      UserName: timelog.UserName,
+      TaskType: taskType,
+      PerformedBy: performedBy.toString(),
+      PerformedOn: performeddate.toString(),
+      TimeAmount: time.toString(),
+      StartDT: timelog.startDT,
+      EndDT: timelog.endDT,
+      ActiveStatus: "Active",
+    });
+    await axios
+    .put(
+      apiUrl2 +
+        "timelog",data,{
         headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
+         
         },
-      })
+         
+    )
       .then((response) => {
+        console.log("updated responsee",response);
         if (response.data === "Updated") {
           alert("TimeLog has been updated");
         }

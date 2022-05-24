@@ -6,6 +6,9 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom";
+import {ErrorBoundary} from 'react-error-boundary'
+
+import API from "./components/API"
 import Loader from "react-loader-spinner";
 import axios from "axios";
 import Sidebar from "react-sidebar";
@@ -324,6 +327,7 @@ function App() {
            
             
                   <Route exact path="/provider" component={Pages.Provider} />{" "}
+                  <Route exact path="/API" component={API} />{" "}
                   <Route
                     exact
                     path="/care-coordinator"
@@ -335,7 +339,7 @@ function App() {
                   <Route exact path="/outbox" component={Pages.Outbox} />{" "}
                   <Route exact path="/settings" component={Pages.Settings} />{" "}
                   <Route exact path="/dashboard" component={Pages.Dashboard} />{" "}
-                  <Route exact path="/patients" component={Pages.Patients} />{" "}
+                  <ErrorBoundary><Route exact path="/patients" component={Pages.Patients} /></ErrorBoundary>{" "}
                   <Route exact path="/dpatients" component={DPatients} />
                   <Route exact path="/billing" component={BillingPatient} />
                   <Route

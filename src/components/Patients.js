@@ -77,6 +77,7 @@ const Patients = (props) => {
   const [usertype, setuserType] = useState("");
   const [gender, setGender] = useState("");
   const [language, setLanguage] = useState("");
+  const [updateId, setUpdateId] = useState();
   const [workPhone, setWorkPhone] = useState("");
   const [mobilePhone, setMobilePhone] = useState("");
   const [street, setStreet] = useState("");
@@ -168,7 +169,9 @@ const Patients = (props) => {
       zip,
       city,
       state,
-      newId.substring(1)
+      newId.substring(1),
+      updateId,
+
     );
     coreContext.cleanup1();
   }
@@ -207,6 +210,7 @@ const Patients = (props) => {
     {
       console.log("checking", patient);
     }
+    setUpdateId(patient)
     if (patient.name !== undefined) {
       patient.lastName = patient.name.split(",")[0].trim();
       patient.firstName = patient.name.split(",")[1].trim();
@@ -358,7 +362,7 @@ const Patients = (props) => {
     })
     .then((willDelete) => {
       if (willDelete) {
-        coreContext.DeletePatient(patient.userId);
+        coreContext.DeletePatient(patient);
         coreContext.cleanup1();
         fetchPatients();
 
@@ -459,7 +463,7 @@ const Patients = (props) => {
           <Link
             style={{ marginRight: "5px" }}
             to="#"
-            onClick={() => {coreContext.ActivatePatient(params.row.userId);coreContext.cleanup1()}}>
+            onClick={() => {coreContext.ActivatePatient(params.row);coreContext.cleanup1()}}>
             {" "}
              Activate
           </Link>
