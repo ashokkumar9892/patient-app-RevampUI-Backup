@@ -1817,7 +1817,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
     })
     .then((willDelete) => {
       if (willDelete) {
-        coreContext.DeleteDeviceData(deviceData.id,patientId,userName);
+        coreContext.DeleteDeviceData(deviceData,patientId,userName);
         setdeviceflag(adddeviceflag + 1 )
         
         
