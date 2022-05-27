@@ -1046,125 +1046,51 @@ export const CoreContextProvider = (props) => {
       });
   };
 
-  const fetchThresold = (userid, usertype) => {
+  const fetchThresold = async (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
-
-    let data = "";
-    data = {
-      TableName: userTable,
-      ProjectionExpression: "PK,SK,Low,High,TElements",
-      KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
-      ExpressionAttributeValues: {
-        ":v_PK": { S: "THRESHOLDRANGE_ADMIN" },
-        ":v_SK": { S: userid },
-      },
-    };
-
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
-      .then((response) => {
-        const thresholdData = response.data;
+    await axios
+    .get(
+      apiUrl2 +
+        "threshold",
         
-
-        const dataSetthresold = [];
         {
-          thresholdData.forEach((th, index) => {
-            // console.log("p" + index, th);
-            const thdata = {};
-
-            if (th.TElements) {
-              thdata.Element_value = th.TElements.s;
-            }
-            if (th.Low) {
-              th.Low_value = th.Low.s;
-            }
-            if (th.High) {
-              th.High_value = th.High.s;
-            }
-            if (th.SK) {
-              thdata.UserId = th.SK.s;
-            }
-
-            if (thdata.Element_value === "Blood Glucose") {
-              thdata.bg_low = th.Low_value;
-              thdata.bg_high = th.High_value;
-            } else if (thdata.Element_value === "SYSTOLIC") {
-              thdata.systolic_low = th.Low_value;
-              thdata.systolic_high = th.High_value;
-            } else if (thdata.Element_value === "DIASTOLIC") {
-              thdata.diastolic_low = th.Low_value;
-              thdata.diastolic_high = th.High_value;
-            } else if (thdata.Element_value === "BMI") {
-              thdata.bmi_low = th.Low_value;
-              thdata.bmi_high = th.High_value;
-            } else if (thdata.Element_value === "Weight") {
-              thdata.weight_low = th.Low_value;
-              thdata.weight_high = th.High_value;
-            }
-
-            dataSetthresold.push(thdata);
-          });
-        }
-        if (usertype === "admin") {
-          setadminthresold(dataSetthresold);
-        }
-        setThresoldData(dataSetthresold);
-      });
-  };
-  const fetchadminThresold = (userid, usertype) => {
-    const token = localStorage.getItem("app_jwt");
-
-    let data = "";
-    data = {
-      TableName: userTable,
-      ProjectionExpression: "PK,SK,Low,High,TElements",
-      KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
-      ExpressionAttributeValues: {
-        ":v_PK": { S: "THRESHOLDRANGE_ADMIN" },
-        ":v_SK": { S: userid },
-      },
-    };
-
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
         headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
         },
-      })
-      .then((response) => {
+        
+         
+    )  .then((response) => {
         const thresholdData = response.data;
+        console.log(response.data,userid,"thesolf")
 
         const dataSetthresold = [];
         {
           thresholdData.forEach((th, index) => {
             // console.log("p" + index, th);
             let thdata = {};
-
-            if (th.TElements) {
-              thdata.Element_value = th.TElements.s;
+              thdata.id=th.id
+            if (th.tElements) {
+              thdata.Element_value = th.tElements;
             }
-            if (th.Low) {
-              th.Low_value = th.Low.s;
+            if (th.low) {
+              th.Low_value = th.low;
             }
-            if (th.High) {
-              th.High_value = th.High.s;
+            if (th.high) {
+              th.High_value = th.high;
             }
-
+            if (th.sk) {
+              thdata.UserId = th.sk;
+            }
+          
             if (thdata.Element_value === "Blood Glucose") {
               thdata.bg_low = th.Low_value;
               thdata.bg_high = th.High_value;
-            } else if (thdata.Element_value === "SYSTOLIC") {
+            } else if (thdata.Element_value === "SYSTOLIC" ||thdata.Element_value === "Systolic") {
               thdata.systolic_low = th.Low_value;
               thdata.systolic_high = th.High_value;
-            } else if (thdata.Element_value === "DIASTOLIC") {
+            } else if (thdata.Element_value === "DIASTOLIC" ||thdata.Element_value === "Diastolic") {
               thdata.diastolic_low = th.Low_value;
               thdata.diastolic_high = th.High_value;
             } else if (thdata.Element_value === "BMI") {
@@ -1178,8 +1104,83 @@ export const CoreContextProvider = (props) => {
             dataSetthresold.push(thdata);
           });
         }
+        
+        if (usertype === "admin") {
+          if(dataSetthresold.length>1){
+            setadminthresold(dataSetthresold.filter((curr)=>curr.UserId.includes(userid)));
+                   
+          }
+        }
+        if(dataSetthresold.length>1){
+          setThresoldData(dataSetthresold.filter((curr)=>curr.UserId.includes(userid)));
+        }
+      });
+  };
+  const fetchadminThresold = async (userid, usertype) => {
+    const token = localStorage.getItem("app_jwt");
 
-        setadminthresold(dataSetthresold);
+    await axios
+    .get(
+      apiUrl2 +
+        "threshold",
+        
+        {
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
+        },
+        
+         
+    )  .then((response) => {
+        const thresholdData = response.data;
+        console.log(response.data,userid,"thesolf")
+
+        const dataSetthresold = [];
+        {
+          thresholdData.forEach((th, index) => {
+            // console.log("p" + index, th);
+            let thdata = {};
+            thdata.id=th.id
+
+            if (th.tElements) {
+              thdata.Element_value = th.tElements;
+            }
+            if (th.low) {
+              th.Low_value = th.low;
+            }
+            if (th.high) {
+              th.High_value = th.high;
+            }
+            if (th.sk) {
+              thdata.UserId = th.sk;
+            }
+          
+            if (thdata.Element_value === "Blood Glucose") {
+              thdata.bg_low = th.Low_value;
+              thdata.bg_high = th.High_value;
+            } else if (thdata.Element_value === "SYSTOLIC"||thdata.Element_value === "Systolic") {
+              thdata.systolic_low = th.Low_value;
+              thdata.systolic_high = th.High_value;
+            } else if (thdata.Element_value === "DIASTOLIC" ||thdata.Element_value === "Diastolic") {
+              thdata.diastolic_low = th.Low_value;
+              thdata.diastolic_high = th.High_value;
+            } else if (thdata.Element_value === "BMI") {
+              thdata.bmi_low = th.Low_value;
+              thdata.bmi_high = th.High_value;
+            } else if (thdata.Element_value === "Weight") {
+              thdata.weight_low = th.Low_value;
+              thdata.weight_high = th.High_value;
+            }
+
+            dataSetthresold.push(thdata);
+          });
+        }
+if(dataSetthresold.length>1){
+  setadminthresold(dataSetthresold.filter((curr)=>curr.UserId.includes("ADMIN_1631483185423")));
+  console.log(dataSetthresold.filter((curr)=>curr.UserId.includes("ADMIN_1631483185423")),"dataSetthresold.filter((curr)=>curr.userId.includes(userid))")
+
+}
       });
   };
 
@@ -1350,36 +1351,36 @@ export const CoreContextProvider = (props) => {
       });
   };
 
-  const UpdateThreshold = (patient, type, high, low, userType) => {
+  const UpdateThreshold = async (patient, type, high, low, userType,time) => {
     // fetch Threshold.
     const token = localStorage.getItem("app_jwt");
+    const data={
+      id: time[0].id,
+      sk: patient.toString(),
+      high: high.toString(),
+      low: low.toString(),
+      tElements: type
+    }
 
-    let data = "";
-    data = {
-      TableName: userTable,
-      ProjectionExpression: "PK,SK,Low,High,TElements",
-      KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
-      ExpressionAttributeValues: {
-        ":v_PK": { S: "THRESHOLDRANGE_ADMIN" },
-        ":v_SK": { S: patient },
-      },
-    };
-
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+    await axios
+    .put(
+      apiUrl2 +
+        "threshold",data,{
         headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
+         
         },
-      })
-      .then((response) => {
-        const thresholdData = response.data;
-        if (thresholdData.length > 0) {
-          UpdateTh(patient, type, high, low, userType);
-        } else {
-          AddThreshold(patient, type, high, low, userType);
-        }
+         
+    ).then((response) => {
+      if (response.status === 200) {
+        swal("success", "Threshold Update Successfully.", "success");
+        //alert("Threshold Update Successfully.");
+      } else {
+        swal("error", "Threshold did not Update.", "error");
+        // alert("");
+      }
       });
     //Update
   };
@@ -1717,68 +1718,82 @@ zip: zip,
       });
   };
 
-  const UpdateProvider = (username, mobile, email, patientId) => {
+  const UpdateProvider = async(username, mobile, email, patientId,doctor) => {
     const token = localStorage.getItem("app_jwt");
 
-    const data = {
-      TableName: userTable,
-      Key: {
-        SK: { S: patientId },
-        PK: { S: "doctor" },
-      },
-      UpdateExpression: "SET UserName = :v_username, ContactNo = :v_mobile",
-      ExpressionAttributeValues: {
-        ":v_username": { S: "" + username + "" },
-        ":v_mobile": { S: "" + mobile + "" },
-      },
-    };
+    const data ={
+      id: doctor.id,
+      sk: patientId,
+      activeStatus: "Active",
+      contactNo: mobile,
+      createdDate: doctor.CreatedDate,
+      email: email,
+      "gsI1PK": "string",
+      "gsI1SK": patientId,
+      "userId": "string",
+      "userName": username,
+      "userType": "doctor"
+    }
 
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
+    await axios
+    .put(
+      apiUrl2 +
+        "doctor",data,{
         headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
+         
         },
-      })
+         
+    )
       .then((response) => {
-        if (response.data === "Updated") {
-          alert("Provider data Update Successfully.");
-        } else {
-          alert("Patient data did not Update  Successfully.");
+        console.log("updated responsee",response);
+        if (response.status === 200) {
+          alert("Provider has been updated");
+        }
+        else{
+          alert("data not updated")
         }
       });
   };
 
-  const UpdateCareCoordinator = (username, mobile, email, patientId) => {
+  const UpdateCareCoordinator = async(username, mobile, email, patientId,doctor) => {
     const token = localStorage.getItem("app_jwt");
 
-    const data = {
-      TableName: userTable,
-      Key: {
-        SK: { S: patientId },
-        PK: { S: "carecoordinator" },
-      },
-      UpdateExpression: "SET UserName = :v_username, ContactNo = :v_mobile",
-      ExpressionAttributeValues: {
-        ":v_username": { S: "" + username + "" },
-        ":v_mobile": { S: "" + mobile + "" },
-      },
-    };
+    const data ={
+      id: doctor.id,
+      sk: patientId,
+      activeStatus: "Active",
+      contactNo: mobile,
+      createdDate: doctor.CreatedDate,
+      email: email,
+      gsI1PK: "string",
+      gsI1SK: patientId,
+      userId: "string",
+      userName: username,
+      userType: "Care Coordinator"
+    }
 
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
+    await axios
+    .put(
+      apiUrl2 +
+        "carecoordinator",data,{
         headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
+         
         },
-      })
+         
+    )
       .then((response) => {
-        if (response.data === "Updated") {
-          alert("Care Coordinator Update Successfully.");
-        } else {
-          alert("Patient data did not Update  Successfully.");
+        console.log("updated responsee",response);
+        if (response.status === 200) {
+          alert("care coordinator has been updated");
+        }
+        else{
+          alert("data not updated")
         }
       });
   };
@@ -1882,6 +1897,74 @@ deviceType:patient.deviceType,
         }
       });
   };
+  const DeleteDoctor = async(doctor) => {
+  
+   const data1 ={
+    id: doctor.id,
+    sk: doctor.doctor_id,
+    activeStatus: "Deactive",
+    contactNo: doctor.phone,
+    createdDate: doctor.CreatedDate,
+    email: doctor.email,
+    "gsI1PK": "string",
+    "gsI1SK": doctor.doctor_id,
+    "userId": "string",
+    "userName": doctor.provider,
+    "userType": "doctor"
+  }
+
+ await axios
+ .put(
+   apiUrl2 +
+     "doctor",data1,{
+     headers: {
+       'Content-Type': 'application/json',
+       'accept': 'text/plain'
+      }
+      
+     },
+      
+ )
+      .then((response) => {
+        if (response.status === 200) {
+          swal("success", "Patient Deleted Successfully.", "success");
+        }
+      });
+  };
+  const DeleteCareCoordinator = async(doctor) => {
+  
+    const data1 ={
+     id: doctor.id,
+     sk: doctor.doctor_id,
+     activeStatus: "Deactive",
+     contactNo: doctor.phone,
+     createdDate: doctor.CreatedDate,
+     email: doctor.email,
+     "gsI1PK": "string",
+     "gsI1SK": doctor.doctor_id,
+     "userId": "string",
+     "userName": doctor.provider,
+     "userType": "Care Coordinator"
+   }
+ 
+  await axios
+  .put(
+    apiUrl2 +
+      "carecoordinator",data1,{
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'text/plain'
+       }
+       
+      },
+       
+  )
+       .then((response) => {
+         if (response.status === 200) {
+           swal("success", "Care Coordinator Deleted Successfully.", "success");
+         }
+       });
+   };
   const ActivatePatient = async(patient) => {
     const token = localStorage.getItem("app_jwt");
 
@@ -2062,50 +2145,55 @@ deviceType:patient.deviceType,
           Authorization: "Bearer " + token,
         },
       })
-      .then((response) => {
+      .then( (response) => {
+        console.log(response)
         if (response.data === "Registered") {
-          const data = JSON.stringify({
-            PK: "doctor",
-            SK: "DOCTOR_" + id, //"doctor",
-            UserId: id,
-            UserName: name,
-            Email: email,
-            ContactNo: phone,
-            UserType: "doctor",
-            CreatedDate: date,
-            ActiveStatus: "Active",
-            GSI1PK: "NotAssign",
-            GSI1SK: "DOCTOR_" + id,
-          });
-
-          axios
-            .post(
-              apiUrl2 +
-                "/Doctor",{
-                headers: {
-                  'Content-Type': 'application/json',
-                  'accept': 'text/plain'
-                 }
-                },
-                 {
-               data: data
-              }
-            )
-            .then((putresponse) => {
+          const data = 
+          {
             
-              if (putresponse.status === 200) {
-                alert("Verification code sent to your email " + email);
+            "sk": "DOCTOR_" + id,
+            "activeStatus": "Active",
+            "contactNo": phone,
+            "createdDate": Moment(date).format('MM-DD-YYYY hh:mm A').toString(),
+            "email": email,
+            "gsI1PK": "string",
+            "gsI1SK": "DOCTOR_" + id,
+            "userId": id.toString(),
+            "userName": name,
+            "userType": "doctor"
+          }
+        add2(data)
+      } else {
+        alert(response.data);
+      }
+    });
+  };
+  const add2=async(data)=>{
+    await axios
+    .post(
+      apiUrl2 +
+        "Doctor",data,{
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
+         
+        },
+         
+    ) .then((putresponse) => {
+      console.log(putresponse,"putrre")
+            
+              if (putresponse) {
+                alert("Verification code sent to your email " + data.email);
                 handleProviderModalShow();
                 //window.location.replace('confirm-user-screen.html?username='+useremail);
               } else {
                 
               }
-            });
-        } else {
-          alert(response.data);
-        }
-      });
-  };
+            })
+            .catch((error)=>console.log(error,"api error"));
+      
+  }
 
   const Registration = (
     username,
@@ -2485,58 +2573,35 @@ deviceType:patient.deviceType,
       });
   };
 
-  const fetchProviders = (isactive) => {
+  const fetchProviders = async (isactive) => {
     const token = localStorage.getItem("app_jwt");
-    const config = {
-      headers: { Authorization: `Bearer ${token}` },
-    };
+    
     let data = "";
-    if (!isactive) {
+    if (isactive) {
       data = {
-        TableName: userTable,
-        ProjectionExpression: "PK,SK,UserName,Email,ContactNo,ActiveStatus",
-        KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
-        FilterExpression: "ActiveStatus = :v_status",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "doctor" },
-          ":v_SK": { S: "DOCTOR_" },
-          ":v_status": { S: "Active" },
-        },
-
-        // "ExpressionAttributeValues": {
-        //     ":v_PK": { "S": "doctor" },
-        //     ":v_SK": { "S": "DOCTOR_" },
-        //     ":v_status": { "S": "Active" }
-        // }
+       ActiveStatus: "Deactive"
       };
     } else {
       data = {
-        TableName: userTable,
-        ProjectionExpression: "PK,SK,UserName,Email,ContactNo,ActiveStatus",
-        KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
-        //FilterExpression: "ActiveStatus = :v_status",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "doctor" },
-          ":v_SK": { S: "DOCTOR_" },
-          //":v_status": { S: "Active" },
-        },
-
-        // "ExpressionAttributeValues": {
-        //     ":v_PK": { "S": "doctor" },
-        //     ":v_SK": { "S": "DOCTOR_" },
-        //     ":v_status": { "S": "Active" }
-        // }
+        ActiveStatus: "Active"
+       };
+    
       };
-    }
+    
 
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+    await axios.get(
+      apiUrl2 +
+        "doctor",
+        { params: data },
+        {
         headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
         },
-      })
+        
+         
+    )
       .then((response) => {
         const providerData = response.data;
        
@@ -2546,55 +2611,55 @@ deviceType:patient.deviceType,
         providerData.forEach((p, index) => {
          
           let providerdata = {};
-          providerdata.id = index;
-          providerdata.provider = p.UserName.s;
-          providerdata.email = p.Email.s;
-          providerdata.phone = p.ContactNo.s;
-          if (p.ActiveStatus !== undefined) {
-            providerdata.ActiveStatus = p.ActiveStatus.s;
+          providerdata.id = p.id;
+          providerdata.provider = p.userName;
+          providerdata.email = p.email;
+          providerdata.phone = p.contactNo;
+          if (p.activeStatus !== undefined) {
+            providerdata.ActiveStatus = p.activeStatus;
+          }
+          if (p.createdDate !== undefined) {
+            providerdata.CreatedDate = p.createdDate;
           }
 
-          if (p.SK !== undefined) {
-            providerdata.doctor_id = p.SK.s;
+          if (p.sk !== undefined) {
+            providerdata.doctor_id = p.sk;
           }
-
           dataSetdoctor.push(providerdata);
-          pOptions.push({ value: p.SK.s, name: p.UserName.s });
+          pOptions.push({ value: p.sk, name: p.userName });
+          
+          
         });
+
 
         setdoctorData(dataSetdoctor);
         setProviderOptions(pOptions);
       })
-      .catch(() => {
-        relogin();
+      .catch((error) => {
+       console.log(error,"error")
       });
   };
 
-  const fetchCareCoordinator = () => {
+  const fetchCareCoordinator = async () => {
     const token = localStorage.getItem("app_jwt");
-
-    const data = {
-      TableName: userTable,
-      ProjectionExpression: "PK,SK,UserName,Email,ContactNo",
-      KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
-      FilterExpression: "ActiveStatus = :v_status",
-      ExpressionAttributeValues: {
-        ":v_PK": { S: "carecoordinator" },
-        ":v_SK": { S: "CARECOORDINATOR_" },
-        ":v_status": { S: "Active" },
-      },
-    };
-
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+     const data = {
+        ActiveStatus: "Active"
+       };
+    await axios.get(
+      apiUrl2 +
+        "carecoordinator",
+        { params: data },
+        {
         headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
         },
-      })
+        
+         
+    )
       .then((response) => {
-        const careCoordinatorData = response.data;
+       const careCoordinatorData = response.data;
         const dataSetcareCoordinator = [];
         const ccOptions = [{ value: "", name: "Select Coordinator" }];
 
@@ -2602,24 +2667,27 @@ deviceType:patient.deviceType,
           console.log("p" + index, p);
           let ccdata = {};
 
-          ccdata.id = index;
-          ccdata.name = p.UserName.s;
-          ccdata.email = p.Email.s;
-          ccdata.phone = p.ContactNo.s;
+          ccdata.id = p.id;
+          ccdata.name = p.userName;
+          ccdata.email = p.email;
+          ccdata.phone = p.contactNo;
 
-          if (p.SK !== undefined) {
-            ccdata.doctor_id = p.SK.s;
+          if (p.sk !== undefined) {
+            ccdata.doctor_id = p.sk;
           }
-
+          if (p.createdDate !== undefined) {
+            ccdata.createdDate = p.createdDate;
+          }
+          
           dataSetcareCoordinator.push(ccdata);
-          ccOptions.push({ value: p.SK.s, name: p.UserName.s });
+          ccOptions.push({ value: p.sk, name: p.userName });
         });
-
+       
         setccData(dataSetcareCoordinator);
         setCoordinatorOptions(ccOptions);
       })
-      .catch(() => {
-        relogin();
+      .catch((error) => {
+        console.log(error,"sadhil")
       });
   };
 
@@ -4648,8 +4716,10 @@ deviceType:patient.deviceType,
       fetchDeviceDataForPatient,
       deviceDataForPatient,
       ActivatePatient,
+      DeleteDoctor,
       cleanup1,
-      setdoctorData
+      setdoctorData,
+      DeleteCareCoordinator
       }}>
       {props.children}
     </CoreContext.Provider>
