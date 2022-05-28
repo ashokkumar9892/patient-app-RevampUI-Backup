@@ -37,6 +37,7 @@ const Coach = (props) => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [editcoach, seteditcoach] = useState("");
   const [message, setMessage] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
   const [patientId, setPatientId] = useState("");
@@ -103,7 +104,9 @@ const Coach = (props) => {
     setEmail(patient.email);
     //setPatientId(patient.id);
     setPatientId(patient.doctor_id);
+    seteditcoach(patient);
     handleModalShow();
+    seteditcoach(patient);
   };
 
   const deletePatient = (patient) => {
@@ -117,7 +120,7 @@ const Coach = (props) => {
     })
     .then((willDelete) => {
       if (willDelete) {
-        coreContext.DeleteCareTeam(patient.doctor_id, "coach", "Coach");
+        coreContext.DeleteCoach(patient, "coach", "Coach");
         coreContext.setcoachData([]);
       } else {
         swal("Delete Cancelled");
@@ -241,7 +244,7 @@ const Coach = (props) => {
             blockButton={true}
             value="Submit"
             onClick={() =>
-              {coreContext.UpdateCoach(name, phone, email, patientId);handleModalClose();coreContext.setcoachData([]);}
+              {coreContext.UpdateCoach(name, phone, email, patientId,editcoach);handleModalClose();coreContext.setcoachData([]);}
             }
             elementType="button"
             variant="primary"

@@ -90,7 +90,7 @@ export const CoreContextProvider = (props) => {
     "https://appapi.apatternplus.com/api"
   );
   const [apiUrl2, setApiUrl2] = useState(
-    "https://localhost:44320/"
+    "http://patientapisqlmigration.azurewebsites.net/"
   );
   const [userTable, setuserTable] = useState("UserDetailsDemo");
 
@@ -1766,7 +1766,7 @@ zip: zip,
       sk: patientId,
       activeStatus: "Active",
       contactNo: mobile,
-      createdDate: doctor.CreatedDate,
+      createdDate: doctor.createdDate,
       email: email,
       gsI1PK: "string",
       gsI1SK: patientId,
@@ -1798,33 +1798,39 @@ zip: zip,
       });
   };
 
-  const UpdateCoach = (username, mobile, email, patientId) => {
+  const UpdateCoach =async(username, mobile, email, patientId,doctor) => {
+  
     const token = localStorage.getItem("app_jwt");
 
-    const data = {
-      TableName: userTable,
-      Key: {
-        SK: { S: patientId },
-        PK: { S: "coach" },
-      },
-      UpdateExpression: "SET UserName = :v_username, ContactNo = :v_mobile",
-      ExpressionAttributeValues: {
-        ":v_username": { S: "" + username + "" },
-        ":v_mobile": { S: "" + mobile + "" },
-      },
-    };
+    const data ={
+      id: doctor.id,
+      sk: patientId,
+      activeStatus: "Active",
+      contactNo: mobile,
+      createdDate: doctor.createdDate,
+      email: email,
+      gsI1PK: "string",
+      gsI1SK: patientId,
+      userId: "string",
+      userName: username,
+      userType: "coach"
+    }
 
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
+    await axios
+    .put(
+      apiUrl2 +
+        "coach",data,{
         headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
+         
         },
-      })
-      .then((response) => {
-        if (response.data === "Updated") {
+         
+    )  .then((response) => {
+        if (response.status === 200) {
           alert("Coach Update Successfully.");
+          fetchCoach();
         } else {
           alert("Patient data did not Update  Successfully.");
         }
@@ -1962,6 +1968,41 @@ deviceType:patient.deviceType,
        .then((response) => {
          if (response.status === 200) {
            swal("success", "Care Coordinator Deleted Successfully.", "success");
+         }
+       });
+   };
+   const DeleteCoach = async(doctor) => {
+  
+    const data1 ={
+     id: doctor.id,
+     sk: doctor.doctor_id,
+     activeStatus: "Deactive",
+     contactNo: doctor.phone,
+     createdDate: doctor.CreatedDate,
+     email: doctor.email,
+     "gsI1PK": "string",
+     "gsI1SK": doctor.doctor_id,
+     "userId": "string",
+     "userName": doctor.name,
+     "userType": "coach"
+   }
+ 
+  await axios
+  .put(
+    apiUrl2 +
+      "coach",data1,{
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'text/plain'
+       }
+       
+      },
+       
+  )
+       .then((response) => {
+         if (response.status === 200) {
+           swal("success", "Coach Deleted Successfully.", "success");
+           fetchCoach();
          }
        });
    };
@@ -2162,17 +2203,17 @@ deviceType:patient.deviceType,
             "userName": name,
             "userType": "doctor"
           }
-        add2(data)
+        add2(data,"Doctor")
       } else {
         alert(response.data);
       }
     });
   };
-  const add2=async(data)=>{
+  const add2=async(data,type)=>{
     await axios
     .post(
       apiUrl2 +
-        "Doctor",data,{
+        type,data,{
         headers: {
           'Content-Type': 'application/json',
           'accept': 'text/plain'
@@ -2186,6 +2227,9 @@ deviceType:patient.deviceType,
               if (putresponse) {
                 alert("Verification code sent to your email " + data.email);
                 handleProviderModalShow();
+                if(type==="coach"){
+                  fetchCoach();
+                }
                 //window.location.replace('confirm-user-screen.html?username='+useremail);
               } else {
                 
@@ -2321,46 +2365,21 @@ deviceType:patient.deviceType,
       })
       .then((response) => {
         if (response.data === "Registered") {
-          const data = JSON.stringify({
-            PK: "carecoordinator",
-            SK: "CARECOORDINATOR_" + id, //"doctor",
-            UserId: id,
-            UserName: name,
-            Email: email,
-            ContactNo: phone,
-            UserType: "carecoordinator",
-            CreatedDate: date,
-            ActiveStatus: "Active",
-            GSI1PK: "NotAssign",
-            GSI1SK: "CARECOORDINATOR_" + id,
-          });
-
-          axios
-            .post(
-              apiUrl +
-                "/DynamoDbAPIs/putitem?jsonData=" +
-                data +
-                "&tableName=" +
-                userTable +
-                "&actionType=register",
-              {
-                headers: {
-                  Accept: "application/json, text/plain, */*",
-                  // "Content-Type": "application/json",
-                  Authorization: "Bearer " + token,
-                },
-              }
-            )
-            .then((putresponse) => {
-              console.log(putresponse.status);
-              if (putresponse.status === 200) {
-                alert("Verification code sent to your email " + email);
-                handleProviderModalShow();
-                //window.location.replace('confirm-user-screen.html?username='+useremail);
-              } else {
-                console.log(putresponse);
-              }
-            });
+          const data = 
+          {
+            
+            "sk": "CARECOORDINATOR_" + id,
+            "activeStatus": "Active",
+            "contactNo": phone,
+            "createdDate": Moment(date).format('MM-DD-YYYY hh:mm A').toString(),
+            "email": email,
+            "gsI1PK": "string",
+            "gsI1SK": "CARECOORDINATOR_" + id,
+            "userId": id.toString(),
+            "userName": name,
+            "userType": "Care Coordinator"
+          }
+        add2(data,"carecoordinator")
         } else {
           alert(response.data);
         }
@@ -2387,50 +2406,26 @@ deviceType:patient.deviceType,
       })
       .then((response) => {
         if (response.data === "Registered") {
-          const data = JSON.stringify({
-            PK: "coach",
-            SK: "COACH_" + id, //"doctor",
-            UserId: id,
-            UserName: name,
-            Email: email,
-            ContactNo: phone,
-            UserType: "coach",
-            CreatedDate: date,
-            ActiveStatus: "Active",
-            GSI1PK: "NotAssign",
-            GSI1SK: "COACH_" + id,
-          });
-
-          axios
-            .post(
-              apiUrl +
-                "/DynamoDbAPIs/putitem?jsonData=" +
-                data +
-                "&tableName=" +
-                userTable +
-                "&actionType=register",
-              {
-                headers: {
-                  Accept: "application/json, text/plain, */*",
-                  // "Content-Type": "application/json",
-                  Authorization: "Bearer " + token,
-                },
-              }
-            )
-            .then((putresponse) => {
+          const data = 
+          {
             
-              if (putresponse.status === 200) {
-                alert("Verification code sent to your email " + email);
-                handleProviderModalShow();
-                //window.location.replace('confirm-user-screen.html?username='+useremail);
-              } else {
-               
-              }
-            });
+            "sk": "COACH_" + id,
+            "activeStatus": "Active",
+            "contactNo": phone,
+            "createdDate": "string",
+            "email": email,
+            "gsI1PK": "string",
+            "gsI1SK": "COACH_" + id,
+            "userId": id.toString(),
+            "userName": name,
+            "userType": "coach"
+          }
+        add2(data,"coach")
         } else {
           alert(response.data);
         }
       });
+        
   };
 
   const fetchDeviceData = async (patientId, username, usertype, type, patient) => {
@@ -2691,31 +2686,27 @@ deviceType:patient.deviceType,
       });
   };
 
-  const fetchCoach = () => {
+  const fetchCoach =async () => {
     const token = localStorage.getItem("app_jwt");
 
     const data = {
-      TableName: userTable,
-      ProjectionExpression: "PK,SK,UserName,Email,ContactNo",
-      KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
-      FilterExpression: "ActiveStatus = :v_status",
-      ExpressionAttributeValues: {
-        ":v_PK": { S: "coach" },
-        ":v_SK": { S: "COACH_" },
-        ":v_status": { S: "Active" },
+      ActiveStatus: "Active"
+     };
+  await axios.get(
+    apiUrl2 +
+      "coach",
+      { params: data },
+      {
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'text/plain'
+       }
       },
-    };
-
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
-      .then((response) => {
-        const coachData = response.data;
+      
+       
+  )
+    .then((response) => {
+      const coachData = response.data;
         const dataSetcoach = [];
         const cOptions = [{ value: "", name: "Select Coach" }];
 
@@ -2723,17 +2714,17 @@ deviceType:patient.deviceType,
         
 
           let coachdata = {};
-          coachdata.id = index;
-          coachdata.name = p.UserName.s;
-          coachdata.email = p.Email.s;
-          coachdata.phone = p.ContactNo.s;
+          coachdata.id = p.id;
+          coachdata.name = p.userName;
+          coachdata.email = p.email;
+          coachdata.phone = p.contactNo;
 
-          if (p.SK !== undefined) {
-            coachdata.doctor_id = p.SK.s;
+          if (p.sk !== undefined) {
+            coachdata.doctor_id = p.sk;
           }
 
           dataSetcoach.push(coachdata);
-          cOptions.push({ value: p.SK.s, name: p.UserName.s });
+          cOptions.push({ value: p.sk, name: p.userName });
         });
 
         setcoachData(dataSetcoach);
@@ -4327,16 +4318,13 @@ deviceType:patient.deviceType,
       return;
     }
 
-    const data =  ({
+    const data =  {
      
       
       SK:
         "TIMELOG_READING_" +
         taskType +
-        "_" +
-        performedBy +
-        "_" +
-        performedOn +
+        
         "_" +
         timeAmount,
       GSI1PK: "TIMELOG_READING_PATIENT_" + patientId,
@@ -4346,12 +4334,12 @@ deviceType:patient.deviceType,
       UserName: userName,
       TaskType: taskType,
       PerformedBy: performedBy,
-      PerformedOn: performedOn,
+      PerformedOn: Moment(performedOn).format('MMM-DD-YYYY hh:mm:ss A'),
       TimeAmount: timeAmount.toString(),
-      StartDT: date,
-      EndDT: end,
+      StartDT: Moment(date).format('MMM-DD-YYYY hh:mm:ss A'),
+      EndDT: Moment(end).format('MMM-DD-YYYY hh:mm:ss A'),
       ActiveStatus: "Active",
-    });
+    }
     await axios
     .post(
       apiUrl2 +
@@ -4490,7 +4478,7 @@ deviceType:patient.deviceType,
     )
       .then((response) => {
         console.log("updated responsee",response);
-        if (response.data === "Updated") {
+        if (response.status === 200) {
           alert("TimeLog has been updated");
         }
       });
@@ -4719,7 +4707,8 @@ deviceType:patient.deviceType,
       DeleteDoctor,
       cleanup1,
       setdoctorData,
-      DeleteCareCoordinator
+      DeleteCareCoordinator,
+      DeleteCoach
       }}>
       {props.children}
     </CoreContext.Provider>

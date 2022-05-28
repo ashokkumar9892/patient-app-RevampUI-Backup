@@ -461,7 +461,7 @@ const Patients = (props) => {
           <Link
             style={{ marginRight: "5px" }}
             to="#"
-            onClick={() => {coreContext.ActivatePatient(params.row);coreContext.cleanup1()}}>
+            onClick={() => {coreContext.ActivatePatient(params.row);coreContext.cleanup1();setChecked(false)}}>
             {" "}
              Activate
           </Link>

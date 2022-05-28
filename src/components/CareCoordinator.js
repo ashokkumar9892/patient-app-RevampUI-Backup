@@ -22,6 +22,7 @@ const CareCoordinator = (props) => {
   const [message, setMessage] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
   const [patientId, setPatientId] = useState("");
+  const [editcarecoordinator, seteditcarecoordinator] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const handleModalClose = () => {
     setShowModal(false);
@@ -100,6 +101,7 @@ const CareCoordinator = (props) => {
     //setPatientId(patient.id);
     setPatientId(patient.doctor_id);
     handleModalShow();
+    seteditcarecoordinator(patient);
   };
 
   const deletePatient = (patient) => {
@@ -111,8 +113,8 @@ const CareCoordinator = (props) => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        coreContext.DeleteCareTeam(
-          patient.doctor_id,
+        coreContext.DeleteCareCoordinator(
+          patient,
           "carecoordinator",
           "Care Coordinator"
         );
@@ -238,7 +240,7 @@ const CareCoordinator = (props) => {
             blockButton={true}
             value="Submit"
             onClick={() => {
-              coreContext.UpdateCareCoordinator(name, phone, email, patientId);
+              coreContext.UpdateCareCoordinator(name, phone, email, patientId,editcarecoordinator);
               coreContext.setccData([]);
               handleModalClose();
             }}

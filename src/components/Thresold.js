@@ -111,7 +111,7 @@ const Thresold = (props) => {
         }
   
         var dialostic = coreContext.thresoldData.filter(
-          (a) => a.Element_value === "DIASTOLIC"
+          (a) => a.Element_value === "DIASTOLIC" || a.Element_value === "Diastolic"
         );
   
         if (dialostic.length > 0) {
@@ -123,7 +123,7 @@ const Thresold = (props) => {
         }
   
         var systolic = coreContext.thresoldData.filter(
-          (a) => a.Element_value === "SYSTOLIC"
+          (a) => a.Element_value === "SYSTOLIC" || a.Element_value === "Systolic"
         );
         if (systolic.length > 0) {
           setSystolicMin(systolic[0].systolic_low);
@@ -226,20 +226,7 @@ const Thresold = (props) => {
     setWeightMax(e.to);
   };
 
-  const UpdateThreshold = () => {
-    console.log(
-      bgMin,
-      bgMax,
-      bmiMin,
-      bmiMax,
-      diastolicMin,
-      diastolicMax,
-      systolicMin,
-      systolicMax,
-      weightMin,
-      weightMax
-    );
-  };
+  
   const renderslider = () => {
     if (coreContext.adminthresold.length === 0) {
       return (
@@ -275,12 +262,14 @@ const Thresold = (props) => {
 			<div className="card-header fs-5">Blood Glucose (mg / dl) <span>{userType === "doctor" ||
               userType === "admin" ||
               userType === "provider" ? <button type="button" className="btn btn-lg btn-danger fs-6 float-end" onClick={() => {
+                console.log(coreContext.thresoldData,"fhi")
                 coreContext.UpdateThreshold(
                   "ADMIN_" + patientId,
-                  "bg",
+                  "Blood Glucose",
                   bgMax,
                   bgMin,
-                  userType
+                  userType,
+                  coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose")
                 );
                 
               }}> Update</button>:""}</span>
@@ -317,10 +306,11 @@ const Thresold = (props) => {
               userType === "provider" ? <button type="button"  onClick={() =>
                 coreContext.UpdateThreshold(
                   "ADMIN_" + patientId,
-                  "bmi",
+                  "BMI",
                   bmiMax,
                   bmiMin,
-                  userType
+                  userType,
+                  coreContext.thresoldData.filter((curr)=>curr.Element_value==="BMI")
                 )
               }
               className="btn btn-lg btn-danger fs-6 float-end"> Update</button>:""}</span>
@@ -359,7 +349,8 @@ const Thresold = (props) => {
                   "Diastolic",
                   diastolicMax,
                   diastolicMin,
-                  userType
+                  userType,
+                  coreContext.thresoldData.filter((curr)=>curr.Element_value==="Diastolic" || curr.Element_value==="DIASTOLIC")
                 )
               }> Update</button>:""}</span>
 		</div>
@@ -395,7 +386,8 @@ const Thresold = (props) => {
                   "Systolic",
                   systolicMax,
                   systolicMin,
-                  userType
+                  userType,
+                  coreContext.thresoldData.filter((curr)=>curr.Element_value==="Systolic" || curr.Element_value==="SYSTOLIC")
                 )
               }> Update</button>:""}</span>
 		</div>

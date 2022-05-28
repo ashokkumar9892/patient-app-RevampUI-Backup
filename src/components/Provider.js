@@ -102,6 +102,7 @@ const Provider = (props) => {
   const [patientId, setPatientId] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [searchText, setSearchText] = React.useState("");
+  const [editdoctor, seteditdoctor] = React.useState("");
   const handleModalClose = () => {setShowModal(false);fetchProviders()};
   const handleModalShow = () => setShowModal(true);
 
@@ -211,6 +212,7 @@ useEffect(fetchProviders, [checked]);
     setEmail(patient.email);
     //setPatientId(patient.id);
     setPatientId(patient.doctor_id);
+    seteditdoctor(patient);
     handleModalShow();
   };
 
@@ -225,7 +227,7 @@ useEffect(fetchProviders, [checked]);
     })
     .then((willDelete) => {
       if (willDelete) {
-        coreContext.DeleteCareTeam(patient.doctor_id, "doctor", "Provider");
+        coreContext.DeleteDoctor(patient);
         coreContext.setdoctorData([]);
       } else {
         swal("Delete Cancelled");
@@ -480,7 +482,7 @@ useEffect(fetchProviders, [checked]);
             blockButton={true}
             value="Submit"
             onClick={() =>
-              {coreContext.UpdateProvider(name, phone, email, patientId);coreContext.setdoctorData([]);handleModalClose()}
+              {coreContext.UpdateProvider(name, phone, email, patientId,editdoctor);coreContext.setdoctorData([]);handleModalClose()}
             }
             elementType="button"
             variant="primary"
