@@ -299,7 +299,7 @@ const Patients = (props) => {
     setLName(patient.lastName);
     setBirthDate(patient.dob);
     setPhone(patient.mobile);
-    setPatientId(patient.userId);
+    setPatientId(patient);
     if (patient.ProviderName === undefined) {
       patient.ProviderName = "Select Provider";
       setProvider("");
