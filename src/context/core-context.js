@@ -230,61 +230,49 @@ export const CoreContextProvider = (props) => {
       });
   };
 
-  const userDetails = (useremail, url = "") => {
+  const userDetails = async(useremail, url = "") => {
     const token = localStorage.getItem("app_jwt");
     //let url ='';
-    const data = {
-      TableName: userTable,
-      IndexName: "Email-Index",
-      KeyConditionExpression: "Email = :v_Email",
-      ExpressionAttributeValues: { ":v_Email": { S: useremail } },
-    };
-
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+    await axios
+    .get(
+      "https://localhost:44320/usertable",
+        
+        {
         headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
         },
-      })
+        
+         
+    )
       .then((response) => {
-        // setJwt(response.data);
-        const userData = response.data;
+         // setJwt(response.data);
+        const userData = response.data.filter((curr)=>curr.email===useremail);
         setuserinfo(userData);
        
 
-        userData.forEach((p) => {
-          localStorage.setItem("userName", p.UserName.s);
-          localStorage.setItem("userType", p.UserType.s);
-          localStorage.setItem("userId", p.SK.s);
-          localStorage.setItem("userEmail", p.Email.s);
-          if (p.Height !== undefined) {
-            localStorage.setItem("height", p.Height.s);
-          }
-          if (p.weight !== undefined) {
-            localStorage.setItem("weight", p.weight.s);
-          }
+        userData.filter((curr)=>curr.email===useremail).forEach((p) => {
+          localStorage.setItem("userName", p.userName);
+          localStorage.setItem("userType", p.userType);
+          localStorage.setItem("userId", p.userId);
+          localStorage.setItem("userEmail", p.email);
 
           const pat = {
-            userName: p.UserName ? p.UserName.s : "",
-            userType: p.UserTpye ? p.UserType.s : "",
-            userId: p.SK ? p.SK.s : "",
-            userEmail: p.Email ? p.Email.s : "",
-            height: p.Height ? p.Height.s : "",
-            weight: p.weight ? p.weight.s : "",
-            dob: p.DOB ? p.DOB.s : "",
-            bmi: p.BMI ? p.BMI.s : "",
-            phone: p.ContactNo ? p.ContactNo.s : "",
+            userName: p.userName ? p.userName : "",
+            userType: p.userTpye ? p.userType : "",
+            userId: p.userId ? p.userId : "",
+            userEmail: p.email ? p.email : "",
+            
           };
 
           localStorage.setItem("app_patient", JSON.stringify(pat));
 
-          if (p.UserType.s === "patient" && url) {
+          if (p.userType === "patient" && url) {
             if (pat.userName.includes("||0")) url = "profile";
-            else url = "patient-profile/" + p.SK.s.split("_").pop();
+            else url = "patient-profile/" + p.userId.split("_").pop();
           }
-          if (p.UserType.s === "admin" && url) {
+          if (p.userType === "admin" && url) {
             if (pat.userName.includes("||0")) url = "profile";
             else url = "dashboard";
           }
@@ -505,6 +493,7 @@ export const CoreContextProvider = (props) => {
           // if (patient.userId !== undefined && patient.name) {
           //     fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
           // }
+                
           ps.push(patient);
         });
           
@@ -1165,28 +1154,28 @@ if(dataSetthresold.length>1){
           let tldata = {};
 
           if (tl.TaskType) {
-            tldata.taskType = tl.TaskType.s;
+            tldata.taskType = tl.taskType;
           }
           if (tl.PerformedBy) {
-            tldata.performedBy = tl.PerformedBy.s;
+            tldata.performedBy = tl.performedBy;
           }
           if (tl.PerformedOn) {
-            tldata.performedOn = tl.PerformedOn.s;
+            tldata.performedOn = tl.performedOn;
           }
           if (tl.StartDT) {
-            tldata.startDT = tl.StartDT.s;
+            tldata.startDT = tl.startDT;
           }
           if (tl.EndDT) {
-            tldata.endDT = tl.EndDT.s;
+            tldata.endDT = tl.endDT;
           }
           if (tl.TimeAmount) {
-            tldata.timeAmount = tl.TimeAmount.s;
+            tldata.timeAmount = tl.timeAmount;
           }
           if (tl.UserName) {
-            tldata.UserName = tl.UserName.s;
+            tldata.UserName = tl.userName;
           }
           if (tl.GSI1SK) {
-            tldata.UserId = tl.GSI1SK.s;
+            tldata.UserId = tl.gsI1SK;
           }
           dataSettimeLog.push(tldata);
         });
@@ -2461,13 +2450,13 @@ deviceType:patient.deviceType,
           if (p.sk !== undefined) {
             providerdata.doctor_id = p.sk;
           }
+          
           dataSetdoctor.push(providerdata);
           pOptions.push({ value: p.sk, name: p.userName });
           
           
         });
-
-
+        
         setdoctorData(dataSetdoctor);
         setProviderOptions(pOptions);
       })
