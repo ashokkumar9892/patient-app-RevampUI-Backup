@@ -67,14 +67,14 @@ const Dashboard = (props) => {
 
     const userType = localStorage.getItem("userType");
     const userId = localStorage.getItem("userId");
-    
+    coreContext.fetchAllTimeLog();
 
     if (userType === "admin") {
       coreContext.fetchPatientListfromApi("admin");
     } else {
       coreContext.fetchPatientListfromApi(userType, userId);
     }
-    coreContext.fetchAllTimeLog();
+    
     coreContext.fetchPatientWithDevice();
   };
   useEffect(fetchPatients, []);
@@ -215,6 +215,7 @@ const Dashboard = (props) => {
       localStorage.setItem("patient_list",JSON.stringify(coreContext.patients))
       
       coreContext.patients.map((curr) => {
+        console.log("sahilg",coreContext.AlltimeLogData)
         
         let patientTimelog = coreContext.AlltimeLogData.filter(
           (app) => app.UserId == curr.userId && Number(app.performedOn.substring(5,7))==Number(month)+1 && Number(app.performedOn.substring(0,4))==2022

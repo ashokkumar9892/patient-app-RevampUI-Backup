@@ -235,7 +235,7 @@ export const CoreContextProvider = (props) => {
     //let url ='';
     await axios
     .get(
-      "https://localhost:44320/usertable",
+      apiUrl2+"usertable",
         
         {
         headers: {
@@ -1106,7 +1106,7 @@ if(dataSetthresold.length>1){
             tldata.performedBy = tl.performedBy;
           }
           if (tl.performedOn) {
-            tldata.performedOn = tl.performedOn;
+            tldata.performedOn = Moment(tl.performedOn).format('YYYY-MM-DD hh:mm:ss A').toString();
           }
           if (tl.startDT) {
             tldata.startDT = tl.startDT;
@@ -1153,28 +1153,28 @@ if(dataSetthresold.length>1){
          
           let tldata = {};
 
-          if (tl.TaskType) {
+          if (tl.taskType) {
             tldata.taskType = tl.taskType;
           }
-          if (tl.PerformedBy) {
+          if (tl.performedBy) {
             tldata.performedBy = tl.performedBy;
           }
-          if (tl.PerformedOn) {
-            tldata.performedOn = tl.performedOn;
+          if (tl.performedOn) {
+            tldata.performedOn = Moment(tl.performedOn).format('YYYY-MM-DD hh:mm:ss A').toString();
           }
-          if (tl.StartDT) {
+          if (tl.startDT) {
             tldata.startDT = tl.startDT;
           }
-          if (tl.EndDT) {
+          if (tl.endDT) {
             tldata.endDT = tl.endDT;
           }
-          if (tl.TimeAmount) {
+          if (tl.timeAmount) {
             tldata.timeAmount = tl.timeAmount;
           }
-          if (tl.UserName) {
+          if (tl.userName) {
             tldata.UserName = tl.userName;
           }
-          if (tl.GSI1SK) {
+          if (tl.gsI1SK) {
             tldata.UserId = tl.gsI1SK;
           }
           dataSettimeLog.push(tldata);
