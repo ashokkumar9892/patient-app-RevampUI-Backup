@@ -232,69 +232,70 @@ export const CoreContextProvider = (props) => {
 
   const userDetails = async(useremail, url = "") => {
     const token = localStorage.getItem("app_jwt");
-    //let url ='';
-    await axios
-    .get(
-      apiUrl2+"usertable",
-        
-        {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
+    if(token){await axios
+      .get(
+        apiUrl2+"usertable",
+          
+          {
+          headers: {
+            'Content-Type': 'application/json',
+            'accept': 'text/plain'
+           }
+          },
+          
+           
+      )
+        .then((response) => {
+           // setJwt(response.data);
+          const userData = response.data.filter((curr)=>curr.email===useremail);
+          setuserinfo(userData);
          
-    )
-      .then((response) => {
-         // setJwt(response.data);
-        const userData = response.data.filter((curr)=>curr.email===useremail);
-        setuserinfo(userData);
-       
-
-        userData.filter((curr)=>curr.email===useremail).forEach((p) => {
-          localStorage.setItem("userName", p.userName);
-          localStorage.setItem("userType", p.userType);
-          localStorage.setItem("userId", p.userId);
-          localStorage.setItem("userEmail", p.email);
-
-          const pat = {
-            userName: p.userName ? p.userName : "",
-            userType: p.userTpye ? p.userType : "",
-            userId: p.userId ? p.userId : "",
-            userEmail: p.email ? p.email : "",
-            
-          };
-
-          localStorage.setItem("app_patient", JSON.stringify(pat));
-
-          if (p.userType === "patient" && url) {
-            if (pat.userName.includes("||0")) url = "profile";
-            else url = "patient-profile/" + p.userId.split("_").pop();
-          }
-          if (p.userType === "admin" && url) {
-            if (pat.userName.includes("||0")) url = "profile";
-            else url = "dashboard";
-          }
-        });
-
-        const patientId = localStorage.getItem("userId");
-        const username = localStorage.getItem("userName");
-
-        setShowLoader(false);
-
-        if (userData.length === 0) window.location.assign("profile");
-        else if (url) window.location.assign(url);
-
-        // if (userType === 'patient')
-        // {
-        //     window.location.assign(url);
-        // }
-        // else
-        //     {
-        //         window.location.assign('/dashboard');
-        //     }
-      });
+  
+          userData.filter((curr)=>curr.email===useremail).forEach((p) => {
+            localStorage.setItem("userName", p.userName);
+            localStorage.setItem("userType", p.userType);
+            localStorage.setItem("userId", p.userId);
+            localStorage.setItem("userEmail", p.email);
+  
+            const pat = {
+              userName: p.userName ? p.userName : "",
+              userType: p.userTpye ? p.userType : "",
+              userId: p.userId ? p.userId : "",
+              userEmail: p.email ? p.email : "",
+              
+            };
+  
+            localStorage.setItem("app_patient", JSON.stringify(pat));
+  
+            if (p.userType === "patient" && url) {
+              if (pat.userName.includes("||0")) url = "profile";
+              else url = "patient-profile/" + p.userId.split("_").pop();
+            }
+            if (p.userType === "admin" && url) {
+              if (pat.userName.includes("||0")) url = "profile";
+              else url = "dashboard";
+            }
+          });
+  
+          const patientId = localStorage.getItem("userId");
+          const username = localStorage.getItem("userName");
+  
+          setShowLoader(false);
+  
+          if (userData.length === 0) window.location.assign("profile");
+          else if (url) window.location.assign(url);
+  
+          // if (userType === 'patient')
+          // {
+          //     window.location.assign(url);
+          // }
+          // else
+          //     {
+          //         window.location.assign('/dashboard');
+          //     }
+        })}
+    //let url ='';
+    
   };
   const setdefault=()=>{
     setTimeLogData([])
