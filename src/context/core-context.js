@@ -1274,49 +1274,78 @@ if(dataSetthresold.length>1){
 
   
 
-  const UpdateProfie = (userName, email, phone, dob, height, weight, bmi) => {
+  const UpdateProfie = async(userName, email, phone, dob, height, weight, bmi) => {
+    console.log(patients)
+    const patient=patients.filter((curr)=>curr.email===email);
     const userid = localStorage.getItem("userId");
     const token = localStorage.getItem("app_jwt");
     let userType = localStorage.getItem("userType");
     if (userType === "") userType = "patient";
-    const data = {
-      TableName: userTable,
-      Key: {
-        PK: { S: userType },
-        SK: { S: userid },
-      },
-      UpdateExpression:
-        "SET ProfileImage = :v_ProfileImage ,UserName = :v_UserName , ContactNo = :v_ContactNo , DOB =:v_DOB , Height=:v_Height , weight=:v_weight ,UserTimeZone = :v_TimeZone,BMI= :v_BMI",
-      ExpressionAttributeValues: {
-        ":v_UserName": { S: userName },
-        ":v_ContactNo": { S: phone },
-        ":v_DOB": { S: dob },
-        ":v_Height": { S: height },
-        ":v_weight": { S: weight },
-        ":v_ProfileImage": { S: "" },
-        ":v_TimeZone": { S: "" },
-        ":v_BMI": { S: bmi },
-      },
-    };
+    const data={
+      id:patient.id,
+sk:patient.sk,
+activeStatus:"Active",
+carecoordinatorId:patient.careId,
+carecoordinatorName:patient.CareName,
+city:patient.city,
+coach:patient.CoachName,
+coachId:patient.coachId,
+connectionId:"",
+contactNo:phone,
+createdDate:patient.createdDate,
+diagnosisId:patient.diagnosisId,
+diastolic:patient.diastolic,
+dob:dob,
+doctorId:patient.ProviderId,
+doctorName:patient.ProviderName,
+email:patient.email,
+firstName:patient.firstName,
+gender:patient.gender,
+gsI1PK:"patient",
+gsI1SK:patient.ProviderId,
+height:height,
+lang:patient.language,
+lastName:patient.lastName,
+middleName:patient.middleName,
+mobilePhone:phone,
+notes:patient.notes,
+otp:patient.otp,
+profileImage:patient.profileImage,
+reading:bmi,
+st:patient.st,
+street:patient.street,
+systolic:patient.systolic,
+userId:patient.userId,
+userName:patient.userName,
+userTimeZone:patient.userTimeZone,
+userType:patient.userType,
+weight:weight,
+workPhone:patient.workPhone,
+zip:patient.zip,
+deviceId:patient.deviceId,
+deviceStatus:patient.deviceStatus,
+deviceType:patient.deviceType,
+ }
 
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
+ await axios
+ .put(
+   apiUrl2 +
+     "patient",data,{
+     headers: {
+       'Content-Type': 'application/json',
+       'accept': 'text/plain'
+      }
+      
+     },
+      
+ )
       .then((response) => {
-       
-        if (response.data === "Updated") {
-          //alert("Record Updated Successfully.");
-          swal("success", "Record Updated Successfully.", "success");
-          userDetails(email, "");
+        if (response.status === 200) {
+          swal("success", "Patient Deleted Successfully.", "success");
         }
       });
   };
-
+ 
   const fetchNameFromId = (id, array) => {
     const ent = array.filter((a) => a.value === id);
     return ent[0];
@@ -3835,71 +3864,59 @@ deviceType:patient.deviceType,
         }
       });
   };
-  const AddNotification = (Notification,usertype,userid) => {
+  const AddNotification = async(Notification,usertype,userid) => {
     const token = localStorage.getItem("app_jwt");
-      const data = JSON.stringify({
-     // id: timeLogData.length + 1,
-      PK: "Notification_"+usertype,
-      SK:Notification,
-      GSI1PK:"Notification_"+userid
-      
-    });
-
-    axios
-      .post(
-        apiUrl +
-          "/DynamoDbAPIs/PutItem?jsonData=" +
-          data +
-          "&tableName=" +
-          userTable +
-          "&actionType=register",
-        {
-          headers: {
-            Accept: "application/json, text/plain, */*",
-            // "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-        }
-      )
-      
-      .then((response) => {
-        if (response.data === "Registered") {
+    const data={
+      sk:Notification,
+      gsI1PK:"Notification_ADMIN_"+userid
+    }
+axios
+.post(
+apiUrl2 +
+  "notification",data,{
+  headers: {
+    'Content-Type': 'application/json',
+    'accept': 'text/plain'
+   }
+   
+  },
+   
+)
+.then((response) => {
+    if (response.status === 200) {
           console.log(response.data);
           swal("success", "Notification has been marked as read.", "success");
         }
       });
   };
-  const FetchNotification = (userid) => {
+  const FetchNotification = async (userid) => {
     const token = localStorage.getItem("app_jwt");
-
-    let data = "";
-    data = {
-      TableName: userTable,
-      KeyConditionExpression: "PK = :v_PK",
-      FilterExpression: "GSI1PK = :v_GSI1PK",
-      ExpressionAttributeValues: {
-        ":v_PK": { S: "Notification_admin" },
-       ":v_GSI1PK": { S: "Notification_" + userid },
+    await axios
+    .get(
+      apiUrl2 +
+        "notification",
         
-      },
-    };
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+        {
         headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
         },
-      })
+        
+         
+    )
       .then((response) => {
-        const notificationData = response.data;
+            const notificationData = response.data;
         const notificationarray=[];
         if(notificationData.length===0){
           notificationarray.push("no data found")
         }
 
         notificationData.map((curr)=>{
-          notificationarray.push(curr.SK.s)
+          notificationarray.push(curr.sk)
+          
+
+         
 
         })
         setNotifications(notificationarray)
