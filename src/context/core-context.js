@@ -3699,88 +3699,68 @@ deviceType:patient.deviceType,
   };
 
   const fetchWSChartData = async(userid, usertype) => {
-    const token = localStorage.getItem("app_jwt");
-    console.log("fetchWSData : userId" + userId);
-
     
+    const token = localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
     let data = "";
     if (usertype === "patient") {
-      data = {
-        TableName: userTable,
-        IndexName: "Patient-Doctor-Device-Index",
-        KeyConditionExpression: "GSI1PK = :v_PK",
-        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "DEVICE_WS_" + userid },
-          ":v_ActiveStatus": { S: "Deactive" },
-        },
-      };
+      data = "DEVICE_WS_" + userid;
     }
 
-    if (usertype === "doctor") {
-      data = {
-        TableName: userTable,
-        KeyConditionExpression: "PK = :v_PK",
-        FilterExpression:
-          "ActiveStatus <> :v_ActiveStatus AND GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2)",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "DEVICE_WS_READING" },
-          ":v_ActiveStatus": { S: "Deactive" },
-          ":v_GSI1PK1": { S: "DEVICE_WS_PATIENT_121524123727622" },
-          ":v_GSI1PK2": { S: "DEVICE_WS_PATIENT_1627230254837" },
-        },
-      };
-    }
-
-    if (usertype === "admin") {
-      data = {
-        TableName: userTable,
-        KeyConditionExpression: "PK = :v_PK",
-        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "DEVICE_WS_READING" },
-          ":v_ActiveStatus": { S: "Deactive" },
-        },
-      };
-    }
-
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+   else{
+    data="DEVICE_WS_";
+   }
+    await axios
+    .get(
+      apiUrl2 +
+        "weight",
+        { params: { GSI1PK: data } },
+        {
         headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
         },
-      })
+        
+         
+    )
       .then((response) => {
-    const weightData = response.data;
+        const weightData = response.data;
         const dataSetweight = [];
 
         weightData.forEach((wt, index) => {
           console.log("p" + index, wt);
           let wtdata = {};
-          wtdata.id = index;
+          wtdata.id = wt.id;
           // if (wt.BMI !== undefined) {
           //     wtdata.bmi = wt.BMI.n;
           // }
-          wtdata.gSI1PK = wt.GSI1PK.s;
-          wtdata.deviceid = wt.DeviceId.n;
-          wtdata.actionTaken = wt.ActionTaken.s;
-          wtdata.weight = Math.round(wt.weight.n);
+          wtdata.gSI1PK = wt.gsI1PK;
+          wtdata.deviceid = wt.deviceId;
+          wtdata.actionTaken = wt.actionTaken;
+          wtdata.weight = Math.round(wt.weight);
           if (wt.timeSlots !== undefined) {
-            wtdata.timeSlots = wt.TimeSlots.s;
+            wtdata.timeSlots = wt.timeSlots;
           }
 
-          if (wt.MeasurementDateTime !== undefined) {
-            wtdata.measurementDateTime = wt.MeasurementDateTime.s;
+          if (wt.measurementDateTime !== undefined) {
+            wtdata.measurementDateTime = wt.measurementDateTime;
           }
-          if (wt.MeasurementTimestamp !== undefined) {
-            wtdata.measurementDateTimeStamp = wt.MeasurementTimestamp.n;
+          if (wt.measurementTimestamp !== undefined) {
+            wtdata.measurementDateTimeStamp = wt.measurementTimestamp;
           }
 
-          wtdata.username = wt.UserName.s;
-          wtdata.batteryVoltage = wt.batteryVoltage.n;
-          wtdata.signalStrength = wt.signalStrength.n;
+          wtdata.username = wt.userName;
+          wtdata.batteryVoltage = wt.batteryVoltage;
+          wtdata.signalStrength = wt.signalStrength;
 
           dataSetweight.push(wtdata);
           // console.log('pos', wtdata);
