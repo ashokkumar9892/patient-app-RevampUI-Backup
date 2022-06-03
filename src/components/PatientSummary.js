@@ -185,15 +185,25 @@ const PatientSummary = (props) => {
   let [coach, setCoach] = useState("");
   let [coordinator, setCoordinator] = useState("");
   const fetchbp = () => {
-    coreContext.fetchBloodPressureForPatient(localStorage.getItem("ehrId"), "patient");
+    if(coreContext.patientsForPatient[0]){
+      const patientId = coreContext.patientsForPatient[0].ehrId
+    coreContext.fetchBloodPressureForPatient(patientId, "patient");
+    }
   };
   const fetchbg = () => {
-    coreContext.fetchBloodGlucoseForPatient(localStorage.getItem("ehrId"), "patient");
+    if(coreContext.patientsForPatient[0]){
+      const patientId = coreContext.patientsForPatient[0].ehrId
+      coreContext.fetchBloodGlucoseForPatient(patientId, "patient");
+    }
+    
+
+    
+
   };
 
-  useEffect(fetchbp, [coreContext.bloodpressureDataForPatient]);
+  useEffect(fetchbp, [coreContext.patientsForPatient.length]);
   
-  useEffect(fetchbg, [coreContext.bloodglucoseDataForPatient]);
+  useEffect(fetchbg, [coreContext.patientsForPatient.length]);
   const fetchCareCoordinator = () => {
     const patientId = props.match.params.patient;
     setPatientId(patientId);
@@ -240,6 +250,8 @@ const PatientSummary = (props) => {
 
     //setPatient(patientData);
     coreContext.fetchPatientListfromApiForPatient("patient", patientId);
+    fetchbp();
+    fetchbg();
 
     //coreContext.fetchThresold("ADMIN_PATIENT_" + patientId, userType);
 
@@ -524,7 +536,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
     );
   }, [slider]);
 
-  const getbpdata = (index) => {
+  const getbpdata =React.useCallback( (index) => {
     if (coreContext.bloodpressureDataForPatient.length == 0) {
       return (
         <>
@@ -902,7 +914,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
     } else {
       return <h1>no data found</h1>;
     }
-  };
+  },[coreContext.bloodpressureDataForPatient]);
   // const getbpdata1 = useMemo(() => getbpdata(1), []);
   // const getbpdata3 = useMemo(() => getbpdata(3), []);
   // const getbpdata2 = useMemo(() => getbpdata(2), []);

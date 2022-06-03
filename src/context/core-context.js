@@ -141,6 +141,7 @@ export const CoreContextProvider = (props) => {
   };
   const cleanup=()=>{
     // setPatients([]);
+    setPatientsForPatient([]);
     setbloodglucoseDataForPatient([]);
     setbloodpressureDataForPatient([]);
   }
@@ -311,6 +312,7 @@ export const CoreContextProvider = (props) => {
   // capture from patient List page.
   const fetchPatientListfromApi = async (usertype, userId, AllActive) => {
     const token = localStorage.getItem("app_jwt");
+    if(token){
 
     let data = "";
 
@@ -503,10 +505,14 @@ export const CoreContextProvider = (props) => {
       .catch((error) => {
         console.log(error,"errorlogin")
       });
+    }
   };
   const fetchPatientListfromApiForPatient = async (usertype, userId, AllActive) => {
     setPatientsForPatient([])
     const token = localStorage.getItem("app_jwt");
+    if(token){
+
+    
     var data={};
 
     if (usertype === "patient") {
@@ -664,6 +670,7 @@ export const CoreContextProvider = (props) => {
       .catch(() => {
         relogin();
       });
+    }
   };
 
   const renderLoader = () => {
@@ -933,6 +940,15 @@ export const CoreContextProvider = (props) => {
 
   const fetchThresold = async (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
     await axios
     .get(
       apiUrl2 +
@@ -1003,6 +1019,15 @@ export const CoreContextProvider = (props) => {
   };
   const fetchadminThresold = async (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
 
     await axios
     .get(
@@ -1070,6 +1095,16 @@ if(dataSetthresold.length>1){
   };
 
   const fetchTimeLog = async (userid) => {
+    const token=localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
     await axios
     .get(
       apiUrl2 +
@@ -1133,6 +1168,15 @@ if(dataSetthresold.length>1){
 
   const fetchAllTimeLog = async () => {
     const token = localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
    
    await axios
     .get(
@@ -1190,6 +1234,15 @@ if(dataSetthresold.length>1){
   const addDevice = async (deviceType, deviceId, patientId,userName) => {
   setdeviceDataForPatient([]);
     const token = localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
     const date = new Date();
     const doctorId = "";
     const config = {
@@ -1239,6 +1292,15 @@ if(dataSetthresold.length>1){
   const UpdateThreshold = async (patient, type, high, low, userType,time) => {
     // fetch Threshold.
     const token = localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
     const data={
       id: time[0].id,
       sk: patient.toString(),
@@ -1276,9 +1338,19 @@ if(dataSetthresold.length>1){
 
   const UpdateProfie = async(userName, email, phone, dob, height, weight, bmi) => {
     console.log(patients)
+    const token=localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
     const patient=patients.filter((curr)=>curr.email===email);
     const userid = localStorage.getItem("userId");
-    const token = localStorage.getItem("app_jwt");
+    
     let userType = localStorage.getItem("userType");
     if (userType === "") userType = "patient";
     const data={
@@ -1499,7 +1571,16 @@ zip: zip,
   };
 
   const AssignCareTeam =async (provider, coordinator, coach, patient) => {
-    const token = localStorage.getItem("app_jwt");
+    const token=localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
     let providername = fetchNameFromId(provider, providerOptions);
     let carecoordinatorname = fetchNameFromId(
       coordinator,
@@ -1582,7 +1663,16 @@ deviceType:patient.deviceType,
   };
 
   const UpdateProvider = async(username, mobile, email, patientId,doctor) => {
-    const token = localStorage.getItem("app_jwt");
+    const token=localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
 
     const data ={
       id: doctor.id,
@@ -1622,7 +1712,16 @@ deviceType:patient.deviceType,
   };
 
   const UpdateCareCoordinator = async(username, mobile, email, patientId,doctor) => {
-    const token = localStorage.getItem("app_jwt");
+    const token=localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
 
     const data ={
       id: doctor.id,
@@ -1663,7 +1762,16 @@ deviceType:patient.deviceType,
 
   const UpdateCoach =async(username, mobile, email, patientId,doctor) => {
   
-    const token = localStorage.getItem("app_jwt");
+    const token=localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
 
     const data ={
       id: doctor.id,
@@ -2359,7 +2467,16 @@ deviceType:patient.deviceType,
       });
   };
   const fetchDeviceDataForPatient = async (patientId, username, usertype, type, patient) => {
-    const token = localStorage.getItem("app_jwt");
+    const token=localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
     await axios
     .get(
       apiUrl2 +
@@ -2886,6 +3003,10 @@ deviceType:patient.deviceType,
   };
   const fetchBloodPressureForPatient = async (userid, usertype) => {
     
+    const user=userid.split('_')[1]
+    console.log(user,"hi")
+    
+    
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
@@ -2898,7 +3019,7 @@ deviceType:patient.deviceType,
 
     let data = "";
     if (usertype === "patient") {
-      data = "DEVICE_BP_" + userid;
+      data = "DEVICE_BP_" + user;
     }
 
    else{
@@ -2918,75 +3039,76 @@ deviceType:patient.deviceType,
         
          
     )      .then((response) => {
-        const bloodpressureData = response.data;
-        
-        const dataSetbp = [];
-        if (bloodpressureData.length === 0) {
-          dataSetbp.push("No Data Found");
+      const bloodpressureData = response.data;
+      console.log(bloodpressureData,"bloodpressureData")
+      
+      const dataSetbp = [];
+      if (bloodpressureData.length === 0) {
+        dataSetbp.push("No Data Found");
+      }
+
+      bloodpressureData.forEach((bp, index) => {
+        //   console.log('p' + index, bg);
+        let bpdata = {};
+        bpdata.id = bp.id;
+        if (bp.gsI1PK !== undefined) {
+          bpdata.gSI1PK = bp.gsI1PK;
+          bpdata.UserId = bp.gsI1PK.split("_").pop();
+         
+        }
+       
+        if (bp.userName !== undefined) {
+          bpdata.UserName = bp.userName;
         }
 
-        bloodpressureData.forEach((bp, index) => {
-          //   console.log('p' + index, bg);
-          let bpdata = {};
-          bpdata.id = index;
-          if (bp.GSI1PK !== undefined) {
-            bpdata.gSI1PK = bp.GSI1PK.s;
-            bpdata.UserId = bp.GSI1PK.s.split("_").pop();
-           
-          }
-         
-          if (bp.UserName !== undefined) {
-            bpdata.UserName = bp.UserName.s;
-          }
+        if (bp.irregular !== undefined) {
+          bpdata.irregular = bp.irregular;
+        }
+        if (bp.systolic !== undefined) {
+          bpdata.systolic = parseFloat(bp.systolic).toFixed(0);
+        }
+        if (bp.diastolic !== undefined) {
+          bpdata.diastolic = parseFloat(bp.diastolic).toFixed(0);
+        }
+        if (bp.pulse !== undefined) {
+          bpdata.Pulse = bp.pulse;
+        }
+        if (bp.timeSlots !== undefined) {
+          bpdata.timeSlots = bp.timeSlots;
+        }
+        if (bp.measurementDateTime !== undefined) {
+          bpdata.MeasurementDateTime = bp.measurementDateTime;
+          bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
+          bpdata.sortDateColumn = bp.measurementDateTime;
+          //  bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MM-DD-YYYY hh:mm A');
+        }
 
-          if (bp.irregular !== undefined) {
-            bpdata.irregular = bp.irregular.n;
-          }
-          if (bp.systolic !== undefined) {
-            bpdata.systolic = parseFloat(bp.systolic.n).toFixed(0);
-          }
-          if (bp.diastolic !== undefined) {
-            bpdata.diastolic = parseFloat(bp.diastolic.n).toFixed(0);
-          }
-          if (bp.pulse !== undefined) {
-            bpdata.Pulse = bp.pulse.n;
-          }
-          if (bp.TimeSlots !== undefined) {
-            bpdata.timeSlots = bp.TimeSlots.s;
-          }
-          if (bp.MeasurementDateTime !== undefined) {
-            bpdata.MeasurementDateTime = bp.MeasurementDateTime.s;
-            bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
-            bpdata.sortDateColumn = bp.MeasurementDateTime.s;
-            //  bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MM-DD-YYYY hh:mm A');
-          }
+        if (bp.createdDate !== undefined) {
+          bpdata.CreatedDate = bp.createdDate;
+          bpdata.CreatedDate = new Date(bpdata.CreatedDate);
+          //bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MM-DD-YYYY hh:mm A');
+        }
 
-          if (bp.CreatedDate !== undefined) {
-            bpdata.CreatedDate = bp.CreatedDate.s;
-            bpdata.CreatedDate = new Date(bpdata.CreatedDate);
-            //bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MM-DD-YYYY hh:mm A');
-          }
+        // bpdata.date_recorded = bp.date_recorded.s;
 
-          // bpdata.date_recorded = bp.date_recorded.s;
+        if (bp.deviceId !== undefined) {
+          bpdata.DeviceId = bp.deviceId;
+        }
 
-          if (bp.DeviceId !== undefined) {
-            bpdata.DeviceId = bp.DeviceId.s;
-          }
+        if (bp.IMEI !== undefined) {
+          bpdata.DeviceId = bp.IMEI;
+        }
 
-          if (bp.IMEI !== undefined) {
-            bpdata.DeviceId = bp.IMEI.s;
-          }
+        if (bp.sk !== undefined) {
+          bpdata.readingId = bp.sk.split("_").pop();
+        }
 
-          if (bp.SK !== undefined) {
-            bpdata.readingId = bp.SK.s.split("_").pop();
-          }
+        if (bp.actionTaken !== undefined) {
+          bpdata.actionTaken = bp.actionTaken;
+        }
 
-          if (bp.ActionTaken !== undefined) {
-            bpdata.actionTaken = bp.ActionTaken.s;
-          }
-
-          dataSetbp.push(bpdata);
-        });
+        dataSetbp.push(bpdata);
+      });
 
         setbloodpressureDataForPatient(dataSetbp);
       });
@@ -3113,6 +3235,116 @@ deviceType:patient.deviceType,
 
     let data = "";
     if (usertype === "patient") {
+      data = "DEVICE_BG_PATIENT_" + userid;
+    }
+
+   else{
+    data="DEVICE_BG_";
+   }
+    await axios
+    .get(
+      apiUrl2 +
+        "bg",
+        { params: { GSI1PK: data } },
+        {
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
+        },
+        
+         
+    )
+      .then((response) => {
+        const bloodglucoseData = response.data;
+        console.log(response.data,"response.data")
+        
+        const dataSetbg = [];
+        if (bloodglucoseData.length === 0) {
+          dataSetbg.push("No Data Found");
+        }
+        
+        bloodglucoseData.forEach((bg, index) => {
+          //   console.log('p' + index, bg);
+        
+          let bgdata = {};
+          bgdata.id = index;
+          if (bg.gsI1PK !== undefined) {
+            bgdata.gSI1PK = bg.gsI1PK;
+            bgdata.userId = bg.gsI1PK.split("_").pop();
+          }
+          if (bg.userName !== undefined) {
+            bgdata.UserName = bg.userName;
+            if (bgdata.UserName == "Dale Cadwallader") {
+              let test = "";
+            }
+          }
+
+          if (bg.bloodGlucosemmol !== undefined) {
+            bgdata.bloodglucosemmol = bg.bloodGlucosemmol
+          }
+
+          if (bg.bloodGlucosemgdl !== undefined) {
+            bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl
+          }
+
+          if (bg.before_Meal !== undefined) {
+            if(bg.before_Meal=="True"){
+              bgdata.meal = "Before Meal";
+            }else{
+              bgdata.meal = "After Meal";
+            }
+          }
+
+          if (bg.battery !== undefined) {
+            bgdata.battery = bg.battery;
+          }
+          if (bg.timeSlots !== undefined) {
+            bgdata.timeSlots = bg.timeSlots;
+          }
+          if (bg.measurementDateTime !== undefined) {
+            bgdata.MeasurementDateTime = bg.measurementDateTime;
+            bgdata.MeasurementDateTime = new Date(bgdata.MeasurementDateTime);
+            bgdata.sortDateColumn = bg.measurementDateTime;
+            //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
+          }
+          
+          if (bg.createdDate !== undefined) {
+            bgdata.CreatedDate = bg.createdDate;
+            bgdata.CreatedDate = new Date(bgdata.CreatedDate);
+            bgdata.sortDateColumn = Moment(bg.createdDate).format('YYYY-MM-DD hh:mm');
+            // bgdata.CreatedDate =Moment(bgdata.CreatedDate);
+          }
+
+          if (bg.sk !== undefined) {
+            bgdata.readingId = bg.sk.split("_").pop();
+          }
+
+          if (bg.deviceId !== undefined) {
+            bgdata.DeviceId = bg.deviceId;
+          }
+
+          dataSetbg.push(bgdata);
+        });
+
+        setbloodglucoseData(dataSetbg);
+      });
+  };
+  const fetchBloodGlucoseForPatient = async(userid, usertype) => {
+    
+    
+    const token = localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
+    let data = "";
+    if (usertype === "patient") {
       data = "DEVICE_BG_" + userid;
     }
 
@@ -3167,8 +3399,12 @@ deviceType:patient.deviceType,
           }
 
           if (bg.before_Meal !== undefined) {
-            if (bg.before_Meal.bool) bgdata.meal = "Before Meal";
-            if (!bg.before_Meal.bool) bgdata.meal = "After Meal";
+            if(bg.before_Meal=="True"){
+              bgdata.meal = "Before Meal";
+            }else{
+              bgdata.meal = "After Meal";
+            }
+            
           }
 
           if (bg.battery !== undefined) {
@@ -3202,117 +3438,7 @@ deviceType:patient.deviceType,
           dataSetbg.push(bgdata);
         });
 
-        setbloodglucoseData(dataSetbg);
-      });
-  };
-  const fetchBloodGlucoseForPatient = (userid, usertype) => {
-    
-    const token = localStorage.getItem("app_jwt");
-    const isAuth = localStorage.getItem("app_isAuth");
-    if (isAuth === "yes") {
-      setIsAuthenticated(true);
-      setJwt(token);
-      setUserId(userId);
-    } else {
-      relogin();
-    }
-
-    let data = "";
-
-    if (usertype === "patient") {
-      data = {
-        TableName: userTable,
-        IndexName: "Patient-Doctor-Device-Index",
-        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
-        KeyConditionExpression: "GSI1PK = :v_PK",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "DEVICE_BG_" + userid },
-          ":v_ActiveStatus": { S: "Deactive" },
-        },
-      };
-    }
-
-
-    axios
-      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
-      .then((response) => {
-        const bloodglucoseData = response.data;
-        console.log(response.data,"response.data")
-        const dataSetbg = [];
-        if (bloodglucoseData.length === 0) {
-          dataSetbg.push("No Data Found");
-        }
-    
-
-        bloodglucoseData.forEach((bg, index) => {
-          //   console.log('p' + index, bg);
-          let bgdata = {};
-          bgdata.id = index;
-          if (bg.GSI1PK !== undefined) {
-            bgdata.gSI1PK = bg.GSI1PK.s;
-            bgdata.userId = bg.GSI1PK.s.split("_").pop();
-          }
-          if (bg.UserName !== undefined) {
-            bgdata.UserName = bg.UserName.s;
-            if (bgdata.UserName == "Dale Cadwallader") {
-              let test = "";
-            }
-          }
-
-          if (bg.bloodglucosemmol !== undefined) {
-            bgdata.bloodglucosemmol = parseFloat(bg.bloodglucosemmol.n).toFixed(
-              0
-            );
-          }
-
-          if (bg.bloodglucosemgdl !== undefined) {
-            bgdata.bloodglucosemgdl = parseFloat(bg.bloodglucosemgdl.n).toFixed(
-              0
-            );
-          }
-
-          if (bg.before_meal !== undefined) {
-            if (bg.before_meal.bool) bgdata.meal = "Before Meal";
-            if (!bg.before_meal.bool) bgdata.meal = "After Meal";
-          }
-
-          if (bg.battery !== undefined) {
-            bgdata.battery = bg.battery.n;
-          }
-          if (bg.TimeSlots !== undefined) {
-            bgdata.timeSlots = bg.TimeSlots.s;
-          }
-          if (bg.MeasurementDateTime !== undefined) {
-            bgdata.MeasurementDateTime = bg.MeasurementDateTime.s;
-            bgdata.MeasurementDateTime = new Date(bgdata.MeasurementDateTime);
-            bgdata.sortDateColumn = bg.MeasurementDateTime.s;
-            //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
-          }
-          
-          if (bg.CreatedDate !== undefined) {
-            bgdata.CreatedDate = bg.CreatedDate.s;
-            bgdata.CreatedDate = new Date(bgdata.CreatedDate);
-            bgdata.sortDateColumn = Moment(bg.CreatedDate.s).format('YYYY-MM-DD hh:mm');
-            // bgdata.CreatedDate =Moment(bgdata.CreatedDate);
-          }
-
-          if (bg.SK !== undefined) {
-            bgdata.readingId = bg.SK.s.split("_").pop();
-          }
-
-          if (bg.DeviceId !== undefined) {
-            bgdata.DeviceId = bg.DeviceId.s;
-          }
-
-          dataSetbg.push(bgdata);
-        });
-
+ 
         setbloodglucoseDataForPatient(dataSetbg);
       });
   };
@@ -3384,8 +3510,11 @@ deviceType:patient.deviceType,
           }
 
           if (bg.before_Meal !== undefined) {
-            if (bg.before_Meal.bool) bgdata.meal = "Before Meal";
-            if (!bg.before_Meal.bool) bgdata.meal = "After Meal";
+            if(bg.before_Meal=="True"){
+              bgdata.meal = "Before Meal";
+            }else{
+              bgdata.meal = "After Meal";
+            }
           }
 
           if (bg.battery !== undefined) {
@@ -3489,8 +3618,11 @@ deviceType:patient.deviceType,
           }
 
           if (bg.before_Meal !== undefined) {
-            if (bg.before_Meal.bool) bgdata.meal = "Before Meal";
-            if (!bg.before_Meal.bool) bgdata.meal = "After Meal";
+            if(bg.before_Meal=="True"){
+              bgdata.meal = "Before Meal";
+            }else{
+              bgdata.meal = "After Meal";
+            }
           }
 
           if (bg.battery !== undefined) {
