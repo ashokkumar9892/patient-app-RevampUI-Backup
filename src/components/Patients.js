@@ -251,14 +251,21 @@ const Patients = (props) => {
       //   }
         
       // })
+      if(coreContext.providerOptions.filter((curr) =>
+      curr.name.includes(patient.ProviderName)
+    ).length>0){
       setProvider(
-        coreContext.providerOptions.filter((name) =>
-          name.name.includes(patient.ProviderName)
-        )[0].value !== undefined ?  coreContext.providerOptions.filter((name) =>
-        name.name.includes(patient.ProviderName)
+        coreContext.providerOptions.filter((curr) =>
+          curr.name.includes(patient.ProviderName)
+        )[0].value !== undefined ?  coreContext.providerOptions.filter((curr) =>
+        curr.name.includes(patient.ProviderName)
       )[0].value : ""
       );
-    
+    }else{
+      patient.ProviderName = "Select Provider";
+      setProvider("");
+    }
+      
 
       // setProvider(
       //   coreContext.providerOptions.filter((name) =>
