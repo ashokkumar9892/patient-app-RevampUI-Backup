@@ -334,7 +334,7 @@ const Dashboard = (props) => {
               })
               if (count===0){
                 Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length})
-                
+                console.log(bpdates)
               }
             }
           } else if (totalTimeLogForDataReview >= 2400 && totalTimeLogForDataReview <= 3600) {
@@ -342,6 +342,7 @@ const Dashboard = (props) => {
             fiftynine1.push(curr.userId);
             if(Billing.length<1){
               Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length})
+              console.log(bpdates)
             }
             else{
               let count=0
@@ -377,7 +378,7 @@ const Dashboard = (props) => {
               })
               if (count===0){
                 Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length})
-                console.log("ridlley 5764",Math.floor(totalTimeLogForDataReview/60)%20,Math.floor(totalTimeLogForDataReview/60),totalTimeLogForDataReview,totalTimeLogForDataReview/60)
+                console.log("ridlley 5764",Math.floor(totalTimeLogForDataReview/60)%20,Math.floor(totalTimeLogForDataReview/60),totalTimeLogForDataReview,totalTimeLogForDataReview/60,[...new Set(bpdates)].length,bpdates)
               }
             }
             //Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20})
@@ -655,11 +656,11 @@ const Dashboard = (props) => {
 <td><Link to="/verifieddevices">
                  {v_devices !== undefined ? v_devices.length : 0}
                </Link></td>
-<td> <Link to="/dpatients" onClick={()=>setPatient([...new Set(RPM16)],"Patient's Information")}>{[...new Set(RPM16)].length}</Link></td>
-<td> <Link to="/dpatients" onClick={()=>setPatient([...new Set(RPM11)],"Patient's Information")}>{[...new Set(RPM11)].length}</Link></td>
-<td> <Link to="/dpatients" onClick={()=>setPatient([...new Set(RPM6)],"Patient's Information")}>{[...new Set(RPM6)].length}</Link></td>
-<td> <Link to="/dpatients" onClick={()=>setPatient([...new Set(RPM1)],"Patient's Information")}>{[...new Set(RPM1)].length}</Link></td>
-<td> <Link to="/dpatients" onClick={()=>setPatient([...new Set(RPM0)],"Patient's Information")}>{[...new Set(RPM0)].length}</Link></td>
+<td> <Link to="/dpatients" onClick={()=>setPatient([...new Set(RPM16)],"Days Information")}>{[...new Set(RPM16)].length}</Link></td>
+<td> <Link to="/dpatients" onClick={()=>setPatient([...new Set(RPM11)],"Days Information")}>{[...new Set(RPM11)].length}</Link></td>
+<td> <Link to="/dpatients" onClick={()=>setPatient([...new Set(RPM6)],"Days Information")}>{[...new Set(RPM6)].length}</Link></td>
+<td> <Link to="/dpatients" onClick={()=>setPatient([...new Set(RPM1)],"Days Information")}>{[...new Set(RPM1)].length}</Link></td>
+<td> <Link to="/dpatients" onClick={()=>setPatient([...new Set(RPM0)],"Days Information")}>{[...new Set(RPM0)].length}</Link></td>
 </tr>
 
 </tbody>

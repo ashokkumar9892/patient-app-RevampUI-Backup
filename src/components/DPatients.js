@@ -160,77 +160,70 @@ const DPatients = (props) => {
        
       ),
     },
+
+   
+  
+  ];
+  const dayscolumns = [
+    {
+      field: "name",
+      headerName: "Name",
+      editable: false,
+      width: 250,
+      renderCell: (params) => (
+        <Link to={`/patient-summary/${btoa(params.row.userId)}`}>
+          {" "}
+          {params.value}{" "}
+        </Link>
+      ),
+    },
+    {
+      field: "providerName",
+      headerName: "Provider Name",
+      editable: false,
+      
+      width: 200,
+    },
+    {
+      field: "diagnosisId",
+      headerName: "Diagnosis",
+      editable: false,
+     
+      width: 200,
+    },
+    {
+      field: "CCM",
+      headerName: "CCM Mins",
+      editable: false,
+      width: 150,
+      renderCell: (params) => (
+        <div>          {String(Math.floor(params.value/60))+":"+('0' + String(params.value%60)).slice(-2)}</div>
+
+       
+      ),
+    },
+    
+    {
+      field: "RPM",
+      headerName: "RPM Mins",
+      width: 150,
+      editable: false,
+      renderCell: (params) => (
+        <div>          {String(Math.floor(params.value/60))+":"+('0' + String(params.value%60)).slice(-2)}</div>
+
+       
+      ),
+    },
     {
       field: "Days Reading",
       headerName: "Days Reading",
       editable: false,
       width: 150,
-      // renderCell: (params) => (
-      //   <div>          {String(Math.floor(params.value/60))+":"+('0' + String(params.value%60)).slice(-2)}</div>
-
-       
-      // ),
-    },
+        },
    
   
-    // {
-    //   field: "Weight",
-    //   headerName: "Weight",
-    //   type: "number",
-    //   width: 125,
-    //   editable: false,
-    // },
-    // {
-    //   field: "diastolic",
-    //   headerName: "Diastolic",
-    //   type: "number",
-    //   width: 140,
-    //   editable: false,
-    // },
-    // {
-    //   field: "systolic",
-    //   headerName: "Systolic",
-    //   type: "number",
-    //   width: 140,
-    //   editable: false,
-    // },
-    // {
-    //   field: "BMI",
-    //   headerName: "BMI",
-    //   width: 175,
-    //   editable: false,
-    // },
-    // {
-    //   field: "",
-    //   headerName: "Action",
-    //   width: 120,
-    //   renderCell: (params) => (
-    //     <div style={{ width: "100px" }}>
-    //       <Link
-    //         style={{ marginRight: "5px" }}
-    //         to="#"
-    //         onClick={() => showEditForm(params.row)}>
-    //         {" "}
-    //         <PencilSquare />
-    //       </Link>
-    //       <Link
-    //         style={{ marginRight: "5px" }}
-    //         to="#"
-    //         onClick={() => deletePatient(params.row)}>
-    //         {" "}
-    //         <Trash />
-    //       </Link>
-    //       <Link
-    //         style={{ marginRight: "5px" }}
-    //         to="#"
-    //         onClick={() => showAssignDoctor(params.row)}>
-    //         {" "}
-    //         <Person />
-    //       </Link>
-    //     </div>
-    //   ),
-    // },
   ];
+  
 
   // const useStyles = makeStyles((theme) => (
   //     {
@@ -291,6 +284,12 @@ const DPatients = (props) => {
 
   const renderPatients = () => {
     const d_pat = localStorage.getItem("d_patient");
+    var col;
+    if(localStorage.getItem("DInformaion")==="Days Information"){
+      col=dayscolumns
+    }else{
+      col=columns
+    }
     
     
     console.log(d_pat);
@@ -310,6 +309,7 @@ const DPatients = (props) => {
       );
     }
     if (coreContext.AlltimeLogData.length > 0) {
+      
       return (
         // <div style={{ height: 680, width: "100%" }}>
         //   <DataGrid
@@ -319,7 +319,7 @@ const DPatients = (props) => {
         //     sortModel={[{ field: "name", sort: "asc" }]}
         //   />
         // </div>
-        <DataGridComponent rows={rows} columns={columns} sortModal={[{ field: "name", sort: "asc" }]}/>
+        <DataGridComponent rows={rows} columns={col} sortModal={[{ field: "name", sort: "asc" }]}/>
       );
     }
   };
