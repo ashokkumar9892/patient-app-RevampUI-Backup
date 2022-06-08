@@ -365,12 +365,14 @@ export const CoreContextProvider = (props) => {
       } else {
         data = {
           TableName: userTable,
-          IndexName: "Patient-Doctor-Device-Index",
-          KeyConditionExpression: "GSI1PK = :v_PK AND GSI1SK =  :v_SK",
-          FilterExpression: "ActiveStatus = :v_status",
+          ProjectionExpression:
+            "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus,Notes,diagnosisId",
+          KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
+          FilterExpression: "ActiveStatus = :v_status AND GSI1SK =:v_GSI1SK",
           ExpressionAttributeValues: {
             ":v_PK": { S: "patient" },
-            ":v_SK": { S: userId },
+            ":v_SK": { S: "PATIENT_" },
+            ":v_GSI1SK": { S: userId },
             ":v_status": { S: "Active" },
           },
         };
