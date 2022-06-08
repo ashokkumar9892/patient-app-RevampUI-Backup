@@ -17,9 +17,9 @@ const socket = io("https://demoapi.apatternplus.com/", {
 
 
 
-const Chat = () => {
+const Any = () => {
     
-    const chatHistoryUrl="https://annexappapi.apatternplus.com/chatHub  ";
+    const chatHistoryUrl="https://annexappapi.apatternplus.com/api/Chat/MyChat";
     const [chat,setchat]=useState([]);
     const [count,setcount]=useState(0);
     const email = localStorage.getItem("userEmail");
@@ -55,7 +55,7 @@ const Chat = () => {
       const data = {
         AuthToken: localStorage.getItem("app_jwt"),
         SenderSK: "DOCTOR_120527155321379",
-        ReceiverSK: "PATIENT_1650619112058",
+        ReceiverSK: "PATIENT_1650897167124",
 
     };
   
@@ -86,8 +86,9 @@ const Chat = () => {
     const token = localStorage.getItem("app_jwt");
   
     var connection = new signal.HubConnectionBuilder().withUrl("https://annexappapi.apatternplus.com/chatHub").build();
+    connection.serverTimeoutInMilliseconds = 600000000;
     var req = 
-{SendersK: "DOCTOR_120527155321379", ReceiversK: "PATIENT_1650897167124", Message: newMessage, MessageType: "Text", AuthToken:token }
+{SendersK: "PATIENT_1650897167124", ReceiversK: "DOCTOR_120527155321379", Message: newMessage, MessageType: "Text", AuthToken:token }
 
     connection.start()
     .then(() => connection.invoke("SendMessages", req)).catch(function (err) {
@@ -263,4 +264,4 @@ connection.on("ReceiveMessage", function (data) {
   )
 }
 
-export default Chat
+export default Any
