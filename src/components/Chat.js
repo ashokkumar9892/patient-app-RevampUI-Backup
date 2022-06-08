@@ -85,9 +85,9 @@ const Chat = () => {
     console.log(`New message incoming! ${newMessage}`);
     const token = localStorage.getItem("app_jwt");
   
-    var connection = new signal.HubConnectionBuilder().withUrl("https://patternclinicapis.harishparas.com/chatHub").build();
+    var connection = new signal.HubConnectionBuilder().withUrl("https://annexappapi.apatternplus.com/chatHub").build();
     var req = 
-{SendersK: "DOCTOR_120527155321379", ReceiversK: "PATIENT_1650619112058", Message: newMessage, MessageType: "Text", AuthToken:token }
+{SendersK: "DOCTOR_120527155321379", ReceiversK: "PATIENT_1650897167124", Message: newMessage, MessageType: "Text", AuthToken:token }
 
     connection.start()
     .then(() => connection.invoke("SendMessages", req)).catch(function (err) {
