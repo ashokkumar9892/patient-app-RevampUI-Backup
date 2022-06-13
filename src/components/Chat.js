@@ -54,8 +54,8 @@ const Any = () => {
     
       const data = {
         AuthToken: localStorage.getItem("app_jwt"),
-        SenderSK: "DOCTOR_120527155321379",
-        ReceiverSK: "PATIENT_1650897167124",
+        SenderSK:"PATIENT_1650001697567",
+        ReceiverSK:"DOCTOR_1646755544995"
 
     };
   
@@ -68,7 +68,7 @@ const Any = () => {
           },
         })
         .then((response) => {
-            console.log(response.data.chatlist)
+            console.log(response.data,"chattttt")
             setchat(response.data.chatlist)
             if(response.data){
                 response.data.chatlist.map((curr)=>
