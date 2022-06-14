@@ -134,12 +134,12 @@ const renderChat=()=>{
 <span className="label"> Thresold</span>
 </Link>
 </li>:""}
-<li>
+{/* <li>
 <Link to="#">
 <i className="icon bi-bag-fill"></i>
 <span className="label">  Orders</span>
 </Link>
-</li>
+</li> */}
 <li>
 <Link to="/tutorial">
 <i className="icon bi-bag-fill"></i>
@@ -197,11 +197,11 @@ const renderChat=()=>{
 <i className="icon bi-align-bottom"></i>
 <span className="label"> Thresold</span>
 </Link>:""}
-{(userType === 'admin' || userType === 'patient')?
+{/* {(userType === 'admin' || userType === 'patient')?
 		<Link className="btn btn-primary d-block rounded-0 text-start mt-1"  to="#">
 <i className="icon bi-bag-fill"></i>
 <span className="label">  Orders</span>
-</Link>:""}
+</Link>:""} */}
 {renderChat()}
 <Link className="btn btn-primary d-block rounded-0 text-start mt-1"  to="/tutorial">
 <i className="icon bi-bag-fill"></i>

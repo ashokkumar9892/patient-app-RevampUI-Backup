@@ -392,7 +392,7 @@ const Patients = (props) => {
     },
     {
       field: "CareName",
-      headerName: "Care",
+      headerName: "Care Coordinator",
       width: 150,
       editable: false,
     },
@@ -422,6 +422,12 @@ const Patients = (props) => {
       editable: false,
       type: "string",
       width: 150,
+      renderCell: (params) => (
+        (params.value==="Deactive")?"Inactive":"Active"
+        
+          
+        
+      ),
     
     },
     
@@ -493,7 +499,7 @@ const Patients = (props) => {
     },
     {
       field: "CareName",
-      headerName: "Care",
+      headerName: "Care Coordinator",
       width: 150,
       editable: false,
     },
@@ -683,7 +689,7 @@ const Patients = (props) => {
 <div className="page-title-container mb-3">
 <div className="row">
 <div className="col mb-2">
-<h1 className="mb-2 pb-0 display-4" id="title">Patient's Information
+<h1 className="mb-2 pb-0 display-4" id="title">Patient Information
 </h1>
 </div>
 <div className="col-sm-1 col-2" style={{width:"70px"}}>

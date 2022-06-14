@@ -93,7 +93,7 @@ const Provider = (props) => {
   useEffect(coreContext.checkLocalAuth, []);
 
   const [name, setName] = useState("");
-  const [checked, setChecked] = useState(false);
+  
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -103,6 +103,7 @@ const Provider = (props) => {
   const [verificationCode, setVerificationCode] = useState("");
   const [searchText, setSearchText] = React.useState("");
   const [editdoctor, seteditdoctor] = React.useState("");
+  const [checked, setChecked] = useState(false);
   const handleModalClose = () => {setShowModal(false);fetchProviders()};
   const handleModalShow = () => setShowModal(true);
 
@@ -284,6 +285,16 @@ useEffect(fetchProviders, [checked]);
     <h1 className="mb-2 pb-0 display-4" id="title">PROVIDER Information
     </h1>
     </div>
+    <div className="col-sm-1 col-2" style={{width:"70px"}}>
+                                                <div className="form-group"><label for="inputName" className="text-14 mts text-black"><strong>Active</strong></label>
+                                                    
+                                           </div>
+                                            </div>
+						<div className="col-sm-3 col-5"><label className="switch">
+                                 <input type="checkbox" checked={checked} onChange={onToggleChangeActiveUsers}/>
+                             <span className="slider round"></span>
+                                 </label></div>
+
     </div>
     </div>
     

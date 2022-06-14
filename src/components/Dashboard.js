@@ -483,12 +483,17 @@ const Dashboard = (props) => {
 <div className="row g-0 align-items-center">
 <div className="col-lg-3 col-6">
 <div className="form-check">
-<input className="form-check-input" type="checkbox"/>
-<label className="form-check-label" for="gridCheck">Check me out</label>
+{/* <input className="form-check-input" type="checkbox"/>
+<label className="form-check-label" for="gridCheck">Check me out</label> */}
+
 </div>
 </div>
-{selectmonth}
-	
+<div className="col-lg-1">
+<label  for="gridCheck">Select Month: </label>
+
+</div>
+
+	<div className="col-lg-8">{selectmonth}</div>
 
 </div>
 </div>
