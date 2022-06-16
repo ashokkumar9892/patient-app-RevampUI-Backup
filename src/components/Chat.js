@@ -53,20 +53,26 @@ const Any = () => {
     const token = localStorage.getItem("app_jwt");
     
       const data = {
-        AuthToken: localStorage.getItem("app_jwt"),
+        
         SenderSK:"PATIENT_1650001697567",
-        ReceiverSK:"DOCTOR_1646755544995"
+        
 
     };
-  
-      axios
-        .post(chatHistoryUrl, data, {
-          headers: {
-            Accept: "application/json, text/plain, */*",
-            // "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-        })
+ 
+       axios
+    .get(
+      chatHistoryUrl ,
+        { params: data },
+        {
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': 'text/plain',
+          'Authorization': token,
+         }
+        },
+        
+         
+    )
         .then((response) => {
             console.log(response.data,"chattttt")
             setchat(response.data.chatlist)
