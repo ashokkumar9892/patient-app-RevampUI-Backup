@@ -50,6 +50,8 @@ const Dashboard = (props) => {
   const RPM6=[];
   const RPM1=[];
   const RPM0=[];
+  const CCMPatient=[];
+  const RPMPatient=[];
   const today=new Date();
   today.setDate(today.getDate() - 7);
   
@@ -217,6 +219,8 @@ const Dashboard = (props) => {
       coreContext.patients.map((curr) => {
         console.log("sahilg",coreContext.AlltimeLogData)
         
+        
+        
         let patientTimelog = coreContext.AlltimeLogData.filter(
           (app) => app.UserId == curr.userId && Number(app.performedOn.substring(5,7))==Number(month)+1 && Number(app.performedOn.substring(0,4))==2022
         );
@@ -256,19 +260,25 @@ const Dashboard = (props) => {
 
         })
         console.log("check days",bpdates)
-        if(bpdates.length>=16){
+        if(curr.program.includes("CCM")){
+          CCMPatient.push(curr.userId+","+bpdates.length)
+        }
+        if(curr.program.includes("RPM")){
+          RPMPatient.push(curr.userId+","+bpdates.length)
+        }
+        if(bpdates.length>=16 && curr.program.includes("RPM")){
           RPM16.push(curr.userId+","+bpdates.length)
         }
-        if(bpdates.length>=11 && bpdates.length<=15){
+        if(bpdates.length>=11 && bpdates.length<=15 && curr.program.includes("RPM")){
           RPM11.push(curr.userId+","+bpdates.length)
         }
-        if(bpdates.length>=6 && bpdates.length<=10){
+        if(bpdates.length>=6 && bpdates.length<=10 && curr.program.includes("RPM")){
           RPM6.push(curr.userId+","+bpdates.length)
         }
-        if(bpdates.length>=1 && bpdates.length<=5){
+        if(bpdates.length>=1 && bpdates.length<=5 && curr.program.includes("RPM")){
           RPM1.push(curr.userId+","+bpdates.length)
         }
-        if(bpdates.length<1){
+        if(bpdates.length<1 && curr.program.includes("RPM")){
           RPM0.push(curr.userId+","+bpdates.length)
         }
         
@@ -285,40 +295,40 @@ const Dashboard = (props) => {
           });
          
           console.log("checking timelog", totalTimeLogForDataReview,curr,totalTimeLog);
-          if (totalTimeLog >= 0 && totalTimeLog <= 60) {
+          if (totalTimeLog >= 0 && totalTimeLog <= 60 && curr.program.includes("CCM")) {
             zero.push(curr.userId);
-          } else if (totalTimeLog > 60 && totalTimeLog <= 600) {
+          } else if (totalTimeLog > 60 && totalTimeLog <= 600 && curr.program.includes("CCM")) {
             // setOnetonine(onetonine+1)
             nine.push(curr.userId);
             //nine=nine+1;
-          } else if (totalTimeLog > 600 && totalTimeLog <= 1200) {
+          } else if (totalTimeLog > 600 && totalTimeLog <= 1200 && curr.program.includes("CCM")) {
             // setOnetonine(onetonine+1)
             nineteen.push(curr.userId);
             //nine=nine+1;
-          } else if (totalTimeLog > 1200 && totalTimeLog <= 2400) {
+          } else if (totalTimeLog > 1200 && totalTimeLog <= 2400 && curr.program.includes("CCM")) {
             // setOnetonine(onetonine+1)
             thirtynine.push(curr.userId);
             //nine=nine+1;
-          } else if (totalTimeLog > 2400 && totalTimeLog <= 3600) {
+          } else if (totalTimeLog > 2400 && totalTimeLog <= 3600 && curr.program.includes("CCM")) {
             // setOnetonine(onetonine+1)
             fiftynine.push(curr.userId);
             //nine=nine+1;
-          } else if (totalTimeLog > 3600) {
+          } else if (totalTimeLog > 3600 && curr.program.includes("CCM")) {
             // setOnetonine(onetonine+1)
             sixty.push(curr.userId);
             //nine=nine+1;
           }
-          if (totalTimeLogForDataReview >= 0 && totalTimeLogForDataReview <= 60) {
+          if (totalTimeLogForDataReview >= 0 && totalTimeLogForDataReview <= 60 && curr.program.includes("RPM")) {
             zero1.push(curr.userId);
-          } else if (totalTimeLogForDataReview > 60 && totalTimeLogForDataReview <= 600) {
+          } else if (totalTimeLogForDataReview > 60 && totalTimeLogForDataReview <= 600 && curr.program.includes("RPM")) {
             // setOnetonine(onetonine+1)
             nine1.push(curr.userId);
             //nine=nine+1;
-          } else if (totalTimeLogForDataReview > 600 && totalTimeLogForDataReview <= 1200) {
+          } else if (totalTimeLogForDataReview > 600 && totalTimeLogForDataReview <= 1200 && curr.program.includes("RPM")) {
             // setOnetonine(onetonine+1)
             nineteen1.push(curr.userId);
             //nine=nine+1;
-          } else if (totalTimeLogForDataReview >= 1200 && totalTimeLogForDataReview <2400) {
+          } else if (totalTimeLogForDataReview >= 1200 && totalTimeLogForDataReview <2400 && curr.program.includes("RPM")) {
             // setOnetonine(onetonine+1)
             thirtynine1.push(curr.userId);
             if(Billing.length<1){
@@ -337,7 +347,7 @@ const Dashboard = (props) => {
                 console.log(bpdates)
               }
             }
-          } else if (totalTimeLogForDataReview >= 2400 && totalTimeLogForDataReview <= 3600) {
+          } else if (totalTimeLogForDataReview >= 2400 && totalTimeLogForDataReview <= 3600 && curr.program.includes("RPM")) {
             // setOnetonine(onetonine+1)
             fiftynine1.push(curr.userId);
             if(Billing.length<1){
@@ -360,7 +370,7 @@ const Dashboard = (props) => {
             //Billing.push({"id":Billing.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"bills":(Math.floor(totalTimeLogForDataReview/1200)),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20})            
             
             //nine=nine+1;
-          } else if (totalTimeLogForDataReview > 3600) {
+          } else if (totalTimeLogForDataReview > 3600 && curr.program.includes("RPM")) {
             // setOnetonine(onetonine+1)
             console.log("sixty1",curr)
             sixty1.push(curr.userId);
@@ -508,7 +518,7 @@ const Dashboard = (props) => {
 <table className="table table-bordered table-striped mb-0">
 <thead className="bg-defualts">
 <tr>
-<th  width="10%">Patients Enrolled	</th>
+<th  width="10%">Active	</th>
 <th width="10%">60+ Mins</th>
 <th width="10%">40-60 Mins	</th>
 <th width="10%">20-40 Mins	</th>
@@ -523,7 +533,7 @@ const Dashboard = (props) => {
 <tbody>
   {renderTimeLogs()}
 <tr>
-<td> <Link to="/dpatients" onClick={() => setPatient([...sixty,...fiftynine,...thirtynine,...nineteen,...nine,...zero,...inactive],`${months[month]} 2022 Logs(CCM)`)}>{coreContext.patients.length}</Link>{" "}</td>
+<td> <Link to="/dpatients" onClick={() => setPatient([... new Set(CCMPatient)],`${months[month]} 2022 Logs(CCM)`)}>{[... new Set(CCMPatient)].length}</Link>{" "}</td>
 <td>   <Link to="/dpatients" onClick={() => setPatient(sixty,`${months[month]} 2022 60+ Mins Logs(CCM)`)}>
                 {sixty.length}
               </Link>
@@ -574,7 +584,7 @@ const Dashboard = (props) => {
 <table className="table table-bordered table-striped mb-0">
 <thead className="bg-defualts">
 <tr>
-<th  width="10%">Patients Enrolled	</th>
+<th  width="10%">Active	</th>
 <th width="10%">60+ Mins</th>
 <th width="10%">40-60 Mins	</th>
 <th width="10%">20-40 Mins	</th>
@@ -589,7 +599,7 @@ const Dashboard = (props) => {
 <tbody>
   {renderTimeLogs()}
 <tr>
-<td> <Link to="/dpatients" onClick={() => setPatient([...sixty,...fiftynine,...thirtynine,...nineteen,...nine,...zero,...inactive],`${months[month]} 2022 Logs(RPM)`)}>{coreContext.patients.length}</Link>{" "}</td>
+<td> <Link to="/dpatients" onClick={() => setPatient([... new Set(RPMPatient)],`${months[month]} 2022 Logs(RPM)`)}>{[... new Set(RPMPatient)].length}</Link>{" "}</td>
 <td>             <Link to="/dpatients" onClick={() => setPatient([...new Set(sixty1)],`Patients Information with time log between 60+ Mins of RPM of ${months[month]} month`)}>
                 {[...new Set(sixty1)].length}
                </Link></td>
@@ -641,7 +651,7 @@ const Dashboard = (props) => {
 <th  width="8%">Active</th>
 <th width="20%">Patients with Devices	</th>
 <th width="20%">Patients taking Readings</th>
-<th width="20%">Qualified Supplied Device</th>
+
 <th width="8%">16+ Days</th>
 <th  width="8%">11-15 Days</th>
 <th width="8%">6-10 Days</th>
@@ -653,14 +663,12 @@ const Dashboard = (props) => {
 <tbody>
   {renderRemotePatientMonitor()}
 <tr>
-<td><Link to="/Patients">{coreContext.patients.length}</Link></td>
+<td><Link to="/dpatients" onClick={()=>setPatient([...new Set(RPMPatient)],"Remote Patient Monitoring")}>{[... new Set(RPMPatient)].length}</Link></td>
 <td><Link to="/device-info" onClick={() => setPatient(inactive)}>
                  {[...new Set(patientwdevice)].length}
                </Link></td>
-<td><Link to="/bloodpressure">{reading.length}</Link></td>
-<td><Link to="/verifieddevices">
-                 {v_devices !== undefined ? v_devices.length : 0}
-               </Link></td>
+<td><Link to="/dpatients" onClick={()=>setPatient([...new Set([...RPM16,...RPM11,...RPM6,...RPM1])],"Days Information")}>{[...new Set([...RPM16,...RPM11,...RPM6,...RPM1])].length}</Link></td>
+
 <td> <Link to="/dpatients" onClick={()=>setPatient([...new Set(RPM16)],"Days Information")}>{[...new Set(RPM16)].length}</Link></td>
 <td> <Link to="/dpatients" onClick={()=>setPatient([...new Set(RPM11)],"Days Information")}>{[...new Set(RPM11)].length}</Link></td>
 <td> <Link to="/dpatients" onClick={()=>setPatient([...new Set(RPM6)],"Days Information")}>{[...new Set(RPM6)].length}</Link></td>

@@ -90,7 +90,7 @@ export const CoreContextProvider = (props) => {
     "https://appapi.apatternplus.com/api"
   );
   const [apiUrl2, setApiUrl2] = useState(
-    "https://patientapisqlmigration.azurewebsites.net/"
+    "http://patientapisqlmigration.azurewebsites.net/"
   );
   const [userTable, setuserTable] = useState("UserDetailsDemo");
 
@@ -398,6 +398,7 @@ export const CoreContextProvider = (props) => {
             patient.email = p.email;
             patient.coachId=p.coachId;
             patient.careId=p.carecoordinatorId;
+            patient.program=p.program;
           
           
             if(p.diagnosisId[0]==","){
@@ -564,6 +565,7 @@ export const CoreContextProvider = (props) => {
             patient.email = p.email;
             patient.coachId=p.coachId;
             patient.careId=p.carecoordinatorId;
+            patient.program=p.program;
           
           
             if(p.diagnosisId[0]==","){
@@ -1543,6 +1545,7 @@ userType: patient.userType,
 weight: patient.Weight,
 workPhone: workPhone,
 zip: zip,
+program:patient.program
     }
     
     await axios
@@ -1854,6 +1857,7 @@ zip:patient.zip,
 deviceId:patient.deviceId,
 deviceStatus:patient.deviceStatus,
 deviceType:patient.deviceType,
+program:patient.program
  }
 
  await axios
@@ -2230,7 +2234,7 @@ deviceType:patient.deviceType,
     pcm,
     pp,
     ppname,
-    diagnosisId
+    diagnosisId,program
   ) => {
     const token = localStorage.getItem("app_jwt");
     const date = new Date();
@@ -2276,7 +2280,8 @@ deviceType:patient.deviceType,
             zip: zip,
             city: city,
             st: state,
-            diagnosisId: diagnosisId
+            diagnosisId: diagnosisId,
+            program:program
           });
 
           

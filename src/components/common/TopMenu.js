@@ -423,15 +423,15 @@ const handlechangeprovider=(p)=>{
 
   // useEffect(fetchPatients, [coreContext.patients.length]);
   const toggleIsccm = (a) => {
-    if (a) setIsccm(false);
+    if (!a) setIsccm(false);
     else setIsccm(true);
   };
   const toggleIspcm = (a) => {
-    if (a) setIspcm(false);
+    if (!a) setIspcm(false);
     else setIspcm(true);
   };
   const toggleIsrpm = (a) => {
-    if (a) setIsrpm(false);
+    if (!a) setIsrpm(false);
     else setIsrpm(true);
   };
   const toggleHasMobile = (a) => {
@@ -457,7 +457,13 @@ const handlechangeprovider=(p)=>{
       alert("Enter password...");
       return;
     }
-    
+    var program=""
+    if(isccm){
+      program=program+"CCM"
+    }
+    if(isrpm){
+      program=program+"RPM"
+    }
     if (pwd.length < 8) {
       alert("Your password needs a minimum of 8 characters")
       return;
@@ -519,7 +525,8 @@ const handlechangeprovider=(p)=>{
       pcm,
       pp,
       ppname,
-      newId.substring(1)
+      newId.substring(1),
+      program
     );
     handleClose();
   };
@@ -1283,7 +1290,7 @@ maxLength="50"
                 <Form.Check
                   type="checkbox"
                   label="CCM"
-                  onChange={toggleIsccm}
+                  onChange={(e)=>toggleIsccm(e.target.checked)}
                   value={isccm}
                 />
               </Col>
@@ -1291,7 +1298,7 @@ maxLength="50"
                 <Form.Check
                   type="checkbox"
                   label="PCM"
-                  onChange={toggleIspcm}
+                  onChange={(e)=>toggleIspcm(e.target.checked)}
                   value={ispcm}
                 />
               </Col>
@@ -1299,7 +1306,7 @@ maxLength="50"
                 <Form.Check
                   type="checkbox"
                   label="RPM"
-                  onChange={toggleIsrpm}
+                  onChange={(e)=>toggleIsrpm(e.target.checked)}
                   value={isrpm}
                 />
               </Col>

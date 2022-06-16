@@ -220,7 +220,19 @@ const DPatients = (props) => {
       editable: false,
       width: 150,
         },
-   
+        {
+          field: "Device Id",
+          headerName: "Device Id",
+          editable: false,
+          width: 150,
+            },
+        {
+          field: "Device Type",
+          headerName: "Device Type",
+          editable: false,
+          width: 150,
+            },
+       
   
   ];
   
@@ -267,7 +279,9 @@ const DPatients = (props) => {
         });
       }
       const p=patients.filter((app)=>app.userId===curr)
-      dashboardPatient.push({"id":index,"name":p[0].name,"providerName":p[0].ProviderName,"diagnosisId":p[0].diagnosisId,"userId":curr,"CCM":totalTimeLog,"RPM":totalTimeLogForDataReview,"Days Reading":days})
+      const device=coreContext.deviceData.filter((app)=>app.patientId.includes(curr))
+      
+      dashboardPatient.push({"id":index,"name":p[0].name,"providerName":p[0].ProviderName,"diagnosisId":p[0].diagnosisId,"userId":curr,"CCM":totalTimeLog,"RPM":totalTimeLogForDataReview,"Days Reading":days,"Device Id":(device.length>0)?device[0].deviceID:"NA","Device Type":(device.length>0)?device[0].DeviceType:"NA"})
     })
     setRows(dashboardPatient)
     console.log(dashboardPatient,"dashba")
@@ -278,14 +292,14 @@ const DPatients = (props) => {
     
   }, [coreContext.AlltimeLogData.length>1]);
   useEffect(() => {
-   
+   coreContext.fetchDeviceData();
     coreContext.fetchAllTimeLog();
   }, []);
 
   const renderPatients = () => {
     const d_pat = localStorage.getItem("d_patient");
     var col;
-    if(localStorage.getItem("DInformaion")==="Days Information"){
+    if(localStorage.getItem("DInformaion")==="Days Information" || localStorage.getItem("DInformaion")==="Remote Patient Monitoring"){
       col=dayscolumns
     }else{
       col=columns
