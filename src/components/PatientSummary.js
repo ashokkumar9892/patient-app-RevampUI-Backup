@@ -1663,22 +1663,24 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
       headerName: "Action",
       width: 120,
       renderCell: (params) => (
+        (localStorage.getItem("userType").includes("test"))?
         <div style={{ width: "100px" }}>
-          <a
-            style={{ marginRight: "5px" }}
-            href="#"
-            onClick={() => setCurrentTL(params.row)}>
-            {" "}
-            <PencilSquare />
-          </a>
-          <a
-            style={{ marginRight: "5px" }}
-            href="#"
-            onClick={() => deleteTimeLog(params.row)}>
-            {" "}
-            <Trash />
-          </a>
-        </div>
+        <a
+          style={{ marginRight: "5px" }}
+          href="#"
+          onClick={() => setCurrentTL(params.row)}>
+          {" "}
+          <PencilSquare />
+        </a>
+        <a
+          style={{ marginRight: "5px" }}
+          href="#"
+          onClick={() => deleteTimeLog(params.row)}>
+          {" "}
+          <Trash />
+        </a>
+      </div>:<div>Access Denied</div>
+       
       ),
     },
   ];
@@ -2012,9 +2014,17 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
 	<p className="mb-0"><strong>Name</strong></p>
   {coreContext.patientsForPatient[0].name}
 </div>
-	<div className="col-xl-4 mb-1">
+	<div className="col-xl-2 mb-1">
 		<p className="mb-0"><strong>Email</strong></p>
     {coreContext.patientsForPatient[0].email}
+</div>
+<div className="col-xl-2 mb-1">
+		<p className="mb-0"><strong>Phone</strong></p>
+    {coreContext.patientsForPatient[0].mobile}
+</div>
+<div className="col-xl-2 mb-1">
+		<p className="mb-0"><strong>Program</strong></p>
+    {coreContext.patientsForPatient[0].program}
 </div>
 <div className="col-xl-2 mb-1">	
 	<p className="mb-0"><strong>DOB</strong></p>

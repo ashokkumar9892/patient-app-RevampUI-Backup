@@ -65,6 +65,7 @@ const Dashboard = (props) => {
 
   const fetchPatients = () => {
     const email = localStorage.getItem("app_userEmail");
+  
     coreContext.userDetails(email);
 
     const userType = localStorage.getItem("userType");

@@ -7,10 +7,16 @@ import axios from 'axios';
 import CoreContextProvider from './context/core-context';
 import TempContextProvider from './context/temp-context';
 import Footer from '../src/components/common/Footer'
+import 'core-js/stable';
 import './styles.css';
+import 'react-app-polyfill/ie9';
+import 'react-app-polyfill/ie11';
+import 'react-app-polyfill/stable';
 
 //axios.defaults.baseURL = 'http://patient.local'; // dev
 axios.defaults.baseURL = 'https://patient-api.siddhantait.com'; // production
+const language = navigator.language || navigator.userLanguage;
+
 
 
 ReactDOM.render(

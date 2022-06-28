@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import loader from "../assets/images/835.gif";
 import Moment from "moment";
@@ -90,7 +90,7 @@ export const CoreContextProvider = (props) => {
     "https://appapi.apatternplus.com/api"
   );
   const [apiUrl2, setApiUrl2] = useState(
-    "http://patientapisqlmigration.azurewebsites.net/"
+    "https://sqlapi.apatternplus.com/"
   );
   const [userTable, setuserTable] = useState("UserDetailsDemo");
 
@@ -167,7 +167,8 @@ export const CoreContextProvider = (props) => {
   // useEffect(checkLocalAuth, []); // because not required on all the pages.
 
   // capture from login page.  'yasser.sheikh@laitkor.com'  'M2n1shlko@1'
-  const login = (email, password, url) => {
+  const login = useCallback((email, password, url) => {
+    console.log(email,password,"sahil")
     setShowLoader(true);
     axios
       .post(apiUrl + "/signin", { Username: email, Password: password })
@@ -191,7 +192,7 @@ export const CoreContextProvider = (props) => {
           userDetails(email, url);
         }
       });
-  };
+  });
   const ForgotPassword = (email) => {
     setShowLoader(true);
     axios
@@ -268,14 +269,14 @@ export const CoreContextProvider = (props) => {
   
             localStorage.setItem("app_patient", JSON.stringify(pat));
   
-            if (p.userType === "patient" && url) {
-              if (pat.userName.includes("||0")) url = "profile";
-              else url = "patient-profile/" + p.userId.split("_").pop();
-            }
-            if (p.userType === "admin" && url) {
-              if (pat.userName.includes("||0")) url = "profile";
-              else url = "dashboard";
-            }
+            // if (p.userType === "patient" && url) {
+            //   if (pat.userName.includes("||0")) url = "profile";
+            //   else url = "patient-profile/" + p.userId.split("_").pop();
+            // }
+            // if (p.userType === "admin" && url) {
+            //   if (pat.userName.includes("||0")) url = "profile";
+            //   else url = "dashboard";
+            // }
           });
   
           const patientId = localStorage.getItem("userId");
@@ -325,7 +326,7 @@ export const CoreContextProvider = (props) => {
       }
     }
 
-    if (usertype === "doctor") {
+    if (usertype.includes("doctor")) {
       if (AllActive) {
         data={ DoctorId: "DOCTOR_"+userId ,ActiveStatus:"Deactive" }
         }
@@ -336,10 +337,10 @@ export const CoreContextProvider = (props) => {
     
 
     if (usertype === "carecoordinator") {
-      data={ DoctorId: "DOCTOR_"+userId ,ActiveStatus:"Deactive" }
+      data={ DoctorId: "CARECOORDINATOR_"+userId ,ActiveStatus:"Active" }
     }
     if (usertype === "coach") {
-      data={ DoctorId: "DOCTOR_"+userId ,ActiveStatus:"Deactive" }
+      data={ DoctorId: "COACH_"+userId ,ActiveStatus:"Active" }
     }
     // if (usertype === "patient" && userName !==undefined) {
     //     data = {
@@ -1444,7 +1445,7 @@ deviceType:patient.deviceType,
     city,
     state,
     diagnosisId,
-    patient
+    patient,program
   ) => {
     let providername = fetchNameFromId(provider, providerOptions);
     
@@ -1545,7 +1546,7 @@ userType: patient.userType,
 weight: patient.Weight,
 workPhone: workPhone,
 zip: zip,
-program:patient.program
+program:program
     }
     
     await axios
@@ -2143,7 +2144,7 @@ deviceType:patient.deviceType,
       });
   };
 
-  const addProvider = (name, email, phone, password) => {
+  const addProvider = (name, email, phone, password,type) => {
     const token = localStorage.getItem("app_jwt");
     const date = new Date();
     const id = date.getTime();
@@ -2176,7 +2177,7 @@ deviceType:patient.deviceType,
             "gsI1SK": "DOCTOR_" + id,
             "userId": id.toString(),
             "userName": name,
-            "userType": "doctor"
+            "userType": (type)?"testdoctor":"doctor"
           }
         add2(data,"Doctor")
       } else {
@@ -2234,7 +2235,7 @@ deviceType:patient.deviceType,
     pcm,
     pp,
     ppname,
-    diagnosisId,program
+    diagnosisId,program,type
   ) => {
     const token = localStorage.getItem("app_jwt");
     const date = new Date();
@@ -2263,7 +2264,7 @@ deviceType:patient.deviceType,
             email: email,
             contactNo: phone,
             dob: dob,
-            userType: "patient",
+            userType: (type)?"testpatient":"patient",
             createdDate: Moment(date).format('MM-DD-YYYY hh:mm A').toString(),
             firstName: firstname,
             middleName: middleName,
@@ -2350,7 +2351,7 @@ deviceType:patient.deviceType,
             "gsI1SK": "CARECOORDINATOR_" + id,
             "userId": id.toString(),
             "userName": name,
-            "userType": "Care Coordinator"
+            "userType": "carecoordinator"
           }
         add2(data,"carecoordinator")
         } else {

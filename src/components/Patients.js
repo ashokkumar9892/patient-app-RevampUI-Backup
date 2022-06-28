@@ -53,6 +53,7 @@ const Patients = (props) => {
   const [patientId, setPatientId] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [phone, setPhone] = useState("");
+  const [program, setProgram] = useState("");
   //const [select, setSelection] = React.useState([]);
   const [selectionModel, setSelectionModel] = React.useState([]);
   const [height, setHeight] = useState("");
@@ -169,6 +170,7 @@ const Patients = (props) => {
       state,
       newId.substring(1),
       updateId,
+      program
 
     );
     coreContext.cleanup1();
@@ -223,6 +225,13 @@ const Patients = (props) => {
     setPhone(patient.mobile);
     setPatientId(patient.userId);
     setHeight(patient.height);
+    if(patient.program=="CCM\RPM"){
+      setProgram("CCM\RPM")
+    }else if(patient.program=="RPM"){
+      setProgram("RPM")
+    }else{
+      setProgram("CCM")
+    }
     console.log(patient.gender,"patient.gender")
     // patient.gender == "Female" ? setGender(1) : setGender(0);
     patient.gender == "Female" ? setGender(1) : setGender(0);
@@ -380,7 +389,10 @@ const Patients = (props) => {
       renderCell: (params) => (
         <Link to={`/patient-summary/${btoa(params.row.userId)}`}>
           {" "}
-          {params.value}{" "}
+          {params.value
+          
+          }{" "}
+          {console.log(params,"edit")}
         </Link>
       ),
     },
@@ -402,19 +414,27 @@ const Patients = (props) => {
       editable: false,
       width: 150,
     },
+    // {
+    //   field: "height",
+    //   headerName: "Height",
+    //   editable: false,
+    //   type: "number",
+    //   width: 150,
+    // },
+    // {
+    //   field: "bg_reading",
+    //   headerName: "Glucose",
+    //   editable: false,
+    //   type: "number",
+    //   width: 150,
+    // },
     {
-      field: "height",
-      headerName: "Height",
+      field: "program",
+      headerName: "Program",
       editable: false,
       type: "number",
       width: 150,
-    },
-    {
-      field: "bg_reading",
-      headerName: "Glucose",
-      editable: false,
-      type: "number",
-      width: 150,
+      
     },
     {
       field: "ActiveStatus",
@@ -436,7 +456,7 @@ const Patients = (props) => {
       headerName: "Action",
       width: 150,
       renderCell: (params) => (
-        (params.row.ActiveStatus==="Active")?
+        (!localStorage.getItem("userType").includes("test"))?        (params.row.ActiveStatus==="Active")?
         <div style={{ width: "100px" }}>
           <Link
             style={{ marginRight: "5px" }}
@@ -474,7 +494,8 @@ const Patients = (props) => {
          
           
         
-        </div>
+        </div>:<div>Access Denied</div>
+
       ),
     },
   ];
@@ -562,6 +583,7 @@ const Patients = (props) => {
       headerName: "Action",
       width: 120,
       renderCell: (params) => (
+        (!localStorage.getItem("userType").includes("test"))?
         <div style={{ width: "100px" }}>
           <Link
             style={{ marginRight: "5px" }}
@@ -581,7 +603,8 @@ const Patients = (props) => {
             <Trash />
           </Link>
           {/* <Link  style={{  marginRight: '5px' }} to="#" onClick={() => showAssignDoctor(params.row)}>  <Person /></Link> */}
-        </div>
+        </div>:
+        <div>Access Denied</div>
       ),
     },
   ];
@@ -1050,6 +1073,22 @@ maxLength="50"
                   value={state}
                  
                   onChange={(e) => setState(e.target.value)}
+                />
+                <label className="mt-2 mb-0">Program</label>
+                 <Input
+                  label="Program"
+                  name="program"
+                  required={true}
+                  register={register}
+                  errors={errors}
+                  elementType="select"
+                  value={program}
+                  options={[
+                    { name: "CCM and RPM", value: "CCM/RPM" },
+                    { name: "CCM Only", value: "CCM" },
+                    { name: "RPM Only", value: "RPM" },
+                  ]}
+                  onChange={(e) => setProgram(e.target.value)}
                 />
               </div>
             </div>

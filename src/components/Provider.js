@@ -103,6 +103,7 @@ const Provider = (props) => {
   const [verificationCode, setVerificationCode] = useState("");
   const [searchText, setSearchText] = React.useState("");
   const [editdoctor, seteditdoctor] = React.useState("");
+  const [utype, setutype] = React.useState("");
   const [checked, setChecked] = useState(false);
   const handleModalClose = () => {setShowModal(false);fetchProviders()};
   const handleModalShow = () => setShowModal(true);
@@ -374,12 +375,22 @@ useEffect(fetchProviders, [checked]);
                                            <label>Enter User Name</label>
                                              </div> 
                                       
+                                       </div>	
+                                       <div class="col-xl-4">
+                                       <div class="form-floating mb-3">
+                                       <select name="cars" class="form-control mb-2 mr-sm-2" placeholder="Enter User Type" onChange={(e)=>setutype(e.target.value)} value={utype}>
+  <option value="false">Regular</option>
+  <option value="true">Test</option>
+</select><label>Enter UserType</label>
+                                </div>             
+                                      
                                        </div>			
+		
         </div>
         <div className="row">
 				    <div className="col-xl-4">
 	<button type="button" class="btn btn-md btn-info mb-2" onClick={() =>
-              coreContext.addProvider(name, email, phone, password)
+              coreContext.addProvider(name, email, phone, password,utype)
             }>Add Provider</button>
 	</div>
 </div>

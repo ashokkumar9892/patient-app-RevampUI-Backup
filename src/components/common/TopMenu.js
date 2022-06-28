@@ -135,6 +135,8 @@ const TopMenu = ({ changestyle, showSidebar }) => {
   const [isccm, setIsccm] = useState(false);
   const [ispcm, setIspcm] = useState(false);
   const [isrpm, setIsrpm] = useState(false);
+  const [isregular, setIsregular] = useState(true);
+  const [istest, setIstest] = useState(false);
   const [pcm, setPcm] = useState("");
   const [pp, setPp] = useState("");
   const [ppname, setPpname] = useState("");
@@ -426,6 +428,14 @@ const handlechangeprovider=(p)=>{
     if (!a) setIsccm(false);
     else setIsccm(true);
   };
+  const toggleIsregular = (a) => {
+    setIstest(false)
+    setIsregular(true);
+  };
+  const toggleIstest = (a) => {
+    setIstest(true)
+    setIsregular(false);
+  };
   const toggleIspcm = (a) => {
     if (!a) setIspcm(false);
     else setIspcm(true);
@@ -526,7 +536,8 @@ const handlechangeprovider=(p)=>{
       pp,
       ppname,
       newId.substring(1),
-      program
+      program,
+      istest
     );
     handleClose();
   };
@@ -1310,6 +1321,27 @@ maxLength="50"
                   value={isrpm}
                 />
               </Col>
+            </Row>
+             <Row>
+              <Col>User Type</Col>
+              <Col>
+                <Form.Check
+                  type="radio"
+                  label="Regular"
+                  onChange={(e)=>toggleIsregular(e.target.checked)}
+                  checked={isregular}
+                />
+              </Col>
+              <Col>
+                <Form.Check
+                  type="radio"
+                  label="Test"
+                  onChange={(e)=>toggleIstest(e.target.checked)}
+                  checked={istest}
+                />
+              </Col>
+              <Col></Col>
+              
             </Row>
             <Row style={{ marginTop: 20 }}>
               <Col>

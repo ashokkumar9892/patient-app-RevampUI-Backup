@@ -160,6 +160,13 @@ const DPatients = (props) => {
        
       ),
     },
+    {
+      field: "program",
+      headerName: "Program",
+      width: 150,
+      editable: false,
+      
+    },
 
    
   
@@ -232,6 +239,13 @@ const DPatients = (props) => {
           editable: false,
           width: 150,
             },
+            {
+              field: "program",
+              headerName: "Program",
+              width: 150,
+              editable: false,
+              
+            },
        
   
   ];
@@ -281,7 +295,7 @@ const DPatients = (props) => {
       const p=patients.filter((app)=>app.userId===curr)
       const device=coreContext.deviceData.filter((app)=>app.patientId.includes(curr))
       
-      dashboardPatient.push({"id":index,"name":p[0].name,"providerName":p[0].ProviderName,"diagnosisId":p[0].diagnosisId,"userId":curr,"CCM":totalTimeLog,"RPM":totalTimeLogForDataReview,"Days Reading":days,"Device Id":(device.length>0)?device[0].deviceID:"NA","Device Type":(device.length>0)?device[0].DeviceType:"NA"})
+      dashboardPatient.push({"id":index,"name":p[0].name,"providerName":p[0].ProviderName,"diagnosisId":p[0].diagnosisId,"userId":curr,"CCM":totalTimeLog,"RPM":totalTimeLogForDataReview,"Days Reading":days,"Device Id":(device.length>0)?device[0].deviceID:"NA","Device Type":(device.length>0)?device[0].DeviceType:"NA","program":p[0].program})
     })
     setRows(dashboardPatient)
     console.log(dashboardPatient,"dashba")
