@@ -68,13 +68,13 @@ const BloodGlucose = (props) => {
         return `${valueFormatted}`;
       },
     },
-    {
-      field: "bloodglucosemmol",
-      headerName: "Blood Glucose (mmol)",
-      type: "number",
-      editable: false,
-      width: 170,
-    },
+    // {
+    //   field: "bloodglucosemmol",
+    //   headerName: "Blood Glucose (mmol)",
+    //   type: "number",
+    //   editable: false,
+    //   width: 170,
+    // },
     {
       field: "bloodglucosemgdl",
       headerName: "Blood Glucose (mgdl)",
@@ -110,13 +110,13 @@ const BloodGlucose = (props) => {
       width: 150,
       editable: false,
     },
-    {
-      field: "battery",
-      headerName: "Battery",
-      type: "number",
-      width: 150,
-      editable: false,
-    },
+    // {
+    //   field: "battery",
+    //   headerName: "Battery",
+    //   type: "number",
+    //   width: 150,
+    //   editable: false,
+    // },
     // {
     //   field: "sortDateColumn",
     //   headerName: "Action",
@@ -279,7 +279,7 @@ const BloodGlucose = (props) => {
     <div className="page-title-container mb-3">
     <div className="row">
     <div className="col mb-2">
-    <h1 className="mb-2 pb-0 display-4" id="title">Blood Glucose's Information
+    <h1 className="mb-2 pb-0 display-4" id="title">Blood Glucose Information
     </h1>
     </div>
     </div>

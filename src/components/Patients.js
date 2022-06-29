@@ -83,7 +83,7 @@ const Patients = (props) => {
   const [zip, setZip] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
-  const diagonislist=["D45- Polycythemia vera",
+  const diagonislist=[,"Select Diagnosis Id","D45- Polycythemia vera",
   "G47.33- Obstructive sleep apnea (adult) (pediatric)",
   "I10- Essential (primary) hypertension",
   "I13.10- Hypertensive heart and chronic kidney disease without heart",
@@ -786,39 +786,21 @@ const Patients = (props) => {
               <div className="col-md-6">
               <label className="mt-2 mb-0">First Name</label>
 
-                <Input
-                  label="First Name*"
-                  elementType="text"
-                  placeholder="Enter First Name"
-                  onChange={(e) => setFName(e.target.value)}
-                  name="name"
-                  value={fname}
-                  required={true}
-                  register={register}
-                  errors={errors}
-                  maxLength={50}
-                />
+                 <input type="text" className="form-control"   onChange={(e) => setFName(e.target.value)}
+                          
+                          value={fname}/>
+			
 <label className="mt-2 mb-0">Phone*</label>
-                <Input
-                  label="Phone*"
-                  elementType="text"
-                  placeholder="Enter phone"
-                  onChange={(e) => setPhone(e.target.value)}
-                  required={true}
-                  minLength={5}
-                  maxLength={50}
-                  register={register}
-                  errors={errors}
-                  name="phone"
-                  value={phone}
-                />
+                
+                  <input type="text" className="form-control"   onChange={(e) => setPhone(e.target.value)}
+                          
+                          value={phone}/>
 <label className="mt-2 mb-0">Date of Birth</label>
-                <Input
-                  label="Date of Birth*"
-                  elementType="date"
+                <input
+                type="date"
                   placeholder="Enter dob"
                   onChange={(e) => setBirthDate(e.target.value)}
-                  required={true}
+                  className="form-control"
                   maxLength={50}
                   register={register}
                   errors={errors}
@@ -844,9 +826,9 @@ const Patients = (props) => {
                 {console.log(birthDate)}
                 {/* <input type="date"/> */}
                 <label className="mt-2 mb-0">Height *</label>
-                <Input
+                <input
                   label="Height (Inch)*"
-                  elementType="number"
+                  className="form-control"
                   minLength={1}
                   maxLength={55}
                   placeholder="Enter height"
@@ -857,22 +839,22 @@ const Patients = (props) => {
                   register={register}
                   errors={errors}
                 />
-                <label className="mt-2 mb-0">Gender</label>
+                <label className="mt-2 mb-0">Gender *</label>
 
-                <Input
-                  label="Gender*"
-                  name="gender"
-                  required={true}
-                  register={register}
-                  errors={errors}
-                  elementType="select"
-                  value={gender}
-                  options={coreContext.genderOptions}
-                  onChange={(e) => setGender(e.target.value)}
-                />
+                
+                
+      <select className="form-select" value={gender} onChange={(e)=>{setGender(e.target.value)}} >
+      <option value="0">Male</option>
+      <option value="1">Female</option>
+      
+      
+    
+      
+      </select>
+      
 <label className="mt-2 mb-0">Mobile Phone*</label>
-                <Input
-                  label="Mobile Phone*"
+                <input
+                  className="form-control"
                   name="mobilePhone"
                   required={true}
                   register={register}
@@ -883,8 +865,8 @@ const Patients = (props) => {
                   onChange={(e) => setMobilePhone(e.target.value)}
                 />
 <label className="mt-2 mb-0">Mailing Address</label>
-                <Input
-                  label="Mailing address"
+                <input
+                  className="form-control"
                   name="street"
                   required={false}
                   register={register}
@@ -895,8 +877,8 @@ const Patients = (props) => {
                   onChange={(e) => setStreet(e.target.value)}
                 />
 <label className="mt-2 mb-0">City</label>
-                <Input
-                  label="City"
+                <input
+                  className="form-control"
                   name="city"
                   required={false}
                   register={register}
@@ -909,57 +891,42 @@ const Patients = (props) => {
                 <div className="row">
                 <div className="col-md-10">
 
-{/* {
+{
                   dcount.map((curr,index)=>{
                     return(
                       <>
                      
                   <label className="mt-2 mb-0">Diagnosis</label>
                 
-                  <Input
-                  label="Diagnosis"
-                  name="diagnosisId"
-                  required={false}
-                  register={register}
-                  errors={errors}
-                  elementType="text"
-                  value={dcount[index]}
-                  maxLength={50}
-                  onChange={(e) => handledcount(index,e.target.value)}
-                />
-               
+                  {(curr!=="")?<>  
                   
+                  
+                  <select className="form-select" value={dcount[index]} onChange={(e)=>{handledcount(index,e.target.value)}} >
+                  <option value=""></option>
+                    {   diagonislist.map((curr)=><option value={curr.split("-")[0]}>{curr}</option>)}
+    
+      
+      </select>
+      
+                  
+                   </>:""}             
+         
                  
                  
                   </>
                     )
-                  })} */}
+                  })}
                     <Form.Group>
-                  <label className="mt-2">Diagnosis</label>
+                  {/* <label className="mt-2">Diagnosis</label>
                   {
                   dcount.map((curr,index)=>{
                     return(
                       <>
-                      
- <Form.Control
-maxLength="50"
-                    onChange={(e) => handledcount(index,e.target.value)}
-                    value={dcount[index]}
-                    size="sm"
-                    className="mt-1"
-                    as="select">
-                      <option value=""></option>
-                    {   diagonislist.map((curr)=><option value={curr.split("-")[0]}>{curr}</option>)}
-                    
-                    
-                    
-
-                    {/* <option value='Hindi'>Hindi</option> */}
-                  </Form.Control>                 
+               
                   </>
                     )
-                  })}
-                   <Button className="mt-1 mb-1" onClick={()=>setdcount([...dcount,""])}>+</Button>
+                  })} */}
+                   <Button className="mt-1 mb-1" onClick={()=>setdcount([...dcount,"Select Diagnosis Id"])}>+</Button>
                   
                 </Form.Group>
                
@@ -972,8 +939,8 @@ maxLength="50"
                 {console.log("sssss", provider)}
                 {/* <Input label='Height (Inch)' placeholder='Enter height' onChange={e => setHeight(e.target.value)} name='height' value={provider} required={true} register={register} errors={errors} /> */}
                 <label className="mt-2 mb-0">Last Name</label>
-                <Input
-                  label="Last Name*"
+                <input
+                  className="form-control"
                   elementType="text"
                   placeholder="Enter Last Name"
                   onChange={(e) => setLName(e.target.value)}
@@ -985,34 +952,30 @@ maxLength="50"
                   errors={errors}
                 />
 <label className="mt-2 mb-0">Provider</label>
-                <Input
-                  label="Provider"
-                  name="provider"
-                  required={false}
-                  register={register}
-                  errors={errors}
-                  elementType="select"
-                  value={provider}
-                  maxLength={50}
-                  options={coreContext.providerOptions}
-                  onChange={(e) => setProvider(e.target.value)}
-                />
+                
+                 <select className="form-select" value={provider} onChange={(e)=>{setProvider(e.target.value)}} >
+      
+      {coreContext.providerOptions.map((curr,index)=>{
+        return(<option value={curr.value}>{curr.name}</option>)
+        
+ })}
+      
+      </select>
+      
                 {/* {console.log(coreContext.careCoordinatorOptions,coreContext.coachOptions)} */}
                 <label className="mt-2 mb-0">Care Coordinator</label>
-                <Input
-                  label="Care Coordinator"
-                  name="coordinator"
-                  required={false}
-                  register={register}
-                  errors={errors}
-                  elementType="select"
-                  maxLength={50}
-                  value={coordinator}
-                  options={coreContext.careCoordinatorOptions}
-                  onChange={(e) => setCoordinator(e.target.value)}
-                />
+                
+                 <select className="form-select" value={coordinator} onChange={(e)=>{setCoordinator(e.target.value)}} >
+      
+      {coreContext.careCoordinatorOptions.map((curr,index)=>{
+        return(<option value={curr.value}>{curr.name}</option>)
+        
+ })}
+      
+      </select>
+      
 <label className="mt-2 mb-0">Coach Name</label>
-                <Input
+                {/* <Input
                   label="Coach Name"
                   name="coach"
                   required={false}
@@ -1023,10 +986,19 @@ maxLength="50"
                   value={coach}
                   options={coreContext.coachOptions}
                   onChange={(e) => setCoach(e.target.value)}
-                />
+                /> */}
+                <select className="form-select" value={coach} onChange={(e)=>{setCoach(e.target.value)}} >
+      
+      {coreContext.coachOptions.map((curr,index)=>{
+        return(<option value={curr.value}>{curr.name}</option>)
+        
+ })}
+      
+      </select>
+                
 <label className="mt-2 mb-0">Language</label>
-                <Input
-                  label="Language*"
+                <input
+                  className="form-control"
                   name="language"
                   required={true}
                   register={register}
@@ -1038,8 +1010,8 @@ maxLength="50"
                   onChange={(e) => setLanguage(e.target.value)}
                 />
 <label className="mt-2 mb-0">Work Phone</label>
-                <Input
-                  label="Work Phone"
+                <input
+                  className="form-control"
                   name="workPhone"
                   required={false}
                   register={register}
@@ -1050,8 +1022,8 @@ maxLength="50"
                   onChange={(e) => setWorkPhone(e.target.value)}
                 />
 <label className="mt-2 mb-0">Zip Code</label>
-                <Input
-                  label="Zip Code"
+                <input
+                  className="form-control"
                   name="zip"
                   required={false}
                   register={register}
@@ -1062,8 +1034,8 @@ maxLength="50"
                   onChange={(e) => setZip(e.target.value)}
                 />
 <label className="mt-2 mb-0">State</label>
-                <Input
-                  label="State"
+                <input
+                  className="form-control"
                   name="State"
                   required={false}
                   register={register}
@@ -1075,21 +1047,18 @@ maxLength="50"
                   onChange={(e) => setState(e.target.value)}
                 />
                 <label className="mt-2 mb-0">Program</label>
-                 <Input
-                  label="Program"
-                  name="program"
-                  required={true}
-                  register={register}
-                  errors={errors}
-                  elementType="select"
-                  value={program}
-                  options={[
-                    { name: "CCM and RPM", value: "CCM/RPM" },
-                    { name: "CCM Only", value: "CCM" },
-                    { name: "RPM Only", value: "RPM" },
-                  ]}
-                  onChange={(e) => setProgram(e.target.value)}
-                />
+                
+                
+      <select className="form-select" value={program} onChange={(e)=>{setProgram(e.target.value)}} >
+      <option value="CCM/RPM">CCM and RPM</option>
+      <option value="CCM">CCM Only</option>
+      <option value="RPM">RPM Only</option>
+      
+    
+      
+      </select>
+      
+      
               </div>
             </div>
             <Input
@@ -1131,7 +1100,7 @@ maxLength="50"
               noValidate>
               <div>
                 <div>
-                  <Input
+                  {/* <Input
                     label="Provider"
                     name="coordinator"
                     required={false}
@@ -1141,7 +1110,16 @@ maxLength="50"
                     value={provider}
                     options={coreContext.providerOptions}
                     onChange={(e) => setProvider(e.target.value)}
-                  />
+                  /> */}
+                            <select className="form-select" value={provider} onChange={(e)=>{setProvider(e.target.value)}} >
+      
+      {coreContext.providerOptions.map((curr,index)=>{
+        return(<option value={curr.value}>{curr.name}</option>)
+        
+ })}
+      
+      </select>
+      
 
                   <Input
                     label="Care Coordinator"

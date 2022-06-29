@@ -1869,6 +1869,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
           <tr>
             <td>{deviceData.DeviceType} </td>
             <td>{deviceData.deviceID} </td>
+            {(!localStorage.getItem("userType").includes("test"))?
             <td>
               {" "}
               {deviceData.Action}{" "}
@@ -1883,7 +1884,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                 {" "}
                 <Trash />
               </a>
-            </td>
+            </td>:<td>Access Denied</td>}x
           </tr>
         );
       });
@@ -2551,6 +2552,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
 	<div className="card-body ps-0 pe-0">
 		<div className="row mb-4">
 		<div className="col-xl-3">
+   { (!localStorage.getItem("userType").includes("test"))?
 			<button className="btn btn-lg btn-success" type="button" onClick={() => {
                       reset();
                       coreContext.AddTimeLog(
@@ -2574,7 +2576,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                       settimevalue("");
                       setTlValue("00:00:00");
                       
-                    }}> Add Time Log</button>
+                    }}> Add Time Log</button>:""}
 		</div>
 			</div>
 		
@@ -2748,6 +2750,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                         className="form-control mb-2 mr-sm-2"
                         placeholder="Enter device ID "
                       />
+                       {(!localStorage.getItem("userType").includes("test"))?
                       <button
                         type="button"
                         onClick={() =>{
@@ -2760,7 +2763,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                         }
                         className="btn btn-primary mb-2">
                         Add Device
-                      </button>
+                      </button>:""}
                     </form>
                   </div>
                 </div>
