@@ -59,27 +59,31 @@ const CareCoordinator = (props) => {
     {
       field: "name",
       headerName: "Care Coordinator Name",
-      width: 300,
+      width: 150,
+      flex:1,
     },
     {
       field: "email",
       headerName: "Email",
       editable: false,
-      width: 200,
+      width: 150,
+      flex:1,
     },
     {
       field: "phone",
       headerName: "Phone",
-      width: 200,
+      width: 150,
       editable: false,
+      flex:1,
     },
     {
       field: "",
       headerName: "Action",
-      width: 300,
+      width: 150,
+      flex:1,
 
       renderCell: (params) => (
-        <div>
+        <div style={{marginLeft:"3em"}}>
           {" "}
           <a href="#" onClick={() => showEditForm(params.row)}>
             {" "}

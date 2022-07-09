@@ -2535,6 +2535,9 @@ deviceType:patient.deviceType,
             
           if (devicedata.username !== undefined && p.gsI1PK===patientId) dataSetdevice.push(devicedata);
         });
+        if(dataSetdevice.length==0){
+          dataSetdevice.push("No device")
+        }
 
         
           setdeviceDataForPatient(dataSetdevice);

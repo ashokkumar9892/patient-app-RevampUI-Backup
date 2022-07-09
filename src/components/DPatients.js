@@ -116,23 +116,28 @@ const DPatients = (props) => {
       headerName: "Name",
       editable: false,
       width: 250,
+      flex:1,
       renderCell: (params) => (
+        <div style={{marginLeft:"1em",paddingBottom:"1em"}}>
         <Link to={`/patient-summary/${btoa(params.row.userId)}`}>
           {" "}
           {params.value}{" "}
         </Link>
+        </div>
       ),
     },
     {
       field: "providerName",
       headerName: "Provider Name",
       editable: false,
+      flex:1,
       
       width: 200,
     },
     {
       field: "diagnosisId",
       headerName: "Diagnosis",
+      flex:1,
       editable: false,
      
       width: 200,
@@ -141,9 +146,10 @@ const DPatients = (props) => {
       field: "CCM",
       headerName: "CCM Mins",
       editable: false,
+      flex:1,
       width: 150,
       renderCell: (params) => (
-        <div>          {String(Math.floor(params.value/60))+":"+('0' + String(params.value%60)).slice(-2)}</div>
+        <div style={{marginLeft:"3em",paddingBottom:"1em"}}>          {String(Math.floor(params.value/60))+":"+('0' + String(params.value%60)).slice(-2)}</div>
 
        
       ),
@@ -153,9 +159,10 @@ const DPatients = (props) => {
       field: "RPM",
       headerName: "RPM Mins",
       width: 150,
+      flex:1,
       editable: false,
       renderCell: (params) => (
-        <div>          {String(Math.floor(params.value/60))+":"+('0' + String(params.value%60)).slice(-2)}</div>
+        <div style={{marginLeft:"3em",paddingBottom:"1em"}}>          {String(Math.floor(params.value/60))+":"+('0' + String(params.value%60)).slice(-2)}</div>
 
        
       ),
@@ -164,6 +171,7 @@ const DPatients = (props) => {
       field: "program",
       headerName: "Program",
       width: 150,
+      flex:1,
       editable: false,
       
     },
@@ -177,23 +185,28 @@ const DPatients = (props) => {
       headerName: "Name",
       editable: false,
       width: 250,
+      flex:1,
       renderCell: (params) => (
+        <div style={{marginLeft:"1em" ,paddingBottom:"1em"}}>
         <Link to={`/patient-summary/${btoa(params.row.userId)}`}>
           {" "}
           {params.value}{" "}
         </Link>
+        </div>
       ),
     },
     {
       field: "providerName",
       headerName: "Provider Name",
       editable: false,
+      flex:1,
       
       width: 200,
     },
     {
       field: "diagnosisId",
       headerName: "Diagnosis",
+      flex:1,
       editable: false,
      
       width: 200,
@@ -201,10 +214,11 @@ const DPatients = (props) => {
     {
       field: "CCM",
       headerName: "CCM Mins",
+      flex:1,
       editable: false,
       width: 150,
       renderCell: (params) => (
-        <div>          {String(Math.floor(params.value/60))+":"+('0' + String(params.value%60)).slice(-2)}</div>
+        <div style={{marginLeft:"3em" ,paddingBottom:"1em"}}>          {String(Math.floor(params.value/60))+":"+('0' + String(params.value%60)).slice(-2)}</div>
 
        
       ),
@@ -213,10 +227,11 @@ const DPatients = (props) => {
     {
       field: "RPM",
       headerName: "RPM Mins",
+      flex:1,
       width: 150,
       editable: false,
       renderCell: (params) => (
-        <div>          {String(Math.floor(params.value/60))+":"+('0' + String(params.value%60)).slice(-2)}</div>
+        <div style={{marginLeft:"3em" ,paddingBottom:"1em"}}>          {String(Math.floor(params.value/60))+":"+('0' + String(params.value%60)).slice(-2)}</div>
 
        
       ),
@@ -225,6 +240,7 @@ const DPatients = (props) => {
       field: "Days Reading",
       headerName: "Days Reading",
       editable: false,
+      flex:1,
       width: 150,
         },
         {
@@ -238,6 +254,7 @@ const DPatients = (props) => {
           headerName: "Device Type",
           editable: false,
           width: 150,
+          flex:1,
             },
             {
               field: "program",

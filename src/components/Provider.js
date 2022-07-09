@@ -185,10 +185,10 @@ useEffect(fetchProviders, [checked]);
     {
       field: "",
       headerName: "Action",
-      width: 300,
+      width: 150,
 
       renderCell: (params) => (
-        <div>
+        <div style={{marginLeft:"3em"}}>
           {" "}
           <a href="#" onClick={() => showEditForm(params.row)}>
             {" "}

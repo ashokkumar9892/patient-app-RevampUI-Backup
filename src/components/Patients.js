@@ -85,7 +85,7 @@ const Patients = (props) => {
   const [state, setState] = useState("");
   const diagonislist=[,"Select Diagnosis Id","D45- Polycythemia vera",
   "G47.33- Obstructive sleep apnea (adult) (pediatric)",
-  "I10- Essential (primary) hypertension",
+  "I10- Essential (primary) hypertension","K219",
   "I13.10- Hypertensive heart and chronic kidney disease without heart",
   "failure ",
   "I509- Heart failure, unspecified",
@@ -115,9 +115,8 @@ const Patients = (props) => {
   "R73.03- Prediabetes",
   "Z68.41- Body mass index [BMI] 40.0-44.9, adult",
   "Z68.44- Body mass index [BMI] 60.0-69.9, adult",
-  "K580- unspecified"
+  "K580- unspecified","I639","E10.9","L67","L67.1","L82.1","N182","J449","E1140","E1151","E1132999","I739","I2510","E663","G4709","N925","H109"
   ]
- 
 
   const editPatient = () => {};
   const coreContext = useContext(CoreContext);
@@ -383,10 +382,12 @@ const Patients = (props) => {
   const admincolumns = [
     {
       field: "name",
+      flex:1,
       headerName: "Patient Name",
       width: 150,
-      fleex:1,
+      
       renderCell: (params) => (
+        <div style={{marginLeft:"1em",paddingBottom:"1em"}}>
         <Link to={`/patient-summary/${btoa(params.row.userId)}`}>
           {" "}
           {params.value
@@ -394,23 +395,27 @@ const Patients = (props) => {
           }{" "}
           {console.log(params,"edit")}
         </Link>
+        </div>
       ),
     },
     {
       field: "ProviderName",
       headerName: "Provider",
-      editable: false,
+      flex:1,
+      
       width: 150,
     },
     {
       field: "CareName",
       headerName: "Care Coordinator",
       width: 150,
-      editable: false,
+      flex:1,
+      
     },
     {
       field: "CoachName",
       headerName: "Coach",
+      flex:1,
       editable: false,
       width: 150,
     },
@@ -431,19 +436,21 @@ const Patients = (props) => {
     {
       field: "program",
       headerName: "Program",
+      flex:1,
       editable: false,
-      type: "number",
+      
       width: 150,
       
     },
     {
       field: "ActiveStatus",
       headerName: "ActiveStatus",
+      flex:1,
       editable: false,
       type: "string",
       width: 150,
       renderCell: (params) => (
-        (params.value==="Deactive")?"Inactive":"Active"
+        (params.value==="Deactive")?<div style={{marginLeft:"3em",paddingBottom:"1em"}}>Inactive </div>:<div style={{marginLeft:"3em" ,paddingBottom:"1em"}}>Active </div>
         
           
         
@@ -455,9 +462,10 @@ const Patients = (props) => {
       field: "",
       headerName: "Action",
       width: 150,
+      flex:1,
       renderCell: (params) => (
         (!localStorage.getItem("userType").includes("test"))?        (params.row.ActiveStatus==="Active")?
-        <div style={{ width: "100px" }}>
+        <div style={{ width: "100px" ,paddingBottom:"1em"}}>
           <Link
             style={{ marginRight: "5px" }}
             to="#"
@@ -505,6 +513,7 @@ const Patients = (props) => {
       field: "name",
       headerName: "Patient Name",
       width: 220,
+      flex:1,
       renderCell: (params) => (
         <Link to={`/patient-summary/${btoa(params.row.userId)}`}>
           {" "}
@@ -517,17 +526,20 @@ const Patients = (props) => {
       headerName: "Provider",
       editable: false,
       width: 200,
+      flex:1,
     },
     {
       field: "CareName",
       headerName: "Care Coordinator",
       width: 150,
       editable: false,
+      flex:1,
     },
     {
       field: "CoachName",
       headerName: "Coach",
       editable: false,
+      flex:1,
       width: 150,
     },
     {
@@ -1100,18 +1112,8 @@ const Patients = (props) => {
               noValidate>
               <div>
                 <div>
-                  {/* <Input
-                    label="Provider"
-                    name="coordinator"
-                    required={false}
-                    register={register}
-                    errors={errors}
-                    elementType="select"
-                    value={provider}
-                    options={coreContext.providerOptions}
-                    onChange={(e) => setProvider(e.target.value)}
-                  /> */}
-                            <select className="form-select" value={provider} onChange={(e)=>{setProvider(e.target.value)}} >
+                <label className="mt-2 mb-0">Provider Name</label>
+                           <select className="form-select" value={provider} onChange={(e)=>{setProvider(e.target.value)}} >
       
       {coreContext.providerOptions.map((curr,index)=>{
         return(<option value={curr.value}>{curr.name}</option>)
@@ -1119,21 +1121,17 @@ const Patients = (props) => {
  })}
       
       </select>
+      <label className="mt-2 mb-0">Care Coordinator Name</label>
+          <select className="form-select" value={coordinator} onChange={(e)=>{setCoordinator(e.target.value)}} >
       
-
-                  <Input
-                    label="Care Coordinator"
-                    name="care"
-                    required={false}
-                    register={register}
-                    errors={errors}
-                    elementType="select"
-                    value={coordinator}
-                    options={coreContext.careCoordinatorOptions}
-                    onChange={(e) => setCoordinator(e.target.value)}
-                  />
-
-                  <Input
+      {coreContext.careCoordinatorOptions.map((curr,index)=>{
+        return(<option value={curr.value}>{curr.name}</option>)
+        
+ })}
+      
+      </select>
+      <label className="mt-2 mb-0">Coach Name</label>
+                  {/* <Input
                     label="Coach Name"
                     name="coach"
                     required={false}
@@ -1143,12 +1141,22 @@ const Patients = (props) => {
                     value={coach}
                     options={coreContext.coachOptions}
                     onChange={(e) => setCoach(e.target.value)}
-                  />
+                  /> */}
+                  
+          <select className="form-select" value={coach} onChange={(e)=>{setCoach(e.target.value)}} >
+      
+      {coreContext.coachOptions.map((curr,index)=>{
+        return(<option value={curr.value}>{curr.name}</option>)
+        
+ })}
+      
+      </select>
                 </div>
               </div>
-              <Input
-                blockButton={true}
+              <input
+                
                 value="Submit"
+                className="btn btn-sm btn-primary mt-2"
                 onClick={() => {
                   coreContext.AssignCareTeam(
                     provider,
@@ -1157,10 +1165,12 @@ const Patients = (props) => {
                     patientId
                   );
                   setAssignDrShowModal(false);
+                  coreContext.cleanup1();
                   fetchPatients();
                 }}
                 elementType="button"
                 variant="primary"
+                
               />
               <br />
               <center> {coreContext.renderLoader()}</center>

@@ -19,7 +19,9 @@ const useStyles = makeStyles((theme) => ({
           lineHeight:"unset !important",
           maxHeight:"none !important",
           whiteSpace:"normal",
-          minWidth:"normal"
+          minWidth:"normal",
+          textAlign:"center"
+
       
       },
       "& .MuiDataGrid-cell":{
@@ -27,16 +29,20 @@ const useStyles = makeStyles((theme) => ({
           lineHeight:"unset !important",
           maxHeight:"none !important",
           whiteSpace:"normal",
-          textAlign:"left"
+          textAlign:"center",
+          paddingTop:"1em"
       },
       "& .MuiDataGrid-row.Mui-odd": {
         backgroundColor: "#e9e9e9",
+        
         
       },
       "& .MuiDataGrid-columnHeaderTitle": {
         overflow: "visible",
         lineHeight: "1.43rem",
         whiteSpace: "normal",
+        textAlign:"center",
+        marginLeft:"2em"
       }
      
     },

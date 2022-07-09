@@ -165,9 +165,9 @@ const TopMenu = ({ changestyle, showSidebar }) => {
   const [open, setOpen] = React.useState(false);
   const today=new Date();
   today.setDate(today.getDate() - 7);
-  const diagonislist=["D45- Polycythemia vera",
+  const diagonislist=[,"Select Diagnosis Id","D45- Polycythemia vera",
   "G47.33- Obstructive sleep apnea (adult) (pediatric)",
-  "I10- Essential (primary) hypertension",
+  "I10- Essential (primary) hypertension","K219",
   "I13.10- Hypertensive heart and chronic kidney disease without heart",
   "failure ",
   "I509- Heart failure, unspecified",
@@ -197,9 +197,8 @@ const TopMenu = ({ changestyle, showSidebar }) => {
   "R73.03- Prediabetes",
   "Z68.41- Body mass index [BMI] 40.0-44.9, adult",
   "Z68.44- Body mass index [BMI] 60.0-69.9, adult",
-  "K580- unspecified"
+  "K580- unspecified","I639","E10.9","L67","L67.1","L82.1","N182","J449","E1140","E1151","E1132999","I739","I2510","E663","G4709","N925","H109"
   ]
- 
  
   const to=Moment(new Date()).format('YYYY-MM-DD')
   const from=Moment(today).format('YYYY-MM-DD')
@@ -1230,16 +1229,11 @@ maxLength="50"
               <Col>
                 <Form.Group>
                   <label className="mt-2">Gender*</label>
-                  <Form.Control
-maxLength="50"
-                    onChange={(e) => setGender(e.target.value)}
-                    value={gender}
-                    size="sm"
-                    as="select">
-                    <option value=""></option>
+                  <select className="form-select" value={gender} onChange={(e)=>{setGender(e.target.value)}} >
+                    <option value="">Select Gender</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
-                  </Form.Control>
+                  </select>
                 </Form.Group>
               </Col>
               
@@ -1248,18 +1242,15 @@ maxLength="50"
             <Col>
                 <Form.Group>
                   <label className="mt-2">Language</label>
-                  <Form.Control
-maxLength="50"
-                    onChange={(e) => setLanguage(e.target.value)}
-                    value={language}
-                    size="sm"
-                    as="select">
-                    <option value=""></option>
+               
+                  <select className="form-select" value={language} onChange={(e)=>{setLanguage(e.target.value)}} >
+                  <option value="">Select Language</option>
                     <option value="English">English</option>
                     <option value="Spanish">Spanish</option>
-
-                    {/* <option value='Hindi'>Hindi</option> */}
-                  </Form.Control>
+      
+    
+      
+      </select>
                 </Form.Group>
               </Col>
               </Row>
@@ -1272,21 +1263,18 @@ maxLength="50"
                     return(
                       <>
                       
- <Form.Control
-maxLength="50"
-                    onChange={(e) => handledcount(index,e.target.value)}
-                    value={dcount[index]}
-                    size="sm"
-                    className="mt-1"
-                    as="select">
-                      <option value=""></option>
-                    {   diagonislist.map((curr)=><option value={curr.split("-")[0]}>{curr}</option>)}
-                    
-                    
-                    
+                      <select className="form-select" value={dcount[index]} onChange={(e)=>{ handledcount(index,e.target.value)}} >
+    
+      
+      
+    <option value=""></option>
+  {   diagonislist.map((curr)=><option value={curr.split("-")[0]}>{curr}</option>)}
+  
+  
+  </select>
 
-                    {/* <option value='Hindi'>Hindi</option> */}
-                  </Form.Control>                 
+
+                                
                   </>
                     )
                   })}
@@ -1352,7 +1340,7 @@ maxLength="50"
               <Col>
                 <form>
                   <label className="mt-2">Care Coordinator</label>
-                  <Input
+                  {/* <Input
                     name="coordinator"
                     required={false}
                     register={register}
@@ -1360,7 +1348,16 @@ maxLength="50"
                     elementType="select"
                     options={coreContext.careCoordinatorOptions}
                     onChange={(e) => setPcm(e.target.value)}
-                  />
+                  /> */}
+                  <select className="form-select" value={pcm} onChange={(e)=>{setPcm(e.target.value)}} >
+      
+      {coreContext.careCoordinatorOptions.map((curr,index)=>{
+        return(<option value={curr.value}>{curr.name}</option>)
+        
+ })}
+      
+      </select>
+      
                 </form>
                 {/* <Form.Group>
                             <label className="mt-2">Care Coordinator</label>
@@ -1377,7 +1374,7 @@ maxLength="50" size="sm" as="select" onChange={e => setPcm(e.target.value)} valu
               <Col>
                 <form>
                   <label className="mt-2">Provider</label>
-                  <Input
+                  {/* <Input
                     name="provider"
                     required={false}
                     register={register}
@@ -1386,7 +1383,16 @@ maxLength="50" size="sm" as="select" onChange={e => setPcm(e.target.value)} valu
                     options={coreContext.providerOptions}
                     onChange={(e) => {handlechangeprovider(e.target.value)}}
                     
-                  />
+                  /> */}
+                  <select className="form-select" value={pp} onChange={(e)=>{handlechangeprovider(e.target.value)}} >
+      
+      {coreContext.providerOptions.map((curr,index)=>{
+        return(<option value={curr.value}>{curr.name}</option>)
+        
+ })}
+      
+      </select>
+      
                 </form>
                 {/* <Form.Group>
                             <label className="mt-2">Providers</label>

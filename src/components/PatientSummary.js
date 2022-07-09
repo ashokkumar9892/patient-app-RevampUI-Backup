@@ -1663,7 +1663,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
       headerName: "Action",
       width: 120,
       renderCell: (params) => (
-        (localStorage.getItem("userType").includes("test"))?
+        (!localStorage.getItem("userType").includes("test"))?
         <div style={{ width: "100px" }}>
         <a
           style={{ marginRight: "5px" }}
@@ -1890,7 +1890,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
       });
     }
     else{
-      return("no device")
+      return("No Device Found")
     }
   };
   useEffect(renderDeviceData, [coreContext.deviceDataForPatient.length]);
@@ -2075,10 +2075,13 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
 	<p className="mb-0">Internal Notes:</p>
 	<textarea className="form-control" rows="3" placeholder="Enter notes" value={notes != "undefined" ? notes : ""} onChange={(e) => setNotes(e.target.value)}></textarea>
 	</div>
-	<div className="col-xl-12 mb-1 text-center">	
-	<button type="button" className="btn btn-danger mt-2" onClick={() => {
-       UpdatePatient();
-         }}>Save Note</button>
+	<div className="col-xl-12 mb-1 text-center">	{
+    (!localStorage.getItem("userType").includes("test"))?
+    <button type="button" className="btn btn-danger mt-2" onClick={() => {
+      UpdatePatient();
+        }}>Save Note</button>
+:""
+  }
 
 </div>
 	</div>
