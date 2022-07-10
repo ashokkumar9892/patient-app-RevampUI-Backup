@@ -42,7 +42,15 @@ const useStyles = makeStyles((theme) => ({
         lineHeight: "1.43rem",
         whiteSpace: "normal",
         textAlign:"center",
-        marginLeft:"2em"
+        
+      },
+      
+      "& .MuiDataGrid-root": {
+        overflow: "visible",
+        lineHeight: "1.43rem",
+        whiteSpace: "normal",
+        textAlign:"center",
+        
       }
      
     },

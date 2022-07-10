@@ -63,24 +63,28 @@ const Coach = (props) => {
     {
       field: "name",
       headerName: "Coach Name",
-      width: 300,
+      
+      flex:1
     },
     {
       field: "email",
       headerName: "Email",
       editable: false,
-      width: 200,
+      
+      flex:1
     },
     {
       field: "phone",
       headerName: "Phone",
-      width: 200,
+      
       editable: false,
+      flex:1
     },
     {
       field: "",
       headerName: "Action",
-      width: 150,
+      
+      flex:1,
 
       renderCell: (params) => (
         <div style={{marginLeft:"3em"}}>

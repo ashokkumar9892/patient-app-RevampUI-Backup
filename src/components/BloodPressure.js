@@ -132,12 +132,14 @@ const BloodPressure = (props) => {
       type: "string",
       headerAlign: 'left',
       renderCell: (params) => (
+        <div style={{marginLeft:"1em",paddingBottom:"1em"}}>
         <Link
           disable={disablelink}
           to={`/patient-summary/${btoa(params.row.userId)}`}>
           {" "}
           {params.row.UserName}{" "}
         </Link>
+        </div>
       ),
     },
     {

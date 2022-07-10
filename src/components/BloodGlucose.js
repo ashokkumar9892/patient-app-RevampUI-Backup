@@ -45,20 +45,24 @@ const BloodGlucose = (props) => {
     {
       field: "UserName",
       headerName: "Patient Name",
-      width: 220,
+      
       type: "string",
+      flex:1,
       renderCell: (params) => (
+        <div style={{marginLeft:"1em",paddingBottom:"1em"}}>
         <Link to={`/patient-summary/${btoa(params.row.userId)}`}>
           {" "}
           {params.row.UserName}{" "}
         </Link>
+        </div>
       ),
     },
     {
       field: "MeasurementDateTime",
       headerName: "Date Recorded",
       editable: false,
-      width: 150,
+      
+      flex:1,
       type: "dateTime",
 
       valueFormatter: (params) => {
@@ -73,29 +77,32 @@ const BloodGlucose = (props) => {
     //   headerName: "Blood Glucose (mmol)",
     //   type: "number",
     //   editable: false,
-    //   width: 170,
+    //   
     // },
     {
       field: "bloodglucosemgdl",
       headerName: "Blood Glucose (mgdl)",
       type: "number",
       editable: false,
-      width: 170,
+      
+      flex:1
     },
     {
       field: "meal",
       headerName: "Before/After Meal",
-      width: 110,
+      
       editable: false,
-      width: 150,
+      
+      flex:1
     },
 
     {
       field: "CreatedDate",
       headerName: "Date Received",
-      width: 150,
+      
       editable: false,
       type: "dateTime",
+      flex:1,
 
       valueFormatter: (params) => {
         const valueFormatted = Moment(params.value).format(
@@ -107,14 +114,15 @@ const BloodGlucose = (props) => {
     {
       field: "DeviceId",
       headerName: "Device Id",
-      width: 150,
+      
+      flex:1,
       editable: false,
     },
     // {
     //   field: "battery",
     //   headerName: "Battery",
     //   type: "number",
-    //   width: 150,
+    //   
     //   editable: false,
     // },
     // {
@@ -146,7 +154,8 @@ const BloodGlucose = (props) => {
       field: "MeasurementDateTime",
       headerName: "Date Recorded",
       editable: false,
-      width: 150,
+      
+      flex:1,
       type: "dateTime",
 
       valueFormatter: (params) => {
@@ -168,20 +177,22 @@ const BloodGlucose = (props) => {
       headerName: "Blood Glucose (mgdl)",
       type: "number",
       editable: false,
-      width: 10,
+      
+      flex:1,
     },
     {
       field: "meal",
       headerName: "Before/After Meal",
-      width: 110,
+      
       editable: false,
-      width: 150,
+      
+      flex:1,
     },
 
     // {
     //   field: 'CreatedDate',
     //   headerName: 'Date Received',
-    //   width: 150,
+    //   
     //   editable: false,type:'dateTime',
 
     //   valueFormatter: (params) => {
@@ -193,26 +204,29 @@ const BloodGlucose = (props) => {
     {
       field: "DeviceId",
       headerName: "Device Id",
-      width: 150,
+      
       editable: false,
+      flex:1,
     },
     // {
     //   field: 'reading_id',
     //   headerName: 'Reading Id',
     //   type: 'number',
-    //   width: 150,
+    //   
     //   editable: false,
     // },
     {
       field: "battery",
       headerName: "Battery",
       type: "number",
-      width: 150,
+      
+      flex:1,
       editable: false,
     },
     {
       field: "sortDateColumn",
       headerName: "Action",
+      flex:1,
     },
   ];
 

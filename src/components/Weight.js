@@ -50,18 +50,20 @@ const Weight = (props) => {
         { field: 
           'UserName', 
           headerName: 'Patient Name', 
-          width: 200 ,  
+           
+          flex:1,  
           type: 'string',
           renderCell: (params) => (
-            <Link  to={`/patient-summary/${btoa(params.row.userId)}`}> {params.row.UserName} </Link>
+            <div style={{marginLeft:"3em",paddingBottom:"1em"}}>
+            <Link  to={`/patient-summary/${btoa(params.row.userId)}`}> {params.row.UserName} </Link></div>
           )
         },
         {
           field: 'weight',
           headerName: 'Weight',
-          type: 'number',
+          
           editable: false,
-          width: 200
+          flex:1,
         },
         {
             field: 'MeasurementDateTime',
@@ -69,7 +71,7 @@ const Weight = (props) => {
             width: 310,
             editable: false,
             type: 'date',
-          width: 200,
+            flex:1,
           valueFormatter: (params) => {
             const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
              return `${valueFormatted}`;
@@ -82,7 +84,7 @@ const Weight = (props) => {
             width: 200,
             editable: false,
             type: 'date',
-          width: 200,
+            flex:1,
           valueFormatter: (params) => {
             const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
              return `${valueFormatted}`;
@@ -93,14 +95,14 @@ const Weight = (props) => {
             field: 'DeviceId',
             headerName: 'Device Id',
             editable: false,
-            width: 200
+            flex:1,
           },
           {
             field: 'readingId',
             headerName: 'Reading Id',
             type: 'number',
             editable: false,
-            width: 200
+            flex:1,
           },
           // { 
           //   field: "sortDateColumn", 
@@ -133,11 +135,11 @@ const Weight = (props) => {
         {
           field: 'MeasurementDateTime',
           headerName: 'Date Recorded',
-          width: 110,
+          
           editable: false,
-          width: 300,
+          flex:1,
           type: 'date',
-        width: 200,
+        
         valueFormatter: (params) => {
           const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
            return `${valueFormatted}`;
@@ -148,7 +150,7 @@ const Weight = (props) => {
           headerName: 'Weight (lbs)',
           type: 'number',
           editable: false,
-          width: 200
+          flex:1,
         },
         
           // // {
@@ -168,14 +170,14 @@ const Weight = (props) => {
             field: 'DeviceId',
             headerName: 'Device Id',
             editable: false,
-            width: 200
+            flex:1,
           },
           {
             field: 'readingId',
             headerName: 'Reading Id',
             type: 'number',
             editable: false,
-            width: 200
+            flex:1,
           },
           // { 
           //   field: "sortDateColumn", 

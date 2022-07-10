@@ -436,19 +436,19 @@ const Patients = (props) => {
     {
       field: "program",
       headerName: "Program",
-      flex:1,
+      
       editable: false,
       
-      width: 150,
+      flex:1
       
     },
     {
       field: "ActiveStatus",
       headerName: "ActiveStatus",
-      flex:1,
+      
       editable: false,
       type: "string",
-      width: 150,
+      flex:1,
       renderCell: (params) => (
         (params.value==="Deactive")?<div style={{marginLeft:"3em",paddingBottom:"1em"}}>Inactive </div>:<div style={{marginLeft:"3em" ,paddingBottom:"1em"}}>Active </div>
         

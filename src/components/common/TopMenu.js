@@ -1263,7 +1263,7 @@ maxLength="50"
                     return(
                       <>
                       
-                      <select className="form-select" value={dcount[index]} onChange={(e)=>{ handledcount(index,e.target.value)}} >
+                      <select className="form-select mt-1" value={dcount[index]} onChange={(e)=>{ handledcount(index,e.target.value)}} >
     
       
       
@@ -1278,7 +1278,7 @@ maxLength="50"
                   </>
                     )
                   })}
-                   <Button className="mt-1" onClick={()=>setdcount([...dcount,""])}>+</Button>
+                   <Button className="mt-1 mb-1" onClick={()=>setdcount([...dcount,""])}>+</Button>
                   
                 </Form.Group>
               </Col>
@@ -1310,8 +1310,8 @@ maxLength="50"
                 />
               </Col>
             </Row>
-             <Row>
-              <Col>User Type</Col>
+             <Row className="mt-1">
+              <Col >User Type</Col>
               <Col>
                 <Form.Check
                   type="radio"

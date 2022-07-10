@@ -58,7 +58,7 @@ const renderChat=()=>{
 <li>
 <Link to="#" data-bs-target="#account">
 <i className="icon bi-person-circle"></i>
-<span className="label">Care Team</span>
+<span className="label ml-1">Care Team</span>
 </Link>
 <ul>
 {(userType!=="patient")?
@@ -150,8 +150,8 @@ const renderChat=()=>{
 </ul>
     <div className="d-none d-md-block sw-25">
 	<Link className="btn btn-primary d-block rounded-0 text-start" data-bs-toggle="collapse" to="#menu-1" role="button" aria-expanded="false" aria-controls="collapseExample">
-<i className="icon bi-person-circle"></i>
-<span className="label">Care Team</span> <i className="bi-caret-down-fill float-end"></i>
+<i className="icon bi-person-circle "></i>
+<span className="label" style={{marginLeft:"1em"}}>Care Team</span> <i className="bi-caret-down-fill float-end"></i>
 </Link>
 <div className="collapse show" id="menu-1">
 <div className="card-body no-shadow mt-0 p-0 sidemenu-collaspe">
@@ -175,7 +175,7 @@ const renderChat=()=>{
 
 		<Link className="btn btn-primary d-block rounded-0 text-start mt-1" data-bs-toggle="collapse" to="#menu-2" role="button" aria-expanded="false" aria-controls="collapseExample">
 <i className="icon bi-tablet-fill"></i>
-<span className="label"> Devices</span> <i className="bi-caret-down-fill float-end"></i>
+<span className="label" style={{marginLeft:"1em"}}> Devices</span> <i className="bi-caret-down-fill float-end"></i>
 </Link>
 <div className="collapse show" id="menu-2">
 <div className="card-body no-shadow mt-0 p-0 sidemenu-collaspe">
@@ -195,7 +195,7 @@ const renderChat=()=>{
 </div>	{(userType === 'admin')?
 		<Link className="btn btn-primary d-block rounded-0 text-start mt-1" to="/thresold">
 <i className="icon bi-align-bottom"></i>
-<span className="label"> Thresold</span>
+<span className="label" style={{marginLeft:"1em"}}> Thresold</span>
 </Link>:""}
 {/* {(userType === 'admin' || userType === 'patient')?
 		<Link className="btn btn-primary d-block rounded-0 text-start mt-1"  to="#">
@@ -205,7 +205,7 @@ const renderChat=()=>{
 {renderChat()}
 <Link className="btn btn-primary d-block rounded-0 text-start mt-1"  to="/tutorial">
 <i className="icon bi-bag-fill"></i>
-<span className="label">  Tutorials</span>
+<span className="label" style={{marginLeft:"1em"}}>  Tutorials</span>
 </Link>
 	</div>
 {/* 
