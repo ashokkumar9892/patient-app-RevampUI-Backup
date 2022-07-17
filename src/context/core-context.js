@@ -87,7 +87,7 @@ export const CoreContextProvider = (props) => {
   const [result, setResult] = useState([]);
 
   const [apiUrl, setApiUrl] = useState(
-    "https://appapi.apatternplus.com/api"
+    "https://sqlapi.apatternplus.com/UserPool/api"
   );
   const [apiUrl2, setApiUrl2] = useState(
     "https://sqlapi.apatternplus.com/"
@@ -171,7 +171,10 @@ export const CoreContextProvider = (props) => {
     console.log(email,password,"sahil")
     setShowLoader(true);
     axios
-      .post(apiUrl + "/signin", { Username: email, Password: password })
+      .post(apiUrl + "/signin", { Username: email,
+        Email: email,
+        Password: password,
+        newPassword:"string" })
       .then((response) => {
         if (response.data === "Incorrect username or password.") {
           alert("Incorrect username or password.");
@@ -2152,6 +2155,7 @@ deviceType:patient.deviceType,
       UserName: email,
       Email: email,
       Password: password,
+      newPassword:"string",
     };
 
     axios
@@ -2244,6 +2248,7 @@ deviceType:patient.deviceType,
       Username: username,
       Email: email,
       Password: password,
+      newPassword:"string",
     };
 
     axios
@@ -2327,6 +2332,7 @@ deviceType:patient.deviceType,
       Username: email,
       Email: email,
       Password: password,
+      newPassword:"string",
     };
 
     axios
@@ -2368,6 +2374,7 @@ deviceType:patient.deviceType,
       Username: email,
       Email: email,
       Password: password,
+      newPassword:"string",
     };
 
     axios
