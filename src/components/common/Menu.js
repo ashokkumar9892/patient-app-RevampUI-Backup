@@ -73,7 +73,7 @@ const renderChat=()=>{
 <li>
 <Link to="/provider">
 <i className="icon bi-hdd"></i>
-<span className="label"> Provider</span>
+<span className="label mt-1"> Provider</span>
 </Link>
 </li>
 <li>
@@ -162,7 +162,7 @@ const renderChat=()=>{
 <span className="label"> Patient Information</span></Link></li>:""}
 {(userType==="admin")?<>
 	<li><Link to="/provider"><i className="icon bi-hdd"></i>
-<span className="label"> Provider</span>
+<span className="label mt-1"> Provider</span>
 </Link></li>
 	<li className="active"><Link to="/care-coordinator"><i className="icon bi-person-badge"></i>
 <span className="label"> Care Coordinator</span></Link></li>
