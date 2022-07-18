@@ -534,6 +534,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
     setfrom(
       new Date(new Date().setDate(new Date().getDate() - fetchsliderdays()))
     );
+    
   }, [slider]);
 
   const getbpdata =React.useCallback( (index) => {
@@ -914,7 +915,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
     } else {
       return <h1>no data found</h1>;
     }
-  },[coreContext.bloodpressureDataForPatient]);
+  },[coreContext.bloodpressureDataForPatient,slider,from,to]);
   // const getbpdata1 = useMemo(() => getbpdata(1), []);
   // const getbpdata3 = useMemo(() => getbpdata(3), []);
   // const getbpdata2 = useMemo(() => getbpdata(2), []);
