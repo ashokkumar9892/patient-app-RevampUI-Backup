@@ -165,6 +165,9 @@ const onToggleChangeActiveUsers = (event) => {
           borderWidth: 1,
         },
       ],
+      options: {
+        indexAxis: 'y'
+      }
     };
     return(
       <Pie data={data} />

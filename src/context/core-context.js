@@ -1879,6 +1879,73 @@ program:patient.program
         }
       });
   };
+  const UpdateNotes = async(patient,notes) => {
+    const token = localStorage.getItem("app_jwt");
+    const data={
+      id:patient.id,
+sk:patient.sk,
+activeStatus:"Active",
+carecoordinatorId:patient.careId,
+carecoordinatorName:patient.CareName,
+city:patient.city,
+coach:patient.CoachName,
+coachId:patient.coachId,
+connectionId:"",
+contactNo:patient.mobile,
+createdDate:patient.createdDate,
+diagnosisId:patient.diagnosisId,
+diastolic:patient.diastolic,
+dob:patient.dob,
+doctorId:patient.ProviderId,
+doctorName:patient.ProviderName,
+email:patient.email,
+firstName:patient.firstName,
+gender:patient.gender,
+gsI1PK:"patient",
+gsI1SK:patient.ProviderId,
+height:patient.height,
+lang:patient.language,
+lastName:patient.lastName,
+middleName:patient.middleName,
+mobilePhone:patient.mobile,
+notes:notes,
+otp:patient.otp,
+profileImage:patient.profileImage,
+reading:patient.BMI,
+st:patient.st,
+street:patient.street,
+systolic:patient.systolic,
+userId:patient.userId,
+userName:patient.userName,
+userTimeZone:patient.userTimeZone,
+userType:patient.userType,
+weight:patient.weight,
+workPhone:patient.workPhone,
+zip:patient.zip,
+deviceId:patient.deviceId,
+deviceStatus:patient.deviceStatus,
+deviceType:patient.deviceType,
+program:patient.program
+ }
+
+ await axios
+ .put(
+   apiUrl2 +
+     "patient",data,{
+     headers: {
+       'Content-Type': 'application/json',
+       'accept': 'text/plain'
+      }
+      
+     },
+      
+ )
+      .then((response) => {
+        if (response.status === 200) {
+          swal("success", "Notes Updated Successfully.", "success");
+        }
+      });
+  };
   const DeleteDoctor = async(doctor) => {
   
    const data1 ={
@@ -4309,6 +4376,7 @@ apiUrl2 +
         patientsForPatient,
         setccData,
         setcoachData,
+        UpdateNotes,
       fetchDeviceDataForPatient,
       deviceDataForPatient,
       ActivatePatient,
