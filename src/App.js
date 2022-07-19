@@ -15,6 +15,7 @@ import Testing from "./components/common/Testing";
 import {BillingPatient} from "./components/BillingPatient";
 import { BloodPressureAverage } from "./components/BloodPressureAverage";
 import { BloodGlucoseAverage } from "./components/BloodGlucoseAverage";
+import Chat from "./components/Chat"
 
 import Covidform from "./Covidform";
 import "./App.css";
@@ -215,6 +216,7 @@ function App() {
                   <Route exact path="/patients" component={Pages.Patients} />{" "}
                   <Route exact path="/dpatients" component={DPatients} />
                   <Route exact path="/billing" component={BillingPatient} />
+                  <Route exact path="/chat" component={Chat} />
                   <Route
                     exact
                     path="/bloodpressure"

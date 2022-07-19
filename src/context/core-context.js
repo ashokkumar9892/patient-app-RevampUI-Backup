@@ -90,7 +90,7 @@ export const CoreContextProvider = (props) => {
     "https://sqlapi.apatternplus.com/UserPool/api"
   );
   const [apiUrl2, setApiUrl2] = useState(
-    "https://sqlapi.apatternplus.com/"
+    "https://localhost:44320/"
   );
   const [userTable, setuserTable] = useState("UserDetailsDemo");
 
@@ -267,6 +267,7 @@ export const CoreContextProvider = (props) => {
               userType: p.userTpye ? p.userType : "",
               userId: p.userId ? p.userId : "",
               userEmail: p.email ? p.email : "",
+              sno: p.sno ? p.sno : "",
               
             };
   
