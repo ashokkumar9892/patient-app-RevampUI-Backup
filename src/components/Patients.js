@@ -65,7 +65,7 @@ const Patients = (props) => {
   const [actionPatients, setActionPatients] = useState([]);
   const [checked, setChecked] = useState(false);
   const [dcount, setdcount] = useState([""]);
-  const [diagnosisId, setDiagnosisId] = useState("");
+  const [complex, setComplex] = useState();
 
   const handleModalClose = () => {setShowModal(false);setdcount([""])};
   const handleModalShow = () => setShowModal(true);
@@ -506,6 +506,24 @@ const Patients = (props) => {
 
       ),
     },
+    {
+      field: "reading",
+      headerName: "Consistent",
+      
+      editable: false,
+      width: 105,
+      renderCell: (params) => (
+        
+        <>
+      
+        <div style={{marginLeft:"2em"}}>
+  <input type="checkbox" checked={params.row.reading==='true'} onChange={(e)=>{coreContext.UpdateNotes(coreContext.patients.filter((curr)=>curr.userId===params.row.userId)[0],"","",e.target.checked);setComplex(e.target.checked);coreContext.fetchPatientListfromApi(localStorage.getItem("userType"),localStorage.getItem("userId"));coreContext.cleanup1();}} />
+  
+</div>
+        </>
+      ),
+    },
+    
   ];
 
   const columns = [

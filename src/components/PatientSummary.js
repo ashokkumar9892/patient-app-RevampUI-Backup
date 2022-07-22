@@ -2079,7 +2079,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
 	<div className="col-xl-12 mb-1 text-center">	{
     (!localStorage.getItem("userType").includes("test"))?
     <button type="button" className="btn btn-danger mt-2" onClick={() => {
-      UpdatePatient();
+      coreContext.UpdateNotes(coreContext.patientsForPatient[0],notes);
         }}>Save Note</button>
 :""
   }

@@ -47,8 +47,8 @@ const Any = () => {
     
       const data = {
       
-        SenderSK: "1345",
-        ReceiverSK: "85",
+        SenderSK: "1351",
+        ReceiverSK: "70",
         AuthToken: localStorage.getItem("app_jwt"),
 
     };
@@ -75,39 +75,48 @@ const Any = () => {
         });
    
   }
-  
-  const handleNewUserMessage = (newMessage) => {
+
+  const handleNewUserMessage=(newMessage)=>{
     console.log(`New message incoming! ${newMessage}`);
     const token = localStorage.getItem("app_jwt");
-  
     var connection = new signal.HubConnectionBuilder().withUrl("https://annexappapi.apatternplus.com/chatHub").build();
-    
-
-   
-    var req = 
+    connection.serverTimeoutInMilliseconds = 6000000;
+    const chat=()=>{
+const sendmessage=()=>{
+  var req = 
 {   SenderSK: "DOCTOR_70" ,   //// PATIENT_Id from PatientTable  
 ReceiverSK: "PATIENT_1351", Message: newMessage, MessageType: "Text", AuthToken:token }
 
-    connection.start()
-    .then(() => connection.invoke("SendMessages", req)).catch(function (err) {
-return console.error(err.toString());
-});
-// var req = {
-//     SenderSK: "DOCTOR_1351" ,   //// PATIENT_Id from PatientTable  
-//     ReceiverSK: "PATIENT_7",   //// DOCTOR_ Id from DoctorTable
-//     Message: newMessage,
-//     MessageType: "Text",  //// Text / Audio / Video/ File / Image
-//    AuthToken : localStorage.getItem("app_jwt")    
-// }
-// connection.invoke("SendMessages", req).catch(function (err) {        
-//     return console.error(err.toString());
-// });
+connection.invoke("SendMessages", req).catch(function (err) {
+  return console.error(err.toString())
 
-connection.on("ReceiveMessage", function (data) {
-    console.log(data,"older"); });
+}      )
+}
+sendmessage();
+const ReceiveMessages=()=>{
+  connection.on("ReceiveMessage", function (data) {
+    console.log(data);      
+  }); 
+  
+}
 
-  };
- 
+ReceiveMessages()
+
+
+}    
+connection.start().then(()=>chat())
+
+connection.on("disconnect", function () {
+  setTimeout(function () {
+     connection.start();
+  }, 5000); // Restart connection after 5 seconds.
+}); 
+
+  }
+  
+
+  
+  
  
 
   

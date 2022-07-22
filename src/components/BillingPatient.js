@@ -26,6 +26,7 @@ import {
 
 import Loader from "react-loader-spinner";
 import { render } from "react-dom";
+import { CheckRounded } from "@material-ui/icons";
 const Moment = require("moment");
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,10 +41,34 @@ const useStyles = makeStyles((theme) => ({
 const BillingPatient = (props) => {
   const [rows,setrows]=useState(JSON.parse(localStorage.getItem("B_patient")));
   const [checked, setChecked] = useState(false);
+  const [complex, setComplex] = useState();
+  const coreContext = useContext(CoreContext);
 const onToggleChangeActiveUsers = (event) => {
   setChecked(event.target.checked);
   
 };
+const updateotp=(id,otp)=>{
+  coreContext.fetchPatientListfromApi(localStorage.getItem("userType"),localStorage.getItem("userId"))
+  const bpatient=[...JSON.parse(localStorage.getItem("B_patient"))]
+  const b=[]
+  JSON.parse(localStorage.getItem("B_patient")).map((curr)=>{
+    if(curr.userId===id){
+      const hi={...curr,"otp":otp.toString()}
+     
+      b.push(hi)
+    }else{
+      b.push(curr)
+    }
+
+  })
+  console.log(b,"sa")
+  
+  localStorage.removeItem("B_patient")
+  localStorage.setItem("B_patient", JSON.stringify(b));
+  setrows(JSON.parse(localStorage.getItem("B_patient")))
+  
+
+}
   const columns = [
     {
       field: "name",
@@ -77,7 +102,39 @@ const onToggleChangeActiveUsers = (event) => {
     {
       field: "CCM Mins",
       headerName: "CCM Mins",
-      type: "number",
+      
+      editable: false,
+      width: 150,
+    },
+    {
+      field: "otp",
+      headerName: "Complex",
+      
+      editable: false,
+      width: 105,
+      renderCell: (params) => (
+        
+        <>
+      
+        <div style={{marginLeft:"2em"}}>
+  <input type="checkbox" checked={params.row.otp==='true'} onChange={(e)=>{coreContext.UpdateNotes(coreContext.patients.filter((curr)=>curr.userId===params.row.userId)[0],"",e.target.checked,"");setComplex(e.target.checked);updateotp(params.row.userId,e.target.checked);coreContext.cleanup1()}} />
+  
+</div>
+        </>
+      ),
+    },
+    
+    {
+      field: "diagnosisId",
+      headerName: "Diagnosis",
+      
+      editable: false,
+      width: 150,
+    },
+    {
+      field: "",
+      headerName: "CPT Code",
+      
       editable: false,
       width: 150,
     },
@@ -85,7 +142,7 @@ const onToggleChangeActiveUsers = (event) => {
 
   ];
   const renderBills = () => {
-    if (rows.length == 0) {
+    if (coreContext.patients.length == 0) {
       return (
         <div
           style={{
@@ -102,9 +159,19 @@ const onToggleChangeActiveUsers = (event) => {
     }
     
     if (
-      rows.length>0
+      coreContext.patients.length>0
     ) {
-      //coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
+      // //coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
+      // const updatedrows=[]
+      // rows.map((curr)=>{
+      //   const curr1={...curr}
+        
+      //     curr1['diagnosisId']=coreContext.patients.filter((curr2)=>curr.userId===curr2.userId)[0].diagnosisId
+      //     curr1['otp']=coreContext.patients.filter((curr2)=>curr.userId===curr2.userId)[0].otp
+      //     updatedrows.push(curr1)
+        
+      // })
+      // console.log("updatedrows",updatedrows)
       return (
         // <div style={{ height: 680, width: "100%" }}>
         //   {/* {coreContext.bloodglucoseData} */}
@@ -137,6 +204,10 @@ const onToggleChangeActiveUsers = (event) => {
     
 
   }
+  useEffect(renderBills, [rows]);
+  useEffect(()=>{coreContext.fetchPatientListfromApi(localStorage.getItem("userType"),localStorage.getItem("userId"))}
+  ,[complex]);
+
   const rendercharts=()=>{
     const l=rows.map((curr)=>curr.name+":"+curr.bills)
     const value=rows.map((curr)=>curr.bills)

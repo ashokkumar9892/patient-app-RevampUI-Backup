@@ -90,7 +90,7 @@ export const CoreContextProvider = (props) => {
     "https://sqlapi.apatternplus.com/UserPool/api"
   );
   const [apiUrl2, setApiUrl2] = useState(
-    "https://localhost:44320/"
+    "https://sqlapi.apatternplus.com/"
   );
   const [userTable, setuserTable] = useState("UserDetailsDemo");
 
@@ -391,6 +391,8 @@ export const CoreContextProvider = (props) => {
 
 
           patient.mobilePhone = p.mobilePhone;
+          patient.reading = p.reading;
+          patient.otp = p.otp;
           patient.workPhone = p.workPhone;
           patient.userId = p.userId;
           patient.name = p.lastName+" , "+p.firstName;
@@ -558,6 +560,8 @@ export const CoreContextProvider = (props) => {
 
 
           patient.mobilePhone = p.mobilePhone;
+          patient.reading = p.reading;
+          patient.otp = p.otp;
           patient.workPhone = p.workPhone;
           patient.userId = p.userId;
           patient.name = p.lastName+" , "+p.firstName;
@@ -1536,9 +1540,9 @@ lastName: lname ,
 middleName: "",
 mobilePhone: phone ,
 notes: patient.notes,
-otp: "",
+otp: patient.otp,
 profileImage: "",
-reading: patient.BMI,
+reading: patient.reading.toString(),
 sk: patient.sk,
 st: "undefined",
 street: street,
@@ -1914,6 +1918,76 @@ program:patient.program
       .then((response) => {
         if (response.status === 200) {
           swal("success", "Patient Deleted Successfully.", "success");
+        }
+      });
+  };
+  const UpdateNotes = async(patient,notes,otp,reading) => {
+    const token = localStorage.getItem("app_jwt");
+    const otp1=(otp==="")?patient.otp:otp
+    const notes1=(notes==="")?patient.notes:notes
+    const reading1=(reading==="")?patient.reading:reading
+    const data={
+      id:patient.id,
+sk:patient.sk,
+activeStatus:"Active",
+carecoordinatorId:patient.careId,
+carecoordinatorName:patient.CareName,
+city:patient.city,
+coach:patient.CoachName,
+coachId:patient.coachId,
+connectionId:"",
+contactNo:patient.mobile,
+createdDate:patient.createdDate,
+diagnosisId:patient.diagnosisId,
+diastolic:patient.diastolic,
+dob:patient.dob,
+doctorId:patient.ProviderId,
+doctorName:patient.ProviderName,
+email:patient.email,
+firstName:patient.firstName,
+gender:patient.gender,
+gsI1PK:"patient",
+gsI1SK:patient.ProviderId,
+height:patient.height,
+lang:patient.language,
+lastName:patient.lastName,
+middleName:patient.middleName,
+mobilePhone:patient.mobile,
+notes:notes1,
+otp:otp1.toString(),
+profileImage:patient.profileImage,
+reading:reading1.toString(),
+st:patient.st,
+street:patient.street,
+systolic:patient.systolic,
+userId:patient.userId,
+userName:patient.userName,
+userTimeZone:patient.userTimeZone,
+userType:patient.userType,
+weight:patient.weight,
+workPhone:patient.workPhone,
+zip:patient.zip,
+deviceId:patient.deviceId,
+deviceStatus:patient.deviceStatus,
+deviceType:patient.deviceType,
+program:patient.program
+ }
+
+ await axios
+ .put(
+   apiUrl2 +
+     "patient",data,{
+     headers: {
+       'Content-Type': 'application/json',
+       'accept': 'text/plain'
+      }
+      
+     },
+      
+ )
+      .then((response) => {
+        if (response.status === 200) {
+          swal("success", "Updated Successfully.", "success");
         }
       });
   };
@@ -4324,7 +4398,7 @@ apiUrl2 +
       cleanup1,
       setdoctorData,
       DeleteCareCoordinator,
-      DeleteCoach
+      DeleteCoach,UpdateNotes
       }}>
       {props.children}
     </CoreContext.Provider>
