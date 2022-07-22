@@ -508,7 +508,7 @@ const Patients = (props) => {
     },
     {
       field: "reading",
-      headerName: "Consistent",
+      headerName: "Inconsistent",
       
       editable: false,
       width: 105,
