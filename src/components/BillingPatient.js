@@ -79,8 +79,8 @@ const updateotp=(id,otp)=>{
     },
     
     {
-      field: "bills",
-      headerName: "Bills",
+      field: "rpmbills",
+      headerName: "RPM Bills",
       
       editable: false,
       width: 200,
