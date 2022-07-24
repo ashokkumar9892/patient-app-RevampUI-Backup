@@ -149,14 +149,7 @@ const updateotp=(id,otp)=>{
       
       editable: false,
       width: 150,
-    },
-    {
-      field: "",
-      headerName: "CPT Code",
-      
-      editable: false,
-      width: 150,
-    },
+    }
     
 
   ];
