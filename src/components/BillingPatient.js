@@ -81,13 +81,32 @@ const updateotp=(id,otp)=>{
     {
       field: "rpmbills",
       headerName: "RPM Bills",
-      
       editable: false,
       width: 200,
+        renderCell: (params) => (
+        (params.row.value>3)?3:params.row.value
+        )
+    },
+    {
+      field: "ccmbills",
+      headerName: "CCM Bills",
+      editable: false,
+      width: 200,
+      renderCell: (params) => (
+        (params.row.value>3)?3:params.row.value
+        )
+    },
+    
+    {
+      field: "cptcode",
+      headerName: "CPT Code",
+      
+      editable: false,
+      width: 150,
     },
     {
       field: "timeLeft",
-      headerName: "Time to Next Bill(mins)",
+      headerName: "Time to Next Bill For RPM(mins)",
       type: "number",
       editable: false,
       width: 250,
@@ -171,7 +190,7 @@ const updateotp=(id,otp)=>{
       //     updatedrows.push(curr1)
         
       // })
-      // console.log("updatedrows",updatedrows)
+       console.log("updatedrows",JSON.parse(localStorage.getItem("B_patient")))
       return (
         // <div style={{ height: 680, width: "100%" }}>
         //   {/* {coreContext.bloodglucoseData} */}
