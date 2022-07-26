@@ -2319,7 +2319,7 @@ deviceType:patient.deviceType,
     pcm,
     pp,
     ppname,
-    diagnosisId,program,type
+    diagnosisId,program,type,cptcode
   ) => {
     const token = localStorage.getItem("app_jwt");
     const date = new Date();
@@ -2369,7 +2369,8 @@ deviceType:patient.deviceType,
             diagnosisId: diagnosisId,
             program:program,
             reading:"true",
-            otp:"false"
+            otp:"false",
+            cptCode1:JSON.stringify(cptcode)
           });
 
           

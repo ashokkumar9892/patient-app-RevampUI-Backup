@@ -12,6 +12,8 @@ import {
   FormControl,
 } from "react-bootstrap";
 import Moment from "moment";
+import { MultiSelect } from "react-multi-select-component";
+import './TopMenu.css'
 import {
   BrowserRouter as Router,
   Route,
@@ -129,6 +131,7 @@ const TopMenu = ({ changestyle, showSidebar }) => {
   const [birthDate, setBirthDate] = useState("");
   const [gender, setGender] = useState("");
   const [language, setLanguage] = useState("");
+  const [cptcode, setcptcode] = useState([]);
   const [ehrId, setEhrId] = useState("");
   const [dcount, setdcount] = useState([""]);
   const [diagnosisId, setDiagnosisId] = useState("");
@@ -536,7 +539,7 @@ const handlechangeprovider=(p)=>{
       ppname,
       newId.substring(1),
       program,
-      istest
+      istest,cptcode
     );
     handleClose();
   };
@@ -1251,6 +1254,26 @@ maxLength="50"
     
       
       </select>
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group>
+                  <label className="mt-2">CPT Code</label>
+               
+                  <MultiSelect
+      
+        options={[
+          { label: "99457", value: "99457" },
+          { label: "99458", value: "99458" },
+          { label: "99490", value: "99490"},
+          { label: "99439", value: "99439" },
+          { label: "99487", value: "99487" },
+          { label: "99489", value: "99489"},
+        ]}
+        value={cptcode}
+        onChange={setcptcode}
+        labelledBy="Select"
+      />
                 </Form.Group>
               </Col>
               </Row>
