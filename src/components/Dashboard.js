@@ -63,6 +63,21 @@ const Dashboard = (props) => {
   let patientwdevice = [];
 
   useEffect(coreContext.checkLocalAuth, []);
+  const handlecptcode=(cpt)=>{
+    
+    var str=""
+    if(cpt.includes("label")){
+    var obj=JSON.parse(cpt)
+    for(var i=0;i<obj.length;i++){
+      str=str+[...new Set(Object.values(obj[i]))]+","
+    }
+    return str
+  }else return cpt
+    
+    
+
+  }
+  
 
   const fetchPatients = () => {
     const email = localStorage.getItem("app_userEmail");
@@ -311,7 +326,7 @@ const Dashboard = (props) => {
             // setOnetonine(onetonine+1)
             thirtynine.push(curr.userId);
             if(BillingCCM.length<1){
-              BillingCCM.push({"id":BillingCCM.length+1+90,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLog,"rpmbills":0,"cptcode":"99490","ccmbills":(Math.floor(totalTimeLog/1200)>3)?3:Math.floor(totalTimeLog/1200),"timeLeft":Math.floor(totalTimeLog/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
+              BillingCCM.push({"id":BillingCCM.length+1+90,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLog,"rpmbills":0,"cptcode":handlecptcode(handlecptcode(curr.cptcode)),"ccmbills":(Math.floor(totalTimeLog/1200)>3)?3:Math.floor(totalTimeLog/1200),"timeLeft":Math.floor((totalTimeLog/60).toFixed(3))%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":(totalTimeLog/60).toFixed(3),"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
             }
             else{
               let count=0
@@ -322,7 +337,7 @@ const Dashboard = (props) => {
                 }
               })
               if (count===0){
-                BillingCCM.push({"id":BillingCCM.length+1+90,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLog,"rpmbills":0,"cptcode":"99490","ccmbills":(Math.floor(totalTimeLog/1200)>3)?3:Math.floor(totalTimeLog/1200),"timeLeft":Math.floor(totalTimeLog/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
+                BillingCCM.push({"id":BillingCCM.length+1+90,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLog,"rpmbills":0,"cptcode":handlecptcode(handlecptcode(curr.cptcode)),"ccmbills":(Math.floor(totalTimeLog/1200)>3)?3:Math.floor(totalTimeLog/1200),"timeLeft":Math.floor((totalTimeLog/60).toFixed(3))%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":(totalTimeLog/60).toFixed(3),"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
                 console.log(bpdates)
               }
             }
@@ -331,7 +346,7 @@ const Dashboard = (props) => {
             // setOnetonine(onetonine+1)
             fiftynine.push(curr.userId);
             if(BillingCCM.length<1){
-              BillingCCM.push({"id":BillingCCM.length+1+90,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLog,"rpmbills":0,"cptcode":"99490,99439","ccmbills":(Math.floor(totalTimeLog/1200)>3)?3:Math.floor(totalTimeLog/1200),"timeLeft":Math.floor(totalTimeLog/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
+              BillingCCM.push({"id":BillingCCM.length+1+90,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLog,"rpmbills":0,"cptcode":handlecptcode(handlecptcode(curr.cptcode)),"ccmbills":(Math.floor(totalTimeLog/1200)>3)?3:Math.floor(totalTimeLog/1200),"timeLeft":Math.floor((totalTimeLog/60).toFixed(3))%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":(totalTimeLog/60).toFixed(3),"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
               console.log(bpdates)
             }
             else{
@@ -343,7 +358,7 @@ const Dashboard = (props) => {
                 }
               })
               if (count===0){
-                BillingCCM.push({"id":BillingCCM.length+1+90,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLog,"rpmbills":0,"cptcode":"99490,99439","ccmbills":(Math.floor(totalTimeLog/1200)>3)?3:Math.floor(totalTimeLog/1200),"timeLeft":Math.floor(totalTimeLog/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
+                BillingCCM.push({"id":BillingCCM.length+1+90,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLog,"rpmbills":0,"cptcode":handlecptcode(handlecptcode(curr.cptcode)),"ccmbills":(Math.floor(totalTimeLog/1200)>3)?3:Math.floor(totalTimeLog/1200),"timeLeft":Math.floor((totalTimeLog/60).toFixed(3))%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":(totalTimeLog/60).toFixed(3),"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
                 
               }
             }
@@ -353,8 +368,8 @@ const Dashboard = (props) => {
             // setOnetonine(onetonine+1)
             sixty.push(curr.userId);
             if(BillingCCM.length<1){
-              BillingCCM.push({"id":BillingCCM.length+1+90,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLog,"rpmbills":0,"cptcode":"99490,99439,99439","ccmbills":(Math.floor(totalTimeLog/1200)>3)?3:Math.floor(totalTimeLog/1200),"timeLeft":Math.floor(totalTimeLog/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
-            console.log("ridlley 5764",Math.floor(totalTimeLog/60)%20,Math.floor(totalTimeLog/60),totalTimeLog,totalTimeLog/60)
+              BillingCCM.push({"id":BillingCCM.length+1+90,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLog,"rpmbills":0,"cptcode":handlecptcode(handlecptcode(curr.cptcode)),"ccmbills":(Math.floor(totalTimeLog/1200)>3)?3:Math.floor(totalTimeLog/1200),"timeLeft":0,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":(totalTimeLog/60).toFixed(3),"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
+            console.log("ridlley 5764",Math.floor((totalTimeLog/60).toFixed(3))%20,Math.floor((totalTimeLog/60).toFixed(3)),totalTimeLog,(totalTimeLog/60).toFixed(3))
             }
             else{
               let count=0
@@ -365,7 +380,7 @@ const Dashboard = (props) => {
                 }
               })
               if (count===0){
-                BillingCCM.push({"id":BillingCCM.length+1+90,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLog,"rpmbills":0,"cptcode":"99490,99439,99439","ccmbills":(Math.floor(totalTimeLog/1200)>3)?3:Math.floor(totalTimeLog/1200),"timeLeft":Math.floor(totalTimeLog/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
+                BillingCCM.push({"id":BillingCCM.length+1+90,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLog,"rpmbills":0,"cptcode":handlecptcode(handlecptcode(curr.cptcode)),"ccmbills":(Math.floor(totalTimeLog/1200)>3)?3:Math.floor(totalTimeLog/1200),"timeLeft":0,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":(totalTimeLog/60).toFixed(3),"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
                 
               }
             }
@@ -385,7 +400,7 @@ const Dashboard = (props) => {
             // setOnetonine(onetonine+1)
             thirtynine1.push(curr.userId);
             if(BillingRPM.length<1){
-              BillingRPM.push({"id":BillingRPM.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"ccmbills":0,"cptcode":"99457","rpmbills":(Math.floor(totalTimeLogForDataReview/1200)>3)?3:Math.floor(totalTimeLogForDataReview/1200),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
+              BillingRPM.push({"id":BillingRPM.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"ccmbills":0,"cptcode":handlecptcode(handlecptcode(curr.cptcode)),"rpmbills":(Math.floor(totalTimeLogForDataReview/1200)>3)?3:Math.floor(totalTimeLogForDataReview/1200),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":(totalTimeLog/60).toFixed(3),"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
             }
             else{
               let count=0
@@ -396,7 +411,7 @@ const Dashboard = (props) => {
                 }
               })
               if (count===0){
-                BillingRPM.push({"id":BillingRPM.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"ccmbills":0,"cptcode":"99457","rpmbills":(Math.floor(totalTimeLogForDataReview/1200)>3)?3:Math.floor(totalTimeLogForDataReview/1200),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
+                BillingRPM.push({"id":BillingRPM.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"ccmbills":0,"cptcode":handlecptcode(handlecptcode(curr.cptcode)),"rpmbills":(Math.floor(totalTimeLogForDataReview/1200)>3)?3:Math.floor(totalTimeLogForDataReview/1200),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":(totalTimeLog/60).toFixed(3),"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
                 console.log(bpdates)
               }
             }
@@ -404,7 +419,7 @@ const Dashboard = (props) => {
             // setOnetonine(onetonine+1)
             fiftynine1.push(curr.userId);
             if(BillingRPM.length<1){
-              BillingRPM.push({"id":BillingRPM.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"ccmbills":0,"cptcode":"99457,99458","rpmbills":(Math.floor(totalTimeLogForDataReview/1200)>3)?3:Math.floor(totalTimeLogForDataReview/1200),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
+              BillingRPM.push({"id":BillingRPM.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"ccmbills":0,"cptcode":handlecptcode(handlecptcode(curr.cptcode)),"rpmbills":(Math.floor(totalTimeLogForDataReview/1200)>3)?3:Math.floor(totalTimeLogForDataReview/1200),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":(totalTimeLog/60).toFixed(3),"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
               console.log(bpdates)
             }
             else{
@@ -416,7 +431,7 @@ const Dashboard = (props) => {
                 }
               })
               if (count===0){
-                BillingRPM.push({"id":BillingRPM.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"ccmbills":0,"cptcode":"99457,99458","rpmbills":(Math.floor(totalTimeLogForDataReview/1200)>3)?3:Math.floor(totalTimeLogForDataReview/1200),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
+                BillingRPM.push({"id":BillingRPM.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"ccmbills":0,"cptcode":handlecptcode(handlecptcode(curr.cptcode)),"rpmbills":(Math.floor(totalTimeLogForDataReview/1200)>3)?3:Math.floor(totalTimeLogForDataReview/1200),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":(totalTimeLog/60).toFixed(3),"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
                 
               }
             }
@@ -428,7 +443,7 @@ const Dashboard = (props) => {
             console.log("sixty1",curr)
             sixty1.push(curr.userId);
             if(BillingRPM.length<1){
-              BillingRPM.push({"id":BillingRPM.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"ccmbills":0,"cptcode":"99457,99458,99458","rpmbills":(Math.floor(totalTimeLogForDataReview/1200)>3)?3:Math.floor(totalTimeLogForDataReview/1200),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
+              BillingRPM.push({"id":BillingRPM.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"ccmbills":0,"cptcode":handlecptcode(handlecptcode(curr.cptcode)),"rpmbills":(Math.floor(totalTimeLogForDataReview/1200)>3)?3:Math.floor(totalTimeLogForDataReview/1200),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":(totalTimeLog/60).toFixed(3),"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
             console.log("ridlley 5764",Math.floor(totalTimeLogForDataReview/60)%20,Math.floor(totalTimeLogForDataReview/60),totalTimeLogForDataReview,totalTimeLogForDataReview/60)
             }
             else{
@@ -440,7 +455,7 @@ const Dashboard = (props) => {
                 }
               })
               if (count===0){
-                BillingRPM.push({"id":BillingRPM.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"ccmbills":0,"cptcode":"99457,99458,99458","rpmbills":(Math.floor(totalTimeLogForDataReview/1200)>3)?3:Math.floor(totalTimeLogForDataReview/1200),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":totalTimeLog/60,"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
+                BillingRPM.push({"id":BillingRPM.length+1,"userId":curr.userId,"name":curr.name,"totalTime":totalTimeLogForDataReview,"ccmbills":0,"cptcode":handlecptcode(handlecptcode(curr.cptcode)),"rpmbills":(Math.floor(totalTimeLogForDataReview/1200)>3)?3:Math.floor(totalTimeLogForDataReview/1200),"timeLeft":Math.floor(totalTimeLogForDataReview/60)%20,"RPM Mins":totalTimeLogForDataReview/60,"CCM Mins":(totalTimeLog/60).toFixed(3),"Days Reading": [...new Set(bpdates)].length,"diagnosisId":curr.diagnosisId,"otp":curr.otp})
                 console.log("ridlley 5764",Math.floor(totalTimeLogForDataReview/60)%20,Math.floor(totalTimeLogForDataReview/60),totalTimeLogForDataReview,totalTimeLogForDataReview/60,[...new Set(bpdates)].length,bpdates)
               }
             }
@@ -706,12 +721,12 @@ const Dashboard = (props) => {
 <tr>
 <th  width="8%">Active</th>
 <th width="20%">Patients with Devices	</th>
-<th width="20%">Patients taking Readings</th>
+<th width="20%">Patients Taking Readings</th>
 
 <th width="8%">16+ Days</th>
 <th  width="8%">11-15 Days</th>
 <th width="8%">6-10 Days</th>
-<th  width="8%">1-5 Days</th>
+<th  width="8%">0-5 Days</th>
 <th width="8%">Inactive
 </th>
 </tr>

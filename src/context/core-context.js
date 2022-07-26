@@ -391,6 +391,7 @@ export const CoreContextProvider = (props) => {
 
 
           patient.mobilePhone = p.mobilePhone;
+          patient.cptcode = p.cptCode1;
           patient.reading = p.reading;
           patient.otp = p.otp;
           patient.workPhone = p.workPhone;
@@ -561,6 +562,7 @@ export const CoreContextProvider = (props) => {
 
           patient.mobilePhone = p.mobilePhone;
           patient.reading = p.reading;
+          patient.cptcode = p.cptCode1;
           patient.otp = p.otp;
           patient.workPhone = p.workPhone;
           patient.userId = p.userId;
@@ -1453,7 +1455,7 @@ deviceType:patient.deviceType,
     city,
     state,
     diagnosisId,
-    patient,program
+    patient,program,cptcode
   ) => {
     let providername = fetchNameFromId(provider, providerOptions);
     
@@ -1554,7 +1556,8 @@ userType: patient.userType,
 weight: patient.Weight,
 workPhone: workPhone,
 zip: zip,
-program:program
+program:program,
+cptCode1:JSON.stringify(cptcode)
     }
     
     await axios
@@ -1866,7 +1869,8 @@ zip:patient.zip,
 deviceId:patient.deviceId,
 deviceStatus:patient.deviceStatus,
 deviceType:patient.deviceType,
-program:patient.program
+program:patient.program,
+cptCode1:patient.cptcode
  }
 
  await axios
@@ -1970,7 +1974,8 @@ zip:patient.zip,
 deviceId:patient.deviceId,
 deviceStatus:patient.deviceStatus,
 deviceType:patient.deviceType,
-program:patient.program
+program:patient.program,
+cptCode1:patient.cptcode
  }
 
  await axios
@@ -2362,7 +2367,9 @@ deviceType:patient.deviceType,
             city: city,
             st: state,
             diagnosisId: diagnosisId,
-            program:program
+            program:program,
+            reading:"true",
+            otp:"false"
           });
 
           

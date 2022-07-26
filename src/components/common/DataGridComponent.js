@@ -30,7 +30,8 @@ const useStyles = makeStyles((theme) => ({
           maxHeight:"none !important",
           whiteSpace:"normal",
           textAlign:"center",
-          paddingTop:"1em"
+          paddingTop:"1em",
+          paddingBottom:"1em"
       },
       "& .MuiDataGrid-row.Mui-odd": {
         backgroundColor: "#e9e9e9",

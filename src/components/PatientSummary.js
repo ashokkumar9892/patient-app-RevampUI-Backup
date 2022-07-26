@@ -1885,7 +1885,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                 {" "}
                 <Trash />
               </a>
-            </td>:<td>Access Denied</td>}x
+            </td>:<td>Access Denied</td>}
           </tr>
         );
       });
@@ -2054,11 +2054,11 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
   );
 
   const renderAddModifyFlags = () => {
-    if (coreContext.patient)
+    if (coreContext.patientsForPatient.length>0)
       return (
         <div className="row">
 <div className="col-xl-12 mb-2 mt-2">	
-	<p className="mb-0">Flags :  <i className="bi-pencil-square"></i></p>
+	<p className="mb-0">Flags : {(coreContext.patientsForPatient[0].reading=="true")?<img src="https://i.im.ge/2022/07/25/FLR13r.png" width="40em"/>:""} </p>
 
 </div>
 	</div>
@@ -2692,26 +2692,9 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
             <div className="card">
               <h4 className="card-header">Devices</h4>
               <div className="card-body">
-                <div className="row">
-                  <div className="col-md-3">Enable Measurements</div>
-                  <div className="col-md-3">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Select one to add"
-                    />
-                  </div>
-                </div>
-                <br />
-
-                <table className="table table-bordered table-sm mt-4">
-                  <th>Enabled Metric</th>
-                  <th>Description</th>
-                  <th>Device</th>
-                  <th>Actions</th>
-                </table>
-                <br />
-
+                
+                  
+                
                 <div className="row">
                   <div className="col-md-8">
                     <h6>
@@ -2771,7 +2754,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                     </form>
                   </div>
                 </div>
-                <div className="card" style={{ backgroundColor: "#b8b133" }}>
+                {/* <div className="card" style={{ backgroundColor: "#b8b133" }}>
                   <div
                     className="card-body"
                     onClick={() => setShowNotesTextBox(true)}>
@@ -2779,15 +2762,8 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                     This patient has not any supplied devices to their portal.
                     You will NOT be able to bill for 99453 or 99454.{" "}
                   </div>
-                </div>
+                </div> */}
 
-                {/* <table className='table table-bordered table-sm mt-4'>
-                                <th>Device</th>
-                                <th>Device ID</th>
-                                <th>Connected At</th>
-                                <th>Last Measurement At</th>
-                                <th>Actions</th>
-                            </table> */}
               </div>
             </div>
           </TabPanel>

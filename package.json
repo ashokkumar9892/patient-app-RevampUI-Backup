@@ -52,6 +52,7 @@
     "react-ion-slider": "^1.0.17",
     "react-linechart": "^1.1.12",
     "react-loader-spinner": "^4.0.0",
+    "react-multi-select-component": "^4.3.0",
     "react-rangeslider": "^2.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",

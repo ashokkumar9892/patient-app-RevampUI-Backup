@@ -18,6 +18,7 @@ import {
 
 import Input from "./common/Input";
 import * as React from "react";
+import { MultiSelect } from "react-multi-select-component";
 import Switch from "@material-ui/core/Switch";
 import moment from 'moment';
 
@@ -54,6 +55,7 @@ const Patients = (props) => {
   const [birthDate, setBirthDate] = useState("");
   const [phone, setPhone] = useState("");
   const [program, setProgram] = useState("");
+  const [cptcode, setcptcode] = useState([]);
   //const [select, setSelection] = React.useState([]);
   const [selectionModel, setSelectionModel] = React.useState([]);
   const [height, setHeight] = useState("");
@@ -63,7 +65,7 @@ const Patients = (props) => {
   const [message, setMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [actionPatients, setActionPatients] = useState([]);
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(true);
   const [dcount, setdcount] = useState([""]);
   const [complex, setComplex] = useState();
 
@@ -128,7 +130,7 @@ const Patients = (props) => {
     setuserType(userType);
     const userId = localStorage.getItem("userId");
     if (checked) {
-      coreContext.fetchPatientListfromApi(userType, userId, checked);
+      coreContext.fetchPatientListfromApi(userType, userId, !checked);
     } else {
       coreContext.fetchPatientListfromApi(userType, userId);
     }
@@ -169,7 +171,8 @@ const Patients = (props) => {
       state,
       newId.substring(1),
       updateId,
-      program
+      program,
+      cptcode
 
     );
     coreContext.cleanup1();
@@ -180,6 +183,9 @@ const Patients = (props) => {
   const fetchCareCoordinator = () => {
     coreContext.fetchCareCoordinator();
   };
+  const handlecptcode=(value)=>{
+    console.log("cpt",value)
+  }
 
   useEffect(fetchCareCoordinator, []);
 
@@ -243,6 +249,7 @@ const Patients = (props) => {
     setZip(patient.zip);
     setCity(patient.city);
     setState(patient.state);
+    setcptcode(JSON.parse(patient.cptcode))
 
     if (patient.ProviderName === undefined) {
       patient.ProviderName = "Select Provider";
@@ -346,7 +353,7 @@ const Patients = (props) => {
     let userId = localStorage.getItem("userId");
     const userType = localStorage.getItem("userType");
     if (isactiveusrs)
-      coreContext.fetchPatientListfromApi(userType, userId, isactiveusrs);
+      coreContext.fetchPatientListfromApi(userType, userId, !isactiveusrs);
   };
 
   useEffect(fetchPatients, [coreContext.patients.length]);
@@ -511,7 +518,7 @@ const Patients = (props) => {
       headerName: "Inconsistent",
       
       editable: false,
-      width: 105,
+      flex:1,
       renderCell: (params) => (
         
         <>
@@ -1087,6 +1094,21 @@ const Patients = (props) => {
     
       
       </select>
+      <label className="mt-2 mb-0">CPT Code</label>
+      <MultiSelect
+      
+        options={[
+          { label: "99457", value: "99457" },
+          { label: "99458", value: "99458" },
+          { label: "99490", value: "99490"},
+          { label: "99439", value: "99439" },
+          { label: "99487", value: "99487" },
+          { label: "99489", value: "99489"},
+        ]}
+        value={cptcode}
+        onChange={setcptcode}
+        labelledBy="Select"
+      />
       
       
               </div>
