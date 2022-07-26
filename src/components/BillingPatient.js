@@ -18,11 +18,10 @@ import moment from 'moment';
 import DataGridComponent from "./common/DataGridComponent";
 
 import {
-  DataGrid,
-  GridColDef,
-  GridApi,
-  GridCellValue,
-} from "@material-ui/data-grid";
+ 
+  Tooltip
+ 
+} from "@material-ui/core";
 
 import Loader from "react-loader-spinner";
 import { render } from "react-dom";
@@ -69,6 +68,17 @@ const updateotp=(id,otp)=>{
   
 
 }
+const handlecptcode=(cpt)=>{
+  var obj=JSON.parse(cpt)
+  var str=""
+
+  for(var i=0;i<obj.length;i++){
+    str=str+[...new Set(Object.values(obj[i]))]
+  }
+  
+  return str
+
+}
   const columns = [
     {
       field: "name",
@@ -82,7 +92,7 @@ const updateotp=(id,otp)=>{
       field: "rpmbills",
       headerName: "RPM Bills",
       editable: false,
-      width: 200,
+      width: 110,
         renderCell: (params) => (
         (params.row.value>3)?3:params.row.value
         )
@@ -91,7 +101,7 @@ const updateotp=(id,otp)=>{
       field: "ccmbills",
       headerName: "CCM Bills",
       editable: false,
-      width: 200,
+      width: 110,
       renderCell: (params) => (
         (params.row.value>3)?3:params.row.value
         )
@@ -148,7 +158,16 @@ const updateotp=(id,otp)=>{
       headerName: "Diagnosis",
       
       editable: false,
-      width: 150,
+      width: 500,
+      renderCell: (params) =>  (
+        <>      
+       {params.row.diagnosisId.split(",").map((curr)=><Tooltip title={"diadjshdsfdfdkgdkdgkghkgdhkgdhkgkhgdkhgkhddgkh"+5}>
+            <p>{curr} , </p>
+          </Tooltip>)}
+          </>
+        
+        
+       ),
     }
     
 
