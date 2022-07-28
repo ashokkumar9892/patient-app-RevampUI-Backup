@@ -41,6 +41,55 @@ const BillingPatient = (props) => {
   const [rows,setrows]=useState(JSON.parse(localStorage.getItem("B_patient")));
   const [checked, setChecked] = useState(false);
   const [complex, setComplex] = useState();
+  const diag=["Select Diagnosis Id","D45- Polycythemia vera",
+  "G47.33- Obstructive sleep apnea (adult) (pediatric)",
+  "I10- Essential (primary) hypertension","K219",
+  "I13.10- Hypertensive heart and chronic kidney disease without heart",
+  "failure ",
+  "I509- Heart failure, unspecified",
+  "E03.9- Hypothyroidism, unspecified",
+  "E11.65- Type 2 diabetes mellitus with hyperglycemia",
+  "E11.9- Type 2 diabetes mellitus without complications",
+  "E61.1- Iron deficiency",
+  "E66.3- Overweight",
+  "E66.01- Morbid (severe) obesity due to excess calories",
+  "E66.9- Obesity, unspecified",
+  "E78.5- Hyperlipidemia, unspecified",
+  "F33.2- Major depressive disorder, recurrent severe without psychotic",
+  "features",
+  "F41.1- Generalized anxiety disorder",
+  "H10.9- Unspecified conjunctivitis",
+  "J32.4- Chronic pansinusitis",
+  "J45.40- Moderate persistent asthma, uncomplicated",
+  "J45.41- Moderate persistent asthma with (acute) exacerbation",
+  "K58.2- Mixed irritable bowel syndrome",
+  "M25.562- Pain in left knee",
+  "M54.50- Low back pain, unspecified",
+  "M79.7- Fibromyalgia",
+  "N92.5- Other specified irregular menstruation",
+  "R03.0- Elevated blood-pressure reading, without diagnosis of",
+  "hypertension",
+  "R53.83- Other fatigue",
+  "R73.03- Prediabetes",
+  "Z68.41- Body mass index [BMI] 40.0-44.9, adult",
+  "Z68.44- Body mass index [BMI] 60.0-69.9, adult",
+  "K580- unspecified",
+"N182- Chronic kidney disease, stage 2 (mild)",
+"J449- Chronic obstructive pulmonary disease",
+"E1140- Type 2 diabetes mellitus with diabetic neuropathy",
+"E11.51- Type 2 diabetes mellitus with diabetic peripheral angiopathy without gangrene",
+"I739- Peripheral vascular disease, unspecified",
+"I25.10- Atherosclerotic heart disease of native coronary artery without angina pectoris",
+"G4709- Other insomnia",
+"I639- unspecified",
+"E10.9- unspecified",
+"L67- unspecified",
+"L67.1- unspecified",
+"L82.1- unspecified",
+"E1132999 - unspecified",
+"E663- unspecified",
+"N925 - unspecified",
+"H109 - unspecified"]
   const coreContext = useContext(CoreContext);
 const onToggleChangeActiveUsers = (event) => {
   setChecked(event.target.checked);
@@ -161,7 +210,7 @@ const handlecptcode=(cpt)=>{
       width: 500,
       renderCell: (params) =>  (
         <>      
-       {params.row.diagnosisId.split(",").map((curr)=><Tooltip title={"diadjshdsfdfdkgdkdgkghkgdhkgdhkgkhgdkhgkhddgkh"+5}>
+       {params.row.diagnosisId.split(",").map((curr)=><Tooltip title={diag.filter((curr1)=>curr1.includes(curr))[0]}>
             <p>{curr} , </p>
           </Tooltip>)}
           </>

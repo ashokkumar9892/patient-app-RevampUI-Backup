@@ -15,6 +15,7 @@ export const CoreContextProvider = (props) => {
   const [wsData, setwsData] = useState([]);
   const [adminthresold, setadminthresold] = useState([]);
   const [notifications,setNotifications]=useState([]);
+  const [ChatLink,setChatLink]=useState([]);
 
   const [weightData, setweightData] = useState([]);
   const [weightDataForPatient, setweightDataForPatient] = useState([]);
@@ -679,6 +680,42 @@ export const CoreContextProvider = (props) => {
         });
          
         setPatientsForPatient(ps);
+      })
+      .catch(() => {
+        relogin();
+      });
+    }
+  };
+  const fetchChatLink = async (receiver) => {
+    
+    const token = localStorage.getItem("app_jwt");
+    if(token){
+
+    
+    var data={ReceiverId:receiver};
+
+    
+
+    await axios
+    .get(
+      apiUrl2 +
+        "chat",
+        { params: data },
+        {
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
+        },
+        
+         
+    )
+      .then((response) => {
+        // setJwt(response.data);
+        //  console.log(response.data);
+        const patients = response.data;
+        
+        setChatLink(response.data)
       })
       .catch(() => {
         relogin();
@@ -2177,6 +2214,7 @@ deviceType:patient.deviceType,
         }
       });
   };
+  
   const DeleteDeviceData = (id,patientId,userName) => {
     setdeviceDataForPatient([]);
     const token = localStorage.getItem("app_jwt");
@@ -4403,10 +4441,11 @@ apiUrl2 +
       deviceDataForPatient,
       ActivatePatient,
       DeleteDoctor,
+      fetchChatLink,
       cleanup1,
       setdoctorData,
       DeleteCareCoordinator,
-      DeleteCoach,UpdateNotes
+      DeleteCoach,UpdateNotes,ChatLink
       }}>
       {props.children}
     </CoreContext.Provider>

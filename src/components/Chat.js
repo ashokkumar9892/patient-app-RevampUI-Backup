@@ -45,35 +45,7 @@ const Any = () => {
     setcount(1);
     const token = localStorage.getItem("app_jwt");
     
-      const data = {
-      
-        SenderSK: "1351",
-        ReceiverSK: "70",
-        AuthToken: localStorage.getItem("app_jwt"),
-
-    };
-  
-      axios
-        .post(chatHistoryUrl, data, {
-          headers: {
-            Accept: "application/json, text/plain, */*",
-            // "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-        })
-        .then((response) => {
-            console.log(response.data.chatlist)
-            setchat(response.data.chatlist)
-            if(response.data){
-                response.data.chatlist.map((curr)=>
-                (curr.senderId.includes("PATIENT"))?addResponseMessage(curr.message):addUserMessage(curr.message)
-                
-                )
-            }
-            setcount(0);
-         
-        });
-   
+     coreContext.fetchChatLink(1375,70)
   }
 
   const handleNewUserMessage=(newMessage)=>{
@@ -85,7 +57,7 @@ const Any = () => {
 const sendmessage=()=>{
   var req = 
 {   SenderSK: "DOCTOR_70" ,   //// PATIENT_Id from PatientTable  
-ReceiverSK: "PATIENT_1351", Message: newMessage, MessageType: "Text", AuthToken:token }
+ReceiverSK: "PATIENT_1375", Message: newMessage, MessageType: "Text", AuthToken:token }
 
 connection.invoke("SendMessages", req).catch(function (err) {
   return console.error(err.toString())
