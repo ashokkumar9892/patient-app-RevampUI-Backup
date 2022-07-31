@@ -292,10 +292,10 @@ const Dashboard = (props) => {
         if(bpdates.length>=6 && bpdates.length<=10 && curr.program.includes("RPM")){
           RPM6.push(curr.userId+","+bpdates.length)
         }
-        if(bpdates.length>=1 && bpdates.length<=5 && curr.program.includes("RPM")){
+        if(bpdates.length>=0 && bpdates.length<=5 && curr.program.includes("RPM")){
           RPM1.push(curr.userId+","+bpdates.length)
         }
-        if(bpdates.length<1 && curr.program.includes("RPM")){
+        if(bpdates.length==0 && curr.program.includes("RPM")==false){
           RPM0.push(curr.userId+","+bpdates.length)
         }
         

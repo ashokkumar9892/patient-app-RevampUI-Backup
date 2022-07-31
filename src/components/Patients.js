@@ -55,7 +55,8 @@ const Patients = (props) => {
   const [birthDate, setBirthDate] = useState("");
   const [phone, setPhone] = useState("");
   const [program, setProgram] = useState("");
-  const [cptcode, setcptcode] = useState([]);
+  const [cptcodeforrpm, setcptcodeforrpm] = useState([]);
+  const [cptcodeforccm, setcptcodeforccm] = useState([]);
   //const [select, setSelection] = React.useState([]);
   const [selectionModel, setSelectionModel] = React.useState([]);
   const [height, setHeight] = useState("");
@@ -132,7 +133,7 @@ const Patients = (props) => {
     if (checked) {
       coreContext.fetchPatientListfromApi(userType, userId, !checked);
     } else {
-      coreContext.fetchPatientListfromApi(userType, userId);
+      coreContext.fetchPatientListfromApi(userType, userId,!checked);
     }
   };
 
@@ -172,7 +173,8 @@ const Patients = (props) => {
       newId.substring(1),
       updateId,
       program,
-      cptcode
+      cptcodeforrpm,
+      cptcodeforccm
 
     );
     coreContext.cleanup1();
@@ -249,7 +251,8 @@ const Patients = (props) => {
     setZip(patient.zip);
     setCity(patient.city);
     setState(patient.state);
-    setcptcode(JSON.parse(patient.cptcode))
+    setcptcodeforrpm(JSON.parse(patient.cptcodeforrpm))
+    setcptcodeforccm(JSON.parse(patient.cptcodeforccm))
 
     if (patient.ProviderName === undefined) {
       patient.ProviderName = "Select Provider";
@@ -1094,7 +1097,7 @@ const Patients = (props) => {
     
       
       </select>
-      <label className="mt-2 mb-0">CPT Code</label>
+      <label className="mt-2 mb-0">CPT Code For RPM</label>
       <MultiSelect
       
         options={[
@@ -1105,8 +1108,24 @@ const Patients = (props) => {
           { label: "99487", value: "99487" },
           { label: "99489", value: "99489"},
         ]}
-        value={cptcode}
-        onChange={setcptcode}
+        value={cptcodeforrpm}
+        onChange={setcptcodeforrpm}
+        labelledBy="Select"
+      />
+      
+      <label className="mt-2 mb-0">CPT Code For CCM</label>
+      <MultiSelect
+      
+        options={[
+          { label: "99457", value: "99457" },
+          { label: "99458", value: "99458" },
+          { label: "99490", value: "99490"},
+          { label: "99439", value: "99439" },
+          { label: "99487", value: "99487" },
+          { label: "99489", value: "99489"},
+        ]}
+        value={cptcodeforccm}
+        onChange={setcptcodeforccm}
         labelledBy="Select"
       />
       

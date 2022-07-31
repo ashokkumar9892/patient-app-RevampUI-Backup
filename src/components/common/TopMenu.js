@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext,useCallback } from "react";
 import {
   Navbar,
   Nav,
@@ -131,7 +131,8 @@ const TopMenu = ({ changestyle, showSidebar }) => {
   const [birthDate, setBirthDate] = useState("");
   const [gender, setGender] = useState("");
   const [language, setLanguage] = useState("");
-  const [cptcode, setcptcode] = useState([]);
+  const [cptcodeforrpm, setcptcodeforrpm] = useState([]);
+  const [cptcodeforccm, setcptcodeforccm] = useState([]);
   const [ehrId, setEhrId] = useState("");
   const [dcount, setdcount] = useState([""]);
   const [diagnosisId, setDiagnosisId] = useState("");
@@ -539,7 +540,7 @@ const handlechangeprovider=(p)=>{
       ppname,
       newId.substring(1),
       program,
-      istest,cptcode
+      istest,cptcodeforccm,cptcodeforrpm
     );
     handleClose();
   };
@@ -778,7 +779,7 @@ const handlechangeprovider=(p)=>{
       )
 
   }
-  const rendernotifications=()=>{
+  const rendernotifications=useCallback(()=>{
     return(<>
     
     <div className="dropdown-menu dropdown-menu-end wide notification-dropdown scroll-out" id="notifications">
@@ -811,10 +812,10 @@ const handlechangeprovider=(p)=>{
 </div>
 </div>
     </>)
-  }
+  },[])
   //const count=React.useMemo({notificationValue.length,[notificationValue.length])
-    const count=React.useMemo(()=>rendernotificationlength(),[notificationValue.length])
-    const count1=React.useMemo(()=>rendernotifications(),[notificationValue.length])
+    const count=React.useMemo(()=>rendernotificationlength(),[[...new Set(notificationValue)]])
+    const count1=React.useMemo(()=>rendernotifications(),[[...new Set(notificationValue)]])
     useEffect(() => {
    
       return () => {
@@ -926,7 +927,7 @@ const handlechangeprovider=(p)=>{
 <span className="notificaion-show badge bg-danger">{notificationValue.length}</span>
 </div>
 </Link>
-{count1}
+{rendernotifications()}
 </li>:null}
 	
 	
@@ -1258,7 +1259,7 @@ maxLength="50"
               </Col>
               <Col>
                 <Form.Group>
-                  <label className="mt-2">CPT Code</label>
+                  <label className="mt-2">CPT Code For CCM</label>
                
                   <MultiSelect
       
@@ -1270,8 +1271,28 @@ maxLength="50"
           { label: "99487", value: "99487" },
           { label: "99489", value: "99489"},
         ]}
-        value={cptcode}
-        onChange={setcptcode}
+        value={cptcodeforccm}
+        onChange={setcptcodeforccm}
+        labelledBy="Select"
+      />
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group>
+                  <label className="mt-2">CPT Code For RPM</label>
+               
+                  <MultiSelect
+      
+        options={[
+          { label: "99457", value: "99457" },
+          { label: "99458", value: "99458" },
+          { label: "99490", value: "99490"},
+          { label: "99439", value: "99439" },
+          { label: "99487", value: "99487" },
+          { label: "99489", value: "99489"},
+        ]}
+        value={cptcodeforrpm}
+        onChange={setcptcodeforrpm}
         labelledBy="Select"
       />
                 </Form.Group>
