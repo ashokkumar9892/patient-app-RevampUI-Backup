@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState, useContext,useCallback } from "react";
+import { Autocomplete } from '@material-ui/lab';
+
 import {
   Navbar,
   Nav,
@@ -280,10 +282,17 @@ date.setHours(0,0,0,0)
                   if(coreContext.notifications.includes(patient.name+"~"+patient.userId+"~"+bp.diastolic+"~"+Moment(bp.MeasurementDateTime).format(
                     "MM-DD-YYYY hh:mm A"
                   )+"~Diastolic")===false){
-                    notificationValue.push({"value":patient.name+"~"+patient.userId+"~"+bp.diastolic+"~"+Moment(bp.MeasurementDateTime).format(
+                    if (Object.values(notificationValue).indexOf(patient.name+"~"+patient.userId+"~"+bp.diastolic+"~"+Moment(bp.MeasurementDateTime).format(
                       "MM-DD-YYYY hh:mm A"
-                    )+"~Diastolic","date":bp.MeasurementDateTime})
-  
+                    )+"~Diastolic") > -1) {
+
+                    }else{
+                      notificationValue.push({"value":patient.name+"~"+patient.userId+"~"+bp.diastolic+"~"+Moment(bp.MeasurementDateTime).format(
+                        "MM-DD-YYYY hh:mm A"
+                      )+"~Diastolic","date":bp.MeasurementDateTime})
+    
+                    }
+                   
                   }
                   
                 }
@@ -296,9 +305,17 @@ date.setHours(0,0,0,0)
                   if(coreContext.notifications.includes(patient.name+"~"+patient.userId+"~"+bp.systolic+"~"+Moment(bp.MeasurementDateTime).format(
                     "MM-DD-YYYY hh:mm A"
                   )+"~Systolic")===false){
-                    notificationValue.push({"value":patient.name+"~"+patient.userId+"~"+bp.systolic+"~"+Moment(bp.MeasurementDateTime).format(
+                    if (Object.values(notificationValue
+                      ).indexOf(patient.name+"~"+patient.userId+"~"+bp.systolic+"~"+Moment(bp.MeasurementDateTime).format(
                       "MM-DD-YYYY hh:mm A"
-                    )+"~Systolic","date":bp.MeasurementDateTime})
+                    )+"~Systolic") > -1) {}
+                    else{
+                      notificationValue.push({"value":patient.name+"~"+patient.userId+"~"+bp.systolic+"~"+Moment(bp.MeasurementDateTime).format(
+                        "MM-DD-YYYY hh:mm A"
+                      )+"~Systolic","date":bp.MeasurementDateTime})
+                    }
+
+                    
                   }
                   
                 }
@@ -767,7 +784,7 @@ const handlechangeprovider=(p)=>{
       
       <Nav.Link to="#" >
               <span className="badge badge-danger" onClick={handleClickOpen}>
-                {notificationValue.length}
+                {[...new Set(notificationValue)].length}
                 
                 
 </span>
@@ -814,8 +831,8 @@ const handlechangeprovider=(p)=>{
     </>)
   },[])
   //const count=React.useMemo({notificationValue.length,[notificationValue.length])
-    const count=React.useMemo(()=>rendernotificationlength(),[[...new Set(notificationValue)]])
-    const count1=React.useMemo(()=>rendernotifications(),[[...new Set(notificationValue)]])
+    const count=React.useCallback(()=>rendernotificationlength(),[])
+    const count1=React.useCallback(()=>rendernotifications(),[])
     useEffect(() => {
    
       return () => {

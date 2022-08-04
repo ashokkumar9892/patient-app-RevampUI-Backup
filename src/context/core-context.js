@@ -16,6 +16,7 @@ export const CoreContextProvider = (props) => {
   const [adminthresold, setadminthresold] = useState([]);
   const [notifications,setNotifications]=useState([]);
   const [ChatLink,setChatLink]=useState([]);
+  const [BillingCodes,setBillingCodes]=useState([]);
 
   const [weightData, setweightData] = useState([]);
   const [weightDataForPatient, setweightDataForPatient] = useState([]);
@@ -91,7 +92,7 @@ export const CoreContextProvider = (props) => {
     "https://sqlapi.apatternplus.com/UserPool/api"
   );
   const [apiUrl2, setApiUrl2] = useState(
-    "https://sqlapi.apatternplus.com/"
+    "https://localhost:44320/"
   );
   const [userTable, setuserTable] = useState("UserDetailsDemo");
 
@@ -227,11 +228,6 @@ export const CoreContextProvider = (props) => {
           relogin();
         } else {
           alert("there is some error")
-          // localStorage.setItem("userType", response[0].UserType.s);
-
-          //  window.location.assign();
-
-          
         }
       });
   };
@@ -1934,6 +1930,75 @@ cptCode1:patient.cptcode
         }
       });
   };
+  const UpdateCPT = async(patient,ccm,rpm) => {
+    const token = localStorage.getItem("app_jwt");
+    const data={
+      id:patient.id,
+sk:patient.sk,
+activeStatus:"Active",
+carecoordinatorId:patient.careId,
+carecoordinatorName:patient.CareName,
+city:patient.city,
+coach:patient.CoachName,
+coachId:patient.coachId,
+connectionId:"",
+contactNo:patient.mobile,
+createdDate:patient.createdDate,
+diagnosisId:patient.diagnosisId,
+diastolic:patient.diastolic,
+dob:patient.dob,
+doctorId:patient.ProviderId,
+doctorName:patient.ProviderName,
+email:patient.email,
+firstName:patient.firstName,
+gender:patient.gender,
+gsI1PK:"patient",
+gsI1SK:patient.ProviderId,
+height:patient.height,
+lang:patient.language,
+lastName:patient.lastName,
+middleName:patient.middleName,
+mobilePhone:patient.mobile,
+notes:patient.notes,
+otp:patient.otp,
+profileImage:patient.profileImage,
+reading:patient.BMI,
+st:patient.st,
+street:patient.street,
+systolic:patient.systolic,
+userId:patient.userId,
+userName:patient.userName,
+userTimeZone:patient.userTimeZone,
+userType:patient.userType,
+weight:patient.weight,
+workPhone:patient.workPhone,
+zip:patient.zip,
+deviceId:patient.deviceId,
+deviceStatus:patient.deviceStatus,
+deviceType:patient.deviceType,
+program:patient.program,
+cptCodeForCCM:ccm,
+cptCodeForRPM:rpm,
+ }
+
+ await axios
+ .put(
+   apiUrl2 +
+     "patient",data,{
+     headers: {
+       'Content-Type': 'application/json',
+       'accept': 'text/plain'
+      }
+      
+     },
+      
+ )
+      .then((response) => {
+        if (response.status === 200) {
+          swal("success", "CPT Code Added Successfully.", "success");
+        }
+      });
+  };
   const DeleteDoctor = async(doctor) => {
   
    const data1 ={
@@ -2314,6 +2379,7 @@ deviceType:patient.deviceType,
       }
     });
   };
+  
   const add2=async(data,type)=>{
     await axios
     .post(
@@ -4183,6 +4249,36 @@ apiUrl2 +
         
       });
   };
+  const FetchBilligCode = async (userid) => {
+    //setNotifications([]);
+    const token = localStorage.getItem("app_jwt");
+    await axios
+    .get(
+      apiUrl2 +
+        "billing",
+        
+        {
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': 'text/plain'
+         }
+        },
+        
+         
+    )
+      .then((response) => {
+            const BillingData = response.data;
+        const notificationarray=[];
+        if(BillingData.length===0){
+          notificationarray.push("no data found")
+        }
+
+        setBillingCodes(BillingData)
+       // console.log(notificationarray,"notificationarray")
+        
+      });
+  };
+
 
 
   const UpdateTimeLog = async(
@@ -4455,7 +4551,8 @@ apiUrl2 +
       cleanup1,
       setdoctorData,
       DeleteCareCoordinator,
-      DeleteCoach,UpdateNotes,ChatLink
+      DeleteCoach,UpdateNotes,ChatLink,UpdateCPT,
+      FetchBilligCode,BillingCodes
       }}>
       {props.children}
     </CoreContext.Provider>

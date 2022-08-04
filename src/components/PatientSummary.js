@@ -90,6 +90,8 @@ const PatientSummary = (props) => {
   const [tddata, settddata] = useState([]);
   const [pointcolor, setpointcolor] = useState([]);
   const [mainThresold,setMainThresold]=useState();
+  const [cptcode,setcptcode]=useState([{cptcode:"99547",program:"RPM"}]);
+  const [row,setrow]=useState([]);
 
   const marks = [
     {
@@ -225,6 +227,23 @@ const PatientSummary = (props) => {
 
   useEffect(fetchCoach, []);
   useEffect(coreContext.setdefault, []);
+  useEffect(coreContext.FetchBilligCode, []);
+  console.log(coreContext.BillingCodes,"biling codess")
+
+  const handledcptcode = (index,val,prp) => {
+    if(prp==="cptcode"){
+      const value=[...cptcode]
+      value[index]= {...value[index],"cptcode":val}
+      setcptcode(value);
+      
+    }else{
+      const value=[...cptcode]
+      value[index]= {...value[index],"program":val}
+      setcptcode(value);
+    }
+    
+  };
+  
 
   const tt = [
     ...coreContext.providerData,
@@ -263,6 +282,65 @@ const PatientSummary = (props) => {
     coreContext.fetchDeviceDataForPatient("PATIENT_" + patientId, userName, "patient");
     
   };
+  const onCreateBill=(cptcode)=>{
+
+    var cptrpm="";
+    var cptccm="";
+    cptcode.map((curr)=>{
+      if(curr.program=="CCM"){
+        cptccm=cptccm+curr.cptcode+","
+      }
+      else{
+        cptrpm=cptrpm+curr.cptcode+","
+      }
+    })
+
+   coreContext.UpdateCPT(coreContext.patientsForPatient[0],cptccm,cptrpm);
+
+  }
+
+  const renderBilling=()=>{
+    
+    return(
+      <>
+      {cptcode.map((curr,index)=>{
+        return(
+          <>
+          <div className="row mt-2">
+          <div className="col-xl-3">
+          <label>CPT Code</label>
+          <input className="form-control" value={curr.cptcode} onChange={(e)=>{ handledcptcode(index,e.target.value,"cptcode")}}/>
+          
+        </div>
+        <div className="col-xl-3">
+        <label>Program</label>
+          <select className="form-select" value={curr.program} onChange={(e)=>{ handledcptcode(index,e.target.value,"program")}}>
+                                <option value="SelectUser">Select a Program</option>
+                                <option value="CCM">CCM</option>
+                                <option value="RPM">RPM</option>
+                                
+                              </select>
+          
+        </div>
+        </div>
+        </>
+        )
+      })
+     
+  }
+  <div className="col-xl-3">
+    
+  <button style={{marginTop:"1.5em"}} className="btn btn-primary" onClick={()=>setcptcode([...cptcode,{cptcode:"",program:""}])}>Add row</button>  
+  </div>
+  <div className="col-xl-3">
+    
+  <button style={{marginTop:"1.5em"}} className="btn btn-primary" onClick={()=>onCreateBill(cptcode)}>Create Bill</button>  
+  </div>
+      </>
+    )
+    
+
+  }
   const fetchtime =()=>{
     coreContext.fetchTimeLog("PATIENT_" + patientId)
   }
@@ -2058,7 +2136,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
       return (
         <div className="row">
 <div className="col-xl-12 mb-2 mt-2">	
-	<p className="mb-0">Flags : {(coreContext.patientsForPatient[0].reading=="true")?<img src="https://i.im.ge/2022/07/25/FLR13r.png" width="40em"/>:""} </p>
+	<p className="mb-0">Flags : {(coreContext.patientsForPatient[0].reading=="true")?<img src="https://i.im.ge/2022/07/25/FLR13r.png" width="25em"/>:""} </p>
 
 </div>
 	</div>
@@ -2260,6 +2338,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
             <Tab>Time Logs</Tab>
             <Tab >Devices</Tab>
             <Tab >Portal</Tab>
+            <Tab >Claims</Tab>
           </TabList>
 
          
@@ -2386,10 +2465,7 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
               <h4 className="card-header">Billing</h4>
               <div className="card-body ps-0 pe-0">
               <div className="row mb-4">
-		<div className="col-xl-3">
-			<label>Status Filter</label>
-			<select name="" className="form-select"><option value="">Ready to Bill</option></select>
-		</div>
+            
 			</div>
       <div className="row">
 		<div className="col-xl-12">
@@ -2773,6 +2849,17 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
               <div className="card-body">
                 Portal Status:{" "}
                 <Button variant="success">Enable Portal Status</Button>
+              </div>
+            </div>
+          </TabPanel>
+          <TabPanel>
+            <div className="card">
+              <h4 className="card-header">Billing</h4>
+              <div className="card-body p-2 pe-0">
+              <div className="row mb-4">
+              {renderBilling()}
+			</div>
+     
               </div>
             </div>
           </TabPanel>

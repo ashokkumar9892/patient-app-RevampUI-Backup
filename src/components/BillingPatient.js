@@ -162,10 +162,14 @@ const handlecptcode=(cpt)=>{
       
       editable: false,
       width: 150,
+      renderCell: (params) => (
+(params.row.value)?params.row.value:""
+
+      )
     },
     {
       field: "timeLeft",
-      headerName: "Time to Next Bill For RPM(mins)",
+      headerName: "Time to Next Bill(mins)",
       type: "number",
       editable: false,
       width: 250,
@@ -210,8 +214,8 @@ const handlecptcode=(cpt)=>{
       width: 500,
       renderCell: (params) =>  (
         <>      
-       {params.row.diagnosisId.split(",").map((curr)=><Tooltip title={diag.filter((curr1)=>curr1.includes(curr))[0]}>
-            <p>{curr} , </p>
+       {params.row.diagnosisId.split(",").map((curr,index)=><Tooltip title={diag.filter((curr1)=>curr1.includes(curr))[0]}>
+            <p>{(curr!=="")?curr:""}{(index+1!==params.row.diagnosisId.split(",").length && curr!=="")?" , ":""} </p>
           </Tooltip>)}
           </>
         
