@@ -173,8 +173,7 @@ const Patients = (props) => {
       newId.substring(1),
       updateId,
       program,
-      cptcodeforrpm,
-      cptcodeforccm
+      
 
     );
     coreContext.cleanup1();
@@ -251,8 +250,8 @@ const Patients = (props) => {
     setZip(patient.zip);
     setCity(patient.city);
     setState(patient.state);
-    setcptcodeforrpm(JSON.parse(patient.cptcodeforrpm))
-    setcptcodeforccm(JSON.parse(patient.cptcodeforccm))
+    // setcptcodeforrpm(JSON.parse(patient.cptcodeforrpm))
+    // setcptcodeforccm(JSON.parse(patient.cptcodeforccm))
 
     if (patient.ProviderName === undefined) {
       patient.ProviderName = "Select Provider";
@@ -1097,7 +1096,7 @@ const Patients = (props) => {
     
       
       </select>
-      <label className="mt-2 mb-0">CPT Code For RPM</label>
+      {/* <label className="mt-2 mb-0">CPT Code For RPM</label>
       <MultiSelect
       
         options={[
@@ -1128,7 +1127,7 @@ const Patients = (props) => {
         onChange={setcptcodeforccm}
         labelledBy="Select"
       />
-      
+       */}
       
               </div>
             </div>

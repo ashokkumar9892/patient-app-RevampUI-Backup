@@ -1018,6 +1018,7 @@ export const CoreContextProvider = (props) => {
         console.log(response.data,userid,"thesolf")
 
         const dataSetthresold = [];
+        if(thresholdData.length>0)
         {
           thresholdData.forEach((th, index) => {
             // console.log("p" + index, th);
@@ -1493,7 +1494,7 @@ deviceType:patient.deviceType,
     city,
     state,
     diagnosisId,
-    patient,program,cptcodeforrpm,cptcodeforccm
+    patient,program
   ) => {
     let providername = fetchNameFromId(provider, providerOptions);
     
@@ -1595,8 +1596,8 @@ weight: patient.Weight,
 workPhone: workPhone,
 zip: zip,
 program:program,
-cptCodeForCCM:JSON.stringify(cptcodeforccm),
-cptCodeForRPM:JSON.stringify(cptcodeforrpm),
+cptCodeForCCM:patient.cptcodeforccm,
+cptCodeForRPM:patient.cptcodeforrpm,
     }
     
     await axios

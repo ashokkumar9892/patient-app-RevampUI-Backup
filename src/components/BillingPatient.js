@@ -162,10 +162,6 @@ const handlecptcode=(cpt)=>{
       
       editable: false,
       width: 150,
-      renderCell: (params) => (
-(params.row.value)?params.row.value:""
-
-      )
     },
     {
       field: "timeLeft",

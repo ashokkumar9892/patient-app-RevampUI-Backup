@@ -90,7 +90,7 @@ const PatientSummary = (props) => {
   const [tddata, settddata] = useState([]);
   const [pointcolor, setpointcolor] = useState([]);
   const [mainThresold,setMainThresold]=useState();
-  const [cptcode,setcptcode]=useState([{cptcode:"99547",program:"RPM"}]);
+  const [cptcode,setcptcode]=useState([{cptcode:"",program:""}]);
   const [row,setrow]=useState([]);
 
   const marks = [
@@ -226,6 +226,26 @@ const PatientSummary = (props) => {
   };
 
   useEffect(fetchCoach, []);
+  useEffect(()=>{
+    
+      const arr=[];
+      if(      coreContext.patientsForPatient.length>0){
+      coreContext.patientsForPatient[0].cptcodeforccm.split(",").map((curr)=>{
+        if(curr!=="")
+        arr.push({cptcode:curr,program:"CCM"})
+      });
+      coreContext.patientsForPatient[0].cptcodeforrpm.split(",").map((curr)=>{
+        if(curr!=="")
+        arr.push({cptcode:curr,program:"RPM"})
+      });
+    }
+      console.log(arr,"array of bills")
+setcptcode(arr)
+        
+      
+    
+
+  },[coreContext.patientsForPatient.length])
   useEffect(coreContext.setdefault, []);
   useEffect(coreContext.FetchBilligCode, []);
   console.log(coreContext.BillingCodes,"biling codess")
@@ -253,7 +273,7 @@ const PatientSummary = (props) => {
 
   const fetchPatient = () => {
     const patientId = atob(props.match.params.patient);
-    console.log("checking patient id from summry page", patientId);
+    
     const usertype = localStorage.getItem("userType");
     setUserType(localStorage.getItem("userType"));
     setUserId(localStorage.getItem("userId"));
@@ -261,7 +281,7 @@ const PatientSummary = (props) => {
     setpatientId(patientId);
 
     setPerformedBy(userName);
-    console.log(coreContext.patient.notes, "coreContext.patient.notes");
+    
     coreContext.patient.notes != undefined &&
       setNotes(coreContext.patient.notes);
     //setTaskType("Care Coordination")
@@ -309,7 +329,20 @@ const PatientSummary = (props) => {
           <div className="row mt-2">
           <div className="col-xl-3">
           <label>CPT Code</label>
-          <input className="form-control" value={curr.cptcode} onChange={(e)=>{ handledcptcode(index,e.target.value,"cptcode")}}/>
+          {/* <input className="form-control" value={curr.cptcode} onChange={(e)=>{ handledcptcode(index,e.target.value,"cptcode")}}/> */}
+          <select className="form-select"  value={curr.cptcode} onChange={(e)=>{ handledcptcode(index,e.target.value,"cptcode")}}>
+          <option value="">Select Code</option>
+            {(coreContext.BillingCodes.length>0)?
+            coreContext.BillingCodes.map((dbcode)=>
+            <option value={dbcode.code}>{dbcode.code}</option>
+            ):
+            
+            <option value=""></option>
+          
+          }
+                                
+                                
+                              </select>
           
         </div>
         <div className="col-xl-3">
@@ -320,6 +353,21 @@ const PatientSummary = (props) => {
                                 <option value="RPM">RPM</option>
                                 
                               </select>
+          
+        </div>
+        <div className="col-xl-3">
+          <label>Description</label>
+          <input className="form-control" value={(coreContext.BillingCodes.filter((curr1)=>curr1.code==curr.cptcode).length>0)?coreContext.BillingCodes.filter((curr1)=>curr1.code==curr.cptcode)[0].description:""}/>
+          
+        </div>
+        <div className="col-xl-2">
+          <label>Cost</label>
+          <input className="form-control" value={(coreContext.BillingCodes.filter((curr1)=>curr1.code==curr.cptcode).length>0)?"$"+coreContext.BillingCodes.filter((curr1)=>curr1.code==curr.cptcode)[0].cost:""}/>
+          
+        </div>
+        <div className="col-xl-1">
+          
+          <button className="btn btn-primary mt-4" onClick={()=>setcptcode([...cptcode,{cptcode:curr.cptcode,program:curr.program}])}>x2</button>
           
         </div>
         </div>
@@ -361,7 +409,7 @@ if(coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose")
 }
 else {
   let ttt=coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose")
-  console.log("functionvalue",coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose")[0].bg_high)
+  
 return String(ttt[0].bg_high)
 }
   }
@@ -403,12 +451,7 @@ return String(ttt[0].bg_high)
     ) {
       return "20";
     } else {
-      console.log(
-        "functionvalue",
-        coreContext.adminthresold.filter(
-          (curr) => curr.Element_value === "Blood Glucose"
-        )[0].bg_high
-      );
+      
       return String(
         coreContext.adminthresold.filter(
           (curr) => curr.Element_value === "Blood Glucose"
@@ -495,7 +538,7 @@ return String(ttt[0].bg_high)
   const tsystolic=useMemo(()=>checkdiastolic("SYSTOLIC"),[JSON.stringify(coreContext.thresoldData)])
   const tdiastolic=useMemo(()=>checkdiastolic("DIASTOLIC"),[JSON.stringify(coreContext.thresoldData)])
 
-  console.log(tadminvalue,tadminsystolic,"patiensummery page")
+  
   //const tMinvalue=checkthresoldMinvalue();
   const tMinvalue = useMemo(() => checkthresoldMinvalue(), [JSON.stringify(coreContext.thresoldData)]);
   const tadminMinvalue = useMemo(() => checkadminthresoldMinvalue(), [JSON.stringify(coreContext.adminthresold)]);
@@ -554,7 +597,7 @@ return String(ttt[0].bg_high)
   
   useEffect(fetchTd, [JSON.stringify(coreContext.thresoldData)]);
   useEffect(fetchadmintd, [JSON.stringify(coreContext.adminthresold)]);
-console.log("check admin thresold from patient",coreContext.thresoldData)
+
   const fetchsliderdays = () => {
     var SliderDays;
     if (slider === 0) {
@@ -633,10 +676,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
         </>
       );
     }
-    console.log(
-      coreContext.bloodpressureDataForPatient[0].UserName,
-      "coreContext.bloodpressureDataForPatient[0].UserName"
-    );
+   
     if (
       coreContext.bloodpressureDataForPatient.length > 0 &&
       coreContext.bloodpressureDataForPatient[0].UserName !== "undefined"
@@ -645,9 +685,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
 
         from.setHours(0,0,0,0);
         to.setHours(23,59,59,999);
-        console.log(
-          "checking date of from and to",to,from
-        );
+       
         var finaldata = coreContext.bloodpressureDataForPatient.filter(
           (date) => date.MeasurementDateTime >= from && date.MeasurementDateTime <= to
         );
@@ -679,7 +717,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
         let today = new Date();
         today.setHours(0,0,0,0)
         let bfr = today.setDate(today.getDate() - SliderDays);
-        console.log(bfr,"bfring")
+       
         var finaldata = coreContext.bloodpressureDataForPatient.filter(
           (date) => date.MeasurementDateTime >= new Date(bfr)
         );
@@ -700,7 +738,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
         
         dates.push(Moment(curr.MeasurementDateTime).format("MM-DD-YYYY"));
       });
-      console.log(labels, "labels date");
+     
 
       let uniquedates = dates.filter(function (item, pos) {
         return dates.indexOf(item) == pos;
@@ -777,14 +815,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
           </>
         );
       }
-      console.log(
-        "hfh sort date",
-        labels.sort(function (a, b) {
-          // Turn your strings into dates, and then subtract them
-          // to get a value that is either negative, positive, or zero.
-          return new Date(b) - new Date(a);
-        })
-      );
+     
       if (index === 2) {
         //var labels =[1,2,3,4,5];
         // console.log(Systolic , "2 Systolic")
@@ -808,7 +839,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
             new Date(Moment(b.MeasurementDateTime).format("MM-DD-YYYY hh:mm A"))
           );
         });
-        console.log(sortData, "dataAA");
+       
 
         sortData.map((curr) => {
           Systolicgrap.push(Number(curr.systolic));
