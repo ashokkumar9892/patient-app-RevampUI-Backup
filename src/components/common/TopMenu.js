@@ -416,6 +416,11 @@ date.setHours(0,0,0,0)
   const onEmailChangedHandler = (e) => {
     setEmail(e.target.value);
     setUserName(e.target.value);
+    if(coreContext.patients.filter((curr)=>curr.email==e.target.value).length>0){
+      alert('Email already registered with '+ coreContext.patients.filter((curr)=>curr.email==e.target.value)[0].name)
+      setEmail('')
+      setUserName('')
+    }
   };
 
   useEffect(fetchProviders, []);
