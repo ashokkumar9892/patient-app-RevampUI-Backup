@@ -131,7 +131,7 @@ const renderChat=()=>{
     <li>
 <Link to="/thresold">
 <i className="icon bi-align-bottom"></i>
-<span className="label"> Thresold</span>
+<span className="label"> Thresold</span>  
 </Link>
 </li>:""}
 {/* <li>
@@ -141,7 +141,7 @@ const renderChat=()=>{
 </Link>
 </li> */}
 <li>
-<Link to="/chat">
+<Link to="/tutorial">
 <i className="icon bi-bag-fill"></i>
 <span className="label">  Tutorials</span>
 </Link>
@@ -203,10 +203,15 @@ const renderChat=()=>{
 <span className="label">  Orders</span>
 </Link>:""} */}
 {renderChat()}
-<Link className="btn btn-primary d-block rounded-0 text-start mt-1"  to="/chat">
+<Link className="btn btn-primary d-block rounded-0 text-start mt-1"  to="/tutorial">
 <i className="icon bi-bag-fill"></i>
 <span className="label" style={{marginLeft:"1em"}}>  Tutorials</span>
 </Link>
+{(userType.includes('doctor'))?
+<Link className="btn btn-primary d-block rounded-0 text-start mt-1"  to="/chat">
+<i className="icon bi-bag-fill"></i>
+<span className="label" style={{marginLeft:"1em"}}>  Chat</span>
+</Link>	:""}
 	</div>
 {/* 
 <li className="border-bottom">

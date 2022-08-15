@@ -691,13 +691,8 @@ export const CoreContextProvider = (props) => {
     
     const token = localStorage.getItem("app_jwt");
     if(token){
-
-    
-    var data={ReceiverId:receiver};
-
-    
-
-    await axios
+var data={ReceiverId:receiver};
+await axios
     .get(
       apiUrl2 +
         "chat",

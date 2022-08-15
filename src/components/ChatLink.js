@@ -75,7 +75,7 @@ const ChatLink = () => {
 
 
     const renderuser = (curr) => {
-        if (coreContext.ChatLink.length === 0) {
+        if (coreContext.patients.length === 0) {
           return (
             <div
               style={{
@@ -91,7 +91,7 @@ const ChatLink = () => {
             </div>
           );
         }
-        if (coreContext.ChatLink.length > 0) {
+        if (coreContext.patients.length > 0) {
             
                 const Name=(coreContext.ChatLink.filter((curr1)=>curr1.senderId==curr.id).length!==0)?coreContext.ChatLink.filter((curr1)=>curr1.senderId==curr.id)[0].chatLink.split(" ")[2]:"No Message from"+ curr.name
                 const Link=(coreContext.ChatLink.filter((curr1)=>curr1.senderId==curr.id).length!==0)?coreContext.ChatLink.filter((curr1)=>curr1.senderId==curr.id)[0].chatLink.split(" ")[3]:"#"
