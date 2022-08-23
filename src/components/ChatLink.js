@@ -3,12 +3,16 @@ import { CoreContext } from "../context/core-context";
 import Button from 'react-bootstrap/Button';
 import Loader from "react-loader-spinner";
 import Modal from 'react-bootstrap/Modal';
+import Iframe from 'react-iframe'
+import { render } from '@testing-library/react';
+
 const signal = require("@microsoft/signalr");
 const ChatLink = () => {
     const coreContext = useContext(CoreContext);
     const [doctorid,setdoctorid]=useState();
     const [message,setMessage]=useState();
     const [show, setShow] = useState(false);
+    const [frame, setframe] = useState("");
     const [pid,setpid]=useState();
 
     const handleClose = () => setShow(false);
@@ -28,12 +32,26 @@ const ChatLink = () => {
         catch(err)
         {
           //console.warn(err)
-           window.location.assign("/login");
+          coreContext.relogin();
+           //window.location.assign("/login");
         }
         //console.log(coreContext.userinfo,"sahill")
         
 
     },[])
+    const renderframe=()=>{
+      return(
+        <Iframe url={frame}
+        width="100%"
+        height="450px"
+        display="initial"
+        position="relative"/>
+
+      )
+    }
+    useEffect(()=>{
+      renderframe()
+    },[frame])
     const handleNewUserMessage=(pid,newMessage)=>{
       console.log(`New message incoming! ${newMessage}`);
       const token = localStorage.getItem("app_jwt");
@@ -93,8 +111,9 @@ const ChatLink = () => {
         }
         if (coreContext.patients.length > 0) {
             
-                const Name=(coreContext.ChatLink.filter((curr1)=>curr1.senderId==curr.id).length!==0)?coreContext.ChatLink.filter((curr1)=>curr1.senderId==curr.id)[0].chatLink.split(" ")[2]:"No Message from"+ curr.name
-                const Link=(coreContext.ChatLink.filter((curr1)=>curr1.senderId==curr.id).length!==0)?coreContext.ChatLink.filter((curr1)=>curr1.senderId==curr.id)[0].chatLink.split(" ")[3]:"#"
+                const Name=(coreContext.ChatLink.filter((curr1)=>curr1.senderId==curr.id).length!==0)?coreContext.ChatLink.filter((curr1)=>curr1.senderId==curr.id)[coreContext.ChatLink.filter((curr1)=>curr1.senderId==curr.id).length-1].chatLink.split(" ")[2]:"No Message from"+ curr.name
+                const Link=(coreContext.ChatLink.filter((curr1)=>curr1.senderId==curr.id).length!==0)?coreContext.ChatLink.filter((curr1)=>curr1.senderId==curr.id)[coreContext.ChatLink.filter((curr1)=>curr1.senderId==curr.id).length-1].chatLink.split(" ")[3]:"#"
+                const disable=coreContext.ChatLink.filter((curr1)=>curr1.senderId==curr.id).length==0
 return(
 <div className="col-xl-4 mt-2">
             
@@ -102,7 +121,7 @@ return(
               <div className="card-body">
                 <h4 className="card-title">{Name}</h4>
                 <p className="card-text">Please Click on below Link to continue existing Chat</p>
-                <a href={Link} target="_blank" className="card-link mt-2">Click Me!!</a>
+                <Button variant="primary" onClick={()=>setframe(Link)} className="card-link mt-2" disabled={disable} >Click Me!!</Button>
                 <Button variant="primary" style={{float:"right"}} onClick={()=>{handleShow();setpid(curr.id)}} className="card-link">Initiate Chat</Button>
                 
               </div>
@@ -143,6 +162,12 @@ return(
       </Modal>
     <div className="row">
         {coreContext.patients.map((curr)=>renderuser(curr))}
+   </div>
+   <div className="row" style={{display:"flex",justifyContent:"flex-end"}}>
+    <div className='col-xl-4'>
+   { renderframe()
+   }
+   </div>
    </div>
     
     </div></div></div></div>

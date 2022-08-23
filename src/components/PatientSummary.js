@@ -43,6 +43,7 @@ import {
 } from "@material-ui/data-grid";
 
 import { Weight } from "./Weight";
+import  {WeightNew } from "./WeightNew";
 import { BloodGlucose } from "./BloodGlucose";
 import { BloodPressure } from "./BloodPressure";
 import { BloodPressureAverage } from "./BloodPressureAverage";
@@ -192,6 +193,16 @@ const PatientSummary = (props) => {
     coreContext.fetchBloodPressureForPatient(patientId, "patient");
     }
   };
+  const fetchnewbp = () => {
+    if(coreContext.patientsForPatient[0]){
+      const patientId = coreContext.patientsForPatient[0].ehrId
+      const deviceid=coreContext.deviceDataForPatient.filter((a)=>a.DeviceType=='BP').map((b)=>b.deviceID)
+
+    coreContext.fetchnewBloodPressureForPatient(patientId, "patient",deviceid);
+    
+    }
+  };
+
   const fetchbg = () => {
     if(coreContext.patientsForPatient[0]){
       const patientId = coreContext.patientsForPatient[0].ehrId
@@ -204,6 +215,7 @@ const PatientSummary = (props) => {
   };
 
   useEffect(fetchbp, [coreContext.patientsForPatient.length]);
+  useEffect(fetchnewbp, [coreContext.patientsForPatient.length,coreContext.deviceDataForPatient.length]);
   
   useEffect(fetchbg, [coreContext.patientsForPatient.length]);
   const fetchCareCoordinator = () => {
@@ -1025,10 +1037,374 @@ return String(ttt[0].bg_high)
       return <h1>no data found</h1>;
     }
   },[coreContext.bloodpressureDataForPatient,slider,from,to]);
-  // const getbpdata1 = useMemo(() => getbpdata(1), []);
-  // const getbpdata3 = useMemo(() => getbpdata(3), []);
-  // const getbpdata2 = useMemo(() => getbpdata(2), []);
+  const getbpdatanew =React.useCallback( (index,type) => {
 
+    if (coreContext.newbloodpressureDataForPatient.length == 0) {
+      return (
+        <>
+          <div
+            style={{
+              height: 680,
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "10px",
+              alignItems: "center",
+            }}>
+            <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+          </div>
+        </>
+      );
+    }
+   
+    if (
+      coreContext.newbloodpressureDataForPatient.length > 0 &&
+      coreContext.newbloodpressureDataForPatient[0].UserName !== "undefined"
+    ) {
+      if (to.getDate() !== from.getDate()) {
+
+        from.setHours(0,0,0,0);
+        to.setHours(23,59,59,999);
+       
+        var finaldata = coreContext.newbloodpressureDataForPatient.filter(
+          (date) => date.MeasurementDateTime >= from && date.MeasurementDateTime <= to
+        );
+      } else {
+        var SliderDays;
+        if (slider === 0) {
+          SliderDays = 0;
+        }
+        if (slider === 15) {
+          SliderDays = 1;
+        }
+        if (slider === 30) {
+          SliderDays = 7;
+        }
+        if (slider === 45) {
+          SliderDays = 30;
+        }
+        if (slider === 60) {
+          SliderDays = 60;
+        }
+        if (slider === 75) {
+          SliderDays = 90;
+        }
+        if (slider === 100) {
+          SliderDays = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
+      }
+        // let today = new Date();
+        // var bfr = new Date().setDate(today.getDate() - SliderDays).setHours(0,0,0,0);
+        let today = new Date();
+        today.setHours(0,0,0,0)
+        let bfr = today.setDate(today.getDate() - SliderDays);
+       
+        var finaldata = coreContext.newbloodpressureDataForPatient.filter(
+          (date) => date.MeasurementDateTime >= new Date(bfr)
+        );
+        
+      }
+      
+      let Systolic = [];
+      let diastolic = [];
+      let labels = [];
+      let pulse = [];
+      let dates = [];
+      
+      finaldata.map((curr) => {
+        Systolic.push(Number(curr.systolic));
+        diastolic.push(Number(curr.diastolic));
+        labels.push(Moment(curr.MeasurementDateTime).format("MM-DD-YYYY hh:mm A"));
+        pulse.push(curr.Pulse);
+        
+        dates.push(Moment(curr.MeasurementDateTime).format("MM-DD-YYYY"));
+      });
+     
+
+      let uniquedates = dates.filter(function (item, pos) {
+        return dates.indexOf(item) == pos;
+      });
+      let sorteddates = uniquedates.sort(function (a, b) {
+        // Turn your strings into dates, and then subtract them
+        // to get a value that is either negative, positive, or zero.
+        return new Date(b) - new Date(a);
+      });
+
+      let avgsys = Systolic.reduce((a, b) => a + b, 0) / finaldata.length;
+      let avgdia = diastolic.reduce((a, b) => a + b, 0) / finaldata.length;
+
+      let daydfrnc;
+      if (slider === 100) {
+        daydfrnc = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
+      } else {
+        daydfrnc = SliderDays;
+      }
+
+      if (index === 3) {
+        return (
+          <>
+          <div className="row">
+          <div className="col-xl-12">
+			<div className="table-responsive-sm mb-0">
+            <table className="table table-bordered mb-0" >
+              <thead>
+                <tr className="bg-primary">
+                  <th width="30%" className="text-white">Date</th>
+                  <th width="30%" className="text-white">Blood Pressure(mmHG)</th>
+                  <th width="30%" className="text-white">Pulse(bpm)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sorteddates.map((curr) => {
+                  return (
+                    <>
+                      <tr
+                        className="text-dark"
+                        style={{ backgroundColor: "#a3a3a6" }}
+                        scope="row">
+                        <td colSpan="3">{curr}</td>
+                      </tr>
+                      {finaldata
+                        .filter(
+                          (item) =>
+                            Moment(item.MeasurementDateTime).format("MM-DD-YYYY") ===
+                            curr
+                        )
+                        .map((curr1) => {
+                          return (
+                            <>
+                              <tr scope="row">
+                                <td>
+                                  {Moment(curr1.MeasurementDateTime).format("hh:mm A")}
+                                </td>
+                                <td>
+                                  {curr1.systolic}/{curr1.diastolic}
+                                </td>
+                                <td>{curr1.Pulse}</td>
+                              </tr>
+                            </>
+                          );
+                        })}
+                    </>
+                  );
+                })}
+              </tbody>
+            </table>
+            </div>
+            </div>
+            </div>
+          </>
+        );
+      }
+     
+      if (index === 2) {
+        //var labels =[1,2,3,4,5];
+        // console.log(Systolic , "2 Systolic")
+        // console.log(diastolic , "2 diastolic")
+        // console.log(pulse , "2 pulse")
+        // console.log(labels,"labels")
+        let Systolicgrap = [];
+        let diastolicgrap = [];
+        let labelsgrap = [];
+        let pulsegrap = [];
+        let thresolddiastolic=[];
+      let thresoldsystolic=[];
+        // Systolic.push(Number(curr.systolic));
+        // diastolic.push(Number(curr.diastolic));
+        // labels.push(Moment(curr.MeasurementDateTime).format("MM-DD-YYYY hh:mm A"));
+        // pulse.push(curr.Pulse);
+        // dates.push(Moment(curr.MeasurementDateTime).format("MM-DD-YYYY"));
+        var sortData = finaldata.sort(function (a, b) {
+          return (
+            new Date(Moment(a.MeasurementDateTime).format("MM-DD-YYYY hh:mm A")) -
+            new Date(Moment(b.MeasurementDateTime).format("MM-DD-YYYY hh:mm A"))
+          );
+        });
+       
+
+        sortData.map((curr) => {
+          Systolicgrap.push(Number(curr.systolic));
+          diastolicgrap.push(Number(curr.diastolic));
+        {(tdiastolic==="0")? thresolddiastolic.push(tadmindiastolic): thresolddiastolic.push(tdiastolic)} 
+          {(tsystolic==="0")?thresoldsystolic.push(tadminsystolic):thresoldsystolic.push(tsystolic)}
+          labelsgrap.push(
+            Moment(curr.MeasurementDateTime).format("MM-DD-YYYY hh:mm A")
+          );
+          pulsegrap.push(curr.Pulse);
+        });
+
+        const data = {
+          // labels: labels.sort(function (a, b) {
+
+          //   return new Date(a) - new Date(b);
+          labels: labelsgrap,
+          datasets: [
+            {
+              label: "Systolic",
+              data: Systolicgrap,
+              fill: false,
+              backgroundColor: ["Blue"],
+              borderColor: ["Blue"],
+              pointRadius: 10,
+              pointStyle: "triangle",
+              pointBackgroundColor: "blue",
+
+              tension: 0,
+              //borderColor:["white"],
+            },
+            {
+              label: "Diastolic",
+              data: diastolicgrap,
+              fill: false,
+              backgroundColor: ["green"],
+              borderColor: ["green"],
+              radius: 10,
+              pointBackgroundColor: "green",
+              //pointRadius: 8,
+              pointStyle: "square",
+              tension: 0,
+              //borderColor:["white"],
+            },
+            {
+              label: "Pulse",
+              data: pulsegrap,
+              fill: false,
+              backgroundColor: ["orange"],
+              borderColor: ["orange"],
+              pointStyle: "rectRot",
+              pointBackgroundColor: "orange",
+              pointRadius: 10,
+              tension: 0,
+
+              //borderColor:["white"],
+            },
+            {
+              label: "Max Diastolic",
+              data: thresolddiastolic,
+              pointRadius: 0,
+              //pointBackgroundColor:"white",
+
+              backgroundColor: ["red"],
+              borderColor: ["red"],
+              fill: false,
+              borderWidth: 6,
+            },
+            {
+              label: "Max Systolic",
+              data: thresoldsystolic,
+              pointRadius: 0,
+              //pointBackgroundColor:"white",
+
+              backgroundColor: ["indigo"],
+              borderColor: ["indigo"],
+              fill: false,
+              borderWidth: 6,
+            },
+          ],
+        };
+
+        return (
+          <>
+            <div className="row mb-4">
+		<div className="col-xl-12">
+			<div className="card-body bg-dark text-white">Reading By Dates
+</div>
+	</div>
+		</div>
+    <div className="row mb-4">
+		<div className="col-xl-12">
+    <Line
+              data={data}
+              options={{
+                tooltips: {
+                  mode: "index",
+                },
+                legend: {
+                  display: true,
+                  position: "right",
+                },
+              }}
+            />
+	</div>
+		</div>
+          
+          </>
+        );
+      }
+      if (index === 1) {
+        return (
+          <>
+            
+        
+          <div className="row mb-2">
+	<div className="col-xl-6 col-8 mb-1">
+		<div className="dashboard-shape-1">Total Reading</div>
+	</div>
+		<div className="col-xl-2 col-4 mb-1">
+		<div className="dashboard-shape-right-orange"> {finaldata.length}</div>
+	</div>	
+		</div>
+	<div className="row mb-2">
+	<div className="col-xl-6 col-8 mb-1">
+		<div className="dashboard-shape">Average Reading per day</div>
+	</div>
+		<div className="col-xl-2 col-4 mb-1">
+		<div className="dashboard-shape-right-blue">{isNaN(
+                  Math.round(
+                    Number(
+                      Math.round(Number(finaldata.length / daydfrnc) * 10) / 10
+                    )
+                  )
+                )
+                  ? "0"
+                  : Math.round(
+                      Number(
+                        Math.round(Number(finaldata.length / daydfrnc) * 10) /
+                          10
+                      )
+                    )}</div>
+	</div>	
+		</div>
+	<div className="row mb-2">
+	<div className="col-xl-6 col-8 mb-1">
+		<div className="dashboard-shape">   Average Systolic</div>
+	</div>
+		<div className="col-xl-2 col-4 mb-1">
+		<div className="dashboard-shape-right-blue"> {isNaN(avgsys) ? "0" : Number(Math.round(avgsys))} mm HG</div>
+	</div>	
+		</div>
+	<div className="row mb-2">
+	<div className="col-xl-6 col-8 mb-1">
+		<div className="dashboard-shape">  Average Diastolic</div>
+	</div>
+		<div className="col-xl-2 col-4 mb-1">
+		<div className="dashboard-shape-right-blue">{isNaN(avgdia) ? "0 " : Number(Math.round(avgsys))}
+                mm HG</div>
+	</div>	
+		</div>
+    <div className="row mb-2">
+	<div className="col-xl-6 col-8 mb-1">
+		<div className="dashboard-shape">  Lowest Systolic</div>
+	</div>
+		<div className="col-xl-2 col-4 mb-1">
+		<div className="dashboard-shape-right-blue">{Systolic.length > 0 ? Math.min(...Systolic) : "0"} mm HG</div>
+	</div>	
+		</div>
+    <div className="row mb-2">
+	<div className="col-xl-6 col-8 mb-1">
+		<div className="dashboard-shape">  Highest Diastolic</div>
+	</div>
+		<div className="col-xl-2 col-4 mb-1">
+		<div className="dashboard-shape-right-blue"> {diastolic.length > 0 ? Number(Math.max(...diastolic)) : "0"} mm
+                HG</div>
+	</div>	
+		</div>
+          </>
+        );
+      }
+    } else {
+      return <h1>no data found</h1>;
+    }
+  },[coreContext.newbloodpressureDataForPatient,slider,from,to]);
   const renderBloodGlucose = (index) => {
     if (coreContext.bloodglucoseDataForPatient.length == 0) {
       return (
@@ -2420,6 +2796,8 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                         <Tab>Weight</Tab>
                         
                         <Tab>Threshold</Tab>
+                        <Tab>New Device BP</Tab>
+                        <Tab>New Weight</Tab>
                       </TabList>
                       <TabPanel>
                         
@@ -2482,6 +2860,36 @@ const rendertimelog=React.useMemo(()=>renderTimelogs(),[JSON.stringify(coreConte
                         {thresoldbars}
                         </div>
                         
+                      </TabPanel>
+                      <TabPanel>
+                        
+                        <Tabs>
+                          <TabList>
+                            <Tab >Dashboard</Tab>
+                            <Tab >LogBook</Tab>
+                            <Tab >Charts</Tab>
+                          </TabList>
+                          <TabPanel>
+                            {renderDates()}
+                            {renderslider()}
+                            {getbpdatanew(1)}
+                          </TabPanel>
+                          <TabPanel>
+                            {renderDates()}
+                            {renderslider()}
+                            {getbpdatanew(3)}
+                          </TabPanel>
+                          <TabPanel>
+                            {renderDates()}
+                            {renderslider()}
+                            {getbpdatanew(2)}
+                          </TabPanel>
+                        </Tabs>
+                      </TabPanel>
+                      <TabPanel>
+                        <div className="card-body">
+                          <WeightNew></WeightNew>
+                        </div>
                       </TabPanel>
                     </Tabs>
                   </TabPanel>

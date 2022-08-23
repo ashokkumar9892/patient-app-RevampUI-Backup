@@ -207,7 +207,7 @@ const renderChat=()=>{
 <i className="icon bi-bag-fill"></i>
 <span className="label" style={{marginLeft:"1em"}}>  Tutorials</span>
 </Link>
-{(userType.includes('doctor'))?
+{(userType=='doctor' || userType=='testdoctor' )?
 <Link className="btn btn-primary d-block rounded-0 text-start mt-1"  to="/chat">
 <i className="icon bi-bag-fill"></i>
 <span className="label" style={{marginLeft:"1em"}}>  Chat</span>

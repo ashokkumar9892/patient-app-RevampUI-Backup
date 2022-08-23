@@ -14,12 +14,13 @@ export const CoreContextProvider = (props) => {
   const [bpData, setbpData] = useState([]);
   const [wsData, setwsData] = useState([]);
   const [adminthresold, setadminthresold] = useState([]);
-  const [notifications,setNotifications]=useState([]);
-  const [ChatLink,setChatLink]=useState([]);
-  const [BillingCodes,setBillingCodes]=useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [ChatLink, setChatLink] = useState([]);
+  const [BillingCodes, setBillingCodes] = useState([]);
 
   const [weightData, setweightData] = useState([]);
   const [weightDataForPatient, setweightDataForPatient] = useState([]);
+  const [newweightDataForPatient, setnewweightDataForPatient] = useState([]);
   const [weightApiData, setweightdeviceApiData] = useState([]);
 
   const [thresoldData, setThresoldData] = useState([]);
@@ -27,13 +28,25 @@ export const CoreContextProvider = (props) => {
   const [AlltimeLogData, setAllTimeLogData] = useState([]);
   const [bloodpressureData, setbloodpressureData] = useState([]);
   const [bloodglucoseData, setbloodglucoseData] = useState([]);
-  const [bloodglucoseDataForNotification, setbloodglucoseDataForNotification] = useState([]);
-  const [bloodglucoseDataForDashboard, setbloodglucoseDataForDashboard] = useState([]);
-  const [bloodglucoseDataForPatient, setbloodglucoseDataForPatient] = useState([]);
-  
-  const [bloodpressureDataForNotification, setbloodpressureDataForNotification] = useState([]);
-  const [bloodpressureDataForDashboard, setbloodpressureDataForDashboard] = useState([]);
-  const [bloodpressureDataForPatient, setbloodpressureDataForPatient] = useState([]);
+  const [bloodglucoseDataForNotification, setbloodglucoseDataForNotification] =
+    useState([]);
+  const [bloodglucoseDataForDashboard, setbloodglucoseDataForDashboard] =
+    useState([]);
+  const [bloodglucoseDataForPatient, setbloodglucoseDataForPatient] = useState(
+    []
+  );
+  const [newbloodpressureDataForPatient, setnewbloodpressureDataForPatient] = useState(
+    []
+  );
+
+  const [
+    bloodpressureDataForNotification,
+    setbloodpressureDataForNotification,
+  ] = useState([]);
+  const [bloodpressureDataForDashboard, setbloodpressureDataForDashboard] =
+    useState([]);
+  const [bloodpressureDataForPatient, setbloodpressureDataForPatient] =
+    useState([]);
 
   const [deviceData, setdeviceData] = useState([]);
   const [deviceDataForPatient, setdeviceDataForPatient] = useState([]);
@@ -91,9 +104,7 @@ export const CoreContextProvider = (props) => {
   const [apiUrl, setApiUrl] = useState(
     "https://sqlapi.apatternplus.com/UserPool/api"
   );
-  const [apiUrl2, setApiUrl2] = useState(
-    "https://sqlapi.apatternplus.com/"
-  );
+  const [apiUrl2, setApiUrl2] = useState("https://sqlapi.apatternplus.com/");
   const [userTable, setuserTable] = useState("UserDetailsDemo");
 
   // const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210725100004.azurewebsites.net/api');
@@ -141,16 +152,15 @@ export const CoreContextProvider = (props) => {
 
     window.location.assign("/login");
   };
-  const cleanup=()=>{
+  const cleanup = () => {
     // setPatients([]);
     setPatientsForPatient([]);
     setbloodglucoseDataForPatient([]);
     setbloodpressureDataForPatient([]);
-  }
-  const cleanup1=()=>{
-   setPatients([]);
- 
-  }
+  };
+  const cleanup1 = () => {
+    setPatients([]);
+  };
 
   const checkLocalAuth = () => {
     const isAuth = localStorage.getItem("app_isAuth");
@@ -170,13 +180,15 @@ export const CoreContextProvider = (props) => {
 
   // capture from login page.  'yasser.sheikh@laitkor.com'  'M2n1shlko@1'
   const login = useCallback((email, password, url) => {
-    console.log(email,password,"sahil")
+    console.log(email, password, "sahil");
     setShowLoader(true);
     axios
-      .post(apiUrl + "/signin", { Username: email,
+      .post(apiUrl + "/signin", {
+        Username: email,
         Email: email,
         Password: password,
-        newPassword:"string" })
+        newPassword: "string",
+      })
       .then((response) => {
         if (response.data === "Incorrect username or password.") {
           alert("Incorrect username or password.");
@@ -201,93 +213,96 @@ export const CoreContextProvider = (props) => {
   const ForgotPassword = (email) => {
     setShowLoader(true);
     axios
-      .post(apiUrl + "/forgotpassword", { Username: email})
+      .post(apiUrl + "/forgotpassword", { Username: email })
       .then((response) => {
         if (response.data.includes("Password reset code sent to")) {
           handleForgotModalShow();
-          setShowLoader(false)
+          setShowLoader(false);
         } else {
-          alert("some error")
+          alert("some error");
           setShowLoader(false);
           // localStorage.setItem("userType", response[0].UserType.s);
 
           //  window.location.assign();
-
-          
         }
       });
   };
-  const verifyForgotPassword = (email,code,newpassword) => {
+  const verifyForgotPassword = (email, code, newpassword) => {
     setShowLoader(true);
     axios
-      .post(apiUrl + "/confirmforgotpassword", { Username: email,newpassword:newpassword,ConfirmationCode:code})
+      .post(apiUrl + "/confirmforgotpassword", {
+        Username: email,
+        newpassword: newpassword,
+        ConfirmationCode: code,
+      })
       .then((response) => {
         if (response.data.includes("successfully")) {
           handleForgotModalClose();
-          swal("success","password changes successfully");
+          swal("success", "password changes successfully");
           relogin();
         } else {
-          alert("there is some error")
+          alert("there is some error");
         }
       });
   };
 
-  const userDetails = async(useremail, url = "") => {
+  const userDetails = async (useremail, url = "") => {
     const token = localStorage.getItem("app_jwt");
-    if(token){await axios
-      .get(
-        apiUrl2+"usertable",
-          
+    if (token) {
+      await axios
+        .get(
+          apiUrl2 + "usertable",
+
           {
-          headers: {
-            'Content-Type': 'application/json',
-            'accept': 'text/plain'
-           }
-          },
-          
-           
-      )
+            headers: {
+              "Content-Type": "application/json",
+              accept: "text/plain",
+            },
+          }
+        )
         .then((response) => {
-           // setJwt(response.data);
-          const userData = response.data.filter((curr)=>curr.email===useremail);
+          // setJwt(response.data);
+          const userData = response.data.filter(
+            (curr) => curr.email === useremail
+          );
           setuserinfo(userData);
-         
-  
-          userData.filter((curr)=>curr.email===useremail).forEach((p) => {
-            localStorage.setItem("userName", p.userName);
-            localStorage.setItem("userType", p.userType);
-            localStorage.setItem("userId", p.userId);
-            localStorage.setItem("userEmail", p.email);
-  
-            const pat = {
-              userName: p.userName ? p.userName : "",
-              userType: p.userTpye ? p.userType : "",
-              userId: p.userId ? p.userId : "",
-              userEmail: p.email ? p.email : "",
-              sno: p.sno ? p.sno : "",
-              
-            };
-  
-            localStorage.setItem("app_patient", JSON.stringify(pat));
-  
-            // if (p.userType === "patient" && url) {
-            //   if (pat.userName.includes("||0")) url = "profile";
-            //   else url = "patient-profile/" + p.userId.split("_").pop();
-            // }
-            // if (p.userType === "admin" && url) {
-            //   if (pat.userName.includes("||0")) url = "profile";
-            //   else url = "dashboard";
-            // }
-          });
-  
+
+          userData
+            .filter((curr) => curr.email === useremail)
+            .forEach((p) => {
+              localStorage.setItem("userName", p.userName);
+              localStorage.setItem("userType", p.userType);
+              localStorage.setItem("userId", p.userId);
+              localStorage.setItem("userEmail", p.email);
+
+              const pat = {
+                userName: p.userName ? p.userName : "",
+                userType: p.userTpye ? p.userType : "",
+                userId: p.userId ? p.userId : "",
+                userEmail: p.email ? p.email : "",
+                sno: p.sno ? p.sno : "",
+              };
+
+              localStorage.setItem("app_patient", JSON.stringify(pat));
+
+              // if (p.userType === "patient" && url) {
+              //   if (pat.userName.includes("||0")) url = "profile";
+              //   else url = "patient-profile/" + p.userId.split("_").pop();
+              // }
+              // if (p.userType === "admin" && url) {
+              //   if (pat.userName.includes("||0")) url = "profile";
+              //   else url = "dashboard";
+              // }
+            });
+
           const patientId = localStorage.getItem("userId");
           const username = localStorage.getItem("userName");
-  
+
           setShowLoader(false);
-  
+
           if (userData.length === 0) window.location.assign("profile");
           else if (url) window.location.assign(url);
-  
+
           // if (userType === 'patient')
           // {
           //     window.location.assign(url);
@@ -296,13 +311,13 @@ export const CoreContextProvider = (props) => {
           //     {
           //         window.location.assign('/dashboard');
           //     }
-        })}
+        });
+    }
     //let url ='';
-    
   };
-  const setdefault=()=>{
-    setTimeLogData([])
-  }
+  const setdefault = () => {
+    setTimeLogData([]);
+  };
 
   const getdp = (d) => {
     const token = localStorage.getItem("app_jwt");
@@ -314,408 +329,367 @@ export const CoreContextProvider = (props) => {
   // capture from patient List page.
   const fetchPatientListfromApi = async (usertype, userId, AllActive) => {
     const token = localStorage.getItem("app_jwt");
-    if(token){
+    if (token) {
+      let data = "";
 
-    let data = "";
-
-    if (usertype === "admin"){
-      if (AllActive) {
-        data={ DoctorId: "ADMIN",ActiveStatus:"Deactive" }
-        
-      } else {
-        data={ DoctorId: "ADMIN",ActiveStatus:"Active" }
+      if (usertype === "admin") {
+        if (AllActive) {
+          data = { DoctorId: "ADMIN", ActiveStatus: "Deactive" };
+        } else {
+          data = { DoctorId: "ADMIN", ActiveStatus: "Active" };
+        }
       }
-    }
 
-    if (usertype.includes("doctor")) {
-      if (AllActive) {
-        data={ DoctorId: "DOCTOR_"+userId ,ActiveStatus:"Deactive" }
+      if (usertype.includes("doctor")) {
+        if (AllActive) {
+          data = { DoctorId: "DOCTOR_" + userId, ActiveStatus: "Deactive" };
+        } else {
+          data = { DoctorId: "DOCTOR_" + userId, ActiveStatus: "Active" };
         }
-       else {
-        data={ DoctorId: "DOCTOR_"+userId ,ActiveStatus:"Active" }
-        }
-  };
-    
+      }
 
-    if (usertype === "carecoordinator") {
-      data={ DoctorId: "CARECOORDINATOR_"+userId ,ActiveStatus:"Active" }
-    }
-    if (usertype === "coach") {
-      data={ DoctorId: "COACH_"+userId ,ActiveStatus:"Active" }
-    }
-    // if (usertype === "patient" && userName !==undefined) {
-    //     data = {
-    //         "TableName":userTable,
-    //         "KeyConditionExpression":"PK = :v_PK AND begins_with(UserName, :v_UserName)",
-    //         "FilterExpression":"ActiveStatus = :v_status",
-    //         "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":userName},":v_status":{"S":"Active"}}
-    //     }
-    // }
-    if (usertype === "patient") {
-      data={ DoctorId: "PATIENT_"+userId ,ActiveStatus:"Active" }
-    }
+      if (usertype === "carecoordinator") {
+        data = {
+          DoctorId: "CARECOORDINATOR_" + userId,
+          ActiveStatus: "Active",
+        };
+      }
+      if (usertype === "coach") {
+        data = { DoctorId: "COACH_" + userId, ActiveStatus: "Active" };
+      }
+      // if (usertype === "patient" && userName !==undefined) {
+      //     data = {
+      //         "TableName":userTable,
+      //         "KeyConditionExpression":"PK = :v_PK AND begins_with(UserName, :v_UserName)",
+      //         "FilterExpression":"ActiveStatus = :v_status",
+      //         "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":userName},":v_status":{"S":"Active"}}
+      //     }
+      // }
+      if (usertype === "patient") {
+        data = { DoctorId: "PATIENT_" + userId, ActiveStatus: "Active" };
+      }
 
-    await axios
-    .get(
-      apiUrl2 +
-        "patient",
-        { params: data },
-        {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
-      .then((response) => {
-        // setJwt(response.data);
-        //  console.log(response.data);
-        const patients = response.data;
-        console.log("i need to check the patient",patients)
-        const ps = [];
-        if (patients.length === 0) {
-          ps.push("No data found");
-        }
-        
+      await axios
+        .get(
+          apiUrl2 + "patient",
+          { params: data },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              accept: "text/plain",
+            },
+          }
+        )
+        .then((response) => {
+          // setJwt(response.data);
+          //  console.log(response.data);
+          const patients = response.data;
+          console.log("i need to check the patient", patients);
+          const ps = [];
+          if (patients.length === 0) {
+            ps.push("No data found");
+          }
 
-        patients.forEach((p, index) => {
-          let patient = {};
+          patients.forEach((p, index) => {
+            let patient = {};
 
-          patient.id = p.id;
-          patient.sk=p.sk;
+            patient.id = p.id;
+            patient.sk = p.sk;
 
+            patient.mobilePhone = p.mobilePhone;
+            patient.cptcode = p.cptCode1;
+            patient.cptcodeforrpm = p.cptCodeForRPM;
+            patient.cptcodeforccm = p.cptCodeForCCM;
+            patient.reading = p.reading;
+            patient.otp = p.otp;
+            patient.workPhone = p.workPhone;
+            patient.userId = p.userId;
+            patient.name = p.lastName + " , " + p.firstName;
+            patient.userName = p.userName;
+            patient.createdDate = p.createdDate;
+            patient.connectionId = p.connectionId;
+            patient.st = p.st;
 
-          patient.mobilePhone = p.mobilePhone;
-          patient.cptcode = p.cptCode1;
-          patient.cptcodeforrpm = p.cptCodeForRPM;
-          patient.cptcodeforccm = p.cptCodeForCCM;
-          patient.reading = p.reading;
-          patient.otp = p.otp;
-          patient.workPhone = p.workPhone;
-          patient.userId = p.userId;
-          patient.name = p.lastName+" , "+p.firstName;
-          patient.userName=p.userName;
-          patient.createdDate=p.createdDate;
-          patient.connectionId=p.connectionId;
-          patient.st=p.st;
-         
-          
             patient.email = p.email;
-            patient.coachId=p.coachId;
-            patient.careId=p.carecoordinatorId;
-            patient.program=p.program;
-          
-          
-            if(p.diagnosisId[0]==","){
-              patient.diagnosisId = p.diagnosisId.substring(1);  
-            }else{
+            patient.coachId = p.coachId;
+            patient.careId = p.carecoordinatorId;
+            patient.program = p.program;
+
+            if (p.diagnosisId[0] == ",") {
+              patient.diagnosisId = p.diagnosisId.substring(1);
+            } else {
               patient.diagnosisId = p.diagnosisId;
             }
-            
-          
-          
+
             patient.mobile = p.contactNo;
-          
-          
+
             patient.dob = Moment(p.dob).format("MM-DD-YYYY");
-          
-          
+
             patient.ProviderName = p.doctorName;
             patient.ProviderId = p.doctorId;
-          
-          
+
             patient.CareName = p.carecoordinatorName;
-          
-          
+
             patient.CoachName = p.coach;
-          
-          
+
             patient.ehrId = p.sk;
-          
-          patient.pid = window.btoa(p.sk);
-          
-          (p.height.s!=="undefined")?patient.height = p.height:patient.height = ""
-          
+
+            patient.pid = window.btoa(p.sk);
+
+            p.height.s !== "undefined"
+              ? (patient.height = p.height)
+              : (patient.height = "");
+
             patient.bg_reading = p.reading;
-          
-          
 
-          if (p.weight !== undefined) {
-            let num = p.weight;
-            if (num === "") num = 0;
-            patient.Weight = parseFloat(num).toFixed(2);
-          }
-          
-          
+            if (p.weight !== undefined) {
+              let num = p.weight;
+              if (num === "") num = 0;
+              patient.Weight = parseFloat(num).toFixed(2);
+            }
+
             patient.ActiveStatus = p.activeStatus;
-          
 
-          
             patient.firstName = p.firstName;
             patient.lastName = p.lastName;
             patient.gender = p.gender;
-          
-          if (p.lang !== undefined) {
-            patient.language = p.lang;
-          } else {
-            patient.language = "";
-          }
 
-          if (p.street !== undefined) {
-            patient.street = p.street;
-          } else {
-            patient.street = "";
-          }
+            if (p.lang !== undefined) {
+              patient.language = p.lang;
+            } else {
+              patient.language = "";
+            }
 
-          if (p.city !== undefined) {
-            patient.city = p.city;
-          } else {
-            patient.city = "";
-          }
+            if (p.street !== undefined) {
+              patient.street = p.street;
+            } else {
+              patient.street = "";
+            }
 
-          if (p.zip !== undefined) {
-            patient.zip = p.zip;
-          } else {
-            patient.zip = "";
-          }
+            if (p.city !== undefined) {
+              patient.city = p.city;
+            } else {
+              patient.city = "";
+            }
 
-          if (p.workPhone !== undefined) {
-            patient.workPhone = p.workPhone;
-          } else {
-            patient.workPhone = "";
-          }
+            if (p.zip !== undefined) {
+              patient.zip = p.zip;
+            } else {
+              patient.zip = "";
+            }
 
-          
-          if (p.notes !== undefined) {
-            patient.notes = p.notes;
-           
-          } else {
-            patient.notes = "";
-          }
-          patient.diastolic=p.diastolic
-          patient.gsI1PK=p.gsI1PK
-          patient.gsI1SK=p.gsI1SK
-          patient.middleName=p.middleName
-          patient.BMI=p.reading
-          patient.userTimeZone=p.userTimeZone
-          patient.userType=p.userType
-          // if (patient.userId !== undefined && patient.name) {
-          //     fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
-          // }
-                
-          ps.push(patient);
+            if (p.workPhone !== undefined) {
+              patient.workPhone = p.workPhone;
+            } else {
+              patient.workPhone = "";
+            }
+
+            if (p.notes !== undefined) {
+              patient.notes = p.notes;
+            } else {
+              patient.notes = "";
+            }
+            patient.diastolic = p.diastolic;
+            patient.gsI1PK = p.gsI1PK;
+            patient.gsI1SK = p.gsI1SK;
+            patient.middleName = p.middleName;
+            patient.BMI = p.reading;
+            patient.userTimeZone = p.userTimeZone;
+            patient.userType = p.userType;
+            // if (patient.userId !== undefined && patient.name) {
+            //     fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
+            // }
+
+            ps.push(patient);
+          });
+
+          setPatients(ps);
+        })
+        .catch((error) => {
+          console.log(error, "errorlogin");
         });
-          
-        setPatients(ps);
-      })
-      .catch((error) => {
-        console.log(error,"errorlogin")
-      });
     }
   };
-  const fetchPatientListfromApiForPatient = async (usertype, userId, AllActive) => {
-    setPatientsForPatient([])
+  const fetchPatientListfromApiForPatient = async (
+    usertype,
+    userId,
+    AllActive
+  ) => {
+    setPatientsForPatient([]);
     const token = localStorage.getItem("app_jwt");
-    if(token){
+    if (token) {
+      var data = {};
 
-    
-    var data={};
+      if (usertype === "patient") {
+        data = { DoctorId: "PATIENT_" + userId, ActiveStatus: "Active" };
+      }
 
-    if (usertype === "patient") {
-      data={ DoctorId: "PATIENT_"+userId ,ActiveStatus:"Active" }
-    }
+      await axios
+        .get(
+          apiUrl2 + "patient",
+          { params: data },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              accept: "text/plain",
+            },
+          }
+        )
+        .then((response) => {
+          // setJwt(response.data);
+          //  console.log(response.data);
+          const patients = response.data;
+          console.log("i need to check the patient", patients);
+          const ps = [];
+          if (patients.length === 0) {
+            ps.push("No data found");
+          }
 
-    await axios
-    .get(
-      apiUrl2 +
-        "patient",
-        { params: data },
-        {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
-      .then((response) => {
-        // setJwt(response.data);
-        //  console.log(response.data);
-        const patients = response.data;
-        console.log("i need to check the patient",patients)
-        const ps = [];
-        if (patients.length === 0) {
-          ps.push("No data found");
-        }
-        
+          patients.forEach((p, index) => {
+            let patient = {};
 
-        patients.forEach((p, index) => {
-          let patient = {};
+            patient.id = p.id;
+            patient.sk = p.sk;
 
-          patient.id = p.id;
-          patient.sk=p.sk;
+            patient.mobilePhone = p.mobilePhone;
+            patient.reading = p.reading;
+            patient.cptcode = p.cptCode1;
 
+            patient.cptcodeforrpm = p.cptCodeForRPM;
+            patient.cptcodeforccm = p.cptCodeForCCM;
+            patient.otp = p.otp;
+            patient.workPhone = p.workPhone;
+            patient.userId = p.userId;
+            patient.name = p.lastName + " , " + p.firstName;
+            patient.userName = p.userName;
+            patient.createdDate = p.createdDate;
+            patient.connectionId = p.connectionId;
+            patient.st = p.st;
 
-          patient.mobilePhone = p.mobilePhone;
-          patient.reading = p.reading;
-          patient.cptcode = p.cptCode1;
-          
-          patient.cptcodeforrpm = p.cptCodeForRPM;
-          patient.cptcodeforccm = p.cptCodeForCCM;
-          patient.otp = p.otp;
-          patient.workPhone = p.workPhone;
-          patient.userId = p.userId;
-          patient.name = p.lastName+" , "+p.firstName;
-          patient.userName=p.userName;
-          patient.createdDate=p.createdDate;
-          patient.connectionId=p.connectionId;
-          patient.st=p.st;
-         
-          
             patient.email = p.email;
-            patient.coachId=p.coachId;
-            patient.careId=p.carecoordinatorId;
-            patient.program=p.program;
-          
-          
-            if(p.diagnosisId[0]==","){
-              patient.diagnosisId = p.diagnosisId.substring(1);  
-            }else{
+            patient.coachId = p.coachId;
+            patient.careId = p.carecoordinatorId;
+            patient.program = p.program;
+
+            if (p.diagnosisId[0] == ",") {
+              patient.diagnosisId = p.diagnosisId.substring(1);
+            } else {
               patient.diagnosisId = p.diagnosisId;
             }
-            
-          
-          
+
             patient.mobile = p.contactNo;
-          
-          
+
             patient.dob = Moment(p.dob).format("MM-DD-YYYY");
-          
-          
+
             patient.ProviderName = p.doctorName;
             patient.ProviderId = p.doctorId;
-          
-          
+
             patient.CareName = p.carecoordinatorName;
-          
-          
+
             patient.CoachName = p.coach;
-          
-          
+
             patient.ehrId = p.sk;
-          
-          patient.pid = window.btoa(p.sk);
-          
-          (p.height.s!=="undefined")?patient.height = p.height:patient.height = ""
-          
+
+            patient.pid = window.btoa(p.sk);
+
+            p.height.s !== "undefined"
+              ? (patient.height = p.height)
+              : (patient.height = "");
+
             patient.bg_reading = p.reading;
-          
-          
 
-          if (p.weight !== undefined) {
-            let num = p.weight;
-            if (num === "") num = 0;
-            patient.Weight = parseFloat(num).toFixed(2);
-          }
-          
-          
+            if (p.weight !== undefined) {
+              let num = p.weight;
+              if (num === "") num = 0;
+              patient.Weight = parseFloat(num).toFixed(2);
+            }
+
             patient.ActiveStatus = p.activeStatus;
-          
 
-          
             patient.firstName = p.firstName;
             patient.lastName = p.lastName;
             patient.gender = p.gender;
-          
-          if (p.lang !== undefined) {
-            patient.language = p.lang;
-          } else {
-            patient.language = "";
-          }
 
-          if (p.street !== undefined) {
-            patient.street = p.street;
-          } else {
-            patient.street = "";
-          }
+            if (p.lang !== undefined) {
+              patient.language = p.lang;
+            } else {
+              patient.language = "";
+            }
 
-          if (p.city !== undefined) {
-            patient.city = p.city;
-          } else {
-            patient.city = "";
-          }
+            if (p.street !== undefined) {
+              patient.street = p.street;
+            } else {
+              patient.street = "";
+            }
 
-          if (p.zip !== undefined) {
-            patient.zip = p.zip;
-          } else {
-            patient.zip = "";
-          }
+            if (p.city !== undefined) {
+              patient.city = p.city;
+            } else {
+              patient.city = "";
+            }
 
-          if (p.workPhone !== undefined) {
-            patient.workPhone = p.workPhone;
-          } else {
-            patient.workPhone = "";
-          }
+            if (p.zip !== undefined) {
+              patient.zip = p.zip;
+            } else {
+              patient.zip = "";
+            }
 
-          
-          if (p.notes !== undefined) {
-            patient.notes = p.notes;
-           
-          } else {
-            patient.notes = "";
-          }
-          patient.diastolic=p.diastolic
-          patient.gsI1PK=p.gsI1PK
-          patient.gsI1SK=p.gsI1SK
-          patient.middleName=p.middleName
-          patient.BMI=p.reading
-          patient.userTimeZone=p.userTimeZone
-          patient.userType=p.userType
-          // if (patient.userId !== undefined && patient.name) {
-          //     fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
-          // }
-          ps.push(patient);
+            if (p.workPhone !== undefined) {
+              patient.workPhone = p.workPhone;
+            } else {
+              patient.workPhone = "";
+            }
+
+            if (p.notes !== undefined) {
+              patient.notes = p.notes;
+            } else {
+              patient.notes = "";
+            }
+            patient.diastolic = p.diastolic;
+            patient.gsI1PK = p.gsI1PK;
+            patient.gsI1SK = p.gsI1SK;
+            patient.middleName = p.middleName;
+            patient.BMI = p.reading;
+            patient.userTimeZone = p.userTimeZone;
+            patient.userType = p.userType;
+            // if (patient.userId !== undefined && patient.name) {
+            //     fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
+            // }
+            ps.push(patient);
+          });
+
+          setPatientsForPatient(ps);
+        })
+        .catch(() => {
+          relogin();
         });
-         
-        setPatientsForPatient(ps);
-      })
-      .catch(() => {
-        relogin();
-      });
     }
   };
   const fetchChatLink = async (receiver) => {
-    
     const token = localStorage.getItem("app_jwt");
-    if(token){
-var data={ReceiverId:receiver};
-await axios
-    .get(
-      apiUrl2 +
-        "chat",
-        { params: data },
-        {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
-      .then((response) => {
-        // setJwt(response.data);
-        //  console.log(response.data);
-        const patients = response.data;
-        
-        setChatLink(response.data)
-      })
-      .catch(() => {
-        relogin();
-      });
+    if (token) {
+      var data = { ReceiverId: receiver };
+      await axios
+        .get(
+          apiUrl2 + "chat",
+          { params: data },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              accept: "text/plain",
+            },
+          }
+        )
+        .then((response) => {
+          // setJwt(response.data);
+          //  console.log(response.data);
+          const patients = response.data;
+
+          setChatLink(response.data);
+        })
+        .catch(() => {
+          relogin();
+        });
     }
   };
 
@@ -729,7 +703,6 @@ await axios
     else return <span></span>;
   };
 
-  
   // const fetchBgData = (userid, usertype) => {
   //   const token = localStorage.getItem("app_jwt");
   //   const config = {
@@ -786,7 +759,7 @@ await axios
   //     })
   //     .then((response) => {
   //       // setJwt(response.data);
-      
+
   //       const bgData = response.data;
   //       const dataSetbg = [];
 
@@ -823,26 +796,22 @@ await axios
     let data = "";
     if (usertype === "patient") {
       data = "DEVICE_WS_" + userid;
+    } else {
+      data = "DEVICE_WS_";
     }
-
-   else{
-    data="DEVICE_WS_";
-   }
     await axios
-    .get(
-      apiUrl2 +
-        "weight",
+      .get(
+        apiUrl2 + "weight",
         { params: { GSI1PK: data } },
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
-      .then((response) => {    const weightData = response.data;
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
+      .then((response) => {
+        const weightData = response.data;
         const dataSetwt = [];
         if (weightData.length === 0) {
           dataSetwt.push("no data found");
@@ -913,22 +882,19 @@ await axios
       data = "DEVICE_WS_" + userid;
     }
 
-  
     await axios
-    .get(
-      apiUrl2 +
-        "weight",
+      .get(
+        apiUrl2 + "weight",
         { params: { GSI1PK: data } },
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
-      .then((response) => {    const weightData = response.data;
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
+      .then((response) => {
+        const weightData = response.data;
         const dataSetwt = [];
         if (weightData.length === 0) {
           dataSetwt.push("no data found");
@@ -983,6 +949,64 @@ await axios
         setweightDataForPatient(dataSetwt);
       });
   };
+  const fetchnewWSDataForPatient = async (userid, usertype,deviceId) => {
+    const token = localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
+    
+    let data = "";
+    
+      data = deviceId.toString();
+    
+    await axios
+      .get(
+        apiUrl2 + "weight",
+        { params: { GSI1PK: data } },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
+      .then((response) => {
+        const weightData = response.data;
+        const dataSetwt = [];
+       
+if(weightData){
+        weightData.forEach((wt, index) => {
+          //   console.log('p' + index, bg);
+          let wtdata = {};
+          wtdata.id = wt.id;
+          if (wt.deviceId !== undefined) {
+            wtdata.DeviceId = wt.deviceId;
+          }
+          if (wt.weight !== undefined) {
+            wtdata.weight = wt.weight;
+          }
+          if (wt.measurementDateTime !== undefined) {
+            wtdata.MeasurementDateTime = wt.measurementDateTime;
+            wtdata.MeasurementDateTime = new Date(wtdata.MeasurementDateTime);
+            wtdata.sortDateColumn = wt.measurementDateTime;
+            // wtdata.MeasurementDateTime =Moment(wtdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm:ss A');
+          }
+         
+          // bpdata.date_recorded = bp.date_recorded.s;
+
+         
+          dataSetwt.push(wtdata);
+        })};
+
+        setnewweightDataForPatient(dataSetwt);
+      });
+  };
 
   const fetchThresold = async (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
@@ -996,29 +1020,26 @@ await axios
     }
 
     await axios
-    .get(
-      apiUrl2 +
-        "threshold",
-        
+      .get(
+        apiUrl2 + "threshold",
+
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )  .then((response) => {
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
+      .then((response) => {
         const thresholdData = response.data;
-        console.log(response.data,userid,"thesolf")
+        console.log(response.data, userid, "thesolf");
 
         const dataSetthresold = [];
-        if(thresholdData.length>0)
-        {
+        if (thresholdData.length > 0) {
           thresholdData.forEach((th, index) => {
             // console.log("p" + index, th);
             let thdata = {};
-              thdata.id=th.id
+            thdata.id = th.id;
             if (th.tElements) {
               thdata.Element_value = th.tElements;
             }
@@ -1031,14 +1052,20 @@ await axios
             if (th.sk) {
               thdata.UserId = th.sk;
             }
-          
+
             if (thdata.Element_value === "Blood Glucose") {
               thdata.bg_low = th.Low_value;
               thdata.bg_high = th.High_value;
-            } else if (thdata.Element_value === "SYSTOLIC" ||thdata.Element_value === "Systolic") {
+            } else if (
+              thdata.Element_value === "SYSTOLIC" ||
+              thdata.Element_value === "Systolic"
+            ) {
               thdata.systolic_low = th.Low_value;
               thdata.systolic_high = th.High_value;
-            } else if (thdata.Element_value === "DIASTOLIC" ||thdata.Element_value === "Diastolic") {
+            } else if (
+              thdata.Element_value === "DIASTOLIC" ||
+              thdata.Element_value === "Diastolic"
+            ) {
               thdata.diastolic_low = th.Low_value;
               thdata.diastolic_high = th.High_value;
             } else if (thdata.Element_value === "BMI") {
@@ -1052,15 +1079,18 @@ await axios
             dataSetthresold.push(thdata);
           });
         }
-        
+
         if (usertype === "admin") {
-          if(dataSetthresold.length>1){
-            setadminthresold(dataSetthresold.filter((curr)=>curr.UserId.includes(userid)));
-                   
+          if (dataSetthresold.length > 1) {
+            setadminthresold(
+              dataSetthresold.filter((curr) => curr.UserId.includes(userid))
+            );
           }
         }
-        if(dataSetthresold.length>1){
-          setThresoldData(dataSetthresold.filter((curr)=>curr.UserId.includes(userid)));
+        if (dataSetthresold.length > 1) {
+          setThresoldData(
+            dataSetthresold.filter((curr) => curr.UserId.includes(userid))
+          );
         }
       });
   };
@@ -1075,30 +1105,27 @@ await axios
       relogin();
     }
 
-
     await axios
-    .get(
-      apiUrl2 +
-        "threshold",
-        
+      .get(
+        apiUrl2 + "threshold",
+
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )  .then((response) => {
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
+      .then((response) => {
         const thresholdData = response.data;
-        console.log(response.data,userid,"thesolf")
+        console.log(response.data, userid, "thesolf");
 
         const dataSetthresold = [];
         {
           thresholdData.forEach((th, index) => {
             // console.log("p" + index, th);
             let thdata = {};
-            thdata.id=th.id
+            thdata.id = th.id;
 
             if (th.tElements) {
               thdata.Element_value = th.tElements;
@@ -1112,14 +1139,20 @@ await axios
             if (th.sk) {
               thdata.UserId = th.sk;
             }
-          
+
             if (thdata.Element_value === "Blood Glucose") {
               thdata.bg_low = th.Low_value;
               thdata.bg_high = th.High_value;
-            } else if (thdata.Element_value === "SYSTOLIC"||thdata.Element_value === "Systolic") {
+            } else if (
+              thdata.Element_value === "SYSTOLIC" ||
+              thdata.Element_value === "Systolic"
+            ) {
               thdata.systolic_low = th.Low_value;
               thdata.systolic_high = th.High_value;
-            } else if (thdata.Element_value === "DIASTOLIC" ||thdata.Element_value === "Diastolic") {
+            } else if (
+              thdata.Element_value === "DIASTOLIC" ||
+              thdata.Element_value === "Diastolic"
+            ) {
               thdata.diastolic_low = th.Low_value;
               thdata.diastolic_high = th.High_value;
             } else if (thdata.Element_value === "BMI") {
@@ -1133,16 +1166,24 @@ await axios
             dataSetthresold.push(thdata);
           });
         }
-if(dataSetthresold.length>1){
-  setadminthresold(dataSetthresold.filter((curr)=>curr.UserId.includes("ADMIN_1631483185423")));
-  console.log(dataSetthresold.filter((curr)=>curr.UserId.includes("ADMIN_1631483185423")),"dataSetthresold.filter((curr)=>curr.userId.includes(userid))")
-
-}
+        if (dataSetthresold.length > 1) {
+          setadminthresold(
+            dataSetthresold.filter((curr) =>
+              curr.UserId.includes("ADMIN_1631483185423")
+            )
+          );
+          console.log(
+            dataSetthresold.filter((curr) =>
+              curr.UserId.includes("ADMIN_1631483185423")
+            ),
+            "dataSetthresold.filter((curr)=>curr.userId.includes(userid))"
+          );
+        }
       });
   };
 
   const fetchTimeLog = async (userid) => {
-    const token=localStorage.getItem("app_jwt");
+    const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
       setIsAuthenticated(true);
@@ -1153,27 +1194,23 @@ if(dataSetthresold.length>1){
     }
 
     await axios
-    .get(
-      apiUrl2 +
-        "timelog",
+      .get(
+        apiUrl2 + "timelog",
         { params: { GSI1PK: "TIMELOG_READING_" + userid } },
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
       .then((response) => {
         const timelogData = response.data;
-        console.log(timelogData,"tilogdata")
-       
+        console.log(timelogData, "tilogdata");
+
         const dataSettimeLog = [];
 
         timelogData.forEach((tl, index) => {
-          
           let tldata = {};
           if (tl.id) {
             tldata.id = tl.id;
@@ -1189,7 +1226,9 @@ if(dataSetthresold.length>1){
             tldata.performedBy = tl.performedBy;
           }
           if (tl.performedOn) {
-            tldata.performedOn = Moment(tl.performedOn).format('YYYY-MM-DD hh:mm:ss A').toString();
+            tldata.performedOn = Moment(tl.performedOn)
+              .format("YYYY-MM-DD hh:mm:ss A")
+              .toString();
           }
           if (tl.startDT) {
             tldata.startDT = tl.startDT;
@@ -1208,8 +1247,6 @@ if(dataSetthresold.length>1){
         });
 
         setTimeLogData(dataSettimeLog);
-
-       
       });
   };
 
@@ -1224,25 +1261,23 @@ if(dataSetthresold.length>1){
       relogin();
     }
 
-   
-   await axios
-    .get(
-      apiUrl2 +
-        "timelog",{ params: { GSI1PK: "TIMELOG_READING_" } },
+    await axios
+      .get(
+        apiUrl2 + "timelog",
+        { params: { GSI1PK: "TIMELOG_READING_" } },
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-         
-    )  .then((response) => {
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
+      .then((response) => {
         const timelogData = response.data;
-       
+
         const dataSettimeLog = [];
 
         timelogData.forEach((tl, index) => {
-         
           let tldata = {};
 
           if (tl.taskType) {
@@ -1252,7 +1287,9 @@ if(dataSetthresold.length>1){
             tldata.performedBy = tl.performedBy;
           }
           if (tl.performedOn) {
-            tldata.performedOn = Moment(tl.performedOn).format('YYYY-MM-DD hh:mm:ss A').toString();
+            tldata.performedOn = Moment(tl.performedOn)
+              .format("YYYY-MM-DD hh:mm:ss A")
+              .toString();
           }
           if (tl.startDT) {
             tldata.startDT = tl.startDT;
@@ -1273,13 +1310,11 @@ if(dataSetthresold.length>1){
         });
 
         setAllTimeLogData(dataSettimeLog);
-
-       
       });
   };
 
-  const addDevice = async (deviceType, deviceId, patientId,userName) => {
-  setdeviceDataForPatient([]);
+  const addDevice = async (deviceType, deviceId, patientId, userName) => {
+    setdeviceDataForPatient([]);
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
@@ -1307,36 +1342,33 @@ if(dataSetthresold.length>1){
       return;
     }
 
-    const data = ({
+    const data = {
       sk: SK,
-      gsI1PK:"PATIENT_"+patientId,
-      deviceId:deviceId,
-      deviceType:deviceType
-      
-    });
+      gsI1PK: "PATIENT_" + patientId,
+      deviceId: deviceId,
+      deviceType: deviceType,
+    };
 
     await axios
-    .post(
-      apiUrl2 +
-        "device",data,{
+      .post(apiUrl2 + "device", data, {
         headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-         
+          "Content-Type": "application/json",
+          accept: "text/plain",
         },
-         
-    )   .then((response) => {
+      })
+      .then((response) => {
         if (response.status === 200) {
-          
           swal("success", "Device Inserted Successfully.", "success");
-          fetchDeviceDataForPatient("PATIENT_" + patientId, userName, "patient");
-          
+          fetchDeviceDataForPatient(
+            "PATIENT_" + patientId,
+            userName,
+            "patient"
+          );
         }
       });
   };
 
-  const UpdateThreshold = async (patient, type, high, low, userType,time) => {
+  const UpdateThreshold = async (patient, type, high, low, userType, time) => {
     // fetch Threshold.
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
@@ -1348,44 +1380,44 @@ if(dataSetthresold.length>1){
       relogin();
     }
 
-    const data={
+    const data = {
       id: time[0].id,
       sk: patient.toString(),
       high: high.toString(),
       low: low.toString(),
-      tElements: type
-    }
+      tElements: type,
+    };
 
     await axios
-    .put(
-      apiUrl2 +
-        "threshold",data,{
+      .put(apiUrl2 + "threshold", data, {
         headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-         
+          "Content-Type": "application/json",
+          accept: "text/plain",
         },
-         
-    ).then((response) => {
-      if (response.status === 200) {
-        swal("success", "Threshold Update Successfully.", "success");
-        //alert("Threshold Update Successfully.");
-      } else {
-        swal("error", "Threshold did not Update.", "error");
-        // alert("");
-      }
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          swal("success", "Threshold Update Successfully.", "success");
+          //alert("Threshold Update Successfully.");
+        } else {
+          swal("error", "Threshold did not Update.", "error");
+          // alert("");
+        }
       });
     //Update
   };
 
-  
-
-  
-
-  const UpdateProfie = async(userName, email, phone, dob, height, weight, bmi) => {
-    console.log(patients)
-    const token=localStorage.getItem("app_jwt");
+  const UpdateProfie = async (
+    userName,
+    email,
+    phone,
+    dob,
+    height,
+    weight,
+    bmi
+  ) => {
+    console.log(patients);
+    const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
       setIsAuthenticated(true);
@@ -1395,82 +1427,77 @@ if(dataSetthresold.length>1){
       relogin();
     }
 
-    const patient=patients.filter((curr)=>curr.email===email);
+    const patient = patients.filter((curr) => curr.email === email);
     const userid = localStorage.getItem("userId");
-    
+
     let userType = localStorage.getItem("userType");
     if (userType === "") userType = "patient";
-    const data={
-      id:patient.id,
-sk:patient.sk,
-activeStatus:"Active",
-carecoordinatorId:patient.careId,
-carecoordinatorName:patient.CareName,
-city:patient.city,
-coach:patient.CoachName,
-coachId:patient.coachId,
-connectionId:"",
-contactNo:phone,
-createdDate:patient.createdDate,
-diagnosisId:patient.diagnosisId,
-diastolic:patient.diastolic,
-dob:dob,
-doctorId:patient.ProviderId,
-doctorName:patient.ProviderName,
-email:patient.email,
-firstName:patient.firstName,
-gender:patient.gender,
-gsI1PK:"patient",
-gsI1SK:patient.ProviderId,
-height:height,
-lang:patient.language,
-lastName:patient.lastName,
-middleName:patient.middleName,
-mobilePhone:phone,
-notes:patient.notes,
-otp:patient.otp,
-profileImage:patient.profileImage,
-reading:bmi,
-st:patient.st,
-street:patient.street,
-systolic:patient.systolic,
-userId:patient.userId,
-userName:patient.userName,
-userTimeZone:patient.userTimeZone,
-userType:patient.userType,
-weight:weight,
-workPhone:patient.workPhone,
-zip:patient.zip,
-deviceId:patient.deviceId,
-deviceStatus:patient.deviceStatus,
-deviceType:patient.deviceType,
- }
+    const data = {
+      id: patient.id,
+      sk: patient.sk,
+      activeStatus: "Active",
+      carecoordinatorId: patient.careId,
+      carecoordinatorName: patient.CareName,
+      city: patient.city,
+      coach: patient.CoachName,
+      coachId: patient.coachId,
+      connectionId: "",
+      contactNo: phone,
+      createdDate: patient.createdDate,
+      diagnosisId: patient.diagnosisId,
+      diastolic: patient.diastolic,
+      dob: dob,
+      doctorId: patient.ProviderId,
+      doctorName: patient.ProviderName,
+      email: patient.email,
+      firstName: patient.firstName,
+      gender: patient.gender,
+      gsI1PK: "patient",
+      gsI1SK: patient.ProviderId,
+      height: height,
+      lang: patient.language,
+      lastName: patient.lastName,
+      middleName: patient.middleName,
+      mobilePhone: phone,
+      notes: patient.notes,
+      otp: patient.otp,
+      profileImage: patient.profileImage,
+      reading: bmi,
+      st: patient.st,
+      street: patient.street,
+      systolic: patient.systolic,
+      userId: patient.userId,
+      userName: patient.userName,
+      userTimeZone: patient.userTimeZone,
+      userType: patient.userType,
+      weight: weight,
+      workPhone: patient.workPhone,
+      zip: patient.zip,
+      deviceId: patient.deviceId,
+      deviceStatus: patient.deviceStatus,
+      deviceType: patient.deviceType,
+    };
 
- await axios
- .put(
-   apiUrl2 +
-     "patient",data,{
-     headers: {
-       'Content-Type': 'application/json',
-       'accept': 'text/plain'
-      }
-      
-     },
-      
- )
+    await axios
+      .put(apiUrl2 + "patient", data, {
+        headers: {
+          "Content-Type": "application/json",
+          accept: "text/plain",
+        },
+      })
       .then((response) => {
         if (response.status === 200) {
           swal("success", "Patient Deleted Successfully.", "success");
         }
       });
   };
- 
+
   const fetchNameFromId = (id, array) => {
     const ent = array.filter((a) => a.value === id);
     return ent[0];
   };
 
-  const UpdatePatient = async(
+  const UpdatePatient = async (
     fname,
     lname,
     phone,
@@ -1489,139 +1516,131 @@ deviceType:patient.deviceType,
     city,
     state,
     diagnosisId,
-    patient,program
+    patient,
+    program
   ) => {
     let providername = fetchNameFromId(provider, providerOptions);
-    
+
     const token = localStorage.getItem("app_jwt");
-    if(!phone||!mobilePhone||!birthDate){
-      swal("error","Please fill all necessary details","error")
-    } else{
+    if (!phone || !mobilePhone || !birthDate) {
+      swal("error", "Please fill all necessary details", "error");
+    } else {
+      var providervalue = providerOptions.filter(
+        (p) => p.name == "Select Provider"
+      )[0];
+      providervalue.value = "";
+      var ccvalue = careCoordinatorOptions.filter(
+        (p) => p.name == "Select Coordinator"
+      )[0];
+      ccvalue.value = "";
+      var coachvalue = coachOptions.filter((p) => p.name == "Select Coach")[0];
+      coachvalue.value = "";
 
-    var providervalue = providerOptions.filter(
-      (p) => p.name == "Select Provider"
-    )[0];
-    providervalue.value = "";
-    var ccvalue = careCoordinatorOptions.filter(
-      (p) => p.name == "Select Coordinator"
-    )[0];
-    ccvalue.value = "";
-    var coachvalue = coachOptions.filter((p) => p.name == "Select Coach")[0];
-    coachvalue.value = "";
+      if (coordinator == "") coordinator = ccvalue.value;
+      if (provider == "") provider = providervalue.value;
+      if (coach == "") coach = coachvalue.value;
 
-    if (coordinator == "") coordinator = ccvalue.value;
-    if (provider == "") provider = providervalue.value;
-    if (coach == "") coach = coachvalue.value;
+      let providername = fetchNameFromId(provider, providerOptions);
+      let carecoordinatorname = fetchNameFromId(
+        coordinator,
+        careCoordinatorOptions
+      );
+      let coachname = fetchNameFromId(coach, coachOptions);
 
-    let providername = fetchNameFromId(provider, providerOptions);
-    let carecoordinatorname = fetchNameFromId(
-      coordinator,
-      careCoordinatorOptions
-    );
-    let coachname = fetchNameFromId(coach, coachOptions);
+      let gendervalue = "";
 
-    let gendervalue = "";
-   
-    if (gender == 1) {
-    
-      gendervalue = "Female";
-    }
-    if (gender == 0) {
-     
-      gendervalue = "Male";
-    }
-    
+      if (gender == 1) {
+        gendervalue = "Female";
+      }
+      if (gender == 0) {
+        gendervalue = "Male";
+      }
 
-    let languagevalue = "";
-    if (language == 0) {
-      languagevalue = "English";
-     
-    }
-    if (language == 1) {
-      languagevalue = "Spanish";
-     
-    }
-    if (fname === undefined) fname = "";
-    if (lname === undefined) lname = "";
+      let languagevalue = "";
+      if (language == 0) {
+        languagevalue = "English";
+      }
+      if (language == 1) {
+        languagevalue = "Spanish";
+      }
+      if (fname === undefined) fname = "";
+      if (lname === undefined) lname = "";
 
-    
-    const data={
-      id: patient.id,
-      activeStatus: "Active",
-carecoordinatorId: carecoordinatorname.value,
-carecoordinatorName: carecoordinatorname.name,
-city: city,
-coach: coachname.name,
-coachId: coachname.value,
-connectionId: "",
-contactNo: phone ,
-createdDate: "",
-deviceId: "",
-deviceStatus: "",
-deviceType: "",
-diagnosisId: diagnosisId,
-diastolic: "71.255",
-dob: birthDate ,
-doctorId: providername.value,
-doctorName: providername.name,
-email: patient.email,
-firstName: fname ,
-gender: gendervalue ,
-gsI1PK: "patient",
-gsI1SK: providername.value,
-height: height ,
-st: state,
-lang: languagevalue,
-lastName: lname ,
-middleName: "",
-mobilePhone: phone ,
-notes: patient.notes,
-otp: patient.otp,
-profileImage: "",
-reading: patient.reading.toString(),
-sk: patient.sk,
-st: "undefined",
-street: street,
-systolic: patient.systolic,
-userId: patient.userId,
-userName:patient.userName,
-userTimeZone: patient.userTimeZone,
-userType: patient.userType,
-weight: patient.Weight,
-workPhone: workPhone,
-zip: zip,
-program:program,
-cptCodeForCCM:patient.cptcodeforccm,
-cptCodeForRPM:patient.cptcodeforrpm,
-    }
-    
-    await axios
-    .put(
-      apiUrl2 +
-        "patient",data,{
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-         
-        },
-         
-    )
-      .then((response) => {
-        if (response.status === 200) {
-          // alert("");
-          swal("success", "Patient data Update Successfully.", "success");
-      
-        } else {
-          //alert("Patient data did not Update  Successfully.");
-          swal("error", "Patient data did not Update  Successfully.", "error");
-        }
-      });
+      const data = {
+        id: patient.id,
+        activeStatus: "Active",
+        carecoordinatorId: carecoordinatorname.value,
+        carecoordinatorName: carecoordinatorname.name,
+        city: city,
+        coach: coachname.name,
+        coachId: coachname.value,
+        connectionId: "",
+        contactNo: phone,
+        createdDate: "",
+        deviceId: "",
+        deviceStatus: "",
+        deviceType: "",
+        diagnosisId: diagnosisId,
+        diastolic: "71.255",
+        dob: birthDate,
+        doctorId: providername.value,
+        doctorName: providername.name,
+        email: patient.email,
+        firstName: fname,
+        gender: gendervalue,
+        gsI1PK: "patient",
+        gsI1SK: providername.value,
+        height: height,
+        st: state,
+        lang: languagevalue,
+        lastName: lname,
+        middleName: "",
+        mobilePhone: phone,
+        notes: patient.notes,
+        otp: patient.otp,
+        profileImage: "",
+        reading: patient.reading.toString(),
+        sk: patient.sk,
+        st: "undefined",
+        street: street,
+        systolic: patient.systolic,
+        userId: patient.userId,
+        userName: patient.userName,
+        userTimeZone: patient.userTimeZone,
+        userType: patient.userType,
+        weight: patient.Weight,
+        workPhone: workPhone,
+        zip: zip,
+        program: program,
+        cptCodeForCCM: patient.cptcodeforccm,
+        cptCodeForRPM: patient.cptcodeforrpm,
+      };
+
+      await axios
+        .put(apiUrl2 + "patient", data, {
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            // alert("");
+            swal("success", "Patient data Update Successfully.", "success");
+          } else {
+            //alert("Patient data did not Update  Successfully.");
+            swal(
+              "error",
+              "Patient data did not Update  Successfully.",
+              "error"
+            );
+          }
+        });
     }
   };
 
-  const AssignCareTeam =async (provider, coordinator, coach, patient) => {
-    const token=localStorage.getItem("app_jwt");
+  const AssignCareTeam = async (provider, coordinator, coach, patient) => {
+    const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
       setIsAuthenticated(true);
@@ -1637,83 +1656,77 @@ cptCodeForRPM:patient.cptcodeforrpm,
       careCoordinatorOptions
     );
     let coachname = fetchNameFromId(coach, coachOptions);
-    
-    const data1={
-      id:patient.id,
-sk:patient.sk,
-activeStatus:"Active",
-carecoordinatorId:carecoordinatorname.value,
-carecoordinatorName:carecoordinatorname.name,
-city:patient.city,
-coach:coachname.name,
-coachId:coachname.value,
-connectionId:"",
-contactNo:patient.mobile,
-createdDate:patient.createdDate,
-diagnosisId:patient.diagnosisId,
-diastolic:patient.diastolic,
-dob:patient.dob,
-doctorId:providername.value,
-doctorName:providername.name,
-email:patient.email,
-firstName:patient.firstName,
-gender:patient.gender,
-gsI1PK:"patient",
-gsI1SK:providername.value,
-height:patient.height,
-lang:patient.language,
-lastName:patient.lastName,
-middleName:patient.middleName,
-mobilePhone:patient.mobile,
-notes:patient.notes,
-otp:patient.otp,
-profileImage:patient.profileImage,
-reading:patient.BMI,
-st:patient.st,
-street:patient.street,
-systolic:patient.systolic,
-userId:patient.userId,
-userName:patient.userName,
-userTimeZone:patient.userTimeZone,
-userType:patient.userType,
-weight:patient.weight,
-workPhone:patient.workPhone,
-zip:patient.zip,
-deviceId:patient.deviceId,
-deviceStatus:patient.deviceStatus,
-deviceType:patient.deviceType,
- }
+
+    const data1 = {
+      id: patient.id,
+      sk: patient.sk,
+      activeStatus: "Active",
+      carecoordinatorId: carecoordinatorname.value,
+      carecoordinatorName: carecoordinatorname.name,
+      city: patient.city,
+      coach: coachname.name,
+      coachId: coachname.value,
+      connectionId: "",
+      contactNo: patient.mobile,
+      createdDate: patient.createdDate,
+      diagnosisId: patient.diagnosisId,
+      diastolic: patient.diastolic,
+      dob: patient.dob,
+      doctorId: providername.value,
+      doctorName: providername.name,
+      email: patient.email,
+      firstName: patient.firstName,
+      gender: patient.gender,
+      gsI1PK: "patient",
+      gsI1SK: providername.value,
+      height: patient.height,
+      lang: patient.language,
+      lastName: patient.lastName,
+      middleName: patient.middleName,
+      mobilePhone: patient.mobile,
+      notes: patient.notes,
+      otp: patient.otp,
+      profileImage: patient.profileImage,
+      reading: patient.BMI,
+      st: patient.st,
+      street: patient.street,
+      systolic: patient.systolic,
+      userId: patient.userId,
+      userName: patient.userName,
+      userTimeZone: patient.userTimeZone,
+      userType: patient.userType,
+      weight: patient.weight,
+      workPhone: patient.workPhone,
+      zip: patient.zip,
+      deviceId: patient.deviceId,
+      deviceStatus: patient.deviceStatus,
+      deviceType: patient.deviceType,
+    };
     if (providername.value === "") {
       alert("Please select provider.");
       return;
     }
     await axios
-    .put(
-      apiUrl2 +
-        "patient",data1,{
+      .put(apiUrl2 + "patient", data1, {
         headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-         
+          "Content-Type": "application/json",
+          accept: "text/plain",
         },
-         
-    )
-    
+      })
+
       .then((response) => {
         if (response.status === 200) {
           //alert("");
           swal("success", "Data update Successfully.", "success");
         } else {
-         
           // alert("");
           swal("error", "Data did did not Update  Successfully.", "error");
         }
       });
   };
 
-  const UpdateProvider = async(username, mobile, email, patientId,doctor) => {
-    const token=localStorage.getItem("app_jwt");
+  const UpdateProvider = async (username, mobile, email, patientId, doctor) => {
+    const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
       setIsAuthenticated(true);
@@ -1723,8 +1736,7 @@ deviceType:patient.deviceType,
       relogin();
     }
 
-
-    const data ={
+    const data = {
       id: doctor.id,
       sk: patientId,
       activeStatus: "Active",
@@ -1735,34 +1747,34 @@ deviceType:patient.deviceType,
       gsI1SK: patientId,
       userId: "string",
       userName: username,
-      userType: "doctor"
-    }
+      userType: "doctor",
+    };
 
     await axios
-    .put(
-      apiUrl2 +
-        "doctor",data,{
+      .put(apiUrl2 + "doctor", data, {
         headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-         
+          "Content-Type": "application/json",
+          accept: "text/plain",
         },
-         
-    )
+      })
       .then((response) => {
-        console.log("updated responsee",response);
+        console.log("updated responsee", response);
         if (response.status === 200) {
           alert("Provider has been updated");
-        }
-        else{
-          alert("data not updated")
+        } else {
+          alert("data not updated");
         }
       });
   };
 
-  const UpdateCareCoordinator = async(username, mobile, email, patientId,doctor) => {
-    const token=localStorage.getItem("app_jwt");
+  const UpdateCareCoordinator = async (
+    username,
+    mobile,
+    email,
+    patientId,
+    doctor
+  ) => {
+    const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
       setIsAuthenticated(true);
@@ -1772,8 +1784,7 @@ deviceType:patient.deviceType,
       relogin();
     }
 
-
-    const data ={
+    const data = {
       id: doctor.id,
       sk: patientId,
       activeStatus: "Active",
@@ -1784,35 +1795,28 @@ deviceType:patient.deviceType,
       gsI1SK: patientId,
       userId: "string",
       userName: username,
-      userType: "Care Coordinator"
-    }
+      userType: "Care Coordinator",
+    };
 
     await axios
-    .put(
-      apiUrl2 +
-        "carecoordinator",data,{
+      .put(apiUrl2 + "carecoordinator", data, {
         headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-         
+          "Content-Type": "application/json",
+          accept: "text/plain",
         },
-         
-    )
+      })
       .then((response) => {
-        console.log("updated responsee",response);
+        console.log("updated responsee", response);
         if (response.status === 200) {
           alert("care coordinator has been updated");
-        }
-        else{
-          alert("data not updated")
+        } else {
+          alert("data not updated");
         }
       });
   };
 
-  const UpdateCoach =async(username, mobile, email, patientId,doctor) => {
-  
-    const token=localStorage.getItem("app_jwt");
+  const UpdateCoach = async (username, mobile, email, patientId, doctor) => {
+    const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
       setIsAuthenticated(true);
@@ -1822,8 +1826,7 @@ deviceType:patient.deviceType,
       relogin();
     }
 
-
-    const data ={
+    const data = {
       id: doctor.id,
       sk: patientId,
       activeStatus: "Active",
@@ -1834,21 +1837,17 @@ deviceType:patient.deviceType,
       gsI1SK: patientId,
       userId: "string",
       userName: username,
-      userType: "coach"
-    }
+      userType: "coach",
+    };
 
     await axios
-    .put(
-      apiUrl2 +
-        "coach",data,{
+      .put(apiUrl2 + "coach", data, {
         headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-         
+          "Content-Type": "application/json",
+          accept: "text/plain",
         },
-         
-    )  .then((response) => {
+      })
+      .then((response) => {
         if (response.status === 200) {
           alert("Coach Update Successfully.");
           fetchCoach();
@@ -1858,392 +1857,355 @@ deviceType:patient.deviceType,
       });
   };
 
-  const DeletePatient = async(patient) => {
+  const DeletePatient = async (patient) => {
     const token = localStorage.getItem("app_jwt");
-    const data={
-      id:patient.id,
-sk:patient.sk,
-activeStatus:"Deactive",
-carecoordinatorId:patient.careId,
-carecoordinatorName:patient.CareName,
-city:patient.city,
-coach:patient.CoachName,
-coachId:patient.coachId,
-connectionId:"",
-contactNo:patient.mobile,
-createdDate:patient.createdDate,
-diagnosisId:patient.diagnosisId,
-diastolic:patient.diastolic,
-dob:patient.dob,
-doctorId:patient.ProviderId,
-doctorName:patient.ProviderName,
-email:patient.email,
-firstName:patient.firstName,
-gender:patient.gender,
-gsI1PK:"patient",
-gsI1SK:patient.ProviderId,
-height:patient.height,
-lang:patient.language,
-lastName:patient.lastName,
-middleName:patient.middleName,
-mobilePhone:patient.mobile,
-notes:patient.notes,
-otp:patient.otp,
-profileImage:patient.profileImage,
-reading:patient.BMI,
-st:patient.st,
-street:patient.street,
-systolic:patient.systolic,
-userId:patient.userId,
-userName:patient.userName,
-userTimeZone:patient.userTimeZone,
-userType:patient.userType,
-weight:patient.weight,
-workPhone:patient.workPhone,
-zip:patient.zip,
-deviceId:patient.deviceId,
-deviceStatus:patient.deviceStatus,
-deviceType:patient.deviceType,
-program:patient.program,
-cptCode1:patient.cptcode
- }
+    const data = {
+      id: patient.id,
+      sk: patient.sk,
+      activeStatus: "Deactive",
+      carecoordinatorId: patient.careId,
+      carecoordinatorName: patient.CareName,
+      city: patient.city,
+      coach: patient.CoachName,
+      coachId: patient.coachId,
+      connectionId: "",
+      contactNo: patient.mobile,
+      createdDate: patient.createdDate,
+      diagnosisId: patient.diagnosisId,
+      diastolic: patient.diastolic,
+      dob: patient.dob,
+      doctorId: patient.ProviderId,
+      doctorName: patient.ProviderName,
+      email: patient.email,
+      firstName: patient.firstName,
+      gender: patient.gender,
+      gsI1PK: "patient",
+      gsI1SK: patient.ProviderId,
+      height: patient.height,
+      lang: patient.language,
+      lastName: patient.lastName,
+      middleName: patient.middleName,
+      mobilePhone: patient.mobile,
+      notes: patient.notes,
+      otp: patient.otp,
+      profileImage: patient.profileImage,
+      reading: patient.BMI,
+      st: patient.st,
+      street: patient.street,
+      systolic: patient.systolic,
+      userId: patient.userId,
+      userName: patient.userName,
+      userTimeZone: patient.userTimeZone,
+      userType: patient.userType,
+      weight: patient.weight,
+      workPhone: patient.workPhone,
+      zip: patient.zip,
+      deviceId: patient.deviceId,
+      deviceStatus: patient.deviceStatus,
+      deviceType: patient.deviceType,
+      program: patient.program,
+      cptCode1: patient.cptcode,
+    };
 
- await axios
- .put(
-   apiUrl2 +
-     "patient",data,{
-     headers: {
-       'Content-Type': 'application/json',
-       'accept': 'text/plain'
-      }
-      
-     },
-      
- )
+    await axios
+      .put(apiUrl2 + "patient", data, {
+        headers: {
+          "Content-Type": "application/json",
+          accept: "text/plain",
+        },
+      })
       .then((response) => {
         if (response.status === 200) {
           swal("success", "Patient Deleted Successfully.", "success");
         }
       });
   };
-  const UpdateCPT = async(patient,ccm,rpm) => {
+  const UpdateCPT = async (patient, ccm, rpm) => {
     const token = localStorage.getItem("app_jwt");
-    const data={
-      id:patient.id,
-sk:patient.sk,
-activeStatus:"Active",
-carecoordinatorId:patient.careId,
-carecoordinatorName:patient.CareName,
-city:patient.city,
-coach:patient.CoachName,
-coachId:patient.coachId,
-connectionId:"",
-contactNo:patient.mobile,
-createdDate:patient.createdDate,
-diagnosisId:patient.diagnosisId,
-diastolic:patient.diastolic,
-dob:patient.dob,
-doctorId:patient.ProviderId,
-doctorName:patient.ProviderName,
-email:patient.email,
-firstName:patient.firstName,
-gender:patient.gender,
-gsI1PK:"patient",
-gsI1SK:patient.ProviderId,
-height:patient.height,
-lang:patient.language,
-lastName:patient.lastName,
-middleName:patient.middleName,
-mobilePhone:patient.mobile,
-notes:patient.notes,
-otp:patient.otp,
-profileImage:patient.profileImage,
-reading:patient.BMI,
-st:patient.st,
-street:patient.street,
-systolic:patient.systolic,
-userId:patient.userId,
-userName:patient.userName,
-userTimeZone:patient.userTimeZone,
-userType:patient.userType,
-weight:patient.weight,
-workPhone:patient.workPhone,
-zip:patient.zip,
-deviceId:patient.deviceId,
-deviceStatus:patient.deviceStatus,
-deviceType:patient.deviceType,
-program:patient.program,
-cptCodeForCCM:ccm,
-cptCodeForRPM:rpm,
- }
+    const data = {
+      id: patient.id,
+      sk: patient.sk,
+      activeStatus: "Active",
+      carecoordinatorId: patient.careId,
+      carecoordinatorName: patient.CareName,
+      city: patient.city,
+      coach: patient.CoachName,
+      coachId: patient.coachId,
+      connectionId: "",
+      contactNo: patient.mobile,
+      createdDate: patient.createdDate,
+      diagnosisId: patient.diagnosisId,
+      diastolic: patient.diastolic,
+      dob: patient.dob,
+      doctorId: patient.ProviderId,
+      doctorName: patient.ProviderName,
+      email: patient.email,
+      firstName: patient.firstName,
+      gender: patient.gender,
+      gsI1PK: "patient",
+      gsI1SK: patient.ProviderId,
+      height: patient.height,
+      lang: patient.language,
+      lastName: patient.lastName,
+      middleName: patient.middleName,
+      mobilePhone: patient.mobile,
+      notes: patient.notes,
+      otp: patient.otp,
+      profileImage: patient.profileImage,
+      reading: patient.BMI,
+      st: patient.st,
+      street: patient.street,
+      systolic: patient.systolic,
+      userId: patient.userId,
+      userName: patient.userName,
+      userTimeZone: patient.userTimeZone,
+      userType: patient.userType,
+      weight: patient.weight,
+      workPhone: patient.workPhone,
+      zip: patient.zip,
+      deviceId: patient.deviceId,
+      deviceStatus: patient.deviceStatus,
+      deviceType: patient.deviceType,
+      program: patient.program,
+      cptCodeForCCM: ccm,
+      cptCodeForRPM: rpm,
+    };
 
- await axios
- .put(
-   apiUrl2 +
-     "patient",data,{
-     headers: {
-       'Content-Type': 'application/json',
-       'accept': 'text/plain'
-      }
-      
-     },
-      
- )
+    await axios
+      .put(apiUrl2 + "patient", data, {
+        headers: {
+          "Content-Type": "application/json",
+          accept: "text/plain",
+        },
+      })
       .then((response) => {
         if (response.status === 200) {
           swal("success", "CPT Code Added Successfully.", "success");
         }
       });
   };
-  const DeleteDoctor = async(doctor) => {
-  
-   const data1 ={
-    id: doctor.id,
-    sk: doctor.doctor_id,
-    activeStatus: "Deactive",
-    contactNo: doctor.phone,
-    createdDate: doctor.CreatedDate,
-    email: doctor.email,
-    "gsI1PK": "string",
-    "gsI1SK": doctor.doctor_id,
-    "userId": "string",
-    "userName": doctor.provider,
-    "userType": "doctor"
-  }
+  const DeleteDoctor = async (doctor) => {
+    const data1 = {
+      id: doctor.id,
+      sk: doctor.doctor_id,
+      activeStatus: "Deactive",
+      contactNo: doctor.phone,
+      createdDate: doctor.CreatedDate,
+      email: doctor.email,
+      gsI1PK: "string",
+      gsI1SK: doctor.doctor_id,
+      userId: "string",
+      userName: doctor.provider,
+      userType: "doctor",
+    };
 
- await axios
- .put(
-   apiUrl2 +
-     "doctor",data1,{
-     headers: {
-       'Content-Type': 'application/json',
-       'accept': 'text/plain'
-      }
-      
-     },
-      
- )
+    await axios
+      .put(apiUrl2 + "doctor", data1, {
+        headers: {
+          "Content-Type": "application/json",
+          accept: "text/plain",
+        },
+      })
       .then((response) => {
         if (response.status === 200) {
           swal("success", "Patient Deleted Successfully.", "success");
         }
       });
   };
-  const UpdateNotes = async(patient,notes,otp,reading) => {
+  const UpdateNotes = async (patient, notes, otp, reading) => {
     const token = localStorage.getItem("app_jwt");
-    const otp1=(otp==="")?patient.otp:otp
-    const notes1=(notes==="")?patient.notes:notes
-    const reading1=(reading==="")?patient.reading:reading
-    const data={
-      id:patient.id,
-sk:patient.sk,
-activeStatus:"Active",
-carecoordinatorId:patient.careId,
-carecoordinatorName:patient.CareName,
-city:patient.city,
-coach:patient.CoachName,
-coachId:patient.coachId,
-connectionId:"",
-contactNo:patient.mobile,
-createdDate:patient.createdDate,
-diagnosisId:patient.diagnosisId,
-diastolic:patient.diastolic,
-dob:patient.dob,
-doctorId:patient.ProviderId,
-doctorName:patient.ProviderName,
-email:patient.email,
-firstName:patient.firstName,
-gender:patient.gender,
-gsI1PK:"patient",
-gsI1SK:patient.ProviderId,
-height:patient.height,
-lang:patient.language,
-lastName:patient.lastName,
-middleName:patient.middleName,
-mobilePhone:patient.mobile,
-notes:notes1,
-otp:otp1.toString(),
-profileImage:patient.profileImage,
-reading:reading1.toString(),
-st:patient.st,
-street:patient.street,
-systolic:patient.systolic,
-userId:patient.userId,
-userName:patient.userName,
-userTimeZone:patient.userTimeZone,
-userType:patient.userType,
-weight:patient.weight,
-workPhone:patient.workPhone,
-zip:patient.zip,
-deviceId:patient.deviceId,
-deviceStatus:patient.deviceStatus,
-deviceType:patient.deviceType,
-program:patient.program,
-cptCodeForCCM:patient.cptcodeforccm,
-cptCodeForRPM:patient.cptcodeforrpm,
- }
+    const otp1 = otp === "" ? patient.otp : otp;
+    const notes1 = notes === "" ? patient.notes : notes;
+    const reading1 = reading === "" ? patient.reading : reading;
+    const data = {
+      id: patient.id,
+      sk: patient.sk,
+      activeStatus: "Active",
+      carecoordinatorId: patient.careId,
+      carecoordinatorName: patient.CareName,
+      city: patient.city,
+      coach: patient.CoachName,
+      coachId: patient.coachId,
+      connectionId: "",
+      contactNo: patient.mobile,
+      createdDate: patient.createdDate,
+      diagnosisId: patient.diagnosisId,
+      diastolic: patient.diastolic,
+      dob: patient.dob,
+      doctorId: patient.ProviderId,
+      doctorName: patient.ProviderName,
+      email: patient.email,
+      firstName: patient.firstName,
+      gender: patient.gender,
+      gsI1PK: "patient",
+      gsI1SK: patient.ProviderId,
+      height: patient.height,
+      lang: patient.language,
+      lastName: patient.lastName,
+      middleName: patient.middleName,
+      mobilePhone: patient.mobile,
+      notes: notes1,
+      otp: otp1.toString(),
+      profileImage: patient.profileImage,
+      reading: reading1.toString(),
+      st: patient.st,
+      street: patient.street,
+      systolic: patient.systolic,
+      userId: patient.userId,
+      userName: patient.userName,
+      userTimeZone: patient.userTimeZone,
+      userType: patient.userType,
+      weight: patient.weight,
+      workPhone: patient.workPhone,
+      zip: patient.zip,
+      deviceId: patient.deviceId,
+      deviceStatus: patient.deviceStatus,
+      deviceType: patient.deviceType,
+      program: patient.program,
+      cptCodeForCCM: patient.cptcodeforccm,
+      cptCodeForRPM: patient.cptcodeforrpm,
+    };
 
- await axios
- .put(
-   apiUrl2 +
-     "patient",data,{
-     headers: {
-       'Content-Type': 'application/json',
-       'accept': 'text/plain'
-      }
-      
-     },
-      
- )
+    await axios
+      .put(apiUrl2 + "patient", data, {
+        headers: {
+          "Content-Type": "application/json",
+          accept: "text/plain",
+        },
+      })
       .then((response) => {
         if (response.status === 200) {
           swal("success", "Updated Successfully.", "success");
         }
       });
   };
-  const DeleteCareCoordinator = async(doctor) => {
-  
-    const data1 ={
-     id: doctor.id,
-     sk: doctor.doctor_id,
-     activeStatus: "Deactive",
-     contactNo: doctor.phone,
-     createdDate: doctor.CreatedDate,
-     email: doctor.email,
-     "gsI1PK": "string",
-     "gsI1SK": doctor.doctor_id,
-     "userId": "string",
-     "userName": doctor.provider,
-     "userType": "Care Coordinator"
-   }
- 
-  await axios
-  .put(
-    apiUrl2 +
-      "carecoordinator",data1,{
-      headers: {
-        'Content-Type': 'application/json',
-        'accept': 'text/plain'
-       }
-       
-      },
-       
-  )
-       .then((response) => {
-         if (response.status === 200) {
-           swal("success", "Care Coordinator Deleted Successfully.", "success");
-         }
-       });
-   };
-   const DeleteCoach = async(doctor) => {
-  
-    const data1 ={
-     id: doctor.id,
-     sk: doctor.doctor_id,
-     activeStatus: "Deactive",
-     contactNo: doctor.phone,
-     createdDate: doctor.CreatedDate,
-     email: doctor.email,
-     "gsI1PK": "string",
-     "gsI1SK": doctor.doctor_id,
-     "userId": "string",
-     "userName": doctor.name,
-     "userType": "coach"
-   }
- 
-  await axios
-  .put(
-    apiUrl2 +
-      "coach",data1,{
-      headers: {
-        'Content-Type': 'application/json',
-        'accept': 'text/plain'
-       }
-       
-      },
-       
-  )
-       .then((response) => {
-         if (response.status === 200) {
-           swal("success", "Coach Deleted Successfully.", "success");
-           fetchCoach();
-         }
-       });
-   };
-  const ActivatePatient = async(patient) => {
-    const token = localStorage.getItem("app_jwt");
+  const DeleteCareCoordinator = async (doctor) => {
+    const data1 = {
+      id: doctor.id,
+      sk: doctor.doctor_id,
+      activeStatus: "Deactive",
+      contactNo: doctor.phone,
+      createdDate: doctor.CreatedDate,
+      email: doctor.email,
+      gsI1PK: "string",
+      gsI1SK: doctor.doctor_id,
+      userId: "string",
+      userName: doctor.provider,
+      userType: "Care Coordinator",
+    };
 
-    const data={
-      id:patient.id,
-sk:patient.sk,
-activeStatus:"Active",
-carecoordinatorId:patient.careId,
-carecoordinatorName:patient.CareName,
-city:patient.city,
-coach:patient.CoachName,
-coachId:patient.coachId,
-connectionId:"",
-contactNo:patient.mobile,
-createdDate:patient.createdDate,
-diagnosisId:patient.diagnosisId,
-diastolic:patient.diastolic,
-dob:patient.dob,
-doctorId:patient.ProviderId,
-doctorName:patient.ProviderName,
-email:patient.email,
-firstName:patient.firstName,
-gender:patient.gender,
-gsI1PK:"patient",
-gsI1SK:patient.ProviderId,
-height:patient.height,
-lang:patient.language,
-lastName:patient.lastName,
-middleName:patient.middleName,
-mobilePhone:patient.mobile,
-notes:patient.notes,
-otp:patient.otp,
-profileImage:patient.profileImage,
-reading:patient.BMI,
-st:patient.st,
-street:patient.street,
-systolic:patient.systolic,
-userId:patient.userId,
-userName:patient.userName,
-userTimeZone:patient.userTimeZone,
-userType:patient.userType,
-weight:patient.weight,
-workPhone:patient.workPhone,
-zip:patient.zip,
-deviceId:patient.deviceId,
-deviceStatus:patient.deviceStatus,
-deviceType:patient.deviceType,
- }
-
- await axios
- .put(
-   apiUrl2 +
-     "patient",data,{
-     headers: {
-       'Content-Type': 'application/json',
-       'accept': 'text/plain'
-      }
-      
-     },
-      
- )
+    await axios
+      .put(apiUrl2 + "carecoordinator", data1, {
+        headers: {
+          "Content-Type": "application/json",
+          accept: "text/plain",
+        },
+      })
       .then((response) => {
         if (response.status === 200) {
-        swal("success", "Patient Activated Successfully.", "success");
+          swal("success", "Care Coordinator Deleted Successfully.", "success");
+        }
+      });
+  };
+  const DeleteCoach = async (doctor) => {
+    const data1 = {
+      id: doctor.id,
+      sk: doctor.doctor_id,
+      activeStatus: "Deactive",
+      contactNo: doctor.phone,
+      createdDate: doctor.CreatedDate,
+      email: doctor.email,
+      gsI1PK: "string",
+      gsI1SK: doctor.doctor_id,
+      userId: "string",
+      userName: doctor.name,
+      userType: "coach",
+    };
+
+    await axios
+      .put(apiUrl2 + "coach", data1, {
+        headers: {
+          "Content-Type": "application/json",
+          accept: "text/plain",
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          swal("success", "Coach Deleted Successfully.", "success");
+          fetchCoach();
+        }
+      });
+  };
+  const ActivatePatient = async (patient) => {
+    const token = localStorage.getItem("app_jwt");
+
+    const data = {
+      id: patient.id,
+      sk: patient.sk,
+      activeStatus: "Active",
+      carecoordinatorId: patient.careId,
+      carecoordinatorName: patient.CareName,
+      city: patient.city,
+      coach: patient.CoachName,
+      coachId: patient.coachId,
+      connectionId: "",
+      contactNo: patient.mobile,
+      createdDate: patient.createdDate,
+      diagnosisId: patient.diagnosisId,
+      diastolic: patient.diastolic,
+      dob: patient.dob,
+      doctorId: patient.ProviderId,
+      doctorName: patient.ProviderName,
+      email: patient.email,
+      firstName: patient.firstName,
+      gender: patient.gender,
+      gsI1PK: "patient",
+      gsI1SK: patient.ProviderId,
+      height: patient.height,
+      lang: patient.language,
+      lastName: patient.lastName,
+      middleName: patient.middleName,
+      mobilePhone: patient.mobile,
+      notes: patient.notes,
+      otp: patient.otp,
+      profileImage: patient.profileImage,
+      reading: patient.BMI,
+      st: patient.st,
+      street: patient.street,
+      systolic: patient.systolic,
+      userId: patient.userId,
+      userName: patient.userName,
+      userTimeZone: patient.userTimeZone,
+      userType: patient.userType,
+      weight: patient.weight,
+      workPhone: patient.workPhone,
+      zip: patient.zip,
+      deviceId: patient.deviceId,
+      deviceStatus: patient.deviceStatus,
+      deviceType: patient.deviceType,
+    };
+
+    await axios
+      .put(apiUrl2 + "patient", data, {
+        headers: {
+          "Content-Type": "application/json",
+          accept: "text/plain",
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          swal("success", "Patient Activated Successfully.", "success");
         }
       });
   };
 
   const DeleteTimeLog = (timelog) => {
     setTimeLogData([]);
-    
 
-    axios.delete(apiUrl2+"timelog", { params: { id: timelog.id } })  .then((response) => {
-      console.log(response,"delete response")
+    axios
+      .delete(apiUrl2 + "timelog", { params: { id: timelog.id } })
+      .then((response) => {
+        console.log(response, "delete response");
         if (response.status === 200) {
           // alert("1 Entry of TimeLog Deleted Successfully.");
           swal(
@@ -2282,17 +2244,22 @@ deviceType:patient.deviceType,
         }
       });
   };
-  
-  const DeleteDeviceData = (id,patientId,userName) => {
+
+  const DeleteDeviceData = (id, patientId, userName) => {
     setdeviceDataForPatient([]);
     const token = localStorage.getItem("app_jwt");
 
-    axios.delete(apiUrl2+"device", { params: { id: id.id } })  
+    axios
+      .delete(apiUrl2 + "device", { params: { id: id.id } })
       .then((response) => {
-        if (response.status ===200) {
+        if (response.status === 200) {
           // alert("");
           swal("success", "Device Deleted Successfully.", "success");
- fetchDeviceDataForPatient("PATIENT_" + patientId, userName, "patient");
+          fetchDeviceDataForPatient(
+            "PATIENT_" + patientId,
+            userName,
+            "patient"
+          );
         } else {
           swal("error", "Server Error", "error");
         }
@@ -2333,7 +2300,7 @@ deviceType:patient.deviceType,
       });
   };
 
-  const addProvider = (name, email, phone, password,type) => {
+  const addProvider = (name, email, phone, password, type) => {
     const token = localStorage.getItem("app_jwt");
     const date = new Date();
     const id = date.getTime();
@@ -2341,7 +2308,7 @@ deviceType:patient.deviceType,
       UserName: email,
       Email: email,
       Password: password,
-      newPassword:"string",
+      newPassword: "string",
     };
 
     axios
@@ -2352,59 +2319,51 @@ deviceType:patient.deviceType,
           Authorization: "Bearer " + token,
         },
       })
-      .then( (response) => {
-        console.log(response)
+      .then((response) => {
+        console.log(response);
         if (response.data === "Registered") {
-          const data = 
-          {
-            
-            "sk": "DOCTOR_" + id,
-            "activeStatus": "Active",
-            "contactNo": phone,
-            "createdDate": Moment(date).format('MM-DD-YYYY hh:mm A').toString(),
-            "email": email,
-            "gsI1PK": "string",
-            "gsI1SK": "DOCTOR_" + id,
-            "userId": id.toString(),
-            "userName": name,
-            "userType": (type)?"testdoctor":"doctor"
-          }
-        add2(data,"Doctor")
-      } else {
-        alert(response.data);
-      }
-    });
+          const data = {
+            sk: "DOCTOR_" + id,
+            activeStatus: "Active",
+            contactNo: phone,
+            createdDate: Moment(date).format("MM-DD-YYYY hh:mm A").toString(),
+            email: email,
+            gsI1PK: "string",
+            gsI1SK: "DOCTOR_" + id,
+            userId: id.toString(),
+            userName: name,
+            userType: type ? "testdoctor" : "doctor",
+          };
+          add2(data, "Doctor");
+        } else {
+          alert(response.data);
+        }
+      });
   };
-  
-  const add2=async(data,type)=>{
+
+  const add2 = async (data, type) => {
     await axios
-    .post(
-      apiUrl2 +
-        type,data,{
+      .post(apiUrl2 + type, data, {
         headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-         
+          "Content-Type": "application/json",
+          accept: "text/plain",
         },
-         
-    ) .then((putresponse) => {
-      console.log(putresponse,"putrre")
-            
-              if (putresponse) {
-                alert("Verification code sent to your email " + data.email);
-                handleProviderModalShow();
-                if(type==="coach"){
-                  fetchCoach();
-                }
-                //window.location.replace('confirm-user-screen.html?username='+useremail);
-              } else {
-                
-              }
-            })
-            .catch((error)=>console.log(error,"api error"));
-      
-  }
+      })
+      .then((putresponse) => {
+        console.log(putresponse, "putrre");
+
+        if (putresponse) {
+          alert("Verification code sent to your email " + data.email);
+          handleProviderModalShow();
+          if (type === "coach") {
+            fetchCoach();
+          }
+          //window.location.replace('confirm-user-screen.html?username='+useremail);
+        } else {
+        }
+      })
+      .catch((error) => console.log(error, "api error"));
+  };
 
   const Registration = (
     username,
@@ -2426,7 +2385,11 @@ deviceType:patient.deviceType,
     pcm,
     pp,
     ppname,
-    diagnosisId,program,type,cptcodeforccm,cptcodeforrpm
+    diagnosisId,
+    program,
+    type,
+    cptcodeforccm,
+    cptcodeforrpm
   ) => {
     const token = localStorage.getItem("app_jwt");
     const date = new Date();
@@ -2435,7 +2398,7 @@ deviceType:patient.deviceType,
       Username: username,
       Email: email,
       Password: password,
-      newPassword:"string",
+      newPassword: "string",
     };
 
     axios
@@ -2448,16 +2411,15 @@ deviceType:patient.deviceType,
       })
       .then((response) => {
         if (response.data === "Registered") {
-          const data = ({
-            
+          const data = {
             sk: "PATIENT_" + id, //"doctor",
             userId: id.toString(),
             userName: username,
             email: email,
             contactNo: phone,
             dob: dob,
-            userType: (type)?"testpatient":"patient",
-            createdDate: Moment(date).format('MM-DD-YYYY hh:mm A').toString(),
+            userType: type ? "testpatient" : "patient",
+            createdDate: Moment(date).format("MM-DD-YYYY hh:mm A").toString(),
             firstName: firstname,
             middleName: middleName,
             lastName: lastname,
@@ -2474,44 +2436,34 @@ deviceType:patient.deviceType,
             city: city,
             st: state,
             diagnosisId: diagnosisId,
-            program:program,
-            reading:"true",
-            otp:"false",
-            
-cptCodeForCCM:JSON.stringify(cptcodeforccm),
-cptCodeForRPM:JSON.stringify(cptcodeforrpm),
-          });
+            program: program,
+            reading: "true",
+            otp: "false",
 
-          
-          
-     axios
-    .post(
-      apiUrl2 +
-        "patient",data,{
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-         
-        },
-         
-    )  .then((putresponse) => {
-              
+            cptCodeForCCM: JSON.stringify(cptcodeforccm),
+            cptCodeForRPM: JSON.stringify(cptcodeforrpm),
+          };
+
+          axios
+            .post(apiUrl2 + "patient", data, {
+              headers: {
+                "Content-Type": "application/json",
+                accept: "text/plain",
+              },
+            })
+            .then((putresponse) => {
               if (putresponse.status === 200) {
                 alert("Verification code sent to your email " + email);
                 handlePatientConfirmationModalShow();
-                
 
                 //window.location.replace('confirm-user-screen.html?username='+useremail);
               } else {
-               
               }
             });
         } else {
           if (response.data == "User already exists")
             response.data = "Email already exists";
           alert(response.data);
-
         }
       });
   };
@@ -2524,7 +2476,7 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
       Username: email,
       Email: email,
       Password: password,
-      newPassword:"string",
+      newPassword: "string",
     };
 
     axios
@@ -2537,21 +2489,19 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
       })
       .then((response) => {
         if (response.data === "Registered") {
-          const data = 
-          {
-            
-            "sk": "CARECOORDINATOR_" + id,
-            "activeStatus": "Active",
-            "contactNo": phone,
-            "createdDate": Moment(date).format('MM-DD-YYYY hh:mm A').toString(),
-            "email": email,
-            "gsI1PK": "string",
-            "gsI1SK": "CARECOORDINATOR_" + id,
-            "userId": id.toString(),
-            "userName": name,
-            "userType": "carecoordinator"
-          }
-        add2(data,"carecoordinator")
+          const data = {
+            sk: "CARECOORDINATOR_" + id,
+            activeStatus: "Active",
+            contactNo: phone,
+            createdDate: Moment(date).format("MM-DD-YYYY hh:mm A").toString(),
+            email: email,
+            gsI1PK: "string",
+            gsI1SK: "CARECOORDINATOR_" + id,
+            userId: id.toString(),
+            userName: name,
+            userType: "carecoordinator",
+          };
+          add2(data, "carecoordinator");
         } else {
           alert(response.data);
         }
@@ -2566,7 +2516,7 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
       Username: email,
       Email: email,
       Password: password,
-      newPassword:"string",
+      newPassword: "string",
     };
 
     axios
@@ -2579,48 +2529,48 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
       })
       .then((response) => {
         if (response.data === "Registered") {
-          const data = 
-          {
-            
-            "sk": "COACH_" + id,
-            "activeStatus": "Active",
-            "contactNo": phone,
-            "createdDate": "string",
-            "email": email,
-            "gsI1PK": "string",
-            "gsI1SK": "COACH_" + id,
-            "userId": id.toString(),
-            "userName": name,
-            "userType": "coach"
-          }
-        add2(data,"coach")
+          const data = {
+            sk: "COACH_" + id,
+            activeStatus: "Active",
+            contactNo: phone,
+            createdDate: "string",
+            email: email,
+            gsI1PK: "string",
+            gsI1SK: "COACH_" + id,
+            userId: id.toString(),
+            userName: name,
+            userType: "coach",
+          };
+          add2(data, "coach");
         } else {
           alert(response.data);
         }
       });
-        
   };
 
-  const fetchDeviceData = async (patientId, username, usertype, type, patient) => {
+  const fetchDeviceData = async (
+    patientId,
+    username,
+    usertype,
+    type,
+    patient
+  ) => {
     const token = localStorage.getItem("app_jwt");
     await axios
-    .get(
-      apiUrl2 +
-        "device",
-       
+      .get(
+        apiUrl2 + "device",
+
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
       .then((response) => {
         const deviceData = response.data;
         const dataSetdevice = [];
-        console.log(response.data,"devicedata")
+        console.log(response.data, "devicedata");
         let deviceType = "";
         if (deviceData.length === 0) {
           dataSetdevice.push("no device found");
@@ -2631,30 +2581,24 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
           let devicedata = {};
           devicedata.id = p.id;
 
-          
-            devicedata.deviceID = p.deviceId;
-          
-          
-            devicedata.DeviceType = p.deviceType;
-          
-          
-            devicedata.patientId = p.gsI1PK;
-          
-          
-            devicedata.sk = p.sk;
+          devicedata.deviceID = p.deviceId;
 
-            if (patients.length > 0) {
-              let patient = patients.filter(
-                (p) => p.ehrId === devicedata.patientId
-              );
-              if (patient.length > 0) devicedata.username = patient[0].name;
-            } else {
-              devicedata.username = username;
-            }
-          
-            
+          devicedata.DeviceType = p.deviceType;
+
+          devicedata.patientId = p.gsI1PK;
+
+          devicedata.sk = p.sk;
+
+          if (patients.length > 0) {
+            let patient = patients.filter(
+              (p) => p.ehrId === devicedata.patientId
+            );
+            if (patient.length > 0) devicedata.username = patient[0].name;
+          } else {
+            devicedata.username = username;
+          }
+
           if (devicedata.username !== undefined) dataSetdevice.push(devicedata);
-          
         });
 
         if (dataSetdevice[0] !== "no device found") {
@@ -2671,8 +2615,14 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
         }
       });
   };
-  const fetchDeviceDataForPatient = async (patientId, username, usertype, type, patient) => {
-    const token=localStorage.getItem("app_jwt");
+  const fetchDeviceDataForPatient = async (
+    patientId,
+    username,
+    usertype,
+    type,
+    patient
+  ) => {
+    const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
       setIsAuthenticated(true);
@@ -2683,23 +2633,20 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
     }
 
     await axios
-    .get(
-      apiUrl2 +
-        "device",
-       
+      .get(
+        apiUrl2 + "device",
+
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
       .then((response) => {
         const deviceData = response.data;
         const dataSetdevice = [];
-        console.log(response.data,"devicedata")
+        console.log(response.data, "devicedata");
         let deviceType = "";
         if (deviceData.length === 0) {
           dataSetdevice.push("no device found");
@@ -2710,37 +2657,31 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
           let devicedata = {};
           devicedata.id = p.id;
 
-          
-            devicedata.deviceID = p.deviceId;
-          
-          
-            devicedata.DeviceType = p.deviceType;
-          
-          
-            devicedata.patientId = p.gsI1PK;
-          
-          
-            devicedata.sk = p.sk;
+          devicedata.deviceID = p.deviceId;
 
-            if (patients.length > 0) {
-              let patient = patients.filter(
-                (p) => p.ehrId === devicedata.patientId
-              );
-              if (patient.length > 0) devicedata.username = patient[0].name;
-            } else {
-              devicedata.username = username;
-            }
-          
-            
-          if (devicedata.username !== undefined && p.gsI1PK===patientId) dataSetdevice.push(devicedata);
+          devicedata.DeviceType = p.deviceType;
+
+          devicedata.patientId = p.gsI1PK;
+
+          devicedata.sk = p.sk;
+
+          if (patients.length > 0) {
+            let patient = patients.filter(
+              (p) => p.ehrId === devicedata.patientId
+            );
+            if (patient.length > 0) devicedata.username = patient[0].name;
+          } else {
+            devicedata.username = username;
+          }
+
+          if (devicedata.username !== undefined && p.gsI1PK === patientId)
+            dataSetdevice.push(devicedata);
         });
-        if(dataSetdevice.length==0){
-          dataSetdevice.push("No device")
+        if (dataSetdevice.length == 0) {
+          dataSetdevice.push("No device");
         }
 
-        
-          setdeviceDataForPatient(dataSetdevice);
-        
+        setdeviceDataForPatient(dataSetdevice);
 
         if (type == "Weight") {
           fetchWSData(patientId, username, usertype, dataSetdevice);
@@ -2755,41 +2696,36 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
 
   const fetchProviders = async (isactive) => {
     const token = localStorage.getItem("app_jwt");
-    
+
     let data = "";
     if (isactive) {
       data = {
-       ActiveStatus: "Deactive"
+        ActiveStatus: "Deactive",
       };
     } else {
       data = {
-        ActiveStatus: "Active"
-       };
-    
+        ActiveStatus: "Active",
       };
-    
+    }
 
-    await axios.get(
-      apiUrl2 +
-        "doctor",
+    await axios
+      .get(
+        apiUrl2 + "doctor",
         { params: data },
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
       .then((response) => {
         const providerData = response.data;
-       
+
         const dataSetdoctor = [];
         const pOptions = [{ value: "", name: "Select Provider" }];
 
         providerData.forEach((p, index) => {
-         
           let providerdata = {};
           providerdata.id = p.id;
           providerdata.provider = p.userName;
@@ -2805,41 +2741,37 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
           if (p.sk !== undefined) {
             providerdata.doctor_id = p.sk;
           }
-          
+
           dataSetdoctor.push(providerdata);
           pOptions.push({ value: p.sk, name: p.userName });
-          
-          
         });
-        
+
         setdoctorData(dataSetdoctor);
         setProviderOptions(pOptions);
       })
       .catch((error) => {
-       console.log(error,"error")
+        console.log(error, "error");
       });
   };
 
   const fetchCareCoordinator = async () => {
     const token = localStorage.getItem("app_jwt");
-     const data = {
-        ActiveStatus: "Active"
-       };
-    await axios.get(
-      apiUrl2 +
-        "carecoordinator",
+    const data = {
+      ActiveStatus: "Active",
+    };
+    await axios
+      .get(
+        apiUrl2 + "carecoordinator",
         { params: data },
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
       .then((response) => {
-       const careCoordinatorData = response.data;
+        const careCoordinatorData = response.data;
         const dataSetcareCoordinator = [];
         const ccOptions = [{ value: "", name: "Select Coordinator" }];
 
@@ -2858,46 +2790,42 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
           if (p.createdDate !== undefined) {
             ccdata.createdDate = p.createdDate;
           }
-          
+
           dataSetcareCoordinator.push(ccdata);
           ccOptions.push({ value: p.sk, name: p.userName });
         });
-       
+
         setccData(dataSetcareCoordinator);
         setCoordinatorOptions(ccOptions);
       })
       .catch((error) => {
-        console.log(error,"sadhil")
+        console.log(error, "sadhil");
       });
   };
 
-  const fetchCoach =async () => {
+  const fetchCoach = async () => {
     const token = localStorage.getItem("app_jwt");
 
     const data = {
-      ActiveStatus: "Active"
-     };
-  await axios.get(
-    apiUrl2 +
-      "coach",
-      { params: data },
-      {
-      headers: {
-        'Content-Type': 'application/json',
-        'accept': 'text/plain'
-       }
-      },
-      
-       
-  )
-    .then((response) => {
-      const coachData = response.data;
+      ActiveStatus: "Active",
+    };
+    await axios
+      .get(
+        apiUrl2 + "coach",
+        { params: data },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
+      .then((response) => {
+        const coachData = response.data;
         const dataSetcoach = [];
         const cOptions = [{ value: "", name: "Select Coach" }];
 
         coachData.forEach((p, index) => {
-        
-
           let coachdata = {};
           coachdata.id = p.id;
           coachdata.name = p.userName;
@@ -2948,7 +2876,6 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
   //       const dataSettaskTimerUserData = [];
 
   //       taskTimerUserData.forEach((p, index) => {
-         
 
   //         let taskTimerUserdata = {};
   //         taskTimerUserdata.id = index;
@@ -2991,7 +2918,12 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
     return strTime;
   }
 
-  const fetchBloodPressureForNotification = async(userid, usertype,from,to) => {
+  const fetchBloodPressureForNotification = async (
+    userid,
+    usertype,
+    from,
+    to
+  ) => {
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
@@ -3005,29 +2937,24 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
     let data = "";
     if (usertype === "patient") {
       data = "DEVICE_BP_" + userid;
+    } else {
+      data = "DEVICE_BP_";
     }
-
-   else{
-    data="DEVICE_BP_";
-   }
     await axios
-    .get(
-      apiUrl2 +
-        "bp",
+      .get(
+        apiUrl2 + "bp",
         { params: { GSI1PK: data } },
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
       .then((response) => {
         const bloodpressureData = response.data;
-        console.log(bloodpressureData,"bloodpressureData")
-        
+        console.log(bloodpressureData, "bloodpressureData");
+
         const dataSetbp = [];
         if (bloodpressureData.length === 0) {
           dataSetbp.push("No Data Found");
@@ -3040,9 +2967,8 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
           if (bp.gsI1PK !== undefined) {
             bpdata.gSI1PK = bp.gsI1PK;
             bpdata.UserId = bp.gsI1PK.split("_").pop();
-           
           }
-         
+
           if (bp.userName !== undefined) {
             bpdata.UserName = bp.userName;
           }
@@ -3096,12 +3022,16 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
           dataSetbp.push(bpdata);
         });
 
-        
-
-        setbloodpressureDataForNotification(dataSetbp.filter((curr)=>curr.CreatedDate>new Date(from) && curr.CreatedDate<new Date(to)));
+        setbloodpressureDataForNotification(
+          dataSetbp.filter(
+            (curr) =>
+              curr.CreatedDate > new Date(from) &&
+              curr.CreatedDate < new Date(to)
+          )
+        );
       });
   };
-  const fetchBloodPressureForDashboard = async (userid, usertype,from,to) => {
+  const fetchBloodPressureForDashboard = async (userid, usertype, from, to) => {
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
@@ -3115,29 +3045,24 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
     let data = "";
     if (usertype === "patient") {
       data = "DEVICE_BP_" + userid;
+    } else {
+      data = "DEVICE_BP_";
     }
-
-   else{
-    data="DEVICE_BP_";
-   }
     await axios
-    .get(
-      apiUrl2 +
-        "bp",
+      .get(
+        apiUrl2 + "bp",
         { params: { GSI1PK: data } },
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
       .then((response) => {
         const bloodpressureData = response.data;
-        console.log(bloodpressureData,"bloodpressureData")
-        
+        console.log(bloodpressureData, "bloodpressureData");
+
         const dataSetbp = [];
         if (bloodpressureData.length === 0) {
           dataSetbp.push("No Data Found");
@@ -3150,9 +3075,8 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
           if (bp.gsI1PK !== undefined) {
             bpdata.gSI1PK = bp.gsI1PK;
             bpdata.UserId = bp.gsI1PK.split("_").pop();
-           
           }
-         
+
           if (bp.userName !== undefined) {
             bpdata.UserName = bp.userName;
           }
@@ -3206,119 +3130,221 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
           dataSetbp.push(bpdata);
         });
 
-        setbloodpressureDataForDashboard(dataSetbp.filter((curr)=>curr.CreatedDate>new Date(from) && curr.CreatedDate<new Date(to)));
+        setbloodpressureDataForDashboard(
+          dataSetbp.filter(
+            (curr) =>
+              curr.CreatedDate > new Date(from) &&
+              curr.CreatedDate < new Date(to)
+          )
+        );
       });
   };
-  const fetchBloodPressureForPatient = async (userid, usertype) => {
-    
-    const user=userid.split('_')[1]
-    console.log(user,"hi")
-    
-    
-    const token = localStorage.getItem("app_jwt");
-    const isAuth = localStorage.getItem("app_isAuth");
-    if (isAuth === "yes") {
-      setIsAuthenticated(true);
-      setJwt(token);
-      setUserId(userId);
-    } else {
-      relogin();
-    }
-
+  const fetchBloodPressureForPatient = async (userid, usertype,deviceId) => {
+    const user = userid.split("_")[1];
     let data = "";
-    if (usertype === "patient") {
+    // if(deviceId.length!==0){
+    //   data=deviceId.toString()
+    // }
+    // else{
       data = "DEVICE_BP_" + user;
+    // }
+
+    const token = localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
     }
 
-   else{
-    data="DEVICE_BP_";
-   }
+
+    
     await axios
-    .get(
-      apiUrl2 +
-        "bp",
+      .get(
+        apiUrl2 + "bp",
         { params: { GSI1PK: data } },
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )      .then((response) => {
-      const bloodpressureData = response.data;
-      console.log(bloodpressureData,"bloodpressureData")
-      
-      const dataSetbp = [];
-      if (bloodpressureData.length === 0) {
-        dataSetbp.push("No Data Found");
-      }
-
-      bloodpressureData.forEach((bp, index) => {
-        //   console.log('p' + index, bg);
-        let bpdata = {};
-        bpdata.id = bp.id;
-        if (bp.gsI1PK !== undefined) {
-          bpdata.gSI1PK = bp.gsI1PK;
-          bpdata.UserId = bp.gsI1PK.split("_").pop();
-         
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
         }
-       
-        if (bp.userName !== undefined) {
-          bpdata.UserName = bp.userName;
+      )
+      .then((response) => {
+        const bloodpressureData = response.data;
+        console.log(bloodpressureData, "bloodpressureData");
+
+        const dataSetbp = [];
+        if (bloodpressureData.length === 0) {
+          dataSetbp.push("No Data Found");
         }
 
-        if (bp.irregular !== undefined) {
-          bpdata.irregular = bp.irregular;
-        }
-        if (bp.systolic !== undefined) {
-          bpdata.systolic = parseFloat(bp.systolic).toFixed(0);
-        }
-        if (bp.diastolic !== undefined) {
-          bpdata.diastolic = parseFloat(bp.diastolic).toFixed(0);
-        }
-        if (bp.pulse !== undefined) {
-          bpdata.Pulse = bp.pulse;
-        }
-        if (bp.timeSlots !== undefined) {
-          bpdata.timeSlots = bp.timeSlots;
-        }
-        if (bp.measurementDateTime !== undefined) {
-          bpdata.MeasurementDateTime = bp.measurementDateTime;
-          bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
-          bpdata.sortDateColumn = bp.measurementDateTime;
-          //  bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MM-DD-YYYY hh:mm A');
-        }
+        bloodpressureData.forEach((bp, index) => {
+          //   console.log('p' + index, bg);
+          let bpdata = {};
+          bpdata.id = bp.id;
+          if (bp.gsI1PK) {
+            bpdata.gSI1PK = bp.gsI1PK;
+            bpdata.UserId = bp.gsI1PK.split("_").pop();
+          }
 
-        if (bp.createdDate !== undefined) {
-          bpdata.CreatedDate = bp.createdDate;
-          bpdata.CreatedDate = new Date(bpdata.CreatedDate);
-          //bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MM-DD-YYYY hh:mm A');
-        }
+          if (bp.userName !== undefined) {
+            bpdata.UserName = bp.userName;
+          }
 
-        // bpdata.date_recorded = bp.date_recorded.s;
+          if (bp.irregular !== undefined) {
+            bpdata.irregular = bp.irregular;
+          }
+          if (bp.systolic !== undefined) {
+            bpdata.systolic = parseFloat(bp.systolic).toFixed(0);
+          }
+          if (bp.diastolic !== undefined) {
+            bpdata.diastolic = parseFloat(bp.diastolic).toFixed(0);
+          }
+          if (bp.pulse !== undefined) {
+            bpdata.Pulse = bp.pulse;
+          }
+          if (bp.timeSlots !== undefined) {
+            bpdata.timeSlots = bp.timeSlots;
+          }
+          if (bp.measurementDateTime !== undefined) {
+            bpdata.MeasurementDateTime = bp.measurementDateTime;
+            bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
+            bpdata.sortDateColumn = bp.measurementDateTime;
+            //  bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MM-DD-YYYY hh:mm A');
+          }
 
-        if (bp.deviceId !== undefined) {
-          bpdata.DeviceId = bp.deviceId;
-        }
+          if (bp.createdDate !== undefined) {
+            bpdata.CreatedDate = parseInt(bp.createdDate);
+            bpdata.CreatedDate = new Date(bpdata.CreatedDate);
+            //bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MM-DD-YYYY hh:mm A');
+          }
+          if (bp.deviceId !== undefined) {
+            bpdata.DeviceId = bp.deviceId;
+          }
 
-        if (bp.IMEI !== undefined) {
-          bpdata.DeviceId = bp.IMEI;
-        }
+          if (bp.IMEI !== undefined) {
+            bpdata.DeviceId = bp.IMEI;
+          }
 
-        if (bp.sk !== undefined) {
-          bpdata.readingId = bp.sk.split("_").pop();
-        }
+          if (bp.sk) {
+            bpdata.readingId = bp.sk.split("_").pop();
+          }
 
-        if (bp.actionTaken !== undefined) {
-          bpdata.actionTaken = bp.actionTaken;
-        }
+          if (bp.actionTaken !== undefined) {
+            bpdata.actionTaken = bp.actionTaken;
+          }
 
-        dataSetbp.push(bpdata);
-      });
+          dataSetbp.push(bpdata);
+        });
 
         setbloodpressureDataForPatient(dataSetbp);
+      });
+  };
+  const fetchnewBloodPressureForPatient = async (userid, usertype,deviceId) => {
+    const user = userid.split("_")[1];
+    let data = "";
+    // if(deviceId.length!==0){
+       data=deviceId.toString()
+    // }
+    // else{
+    //   data = "DEVICE_BP_" + user;
+    // }
+
+    const token = localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
+
+    
+    await axios
+      .get(
+        apiUrl2 + "bp",
+        { params: { GSI1PK: data } },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
+      .then((response) => {
+        const bloodpressureData = response.data;
+        console.log(bloodpressureData, "bloodpressureData");
+
+        const dataSetbp = [];
+        if (bloodpressureData.length === 0) {
+          dataSetbp.push("No Data Found");
+        }
+if(bloodpressureData){
+        bloodpressureData.forEach((bp, index) => {
+          //   console.log('p' + index, bg);
+          let bpdata = {};
+          bpdata.id = bp.id;
+          if (bp.gsI1PK) {
+            bpdata.gSI1PK = bp.gsI1PK;
+            bpdata.UserId = bp.gsI1PK.split("_").pop();
+          }
+
+          if (bp.userName !== undefined) {
+            bpdata.UserName = bp.userName;
+          }
+
+          if (bp.irregular !== undefined) {
+            bpdata.irregular = bp.irregular;
+          }
+          if (bp.systolic !== undefined) {
+            bpdata.systolic = parseFloat(bp.systolic).toFixed(0);
+          }
+          if (bp.diastolic !== undefined) {
+            bpdata.diastolic = parseFloat(bp.diastolic).toFixed(0);
+          }
+          if (bp.pulse !== undefined) {
+            bpdata.Pulse = bp.pulse;
+          }
+          if (bp.timeSlots !== undefined) {
+            bpdata.timeSlots = bp.timeSlots;
+          }
+          if (bp.measurementDateTime !== undefined) {
+            bpdata.MeasurementDateTime = bp.measurementDateTime;
+            bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
+            bpdata.sortDateColumn = bp.measurementDateTime;
+            //  bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MM-DD-YYYY hh:mm A');
+          }
+
+          if (bp.createdDate !== undefined) {
+            bpdata.CreatedDate = parseInt(bp.createdDate);
+            bpdata.CreatedDate = new Date(bpdata.CreatedDate);
+            //bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MM-DD-YYYY hh:mm A');
+          }
+          if (bp.deviceId !== undefined) {
+            bpdata.DeviceId = bp.deviceId;
+          }
+
+          if (bp.IMEI !== undefined) {
+            bpdata.DeviceId = bp.IMEI;
+          }
+
+          if (bp.sk) {
+            bpdata.readingId = bp.sk.split("_").pop();
+          }
+
+          if (bp.actionTaken !== undefined) {
+            bpdata.actionTaken = bp.actionTaken;
+          }
+
+          dataSetbp.push(bpdata);
+        })}
+
+        setnewbloodpressureDataForPatient(dataSetbp);
       });
   };
   const fetchBloodPressure = async (userid, usertype) => {
@@ -3335,29 +3361,24 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
     let data = "";
     if (usertype === "patient") {
       data = "DEVICE_BP_" + userid;
+    } else {
+      data = "DEVICE_BP_";
     }
-
-   else{
-    data="DEVICE_BP_";
-   }
     await axios
-    .get(
-      apiUrl2 +
-        "bp",
+      .get(
+        apiUrl2 + "bp",
         { params: { GSI1PK: data } },
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
       .then((response) => {
         const bloodpressureData = response.data;
-        console.log(bloodpressureData,"bloodpressureData")
-        
+        console.log(bloodpressureData, "bloodpressureData");
+
         const dataSetbp = [];
         if (bloodpressureData.length === 0) {
           dataSetbp.push("No Data Found");
@@ -3370,9 +3391,8 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
           if (bp.gsI1PK !== undefined) {
             bpdata.gSI1PK = bp.gsI1PK;
             bpdata.UserId = bp.gsI1PK.split("_").pop();
-           
           }
-         
+
           if (bp.userName !== undefined) {
             bpdata.UserName = bp.userName;
           }
@@ -3444,37 +3464,32 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
     let data = "";
     if (usertype === "patient") {
       data = "DEVICE_BG_PATIENT_" + userid;
+    } else {
+      data = "DEVICE_BG_";
     }
-
-   else{
-    data="DEVICE_BG_";
-   }
     await axios
-    .get(
-      apiUrl2 +
-        "bg",
+      .get(
+        apiUrl2 + "bg",
         { params: { GSI1PK: data } },
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
       .then((response) => {
         const bloodglucoseData = response.data;
-        console.log(response.data,"response.data")
-        
+        console.log(response.data, "response.data");
+
         const dataSetbg = [];
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
-        
+
         bloodglucoseData.forEach((bg, index) => {
           //   console.log('p' + index, bg);
-        
+
           let bgdata = {};
           bgdata.id = index;
           if (bg.gsI1PK !== undefined) {
@@ -3489,17 +3504,17 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
           }
 
           if (bg.bloodGlucosemmol !== undefined) {
-            bgdata.bloodglucosemmol = bg.bloodGlucosemmol
+            bgdata.bloodglucosemmol = bg.bloodGlucosemmol;
           }
 
           if (bg.bloodGlucosemgdl !== undefined) {
-            bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl
+            bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl;
           }
 
           if (bg.before_Meal !== undefined) {
-            if(bg.before_Meal=="True"){
+            if (bg.before_Meal == "True") {
               bgdata.meal = "Before Meal";
-            }else{
+            } else {
               bgdata.meal = "After Meal";
             }
           }
@@ -3516,11 +3531,13 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
             bgdata.sortDateColumn = bg.measurementDateTime;
             //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
           }
-          
+
           if (bg.createdDate !== undefined) {
             bgdata.CreatedDate = bg.createdDate;
             bgdata.CreatedDate = new Date(bgdata.CreatedDate);
-            bgdata.sortDateColumn = Moment(bg.createdDate).format('YYYY-MM-DD hh:mm');
+            bgdata.sortDateColumn = Moment(bg.createdDate).format(
+              "YYYY-MM-DD hh:mm"
+            );
             // bgdata.CreatedDate =Moment(bgdata.CreatedDate);
           }
 
@@ -3538,9 +3555,7 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
         setbloodglucoseData(dataSetbg);
       });
   };
-  const fetchBloodGlucoseForPatient = async(userid, usertype) => {
-    
-    
+  const fetchBloodGlucoseForPatient = async (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
@@ -3554,37 +3569,32 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
     let data = "";
     if (usertype === "patient") {
       data = "DEVICE_BG_" + userid;
+    } else {
+      data = "DEVICE_BG_";
     }
-
-   else{
-    data="DEVICE_BG_";
-   }
     await axios
-    .get(
-      apiUrl2 +
-        "bg",
+      .get(
+        apiUrl2 + "bg",
         { params: { GSI1PK: data } },
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
       .then((response) => {
         const bloodglucoseData = response.data;
-        console.log(response.data,"response.data")
-        
+        console.log(response.data, "response.data");
+
         const dataSetbg = [];
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
-        
+
         bloodglucoseData.forEach((bg, index) => {
           //   console.log('p' + index, bg);
-        
+
           let bgdata = {};
           bgdata.id = index;
           if (bg.gsI1PK !== undefined) {
@@ -3599,20 +3609,19 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
           }
 
           if (bg.bloodGlucosemmol !== undefined) {
-            bgdata.bloodglucosemmol = bg.bloodGlucosemmol
+            bgdata.bloodglucosemmol = bg.bloodGlucosemmol;
           }
 
           if (bg.bloodGlucosemgdl !== undefined) {
-            bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl
+            bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl;
           }
 
           if (bg.before_Meal !== undefined) {
-            if(bg.before_Meal=="True"){
+            if (bg.before_Meal == "True") {
               bgdata.meal = "Before Meal";
-            }else{
+            } else {
               bgdata.meal = "After Meal";
             }
-            
           }
 
           if (bg.battery !== undefined) {
@@ -3627,11 +3636,13 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
             bgdata.sortDateColumn = bg.measurementDateTime;
             //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
           }
-          
+
           if (bg.createdDate !== undefined) {
             bgdata.CreatedDate = bg.createdDate;
             bgdata.CreatedDate = new Date(bgdata.CreatedDate);
-            bgdata.sortDateColumn = Moment(bg.createdDate).format('YYYY-MM-DD hh:mm');
+            bgdata.sortDateColumn = Moment(bg.createdDate).format(
+              "YYYY-MM-DD hh:mm"
+            );
             // bgdata.CreatedDate =Moment(bgdata.CreatedDate);
           }
 
@@ -3646,14 +3657,18 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
           dataSetbg.push(bgdata);
         });
 
- 
         setbloodglucoseDataForPatient(dataSetbg);
       });
   };
-  const fetchBloodGlucoseForNotification = async (userid, usertype,from,to) => {
+  const fetchBloodGlucoseForNotification = async (
+    userid,
+    usertype,
+    from,
+    to
+  ) => {
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
-    
+
     if (isAuth === "yes") {
       setIsAuthenticated(true);
       setJwt(token);
@@ -3665,37 +3680,32 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
     let data = "";
     if (usertype === "patient") {
       data = "DEVICE_BG_" + userid;
+    } else {
+      data = "DEVICE_BG_";
     }
-
-   else{
-    data="DEVICE_BG_";
-   }
     await axios
-    .get(
-      apiUrl2 +
-        "bg",
+      .get(
+        apiUrl2 + "bg",
         { params: { GSI1PK: data } },
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
       .then((response) => {
         const bloodglucoseData = response.data;
-        console.log(response.data,"response.data")
-        
+        console.log(response.data, "response.data");
+
         const dataSetbg = [];
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
-        
+
         bloodglucoseData.forEach((bg, index) => {
           //   console.log('p' + index, bg);
-        
+
           let bgdata = {};
           bgdata.id = index;
           if (bg.gsI1PK !== undefined) {
@@ -3710,17 +3720,17 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
           }
 
           if (bg.bloodGlucosemmol !== undefined) {
-            bgdata.bloodglucosemmol = bg.bloodGlucosemmol
+            bgdata.bloodglucosemmol = bg.bloodGlucosemmol;
           }
 
           if (bg.bloodGlucosemgdl !== undefined) {
-            bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl
+            bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl;
           }
 
           if (bg.before_Meal !== undefined) {
-            if(bg.before_Meal=="True"){
+            if (bg.before_Meal == "True") {
               bgdata.meal = "Before Meal";
-            }else{
+            } else {
               bgdata.meal = "After Meal";
             }
           }
@@ -3737,11 +3747,13 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
             bgdata.sortDateColumn = bg.measurementDateTime;
             //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
           }
-          
+
           if (bg.createdDate !== undefined) {
             bgdata.CreatedDate = bg.createdDate;
             bgdata.CreatedDate = new Date(bgdata.CreatedDate);
-            bgdata.sortDateColumn = Moment(bg.createdDate).format('YYYY-MM-DD hh:mm');
+            bgdata.sortDateColumn = Moment(bg.createdDate).format(
+              "YYYY-MM-DD hh:mm"
+            );
             // bgdata.CreatedDate =Moment(bgdata.CreatedDate);
           }
 
@@ -3756,10 +3768,16 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
           dataSetbg.push(bgdata);
         });
 
-        setbloodglucoseDataForNotification(dataSetbg.filter((curr)=>curr.CreatedDate>new Date(from) && curr.CreatedDate<new Date(to)));
+        setbloodglucoseDataForNotification(
+          dataSetbg.filter(
+            (curr) =>
+              curr.CreatedDate > new Date(from) &&
+              curr.CreatedDate < new Date(to)
+          )
+        );
       });
   };
-  const fetchBloodGlucoseForDashboard =async (userid, usertype,from,to) => {
+  const fetchBloodGlucoseForDashboard = async (userid, usertype, from, to) => {
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
@@ -3773,37 +3791,32 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
     let data = "";
     if (usertype === "patient") {
       data = "DEVICE_BG_" + userid;
+    } else {
+      data = "DEVICE_BG_";
     }
-
-   else{
-    data="DEVICE_BG_";
-   }
     await axios
-    .get(
-      apiUrl2 +
-        "bg",
+      .get(
+        apiUrl2 + "bg",
         { params: { GSI1PK: data } },
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
       .then((response) => {
         const bloodglucoseData = response.data;
-        console.log(response.data,"response.data")
-        
+        console.log(response.data, "response.data");
+
         const dataSetbg = [];
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
-        
+
         bloodglucoseData.forEach((bg, index) => {
           //   console.log('p' + index, bg);
-        
+
           let bgdata = {};
           bgdata.id = index;
           if (bg.gsI1PK !== undefined) {
@@ -3818,17 +3831,17 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
           }
 
           if (bg.bloodGlucosemmol !== undefined) {
-            bgdata.bloodglucosemmol = bg.bloodGlucosemmol
+            bgdata.bloodglucosemmol = bg.bloodGlucosemmol;
           }
 
           if (bg.bloodGlucosemgdl !== undefined) {
-            bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl
+            bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl;
           }
 
           if (bg.before_Meal !== undefined) {
-            if(bg.before_Meal=="True"){
+            if (bg.before_Meal == "True") {
               bgdata.meal = "Before Meal";
-            }else{
+            } else {
               bgdata.meal = "After Meal";
             }
           }
@@ -3845,11 +3858,13 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
             bgdata.sortDateColumn = bg.measurementDateTime;
             //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
           }
-          
+
           if (bg.createdDate !== undefined) {
             bgdata.CreatedDate = bg.createdDate;
             bgdata.CreatedDate = new Date(bgdata.CreatedDate);
-            bgdata.sortDateColumn = Moment(bg.createdDate).format('YYYY-MM-DD hh:mm');
+            bgdata.sortDateColumn = Moment(bg.createdDate).format(
+              "YYYY-MM-DD hh:mm"
+            );
             // bgdata.CreatedDate =Moment(bgdata.CreatedDate);
           }
 
@@ -3864,7 +3879,13 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
           dataSetbg.push(bgdata);
         });
 
-        setbloodglucoseDataForDashboard(dataSetbg.filter((curr)=>curr.CreatedDate>new Date(from) && curr.CreatedDate<new Date(to)));
+        setbloodglucoseDataForDashboard(
+          dataSetbg.filter(
+            (curr) =>
+              curr.CreatedDate > new Date(from) &&
+              curr.CreatedDate < new Date(to)
+          )
+        );
       });
   };
 
@@ -3931,33 +3952,26 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
   };
 
   //chart Data
-  const fetchBgChartData = async(userid, usertype) => {
-  
-
+  const fetchBgChartData = async (userid, usertype) => {
     let data = "";
     if (usertype === "patient") {
       data = "DEVICE_BG_" + userid;
+    } else {
+      data = "DEVICE_BG_";
     }
-
-   else{
-    data="DEVICE_BG_";
-   }
     await axios
-    .get(
-      apiUrl2 +
-        "bg",
+      .get(
+        apiUrl2 + "bg",
         { params: { GSI1PK: data } },
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
       .then((response) => {
-       // setJwt(response.data);
+        // setJwt(response.data);
         console.log("bgData", response.data);
         const bgData = response.data;
         const dataSetbg = [];
@@ -3981,7 +3995,7 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
       });
   };
 
-  const fetchBpChartData = async(userid, usertype) => {
+  const fetchBpChartData = async (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
@@ -3995,27 +4009,22 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
     let data = "";
     if (usertype === "patient") {
       data = "DEVICE_BP_" + userid;
+    } else {
+      data = "DEVICE_BP_";
     }
-
-   else{
-    data="DEVICE_BP_";
-   }
     await axios
-    .get(
-      apiUrl2 +
-        "bp",
+      .get(
+        apiUrl2 + "bp",
         { params: { GSI1PK: data } },
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
       .then((response) => {
-         const bpData = response.data;
+        const bpData = response.data;
         const dataSetbp = [];
 
         bpData.forEach((p) => {
@@ -4038,8 +4047,7 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
       });
   };
 
-  const fetchWSChartData = async(userid, usertype) => {
-    
+  const fetchWSChartData = async (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
@@ -4053,25 +4061,20 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
     let data = "";
     if (usertype === "patient") {
       data = "DEVICE_WS_" + userid;
+    } else {
+      data = "DEVICE_WS_";
     }
-
-   else{
-    data="DEVICE_WS_";
-   }
     await axios
-    .get(
-      apiUrl2 +
-        "weight",
+      .get(
+        apiUrl2 + "weight",
         { params: { GSI1PK: data } },
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
       .then((response) => {
         const weightData = response.data;
         const dataSetweight = [];
@@ -4141,15 +4144,8 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
       return;
     }
 
-    const data =  {
-     
-      
-      SK:
-        "TIMELOG_READING_" +
-        taskType +
-        
-        "_" +
-        timeAmount,
+    const data = {
+      SK: "TIMELOG_READING_" + taskType + "_" + timeAmount,
       GSI1PK: "TIMELOG_READING_PATIENT_" + patientId,
       GSI1SK: patientId,
       CreatedDate:
@@ -4157,26 +4153,21 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
       UserName: userName,
       TaskType: taskType,
       PerformedBy: performedBy,
-      PerformedOn: Moment(performedOn).format('MMM-DD-YYYY hh:mm:ss A'),
+      PerformedOn: Moment(performedOn).format("MMM-DD-YYYY hh:mm:ss A"),
       TimeAmount: timeAmount.toString(),
-      StartDT: Moment(date).format('MMM-DD-YYYY hh:mm:ss A'),
-      EndDT: Moment(end).format('MMM-DD-YYYY hh:mm:ss A'),
+      StartDT: Moment(date).format("MMM-DD-YYYY hh:mm:ss A"),
+      EndDT: Moment(end).format("MMM-DD-YYYY hh:mm:ss A"),
       ActiveStatus: "Active",
-    }
+    };
     await axios
-    .post(
-      apiUrl2 +
-        "timelog",data,{
+      .post(apiUrl2 + "timelog", data, {
         headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-         
+          "Content-Type": "application/json",
+          accept: "text/plain",
         },
-         
-    )
+      })
       .then((response) => {
-        console.log(response,"check response of timelog")
+        console.log(response, "check response of timelog");
         if (response.status) {
           console.log(response.data);
           swal("success", "TimeLog has been added successfully", "success");
@@ -4184,26 +4175,21 @@ cptCodeForRPM:JSON.stringify(cptcodeforrpm),
         }
       });
   };
-  const AddNotification = async(Notification,usertype,userid) => {
+  const AddNotification = async (Notification, usertype, userid) => {
     const token = localStorage.getItem("app_jwt");
-    const data={
-      sk:Notification,
-      gsI1PK:"Notification_ADMIN_"+userid
-    }
-axios
-.post(
-apiUrl2 +
-  "notification",data,{
-  headers: {
-    'Content-Type': 'application/json',
-    'accept': 'text/plain'
-   }
-   
-  },
-   
-)
-.then((response) => {
-    if (response.status === 200) {
+    const data = {
+      sk: Notification,
+      gsI1PK: "Notification_ADMIN_" + userid,
+    };
+    axios
+      .post(apiUrl2 + "notification", data, {
+        headers: {
+          "Content-Type": "application/json",
+          accept: "text/plain",
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
           console.log(response.data);
           swal("success", "Notification has been marked as read.", "success");
         }
@@ -4213,71 +4199,57 @@ apiUrl2 +
     setNotifications([]);
     const token = localStorage.getItem("app_jwt");
     await axios
-    .get(
-      apiUrl2 +
-        "notification",
-        
+      .get(
+        apiUrl2 + "notification",
+
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
       .then((response) => {
-            const notificationData = response.data;
-        const notificationarray=[];
-        if(notificationData.length===0){
-          notificationarray.push("no data found")
+        const notificationData = response.data;
+        const notificationarray = [];
+        if (notificationData.length === 0) {
+          notificationarray.push("no data found");
         }
 
-        notificationData.map((curr)=>{
-          notificationarray.push(curr.sk)
-          
-
-         
-
-        })
-        setNotifications(notificationarray)
-        console.log(notificationarray,"notificationarray")
-        
+        notificationData.map((curr) => {
+          notificationarray.push(curr.sk);
+        });
+        setNotifications(notificationarray);
+        console.log(notificationarray, "notificationarray");
       });
   };
   const FetchBilligCode = async (userid) => {
     //setNotifications([]);
     const token = localStorage.getItem("app_jwt");
     await axios
-    .get(
-      apiUrl2 +
-        "billing",
-        
+      .get(
+        apiUrl2 + "billing",
+
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
       .then((response) => {
-            const BillingData = response.data;
-        const notificationarray=[];
-        if(BillingData.length===0){
-          notificationarray.push("no data found")
+        const BillingData = response.data;
+        const notificationarray = [];
+        if (BillingData.length === 0) {
+          notificationarray.push("no data found");
         }
 
-        setBillingCodes(BillingData)
-       // console.log(notificationarray,"notificationarray")
-        
+        setBillingCodes(BillingData);
+        // console.log(notificationarray,"notificationarray")
       });
   };
 
-
-
-  const UpdateTimeLog = async(
+  const UpdateTimeLog = async (
     timelog,
     taskType,
     performedBy,
@@ -4288,12 +4260,10 @@ apiUrl2 +
   ) => {
     const token = localStorage.getItem("app_jwt");
     setTimeLogData([]);
-    
 
-    const data =  ({
-     
+    const data = {
       id: timelog.id,
-      SK:timelog.SK,
+      SK: timelog.SK,
       GSI1PK: "TIMELOG_READING_PATIENT_" + patientId,
       GSI1SK: patientId,
       CreatedDate: timelog.createdDate,
@@ -4305,47 +4275,38 @@ apiUrl2 +
       StartDT: timelog.startDT,
       EndDT: timelog.endDT,
       ActiveStatus: "Active",
-    });
+    };
     await axios
-    .put(
-      apiUrl2 +
-        "timelog",data,{
+      .put(apiUrl2 + "timelog", data, {
         headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-         
+          "Content-Type": "application/json",
+          accept: "text/plain",
         },
-         
-    )
+      })
       .then((response) => {
-        console.log("updated responsee",response);
+        console.log("updated responsee", response);
         if (response.status === 200) {
           alert("TimeLog has been updated");
         }
       });
   };
 
-  const fetchPatientWithDevice =async () => {
+  const fetchPatientWithDevice = async () => {
     const token = localStorage.getItem("app_jwt");
 
     await axios
-    .get(
-      apiUrl2 +
-        "device",
-       
+      .get(
+        apiUrl2 + "device",
+
         {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'text/plain'
-         }
-        },
-        
-         
-    )
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
       .then((response) => {
-        
-         const deviceData = response.data;
+        const deviceData = response.data;
         const dataSetdevice = [];
 
         //    console.log('deviceData', deviceData);
@@ -4453,12 +4414,12 @@ apiUrl2 +
         inbox,
         fetchMessages,
         outbox,
-    
+
         threads,
         patient,
         setPatient,
         jwt,
-      
+
         fetchWSData,
         fetchBgChartData,
         fetchWSChartData,
@@ -4483,7 +4444,7 @@ apiUrl2 +
         UpdateThreshold,
         fetchCareCoordinator,
         fetchCoach,
-        
+
         addCareCoordinator,
         addCoach,
         AddTimeLog,
@@ -4506,7 +4467,7 @@ apiUrl2 +
         providerOptions,
         coachOptions,
         careCoordinatorOptions,
-        
+
         getTab1data,
         result,
         showForgotModal,
@@ -4522,9 +4483,12 @@ apiUrl2 +
         ForgotPassword,
         verifyForgotPassword,
         notifications,
-        cleanup,setdefault,
-        fetchBloodGlucoseForNotification,bloodglucoseDataForNotification,
-        bloodpressureDataForNotification,fetchBloodPressureForNotification,
+        cleanup,
+        setdefault,
+        fetchBloodGlucoseForNotification,
+        bloodglucoseDataForNotification,
+        bloodpressureDataForNotification,
+        fetchBloodPressureForNotification,
         fetchBloodGlucoseForDashboard,
         bloodglucoseDataForDashboard,
         bloodpressureDataForDashboard,
@@ -4539,21 +4503,29 @@ apiUrl2 +
         patientsForPatient,
         setccData,
         setcoachData,
-      fetchDeviceDataForPatient,
-      deviceDataForPatient,
-      ActivatePatient,
-      DeleteDoctor,
-      fetchChatLink,
-      cleanup1,
-      setdoctorData,
-      DeleteCareCoordinator,
-      DeleteCoach,UpdateNotes,ChatLink,UpdateCPT,
-      FetchBilligCode,BillingCodes
-      }}>
+        fetchDeviceDataForPatient,
+        deviceDataForPatient,
+        ActivatePatient,
+        DeleteDoctor,
+        fetchChatLink,
+        cleanup1,
+        setdoctorData,
+        DeleteCareCoordinator,
+        DeleteCoach,
+        UpdateNotes,
+        ChatLink,
+        UpdateCPT,
+        FetchBilligCode,
+        BillingCodes,
+        newbloodpressureDataForPatient,
+        fetchnewBloodPressureForPatient,
+        fetchnewWSDataForPatient,
+        newweightDataForPatient
+      }}
+    >
       {props.children}
     </CoreContext.Provider>
   );
 };
 
 export default CoreContextProvider;
-
