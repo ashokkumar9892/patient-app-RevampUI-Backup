@@ -35,7 +35,7 @@ const WeightNew = (props) => {
     const columns = [
         {
           field: 'weight',
-          headerName: 'Weight',
+          headerName: 'Weight (lbs)',
           
           editable: false,
           flex:1,
