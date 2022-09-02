@@ -346,10 +346,16 @@ const PatientSummary = (props) => {
     var cptccm = "";
     cptcode.map((curr) => {
       if (curr.program == "CCM") {
-        cptccm = cptccm + curr.cptcode + ","
+        for (let i = 0; i < curr.count; i++) {
+          cptccm = cptccm + curr.cptcode + ","
+        }
+       
       }
       else {
-        cptrpm = cptrpm + curr.cptcode + ","
+        for (let i = 0; i < curr.count; i++) {
+          cptrpm = cptrpm + curr.cptcode + ","
+        }
+       
       }
     })
 
@@ -403,6 +409,11 @@ const PatientSummary = (props) => {
                   <input className="form-control" value={(coreContext.BillingCodes.filter((curr1) => curr1.code == curr.cptcode).length > 0) ? "$" + (coreContext.BillingCodes.filter((curr1) => curr1.code == curr.cptcode)[0].cost)*curr.count : ""} />
 
                 </div>
+                <div className="col-xl-2">
+                  <label>number of multiplier</label>
+                  <input className="form-control" value={curr.count} />
+
+                </div>
                 <div className="col-xl-1">
 
                   <button className="btn btn-primary mt-4" onClick={() =>{ 
@@ -424,7 +435,7 @@ const PatientSummary = (props) => {
         </div>
         <div className="col-xl-3">
 
-          <button style={{ marginTop: "1.5em" }} className="btn btn-primary" onClick={() => onCreateBill(cptcode)}>Create Bill</button>
+          <button style={{ marginTop: "1.5em" }} className="btn btn-primary" onClick={() => onCreateBill(dummycptcode)}>Create Bill</button>
         </div>
       </>
     )
