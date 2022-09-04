@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState, useContext,useCallback } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import { Autocomplete } from '@material-ui/lab';
 
 import {
@@ -122,8 +122,8 @@ const TopMenu = ({ changestyle, showSidebar }) => {
 
   const [message, setMessage] = useState("");
   const [userName, setUserName] = useState("");
-  const [pwdtype,setpwdtype]=useState("password");
-  const [pwdtype1,setpwdtype1]=useState("password");
+  const [pwdtype, setpwdtype] = useState("password");
+  const [pwdtype1, setpwdtype1] = useState("password");
   const [showSearch, setShowSearch] = useState(false);
   const [pwd, setpwd] = useState("");
   const [cnfpwd, setcnfpwd] = useState("");
@@ -167,48 +167,48 @@ const TopMenu = ({ changestyle, showSidebar }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([coreContext.patients]);
   const [patientName, setPatientName] = useState("");
-  const [notificationValue,setNotificationValue]=useState([]);
+  const [notificationValue, setNotificationValue] = useState([]);
   const [open, setOpen] = React.useState(false);
-  const today=new Date();
+  const today = new Date();
   today.setDate(today.getDate() - 7);
-  const diagonislist=[,"Select Diagnosis Id","D45- Polycythemia vera",
-  "G47.33- Obstructive sleep apnea (adult) (pediatric)",
-  "I10- Essential (primary) hypertension","K219",
-  "I13.10- Hypertensive heart and chronic kidney disease without heart",
-  "failure ",
-  "I509- Heart failure, unspecified",
-  "E03.9- Hypothyroidism, unspecified",
-  "E11.65- Type 2 diabetes mellitus with hyperglycemia",
-  "E11.9- Type 2 diabetes mellitus without complications",
-  "E61.1- Iron deficiency",
-  "E66.3- Overweight",
-  "E66.01- Morbid (severe) obesity due to excess calories",
-  "E66.9- Obesity, unspecified",
-  "E78.5- Hyperlipidemia, unspecified",
-  "F33.2- Major depressive disorder, recurrent severe without psychotic",
-  "features",
-  "F41.1- Generalized anxiety disorder",
-  "H10.9- Unspecified conjunctivitis",
-  "J32.4- Chronic pansinusitis",
-  "J45.40- Moderate persistent asthma, uncomplicated",
-  "J45.41- Moderate persistent asthma with (acute) exacerbation",
-  "K58.2- Mixed irritable bowel syndrome",
-  "M25.562- Pain in left knee",
-  "M54.50- Low back pain, unspecified",
-  "M79.7- Fibromyalgia",
-  "N92.5- Other specified irregular menstruation",
-  "R03.0- Elevated blood-pressure reading, without diagnosis of",
-  "hypertension",
-  "R53.83- Other fatigue",
-  "R73.03- Prediabetes",
-  "Z68.41- Body mass index [BMI] 40.0-44.9, adult",
-  "Z68.44- Body mass index [BMI] 60.0-69.9, adult",
-  "K580- unspecified","I639","E10.9","L67","L67.1","L82.1","N182","J449","E1140","E1151","E1132999","I739","I2510","E663","G4709","N925","H109"
+  const diagonislist = [, "Select Diagnosis Id", "D45- Polycythemia vera",
+    "G47.33- Obstructive sleep apnea (adult) (pediatric)",
+    "I10- Essential (primary) hypertension", "K219",
+    "I13.10- Hypertensive heart and chronic kidney disease without heart",
+    "failure ",
+    "I509- Heart failure, unspecified",
+    "E03.9- Hypothyroidism, unspecified",
+    "E11.65- Type 2 diabetes mellitus with hyperglycemia",
+    "E11.9- Type 2 diabetes mellitus without complications",
+    "E61.1- Iron deficiency",
+    "E66.3- Overweight",
+    "E66.01- Morbid (severe) obesity due to excess calories",
+    "E66.9- Obesity, unspecified",
+    "E78.5- Hyperlipidemia, unspecified",
+    "F33.2- Major depressive disorder, recurrent severe without psychotic",
+    "features",
+    "F41.1- Generalized anxiety disorder",
+    "H10.9- Unspecified conjunctivitis",
+    "J32.4- Chronic pansinusitis",
+    "J45.40- Moderate persistent asthma, uncomplicated",
+    "J45.41- Moderate persistent asthma with (acute) exacerbation",
+    "K58.2- Mixed irritable bowel syndrome",
+    "M25.562- Pain in left knee",
+    "M54.50- Low back pain, unspecified",
+    "M79.7- Fibromyalgia",
+    "N92.5- Other specified irregular menstruation",
+    "R03.0- Elevated blood-pressure reading, without diagnosis of",
+    "hypertension",
+    "R53.83- Other fatigue",
+    "R73.03- Prediabetes",
+    "Z68.41- Body mass index [BMI] 40.0-44.9, adult",
+    "Z68.44- Body mass index [BMI] 60.0-69.9, adult",
+    "K580- unspecified", "I639", "E10.9", "L67", "L67.1", "L82.1", "N182", "J449", "E1140", "E1151", "E1132999", "I739", "I2510", "E663", "G4709", "N925", "H109"
   ]
- 
-  const to=Moment(new Date()).format('YYYY-MM-DD')
-  const from=Moment(today).format('YYYY-MM-DD')
-  console.log(to,from,"tofrom")
+
+  const to = Moment(new Date()).format('YYYY-MM-DD')
+  const from = Moment(today).format('YYYY-MM-DD')
+  console.log(to, from, "tofrom")
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -222,179 +222,184 @@ const TopMenu = ({ changestyle, showSidebar }) => {
   const handleClose1 = () => {
     setOpen(false);
   };
-  const handledcount = (index,val) => {
-    const value=[...dcount]
-    value[index]=val
+  const handledcount = (index, val) => {
+    const value = [...dcount]
+    value[index] = val
     setdcount(value);
-    
+
   };
 
-  const fetchtd=()=>{
+  const fetchtd = () => {
     let userType = localStorage.getItem("userType");
     let patientId = localStorage.getItem("userId");
     coreContext.fetchThresold(
       "ADMIN_PATIENT",
       "patient"
     );
-    coreContext.fetchBloodPressureForNotification(patientId, userType,from,to);
-    coreContext.fetchBloodGlucoseForNotification(patientId, userType,from,to);
-    coreContext.fetchWSData(patientId,userType);
+    coreContext.fetchBloodPressureForNotification(patientId, userType, from, to);
+    coreContext.fetchBloodGlucoseForNotification(patientId, userType, from, to);
+    coreContext.fetchWSData(patientId, userType);
     coreContext.fetchPatientListfromApi(userType, patientId);
   }
-  const fetchadmintd=()=>{
+  const fetchadmintd = () => {
     coreContext.fetchadminThresold("ADMIN_ADMIN_", "admin")
   }
-  const fetchdbnotification=()=>{
-coreContext.FetchNotification(localStorage.getItem("userId"))
+  const fetchdbnotification = () => {
+    coreContext.FetchNotification(localStorage.getItem("userId"))
   }
   useEffect(() => {
-    if(window.location.href.indexOf("patient-summary") <=0){
-      fetchadmintd();fetchtd();fetchdbnotification();
+    if (window.location.href.indexOf("patient-summary") <= 0) {
+      fetchadmintd(); fetchtd(); fetchdbnotification();
     }
-    
+
   }, []);
-  const markasread=()=>{
-    notificationValue.sort(function(a,b){
- 
+  const markasread = () => {
+    notificationValue.sort(function (a, b) {
+
       return new Date(b.date) - new Date(a.date);
-    }).map((curr)=>{
-      coreContext.AddNotification(curr.value,"admin",localStorage.getItem("userId"))
-             })
-             setNotificationValue([]);
-    
-  }
-
-  const FetchNotificationForBP=()=>{
-    var date = new Date();
-date.setDate(date.getDate() - 7);
-date.setHours(0,0,0,0)
-
-    coreContext.patients.map((patient)=>{
-      coreContext.bloodpressureDataForNotification.filter((data)=>data.MeasurementDateTime>date).map((bp)=>{
-        if(patient.userId===bp.UserId){
-          coreContext.thresoldData.map((td)=>{
-            if(td.UserId.includes(patient.userId)){
-              if(Number(bp.diastolic)>Number(td.diastolic_high) || Number(bp.diastolic)<Number(td.diastolic_low)){
-                if(notificationValue.includes(patient.name+"~"+patient.userId+"~"+bp.diastolic+"~"+Moment(bp.MeasurementDateTime).format(
-                  "MM-DD-YYYY hh:mm A"
-                )+"~Diastolic")===false)
-                {
-                  if(coreContext.notifications.includes(patient.name+"~"+patient.userId+"~"+bp.diastolic+"~"+Moment(bp.MeasurementDateTime).format(
-                    "MM-DD-YYYY hh:mm A"
-                  )+"~Diastolic")===false){
-                    if (Object.values(notificationValue).indexOf(patient.name+"~"+patient.userId+"~"+bp.diastolic+"~"+Moment(bp.MeasurementDateTime).format(
-                      "MM-DD-YYYY hh:mm A"
-                    )+"~Diastolic") > -1) {
-
-                    }else{
-                      notificationValue.push({"value":patient.name+"~"+patient.userId+"~"+bp.diastolic+"~"+Moment(bp.MeasurementDateTime).format(
-                        "MM-DD-YYYY hh:mm A"
-                      )+"~Diastolic","date":bp.MeasurementDateTime})
-    
-                    }
-                   
-                  }
-                  
-                }
-                
-              }
-              if(Number(bp.systolic)>Number(td.systolic_high) || Number(bp.systolic)<Number(td.systolic_low )){
-                if(notificationValue.includes(patient.name+"~"+patient.userId+"~"+bp.systolic+"~"+Moment(bp.MeasurementDateTime).format(
-                  "MM-DD-YYYY hh:mm A"
-                )+"~Systolic")===false){
-                  if(coreContext.notifications.includes(patient.name+"~"+patient.userId+"~"+bp.systolic+"~"+Moment(bp.MeasurementDateTime).format(
-                    "MM-DD-YYYY hh:mm A"
-                  )+"~Systolic")===false){
-                    if (Object.values(notificationValue
-                      ).indexOf(patient.name+"~"+patient.userId+"~"+bp.systolic+"~"+Moment(bp.MeasurementDateTime).format(
-                      "MM-DD-YYYY hh:mm A"
-                    )+"~Systolic") > -1) {}
-                    else{
-                      notificationValue.push({"value":patient.name+"~"+patient.userId+"~"+bp.systolic+"~"+Moment(bp.MeasurementDateTime).format(
-                        "MM-DD-YYYY hh:mm A"
-                      )+"~Systolic","date":bp.MeasurementDateTime})
-                    }
-
-                    
-                  }
-                  
-                }
-                
-               }
-            }
-            
-
-          })
-
-        }
-        
-      }
-      
-      
-      )
-
+    }).map((curr) => {
+      coreContext.AddNotification(curr.value, "admin", localStorage.getItem("userId"))
     })
-   
-    
+    setNotificationValue([]);
+
   }
-  const FetchNotificationForBG=()=>{
+
+  const FetchNotificationForBP = () => {
     var date = new Date();
     date.setDate(date.getDate() - 7);
-    date.setHours(0,0,0,0)
-    coreContext.patients.map((patient)=>{
-      coreContext.bloodglucoseDataForNotification.filter((data)=>data.MeasurementDateTime>date).map((bg)=>{
-        if(patient.userId===bg.userId){
-          coreContext.thresoldData.map((td)=>{
-            if(td.UserId.includes(patient.userId)){
-              
-              if(Number(bg.bloodglucosemgdl)>Number(td.bg_high) || Number(bg.bloodglucosemgdl)<Number(td.bg_low)){
-                if(notificationValue.includes(patient.name+"~"+patient.userId+"~"+bg.bloodglucosemgdl+"~"+Moment(bg.MeasurementDateTime).format(
+    date.setHours(0, 0, 0, 0)
+
+    coreContext.patients.map((patient) => {
+      coreContext.bloodpressureDataForNotification.filter((data) => data.MeasurementDateTime > date).map((bp) => {
+        if (patient.userId === bp.UserId) {
+          coreContext.thresoldData.map((td) => {
+            if (td.UserId.includes(patient.userId)) {
+              if (Number(bp.diastolic) > Number(td.diastolic_high) || Number(bp.diastolic) < Number(td.diastolic_low)) {
+                if (notificationValue.includes(patient.name + "~" + patient.userId + "~" + bp.diastolic + "~" + Moment(bp.MeasurementDateTime).format(
                   "MM-DD-YYYY hh:mm A"
-                )+"~Blood Glucose")===false){
-                  if(coreContext.notifications.includes(patient.name+"~"+patient.userId+"~"+bg.bloodglucosemgdl+"~"+Moment(bg.MeasurementDateTime).format(
+                ) + "~Diastolic") === false) {
+                  if (coreContext.notifications.includes(patient.name + "~" + patient.userId + "~" + bp.diastolic + "~" + Moment(bp.MeasurementDateTime).format(
                     "MM-DD-YYYY hh:mm A"
-                  )+"~Blood Glucose")===false){
-                    notificationValue.push({"value":patient.name+"~"+patient.userId+"~"+bg.bloodglucosemgdl+"~"+Moment(bg.MeasurementDateTime).format(
+                  ) + "~Diastolic") === false) {
+                    if (Object.values(notificationValue).indexOf(patient.name + "~" + patient.userId + "~" + bp.diastolic + "~" + Moment(bp.MeasurementDateTime).format(
                       "MM-DD-YYYY hh:mm A"
-                    )+"~Blood Glucose","date":bg.MeasurementDateTime})
+                    ) + "~Diastolic") > -1) {
+
+                    } else {
+                      notificationValue.push({
+                        "value": patient.name + "~" + patient.userId + "~" + bp.diastolic + "~" + Moment(bp.MeasurementDateTime).format(
+                          "MM-DD-YYYY hh:mm A"
+                        ) + "~Diastolic", "date": bp.MeasurementDateTime
+                      })
+
+                    }
+
                   }
-                  
+
                 }
-                 
-               }
+
+              }
+              if (Number(bp.systolic) > Number(td.systolic_high) || Number(bp.systolic) < Number(td.systolic_low)) {
+                if (notificationValue.includes(patient.name + "~" + patient.userId + "~" + bp.systolic + "~" + Moment(bp.MeasurementDateTime).format(
+                  "MM-DD-YYYY hh:mm A"
+                ) + "~Systolic") === false) {
+                  if (coreContext.notifications.includes(patient.name + "~" + patient.userId + "~" + bp.systolic + "~" + Moment(bp.MeasurementDateTime).format(
+                    "MM-DD-YYYY hh:mm A"
+                  ) + "~Systolic") === false) {
+                    if (Object.values(notificationValue
+                    ).indexOf(patient.name + "~" + patient.userId + "~" + bp.systolic + "~" + Moment(bp.MeasurementDateTime).format(
+                      "MM-DD-YYYY hh:mm A"
+                    ) + "~Systolic") > -1) { }
+                    else {
+                      notificationValue.push({
+                        "value": patient.name + "~" + patient.userId + "~" + bp.systolic + "~" + Moment(bp.MeasurementDateTime).format(
+                          "MM-DD-YYYY hh:mm A"
+                        ) + "~Systolic", "date": bp.MeasurementDateTime
+                      })
+                    }
+
+
+                  }
+
+                }
+
+              }
             }
-            
+
 
           })
 
         }
-        
+
       }
-      
-      
+
+
+      )
+
+    })
+
+
+  }
+  const FetchNotificationForBG = () => {
+    var date = new Date();
+    date.setDate(date.getDate() - 7);
+    date.setHours(0, 0, 0, 0)
+    coreContext.patients.map((patient) => {
+      coreContext.bloodglucoseDataForNotification.filter((data) => data.MeasurementDateTime > date).map((bg) => {
+        if (patient.userId === bg.userId) {
+          coreContext.thresoldData.map((td) => {
+            if (td.UserId.includes(patient.userId)) {
+
+              if (Number(bg.bloodglucosemgdl) > Number(td.bg_high) || Number(bg.bloodglucosemgdl) < Number(td.bg_low)) {
+                if (notificationValue.includes(patient.name + "~" + patient.userId + "~" + bg.bloodglucosemgdl + "~" + Moment(bg.MeasurementDateTime).format(
+                  "MM-DD-YYYY hh:mm A"
+                ) + "~Blood Glucose") === false) {
+                  if (coreContext.notifications.includes(patient.name + "~" + patient.userId + "~" + bg.bloodglucosemgdl + "~" + Moment(bg.MeasurementDateTime).format(
+                    "MM-DD-YYYY hh:mm A"
+                  ) + "~Blood Glucose") === false) {
+                    notificationValue.push({
+                      "value": patient.name + "~" + patient.userId + "~" + bg.bloodglucosemgdl + "~" + Moment(bg.MeasurementDateTime).format(
+                        "MM-DD-YYYY hh:mm A"
+                      ) + "~Blood Glucose", "date": bg.MeasurementDateTime
+                    })
+                  }
+
+                }
+
+              }
+            }
+
+
+          })
+
+        }
+
+      }
+
+
       )
 
     })
   }
-  useEffect(()=>{
+  useEffect(() => {
     // console.log(coreContext.thresoldData,coreContext.patients,coreContext.bloodglucoseDataForNotification,"checking threshold from top menu")
-    if(coreContext.thresoldData.length>0 && coreContext.patients.length>0 && coreContext.bloodglucoseDataForNotification.length>0 &&  window.location.href.indexOf("patient-summary") <0 && coreContext.notifications.length>0){
-      
+    if (coreContext.thresoldData.length > 0 && coreContext.patients.length > 0 && coreContext.bloodglucoseDataForNotification.length > 0 && window.location.href.indexOf("patient-summary") < 0 && coreContext.notifications.length > 0) {
+
       FetchNotificationForBG();
-      
+
     }
-  },[coreContext.thresoldData.length,coreContext.patients.length,coreContext.bloodglucoseDataForNotification.length,notificationValue  ,coreContext.notifications.length])
+  }, [coreContext.thresoldData.length, coreContext.patients.length, coreContext.bloodglucoseDataForNotification.length, notificationValue, coreContext.notifications.length])
 
 
-  useEffect(()=>{
+  useEffect(() => {
     // console.log(coreContext.thresoldData,coreContext.patients,coreContext.bloodglucoseDataForNotification,"checking threshold from top menu")
-    if(coreContext.thresoldData.length>0 && coreContext.patients.length>0 && coreContext.bloodpressureDataForNotification.length>0 &&  window.location.href.indexOf("patient-summary") <= 0 && coreContext.notifications.length>0){
+    if (coreContext.thresoldData.length > 0 && coreContext.patients.length > 0 && coreContext.bloodpressureDataForNotification.length > 0 && window.location.href.indexOf("patient-summary") <= 0 && coreContext.notifications.length > 0) {
       FetchNotificationForBP();
-      
-      
+
+
     }
-  },[coreContext.thresoldData.length,coreContext.patients.length,coreContext.bloodpressureDataForNotification.length,notificationValue,coreContext.notifications.length])
-  
+  }, [coreContext.thresoldData.length, coreContext.patients.length, coreContext.bloodpressureDataForNotification.length, notificationValue, coreContext.notifications.length])
+
   const { register, handleSubmit, errors } = useForm({
     mode: "onSubmit",
     reValidateMode: "onBlur",
@@ -416,8 +421,8 @@ date.setHours(0,0,0,0)
   const onEmailChangedHandler = (e) => {
     setEmail(e.target.value);
     setUserName(e.target.value);
-    if(coreContext.patients.filter((curr)=>curr.email==e.target.value).length>0){
-      alert('Email already registered with '+ coreContext.patients.filter((curr)=>curr.email==e.target.value)[0].name)
+    if (coreContext.patients.filter((curr) => curr.email == e.target.value).length > 0) {
+      alert('Email already registered with ' + coreContext.patients.filter((curr) => curr.email == e.target.value)[0].name)
       setEmail('')
       setUserName('')
     }
@@ -425,24 +430,24 @@ date.setHours(0,0,0,0)
 
   useEffect(fetchProviders, []);
   // useEffect(console.log(pp), [pp]);
-  useEffect(()=>{
+  useEffect(() => {
     console.log(pp);
     console.log(ppname)
-  },[pp])
+  }, [pp])
 
   useEffect(fetchCareCoordinator, []);
-const handlechangeprovider=(p)=>{
-  setPp(p)
-  let c;
-  coreContext.providerOptions.map((curr)=>{
-    if(curr.value===p){
-      c=curr.name
-    }
+  const handlechangeprovider = (p) => {
+    setPp(p)
+    let c;
+    coreContext.providerOptions.map((curr) => {
+      if (curr.value === p) {
+        c = curr.name
+      }
 
-  })
-  console.log(c)
-  setPpname(c)
-}
+    })
+    console.log(c)
+    setPpname(c)
+  }
   // const fetchPatients = () => {
   //     coreContext.fetchPatients();
 
@@ -479,12 +484,12 @@ const handlechangeprovider=(p)=>{
   };
 
   const onCreatePatientSubmit = () => {
-    
+
     if (!userName) {
       alert("Enter user name...");
       return;
     }
-    if(pwd!==cnfpwd){
+    if (pwd !== cnfpwd) {
       alert("Password and confirm password");
       return;
     }
@@ -492,12 +497,12 @@ const handlechangeprovider=(p)=>{
       alert("Enter password...");
       return;
     }
-    var program=""
-    if(isccm){
-      program=program+"CCM"
+    var program = ""
+    if (isccm) {
+      program = program + "CCM"
     }
-    if(isrpm){
-      program=program+"RPM"
+    if (isrpm) {
+      program = program + "RPM"
     }
     if (pwd.length < 8) {
       alert("Your password needs a minimum of 8 characters")
@@ -505,16 +510,16 @@ const handlechangeprovider=(p)=>{
     } else if (pwd.search(/[a-z]/) < 0) {
       alert("Your password needs a lower case letter")
       return;
-    } else if(pwd.search(/[A-Z]/) < 0) {
+    } else if (pwd.search(/[A-Z]/) < 0) {
       alert("Your password needs an uppser case letter")
       return;
-    } else  if (pwd.search(/[0-9]/) < 0) {
+    } else if (pwd.search(/[0-9]/) < 0) {
       alert("Your password needs a number")
       return;
-    } else  if (pwd.search(/[!@#$%^&()~":<>?]/) < 0) {
+    } else if (pwd.search(/[!@#$%^&()~":<>?]/) < 0) {
       alert("Your password needs a Speacial Character")
       return;
-    } 
+    }
     if (!birthDate) {
       alert("Enter date of birth...");
       return;
@@ -535,9 +540,9 @@ const handlechangeprovider=(p)=>{
       alert("Enter email...");
       return;
     }
-    var newId= ""
-    dcount.map((curr)=>{
-      newId=newId+","+curr
+    var newId = ""
+    dcount.map((curr) => {
+      newId = newId + "," + curr
     })
     setDiagnosisId(newId)
     coreContext.Registration(
@@ -562,7 +567,7 @@ const handlechangeprovider=(p)=>{
       ppname,
       newId.substring(1),
       program,
-      istest,cptcodeforccm,cptcodeforrpm
+      istest, cptcodeforccm, cptcodeforrpm
     );
     handleClose();
   };
@@ -673,18 +678,18 @@ const handlechangeprovider=(p)=>{
         //   </NavDropdown.Item>
         // </NavDropdown>
         <li className="list-inline-item mr-10">
-	<div className="btn-group">
-<div className="dropdown pt-4">
-<Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-<i className="icon text-white bi-person-circle"></i> Patients
-</Link>
-<div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-<Link className="dropdown-item" to="/patients"><i className="icon bi-list-ul"></i> List</Link>
-<Link className="dropdown-item" to="#" onClick={handleShow}><i className="icon bi-file-plus-fill"></i> Add</Link>
-</div>
-</div>
-</div>
-	</li>
+          <div className="btn-group">
+            <div className="dropdown pt-4">
+              <Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i className="icon text-white bi-person-circle"></i> Patients
+              </Link>
+              <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <Link className="dropdown-item" to="/patients"><i className="icon bi-list-ul"></i> List</Link>
+                <Link className="dropdown-item" to="#" onClick={handleShow}><i className="icon bi-file-plus-fill"></i> Add</Link>
+              </div>
+            </div>
+          </div>
+        </li>
       );
   };
 
@@ -693,18 +698,18 @@ const handlechangeprovider=(p)=>{
     if (userType === "patient")
       return (
         <li className="list-inline-item mr-10">
-        <div className="btn-group">
-      <div className="dropdown pt-4">
-      <Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i className="icon text-white bi-envelope-open"></i> Clinical Data
-      </Link>
-      <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        <Link className="dropdown-item" to="#"><i className="icon bi-chat-left-dots"></i> Allergies</Link>
-      <Link className="dropdown-item" to="#"><i className="icon bi-envelope-open"></i> Lab Results</Link>
-      <Link className="dropdown-item" to="#"><i className="icon bi-envelope-open"></i> Medications</Link>
-      </div>
-      </div>
-      </div>
+          <div className="btn-group">
+            <div className="dropdown pt-4">
+              <Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i className="icon text-white bi-envelope-open"></i> Clinical Data
+              </Link>
+              <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <Link className="dropdown-item" to="#"><i className="icon bi-chat-left-dots"></i> Allergies</Link>
+                <Link className="dropdown-item" to="#"><i className="icon bi-envelope-open"></i> Lab Results</Link>
+                <Link className="dropdown-item" to="#"><i className="icon bi-envelope-open"></i> Medications</Link>
+              </div>
+            </div>
+          </div>
         </li>
       );
   };
@@ -714,18 +719,18 @@ const handlechangeprovider=(p)=>{
     if (userType === "patient")
       return (
         <li className="list-inline-item mr-10">
-        <div className="btn-group">
-      <div className="dropdown pt-4">
-      <Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i className="icon text-white bi-envelope-open"></i> Vitals
-      </Link>
-      <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        <Link className="dropdown-item" to="/bloodpressure"><i className="icon bi-chat-left-dots"></i> Blood Pressure</Link>
-      <Link className="dropdown-item" to="/bloodglucose"><i className="icon bi-envelope-open"></i> Blood Glucose</Link>
-      <Link className="dropdown-item" to="weight"><i className="icon bi-envelope-open"></i> Weight</Link>
-      </div>
-      </div>
-      </div>
+          <div className="btn-group">
+            <div className="dropdown pt-4">
+              <Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i className="icon text-white bi-envelope-open"></i> Vitals
+              </Link>
+              <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <Link className="dropdown-item" to="/bloodpressure"><i className="icon bi-chat-left-dots"></i> Blood Pressure</Link>
+                <Link className="dropdown-item" to="/bloodglucose"><i className="icon bi-envelope-open"></i> Blood Glucose</Link>
+                <Link className="dropdown-item" to="weight"><i className="icon bi-envelope-open"></i> Weight</Link>
+              </div>
+            </div>
+          </div>
         </li>
       );
   };
@@ -784,195 +789,195 @@ const handlechangeprovider=(p)=>{
     if (coreContext.patients.length > 0) {
     }
   };
-  const rendernotificationlength=()=>{
-    return(
-      
+  const rendernotificationlength = () => {
+    return (
+
       <Nav.Link to="#" >
-              <span className="badge badge-danger" onClick={handleClickOpen}>
-                {[...new Set(notificationValue)].length}
-                
-                
-</span>
-<Bell onClick={handleClickOpen}/>
-              </Nav.Link>
+        <span className="badge badge-danger" onClick={handleClickOpen}>
+          {[...new Set(notificationValue)].length}
+
+
+        </span>
+        <Bell onClick={handleClickOpen} />
+      </Nav.Link>
 
 
 
-      )
+    )
 
   }
-  const rendernotifications=useCallback(()=>{
-    return(<>
-    
-    <div className="dropdown-menu dropdown-menu-end wide notification-dropdown scroll-out" id="notifications">
-<div className="scroll-default">
-	<button type="button" className="btn btn-primary mb-3" onClick={()=>{markasread()}}>Mark all read</button>
-<ul className="list-unstyled border-last-none">
-                  {
+  const rendernotifications = useCallback(() => {
+    return (<>
 
-      [...new Set(notificationValue)].sort(function(a,b){
- 
-        return new Date(b.date) - new Date(a.date);
-      }).map((curr)=>{
-                 return(
-                   <>
-                 
+      <div className="dropdown-menu dropdown-menu-end wide notification-dropdown scroll-out" id="notifications">
+        <div className="scroll-default">
+          <button type="button" className="btn btn-primary mb-3" onClick={() => { markasread() }}>Mark all read</button>
+          <ul className="list-unstyled border-last-none">
+            {
 
-                        <li className="mb-2 pb-2 border-bottom border-separator-light d-flex">
-<div className="align-self-left">
-<p className="mb-0">{curr.value.split("~")[0]} has crossed the  threshold with {curr.value.split("~")[4]} reading {curr.value.split("~")[2]} on {curr.value.split("~")[3]}</p>
-	<Link to="#" onClick={()=>{coreContext.AddNotification(curr.value,"admin",localStorage.getItem("userId"));notificationValue.splice(notificationValue.findIndex(a => a.value === curr.value) , 1);handleClose1()}}>Mark as read</Link>
-</div>
-</li>
-                 
-                 
-                  
-                    </>
-                 )
-               })}
- </ul>
-</div>
-</div>
+              [...new Set(notificationValue)].sort(function (a, b) {
+
+                return new Date(b.date) - new Date(a.date);
+              }).map((curr) => {
+                return (
+                  <>
+
+
+                    <li className="mb-2 pb-2 border-bottom border-separator-light d-flex">
+                      <div className="align-self-left">
+                        <p className="mb-0">{curr.value.split("~")[0]} has crossed the  threshold with {curr.value.split("~")[4]} reading {curr.value.split("~")[2]} on {curr.value.split("~")[3]}</p>
+                        <Link to="#" onClick={() => { coreContext.AddNotification(curr.value, "admin", localStorage.getItem("userId")); notificationValue.splice(notificationValue.findIndex(a => a.value === curr.value), 1); handleClose1() }}>Mark as read</Link>
+                      </div>
+                    </li>
+
+
+
+                  </>
+                )
+              })}
+          </ul>
+        </div>
+      </div>
     </>)
-  },[])
+  }, [])
   //const count=React.useMemo({notificationValue.length,[notificationValue.length])
-    const count=React.useCallback(()=>rendernotificationlength(),[])
-    const count1=React.useCallback(()=>rendernotifications(),[])
-    useEffect(() => {
-   
-      return () => {
-        coreContext.cleanup();
-      };
-    },[window.location.href.indexOf("patient-summary") >0]);
+  const count = React.useCallback(() => rendernotificationlength(), [])
+  const count1 = React.useCallback(() => rendernotifications(), [])
+  useEffect(() => {
+
+    return () => {
+      coreContext.cleanup();
+    };
+  }, [window.location.href.indexOf("patient-summary") > 0]);
   return (
     <>
       <React.Fragment>
-      <div id="nav" className="nav-container d-flex">
-<div className="nav-content d-flex">
-<div class="logo position-relative">
-<Link to="/dashboard">
-<div><img src="https://www.linkpicture.com/q/WhatsApp_Image_2022-04-12_at_10.41.03_AM-removebg-preview.png" style={{width:"70px"}}/></div>
-</Link>
-</div>
+        <div id="nav" className="nav-container d-flex">
+          <div className="nav-content d-flex">
+            <div class="logo position-relative">
+              <Link to="/dashboard">
+                <div><img src="https://www.linkpicture.com/q/WhatsApp_Image_2022-04-12_at_10.41.03_AM-removebg-preview.png" style={{ width: "70px" }} /></div>
+              </Link>
+            </div>
 
-<div className="user-container d-flex">
-<Link to="#" className="d-flex user position-relative" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-<img className="profile" alt="profile" src="https://st2.depositphotos.com/1006318/5909/v/950/depositphotos_59094041-stock-illustration-medical-doctor-profile.jpg"/>
-<div className="name">{
+            <div className="user-container d-flex">
+              <Link to="#" className="d-flex user position-relative" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img className="profile" alt="profile" src="https://st2.depositphotos.com/1006318/5909/v/950/depositphotos_59094041-stock-illustration-medical-doctor-profile.jpg" />
+                <div className="name">{
                   localStorage.getItem("userName")
                     ? localStorage.getItem("userName")
                     : "Guest"
                 }</div>
-</Link>
-<div className="dropdown-menu dropdown-menu-end user-menu wide">
+              </Link>
+              <div className="dropdown-menu dropdown-menu-end user-menu wide">
 
-<div className="row mb-1 ms-0 me-0">
+                <div className="row mb-1 ms-0 me-0">
 
-<div className="col-12 ps-1 pe-1">
-<ul className="list-unstyled">
-<li>
-<Link to="/profile">
-<i className="icon bi-person-circle"></i>
-<span className="align-middle">My Profile</span>
-</Link>
-</li>
-<li>
-<Link to="#" onClick={handleShow}>
-<i className="icon bi-person-fill"></i>
-<span className="align-middle">Create Patient</span>
-</Link>
-</li>
-</ul>
-</div>
-<div className="col-12 pe-1 ps-1">
-<ul className="list-unstyled">
-<li>
-<Link to="/settings">
-<i className="icon bi-gear-fill"></i>
-<span className="align-middle">Settings</span>
-</Link>
-</li>
-<li>
-<Link to="/logout">
-<i className="icon bi-box-arrow-right"></i>
-<span className="align-middle">Logout</span>
-</Link>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<ul className="list-unstyled list-inline text-center menu-icons">
-	<li className="list-inline-item mr-10">
-	<div className="btn-group">
-<div className="dropdown pt-4">
-<Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-<i className="icon text-white bi-envelope"></i> Mailbox
-</Link>
-<div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-<Link className="dropdown-item" to="/inbox"><i className="icon bi-inbox"></i>  Inbox</Link>
-<Link className="dropdown-item" to="/outbox"><i className="icon bi-envelope-open"></i> Outbox</Link>
-</div>
-</div>
-</div>
-	</li>
-	<li className="list-inline-item mr-10">
-	<div className="btn-group">
-<div className="dropdown pt-4">
-<Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-<i className="icon text-white bi-envelope-open"></i> Messages
-</Link>
-<div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-	<Link className="dropdown-item" to="/telephone"><i className="icon bi-chat-left-dots"></i> Call</Link>
-<Link className="dropdown-item" to="#" onClick={handleMessageModalShow}><i className="icon bi-envelope-open"></i> SMS</Link>
-</div>
-</div>
-</div>
-	</li>
-	{renderPatientMenu()}
-  {renderClinicalDataMenu()}
+                  <div className="col-12 ps-1 pe-1">
+                    <ul className="list-unstyled">
+                      <li>
+                        <Link to="/profile">
+                          <i className="icon bi-person-circle"></i>
+                          <span className="align-middle">My Profile</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="#" onClick={handleShow}>
+                          <i className="icon bi-person-fill"></i>
+                          <span className="align-middle">Create Patient</span>
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="col-12 pe-1 ps-1">
+                    <ul className="list-unstyled">
+                      <li>
+                        <Link to="/settings">
+                          <i className="icon bi-gear-fill"></i>
+                          <span className="align-middle">Settings</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/logout">
+                          <i className="icon bi-box-arrow-right"></i>
+                          <span className="align-middle">Logout</span>
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ul className="list-unstyled list-inline text-center menu-icons">
+              <li className="list-inline-item mr-10">
+                <div className="btn-group">
+                  <div className="dropdown pt-4">
+                    <Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i className="icon text-white bi-envelope"></i> Mailbox
+                    </Link>
+                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <Link className="dropdown-item" to="/inbox"><i className="icon bi-inbox"></i>  Inbox</Link>
+                      <Link className="dropdown-item" to="/outbox"><i className="icon bi-envelope-open"></i> Outbox</Link>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li className="list-inline-item mr-10">
+                <div className="btn-group">
+                  <div className="dropdown pt-4">
+                    <Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i className="icon text-white bi-envelope-open"></i> Messages
+                    </Link>
+                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <Link className="dropdown-item" to="/telephone"><i className="icon bi-chat-left-dots"></i> Call</Link>
+                      <Link className="dropdown-item" to="#" onClick={handleMessageModalShow}><i className="icon bi-envelope-open"></i> SMS</Link>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              {renderPatientMenu()}
+              {renderClinicalDataMenu()}
               {renderVitalMenu()}
-	
-<li className="list-inline-item">
-<Link to="#" data-bs-toggle="modal"data-bs-target="#searchPagesModal" onClick={()=>handleSearchOpen()}>
-	<i className="icon text-white bi-search"></i>
-</Link>
-</li>
-{/* <li className="list-inline-item">{renderpatientSearch()}</li> */}
 
-{(window.location.href.indexOf("patient-summary") <=0)?
-<li className="list-inline-item">
-<Link to="#" data-bs-toggle="dropdown" data-bs-target="#notifications" aria-haspopup="true" aria-expanded="false" className="notification-button">
-<div className="position-relative d-inline-flex">
-<i className="icon text-white bi-bell"></i>
-<span className="notificaion-show badge bg-danger">{notificationValue.length}</span>
-</div>
-</Link>
-{rendernotifications()}
-</li>:null}
-	
-	
-</ul>
-<div className="menu-container flex-grow-1">
-<ul id="menu" className="menu">
+              <li className="list-inline-item">
+                <Link to="#" data-bs-toggle="modal" data-bs-target="#searchPagesModal" onClick={() => handleSearchOpen()}>
+                  <i className="icon text-white bi-search"></i>
+                </Link>
+              </li>
+              {/* <li className="list-inline-item">{renderpatientSearch()}</li> */}
+
+              {(window.location.href.indexOf("patient-summary") <= 0) ?
+                <li className="list-inline-item">
+                  <Link to="#" data-bs-toggle="dropdown" data-bs-target="#notifications" aria-haspopup="true" aria-expanded="false" className="notification-button">
+                    <div className="position-relative d-inline-flex">
+                      <i className="icon text-white bi-bell"></i>
+                      <span className="notificaion-show badge bg-danger">{notificationValue.length}</span>
+                    </div>
+                  </Link>
+                  {rendernotifications()}
+                </li> : null}
 
 
-</ul>
-</div>
-<div className="mobile-buttons-container">
-<Link to="#" id="scrollSpyButton" className="spy-button" data-bs-toggle="dropdown">
-<i className="icon bi-list text-white display-3"></i>
-	
-</Link>
-<div className="dropdown-menu dropdown-menu-end" id="scrollSpyDropdown"></div>
-<Link to="#" id="mobileMenuButton" className="menu-button">
-<i className="icon bi-list text-white display-3"></i>
-</Link>
-</div>
-</div>
-<div className="nav-shadow"></div>
-</div>
+            </ul>
+            <div className="menu-container flex-grow-1">
+              <ul id="menu" className="menu">
+
+
+              </ul>
+            </div>
+            <div className="mobile-buttons-container">
+              <Link to="#" id="scrollSpyButton" className="spy-button" data-bs-toggle="dropdown">
+                <i className="icon bi-list text-white display-3"></i>
+
+              </Link>
+              <div className="dropdown-menu dropdown-menu-end" id="scrollSpyDropdown"></div>
+              <Link to="#" id="mobileMenuButton" className="menu-button">
+                <i className="icon bi-list text-white display-3"></i>
+              </Link>
+            </div>
+          </div>
+          <div className="nav-shadow"></div>
+        </div>
 
         <Modal
           show={coreContext.showPatientConfirmationModal}
@@ -1015,11 +1020,11 @@ const handlechangeprovider=(p)=>{
           </Modal.Header>
           <Modal.Body>
             {
- (localStorage.getItem("userType")!== "patient")?
-     
-        <Form inline>
-          <div className="col-sm-12">
-            {/* <input
+              (localStorage.getItem("userType") !== "patient") ?
+
+                <Form inline>
+                  <div className="col-sm-12">
+                    {/* <input
                 name="name"
                 type="text"
                 style={{  height: '38px', width: '200px' }}
@@ -1028,30 +1033,30 @@ const handlechangeprovider=(p)=>{
                    }}
                 placeholder="Search patients..."
               /> */}
-            {renderPatients()}
-            <div className="col-sm-12">
-              <header>
-                <div style={{ width: "100%" }}>
-                  <ReactSearchAutocomplete
-                    items={coreContext.patients}
-                    onSearch={handleOnSearch}
-                    onHover={handleOnHover}
-                    onSelect={handleOnSelect}
-                    onFocus={handleOnFocus}
-                    autoFocus
-                  />
-                </div>
-              </header>
-            </div>
-            {/* <input
+                    {renderPatients()}
+                    <div className="col-sm-12">
+                      <header>
+                        <div style={{ width: "100%" }}>
+                          <ReactSearchAutocomplete
+                            items={coreContext.patients}
+                            onSearch={handleOnSearch}
+                            onHover={handleOnHover}
+                            onSelect={handleOnSelect}
+                            onFocus={handleOnFocus}
+                            autoFocus
+                          />
+                        </div>
+                      </header>
+                    </div>
+                    {/* <input
                 name="name"
                 type="button"
                 width="380" value="Search" style={{ marginLeft: '5px',  height: '38px', width: '200px' }}
                 onClick={onSearch}
               /> */}
-          </div>
+                  </div>
 
-          {/* <FormControl 
+                  {/* <FormControl 
             placeholder="Search patients..."
             aria-label="Search patients..."
             aria-describedby="basic-addon1" onKeyPress={event => {
@@ -1060,11 +1065,11 @@ const handlechangeprovider=(p)=>{
                 }}}
           
         /> */}
-        </Form>
-     :null
-}
+                </Form>
+                : null
+            }
           </Modal.Body>
-          
+
         </Modal>
 
         <Modal show={showMessageModal} onHide={handleMessageModalClose}>
@@ -1111,7 +1116,7 @@ maxLength="50" size="sm" type="text" onChange={e => setMobilePhone(e.target.valu
             <Form.Group>
               <label className="mt-2">Description*</label>
               <Form.Control
-maxLength="50"
+                maxLength="50"
                 type="reset"
                 size="sm"
                 as="textarea"
@@ -1142,35 +1147,35 @@ maxLength="50"
                 <Form.Group>
                   <label className="mt-2">Email*</label>
                   <Form.Control
-maxLength="50"
+                    maxLength="50"
                     size="sm"
                     type="email"
                     placeholder="Email"
                     onChange={onEmailChangedHandler}
                     value={email}
                   />
-              
+
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group>
                   <label className="mt-2">Password*</label>
                   <Form.Control
-maxLength="50"
+                    maxLength="50"
                     size="sm"
                     type={pwdtype}
                     onChange={(e) => setcnfpwd(e.target.value)}
                     value={cnfpwd}
                     placeholder="Enter Password"
                   />
-                    <i class="bi bi-eye"onClick={()=>setpwdtype((pwdtype==="password")?"text":"password")}  id="togglePassword" style={{position:"absolute",top:"7%",right:"38%"}}></i>
+                  <i class="bi bi-eye" onClick={() => setpwdtype((pwdtype === "password") ? "text" : "password")} id="togglePassword" style={{ position: "absolute", top: "7%", right: "38%" }}></i>
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group>
                   <label className="mt-2" >Confirm Password*</label>
                   <Form.Control
-maxLength="50"
+                    maxLength="50"
                     size="sm"
                     type={pwdtype1}
                     onChange={(e) => setpwd(e.target.value)}
@@ -1178,17 +1183,17 @@ maxLength="50"
                     placeholder="Enter Password"
 
                   />
-                      <i class="bi bi-eye" onClick={()=>setpwdtype1((pwdtype1==="password")?"text":"password")} id="togglePassword" style={{position:"absolute",top:"7%",right:"5%"}}></i>
+                  <i class="bi bi-eye" onClick={() => setpwdtype1((pwdtype1 === "password") ? "text" : "password")} id="togglePassword" style={{ position: "absolute", top: "7%", right: "5%" }}></i>
                 </Form.Group>
               </Col>
-            
+
             </Row>
             <Row>
-            <Col>
+              <Col>
                 <Form.Group>
                   <label className="mt-2">User Name</label>
                   <Form.Control
-maxLength="50"
+                    maxLength="50"
                     size="sm"
                     readOnly={true}
                     type="text"
@@ -1201,7 +1206,7 @@ maxLength="50"
                 <Form.Group>
                   <label className="mt-2">First Name*</label>
                   <Form.Control
-maxLength="50"
+                    maxLength="50"
                     size="sm"
                     type="text"
                     onChange={(e) => setfirstName(e.target.value)}
@@ -1214,7 +1219,7 @@ maxLength="50"
                 <Form.Group>
                   <label className="mt-2">Middle Name</label>
                   <Form.Control
-maxLength="50"
+                    maxLength="50"
                     size="sm"
                     type="text"
                     onChange={(e) => setmiddleName(e.target.value)}
@@ -1223,14 +1228,14 @@ maxLength="50"
                   />
                 </Form.Group>
               </Col>
-              
+
             </Row>
             <Row>
-            <Col>
+              <Col>
                 <Form.Group>
                   <label className="mt-2">Last Name*</label>
                   <Form.Control
-maxLength="50"
+                    maxLength="50"
                     size="sm"
                     type="text"
                     onChange={(e) => setlastName(e.target.value)}
@@ -1243,7 +1248,7 @@ maxLength="50"
                 <Form.Group>
                   <label className="mt-2">Date of Birth*</label>
                   <Form.Control
-maxLength="50"
+                    maxLength="50"
                     size="sm"
                     type="date"
                     placeholder="Enter date"
@@ -1255,97 +1260,97 @@ maxLength="50"
               <Col>
                 <Form.Group>
                   <label className="mt-2">Gender*</label>
-                  <select className="form-select" value={gender} onChange={(e)=>{setGender(e.target.value)}} >
+                  <select className="form-select" value={gender} onChange={(e) => { setGender(e.target.value) }} >
                     <option value="">Select Gender</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                   </select>
                 </Form.Group>
               </Col>
-              
+
             </Row>
             <Row>
-            <Col>
+              <Col>
                 <Form.Group>
                   <label className="mt-2">Language</label>
-               
-                  <select className="form-select" value={language} onChange={(e)=>{setLanguage(e.target.value)}} >
-                  <option value="">Select Language</option>
+
+                  <select className="form-select" value={language} onChange={(e) => { setLanguage(e.target.value) }} >
+                    <option value="">Select Language</option>
                     <option value="English">English</option>
                     <option value="Spanish">Spanish</option>
-      
-    
-      
-      </select>
+
+
+
+                  </select>
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group>
                   <label className="mt-2">CPT Code For CCM</label>
-               
+
                   <MultiSelect
-      
-        options={[
-          { label: "99457", value: "99457" },
-          { label: "99458", value: "99458" },
-          { label: "99490", value: "99490"},
-          { label: "99439", value: "99439" },
-          { label: "99487", value: "99487" },
-          { label: "99489", value: "99489"},
-        ]}
-        value={cptcodeforccm}
-        onChange={setcptcodeforccm}
-        labelledBy="Select"
-      />
+
+                    options={[
+                      { label: "99457", value: "99457" },
+                      { label: "99458", value: "99458" },
+                      { label: "99490", value: "99490" },
+                      { label: "99439", value: "99439" },
+                      { label: "99487", value: "99487" },
+                      { label: "99489", value: "99489" },
+                    ]}
+                    value={cptcodeforccm}
+                    onChange={setcptcodeforccm}
+                    labelledBy="Select"
+                  />
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group>
                   <label className="mt-2">CPT Code For RPM</label>
-               
+
                   <MultiSelect
-      
-        options={[
-          { label: "99457", value: "99457" },
-          { label: "99458", value: "99458" },
-          { label: "99490", value: "99490"},
-          { label: "99439", value: "99439" },
-          { label: "99487", value: "99487" },
-          { label: "99489", value: "99489"},
-        ]}
-        value={cptcodeforrpm}
-        onChange={setcptcodeforrpm}
-        labelledBy="Select"
-      />
+
+                    options={[
+                      { label: "99457", value: "99457" },
+                      { label: "99458", value: "99458" },
+                      { label: "99490", value: "99490" },
+                      { label: "99439", value: "99439" },
+                      { label: "99487", value: "99487" },
+                      { label: "99489", value: "99489" },
+                    ]}
+                    value={cptcodeforrpm}
+                    onChange={setcptcodeforrpm}
+                    labelledBy="Select"
+                  />
                 </Form.Group>
               </Col>
-              </Row>
+            </Row>
             <Row>
               <Col>
                 <Form.Group>
                   <label className="mt-2">Diagnosis</label>
                   {
-                  dcount.map((curr,index)=>{
-                    return(
-                      <>
-                      
-                      <select className="form-select mt-1" value={dcount[index]} onChange={(e)=>{ handledcount(index,e.target.value)}} >
-    
-      
-      
-    <option value=""></option>
-  {   diagonislist.map((curr)=><option value={curr.split("-")[0]}>{curr}</option>)}
-  
-  
-  </select>
+                    dcount.map((curr, index) => {
+                      return (
+                        <>
+
+                          <select className="form-select mt-1" value={dcount[index]} onChange={(e) => { handledcount(index, e.target.value) }} >
 
 
-                                
-                  </>
-                    )
-                  })}
-                   <Button className="mt-1 mb-1" onClick={()=>setdcount([...dcount,""])}>+</Button>
-                  
+
+                            <option value=""></option>
+                            {diagonislist.map((curr) => <option value={curr.split("-")[0]}>{curr}</option>)}
+
+
+                          </select>
+
+
+
+                        </>
+                      )
+                    })}
+                  <Button className="mt-1 mb-1" onClick={() => setdcount([...dcount, ""])}>+</Button>
+
                 </Form.Group>
               </Col>
             </Row>
@@ -1355,7 +1360,7 @@ maxLength="50"
                 <Form.Check
                   type="checkbox"
                   label="CCM"
-                  onChange={(e)=>toggleIsccm(e.target.checked)}
+                  onChange={(e) => toggleIsccm(e.target.checked)}
                   value={isccm}
                 />
               </Col>
@@ -1363,7 +1368,7 @@ maxLength="50"
                 <Form.Check
                   type="checkbox"
                   label="PCM"
-                  onChange={(e)=>toggleIspcm(e.target.checked)}
+                  onChange={(e) => toggleIspcm(e.target.checked)}
                   value={ispcm}
                 />
               </Col>
@@ -1371,18 +1376,18 @@ maxLength="50"
                 <Form.Check
                   type="checkbox"
                   label="RPM"
-                  onChange={(e)=>toggleIsrpm(e.target.checked)}
+                  onChange={(e) => toggleIsrpm(e.target.checked)}
                   value={isrpm}
                 />
               </Col>
             </Row>
-             <Row className="mt-1">
+            <Row className="mt-1">
               <Col >User Type</Col>
               <Col>
                 <Form.Check
                   type="radio"
                   label="Regular"
-                  onChange={(e)=>toggleIsregular(e.target.checked)}
+                  onChange={(e) => toggleIsregular(e.target.checked)}
                   checked={isregular}
                 />
               </Col>
@@ -1390,12 +1395,12 @@ maxLength="50"
                 <Form.Check
                   type="radio"
                   label="Test"
-                  onChange={(e)=>toggleIstest(e.target.checked)}
+                  onChange={(e) => toggleIstest(e.target.checked)}
                   checked={istest}
                 />
               </Col>
               <Col></Col>
-              
+
             </Row>
             <Row style={{ marginTop: 20 }}>
               <Col>
@@ -1415,15 +1420,15 @@ maxLength="50"
                     options={coreContext.careCoordinatorOptions}
                     onChange={(e) => setPcm(e.target.value)}
                   /> */}
-                  <select className="form-select" value={pcm} onChange={(e)=>{setPcm(e.target.value)}} >
-      
-      {coreContext.careCoordinatorOptions.map((curr,index)=>{
-        return(<option value={curr.value}>{curr.name}</option>)
-        
- })}
-      
-      </select>
-      
+                  <select className="form-select" value={pcm} onChange={(e) => { setPcm(e.target.value) }} >
+
+                    {coreContext.careCoordinatorOptions.map((curr, index) => {
+                      return (<option value={curr.value}>{curr.name}</option>)
+
+                    })}
+
+                  </select>
+
                 </form>
                 {/* <Form.Group>
                             <label className="mt-2">Care Coordinator</label>
@@ -1450,15 +1455,15 @@ maxLength="50" size="sm" as="select" onChange={e => setPcm(e.target.value)} valu
                     onChange={(e) => {handlechangeprovider(e.target.value)}}
                     
                   /> */}
-                  <select className="form-select" value={pp} onChange={(e)=>{handlechangeprovider(e.target.value)}} >
-      
-      {coreContext.providerOptions.map((curr,index)=>{
-        return(<option value={curr.value}>{curr.name}</option>)
-        
- })}
-      
-      </select>
-      
+                  <select className="form-select" value={pp} onChange={(e) => { handlechangeprovider(e.target.value) }} >
+
+                    {coreContext.providerOptions.map((curr, index) => {
+                      return (<option value={curr.value}>{curr.name}</option>)
+
+                    })}
+
+                  </select>
+
                 </form>
                 {/* <Form.Group>
                             <label className="mt-2">Providers</label>
@@ -1479,7 +1484,7 @@ maxLength="50" size="sm" as="select" onChange={e => setPp(e.target.value)} value
                 <Form.Group>
                   <label className="mt-2">Home Phone</label>
                   <Form.Control
-maxLength="50"
+                    maxLength="50"
                     size="sm"
                     type="text"
                     placeholder="Enter home phone"
@@ -1492,7 +1497,7 @@ maxLength="50"
                 <Form.Group>
                   <label className="mt-2">Mobile Phone</label>
                   <Form.Control
-maxLength="50"
+                    maxLength="50"
                     size="sm"
                     type="text"
                     placeholder="Enter mobile phone"
@@ -1505,7 +1510,7 @@ maxLength="50"
                 <Form.Group>
                   <label className="mt-2">Work Phone</label>
                   <Form.Control
-maxLength="50"
+                    maxLength="50"
                     size="sm"
                     type="text"
                     placeholder="212-333-1234-123"
@@ -1516,13 +1521,13 @@ maxLength="50"
               </Col>
             </Row>
             <Row>
-                
-                <Col>
-                
-            <Form.Group>
-            <label className="mt-2">Preferred Phone</label>
+
+              <Col>
+
+                <Form.Group>
+                  <label className="mt-2">Preferred Phone</label>
                   <Form.Control
-maxLength="50"
+                    maxLength="50"
                     size="sm"
                     as="select"
                     onChange={(e) => setPreferred(e.target.value)}
@@ -1532,16 +1537,16 @@ maxLength="50"
                     <option value="Mobile">Mobile</option>
                     <option value="Work">Work</option>
                   </Form.Control>
-                  </Form.Group>
-                </Col>
-              </Row>
-            
+                </Form.Group>
+              </Col>
+            </Row>
+
             <Row>
               <Col>
                 <Form.Group>
                   <label className="mt-2">Phone Notes</label>
                   <Form.Control
-maxLength="50"
+                    maxLength="50"
                     size="sm"
                     type="text"
                     placeholder="Phone Notes"
@@ -1575,13 +1580,13 @@ maxLength="50"
                 <Form.Group>
                   <label className="mt-2">Mailing address</label>
                   <Form.Control
-maxLength="50"
+                    maxLength="50"
                     size="sm"
                     type="text"
                     placeholder="Enter Street Location"
                     onChange={(e) => setStreet(e.target.value)}
                     value={street}
-                    
+
                   />
                 </Form.Group>
               </Col>
@@ -1589,7 +1594,7 @@ maxLength="50"
                 <Form.Group>
                   <label className="mt-2">Zip Code</label>
                   <Form.Control
-maxLength="50"
+                    maxLength="50"
                     size="sm"
                     type="text"
                     placeholder="Enter ZIP"
@@ -1604,7 +1609,7 @@ maxLength="50"
                 <Form.Group>
                   <label className="mt-2">City</label>
                   <Form.Control
-maxLength="50"
+                    maxLength="50"
                     size="sm"
                     type="text"
                     placeholder="Enter City"
@@ -1617,7 +1622,7 @@ maxLength="50"
                 <Form.Group>
                   <label className="mt-2">State</label>
                   <Form.Control
-maxLength="50"
+                    maxLength="50"
                     size="sm"
                     type="text"
                     placeholder="Enter State"
@@ -1668,32 +1673,32 @@ maxLength="50" size="sm" type="text" placeholder="Enter RAF" onChange={e => setR
           </Modal.Footer>
         </Modal>
         <div><BootstrapDialog
-        onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
-        style={{marginLeft:"70%"}}
-        open={open}
-      >
-        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose1}>
-          Notifications
-        </BootstrapDialogTitle>
-        <BootstrapDialogTitle>
-         
-        <div className="row" style={{float:"right"}}>
-      <Button style={{float:"right",fontSize:"14px"}} onClick={()=>{markasread();handleClose1()}}>
-                    
-              Mark All as Read
-              
-                  </Button>
-                  </div>
-       </BootstrapDialogTitle>
-        <DialogContent dividers>
-         
-          
-          {count1}
-        </DialogContent>
-        
-      </BootstrapDialog>
-    </div>    </React.Fragment>
+          onClose={handleClose}
+          aria-labelledby="customized-dialog-title"
+          style={{ marginLeft: "70%" }}
+          open={open}
+        >
+          <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose1}>
+            Notifications
+          </BootstrapDialogTitle>
+          <BootstrapDialogTitle>
+
+            <div className="row" style={{ float: "right" }}>
+              <Button style={{ float: "right", fontSize: "14px" }} onClick={() => { markasread(); handleClose1() }}>
+
+                Mark All as Read
+
+              </Button>
+            </div>
+          </BootstrapDialogTitle>
+          <DialogContent dividers>
+
+
+            {count1}
+          </DialogContent>
+
+        </BootstrapDialog>
+        </div>    </React.Fragment>
     </>
   );
 };

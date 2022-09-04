@@ -371,7 +371,7 @@ const PatientSummary = (props) => {
           return (
             <>
               <div className="row mt-2">
-                <div className="col-xl-3">
+                <div className="col-xl-2">
                   <label>CPT Code</label>
                   {/* <input className="form-control" value={curr.cptcode} onChange={(e)=>{ handledcptcode(index,e.target.value,"cptcode")}}/> */}
                   <select className="form-select" value={curr.cptcode} onChange={(e) => { handledcptcode(index, e.target.value, "cptcode") }}>
@@ -389,7 +389,7 @@ const PatientSummary = (props) => {
                   </select>
 
                 </div>
-                <div className="col-xl-3">
+                <div className="col-xl-2">
                   <label>Program</label>
                   <select className="form-select" value={curr.program} onChange={(e) => { handledcptcode(index, e.target.value, "program") }}>
                     <option value="SelectUser">Select a Program</option>
@@ -399,7 +399,7 @@ const PatientSummary = (props) => {
                   </select>
 
                 </div>
-                <div className="col-xl-3">
+                <div className="col-xl-2">
                   <label>Description</label>
                   <input className="form-control" value={(coreContext.BillingCodes.filter((curr1) => curr1.code == curr.cptcode).length > 0) ? coreContext.BillingCodes.filter((curr1) => curr1.code == curr.cptcode)[0].description : ""} />
 
@@ -415,12 +415,21 @@ const PatientSummary = (props) => {
 
                 </div>
                 <div className="col-xl-1">
+                <button className="btn btn-primary mt-4" onClick={() =>{ 
+                    let value = dummycptcode;
+                    value.splice(index, 1);
+                    value[index].count= dummycptcode[index].count + 1;
+                    setDummycptcode(value)
+                  }}> <Trash /></button>
+                  </div>
+                <div className="col-xl-1">
 
                   <button className="btn btn-primary mt-4" onClick={() =>{ 
                     let value = dummycptcode;
                     value[index].count= dummycptcode[index].count + 1;
                     setDummycptcode(value)
                   }}>x2</button>
+                   
 
                 </div>
               </div>
