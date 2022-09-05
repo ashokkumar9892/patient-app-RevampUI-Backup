@@ -416,18 +416,25 @@ const PatientSummary = (props) => {
                 </div>
                 <div className="col-xl-1">
                 <button className="btn btn-primary mt-4" onClick={() =>{ 
+                   if(Object.keys(dummycptcode).length >0){
                     let value = dummycptcode;
                     value.splice(index, 1);
-                    value[index].count= dummycptcode[index].count + 1;
-                    setDummycptcode(value)
+                    if(Object.keys(value).length >0){
+                      value[index].count= dummycptcode[index].count + 1;
+                      setDummycptcode(value)
+                    }
+                  
+                   }
                   }}> <Trash /></button>
                   </div>
                 <div className="col-xl-1">
 
                   <button className="btn btn-primary mt-4" onClick={() =>{ 
+                    if(Object.keys(dummycptcode).length >0){
                     let value = dummycptcode;
                     value[index].count= dummycptcode[index].count + 1;
                     setDummycptcode(value)
+                    }
                   }}>x2</button>
                    
 
