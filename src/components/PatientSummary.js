@@ -274,17 +274,23 @@ const PatientSummary = (props) => {
   useEffect(coreContext.FetchBilligCode, []);
   const convertToadd = (arr) => {
       const res = {};
+      const data=[];
+      const originalArr = []
       arr.forEach((obj) => {
         const key = `${obj.cptcode}${obj["program"]}`;
          if (!res[key]) {
             res[key] = { ...obj };
+            data.push(key)
          }
          else{
              res[key].count = res[key].count+ obj.count
          }
        
       });
-      return Object.values(res);
+      data.forEach((item, index)=>{
+        originalArr[index] = res[item]
+      })
+      return originalArr;
   }
 
   const handledcptcode = (index, val, prp) => {
