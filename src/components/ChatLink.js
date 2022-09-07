@@ -24,7 +24,7 @@ const ChatLink = () => {
 
       try{
         
-        if(localStorage.getItem("userType").includes("doctor")){
+        if(localStorage.getItem("userType").includes("doctor") || localStorage.getItem("userType").includes("coach")){
           coreContext.fetchChatLink(coreContext.userinfo[0].sno);
           setdoctorid(coreContext.userinfo[0].sno)
 
@@ -56,7 +56,7 @@ const ChatLink = () => {
       console.log(`New message incoming! ${newMessage}`);
       const token = localStorage.getItem("app_jwt");
       var connection = new signal.HubConnectionBuilder().withUrl("https://annexappapi.apatternplus.com/chatHub").build();
-      connection.serverTimeoutInMilliseconds = 6000000;
+      //connection.serverTimeoutInMilliseconds = 6000000;
       const chat=()=>{
   const sendmessage=()=>{
     var req = 

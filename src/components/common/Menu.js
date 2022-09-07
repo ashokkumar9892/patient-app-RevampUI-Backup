@@ -58,7 +58,7 @@ const renderChat=()=>{
 <li>
 <Link to="#" data-bs-target="#account">
 <i className="icon bi-person-circle"></i>
-<span className="label ml-1">Care Team</span>
+<span className="label ml-1"></span>
 </Link>
 <ul>
 {(userType!=="patient")?
@@ -207,11 +207,11 @@ const renderChat=()=>{
 <i className="icon bi-bag-fill"></i>
 <span className="label" style={{marginLeft:"1em"}}>  Tutorials</span>
 </Link>
-{(userType=='doctor' || userType=='testdoctor' )?
+{/* {(userType=='doctor' || userType=='testdoctor' )?
 <Link className="btn btn-primary d-block rounded-0 text-start mt-1"  to="/chat">
 <i className="icon bi-bag-fill"></i>
 <span className="label" style={{marginLeft:"1em"}}>  Chat</span>
-</Link>	:""}
+</Link>	:""} */}
 	</div>
 {/* 
 <li className="border-bottom">

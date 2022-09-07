@@ -912,17 +912,16 @@ const TopMenu = ({ changestyle, showSidebar }) => {
               <li className="list-inline-item mr-10">
                 <div className="btn-group">
                   <div className="dropdown pt-4">
-                    <Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i className="icon text-white bi-envelope"></i> Mailbox
-                    </Link>
-                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                      <Link className="dropdown-item" to="/inbox"><i className="icon bi-inbox"></i>  Inbox</Link>
-                      <Link className="dropdown-item" to="/outbox"><i className="icon bi-envelope-open"></i> Outbox</Link>
-                    </div>
+                    
+{(localStorage.getItem('userType')=='doctor' || localStorage.getItem('userType')=='testdoctor' || localStorage.getItem('userType')=='coach')?
+<Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white"  to="/chat">
+<i className="icon text-white bi-envelope-open"></i>  Chat
+</Link>	:""}
+                    
                   </div>
                 </div>
               </li>
-              <li className="list-inline-item mr-10">
+              {/* <li className="list-inline-item mr-10">
                 <div className="btn-group">
                   <div className="dropdown pt-4">
                     <Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -934,7 +933,7 @@ const TopMenu = ({ changestyle, showSidebar }) => {
                     </div>
                   </div>
                 </div>
-              </li>
+              </li> */}
               {renderPatientMenu()}
               {renderClinicalDataMenu()}
               {renderVitalMenu()}
