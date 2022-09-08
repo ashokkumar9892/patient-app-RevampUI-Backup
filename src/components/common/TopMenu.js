@@ -253,6 +253,13 @@ const TopMenu = ({ changestyle, showSidebar }) => {
     }
 
   }, []);
+
+  const pushNotificationdata=(obj)=>{
+    if(notificationValue.find((item, index)=> JSON.stringify(item) === JSON.stringify(obj))== undefined){
+      notificationValue.push(obj)
+    }
+  }
+
   const markasread = () => {
     notificationValue.sort(function (a, b) {
 
@@ -286,7 +293,7 @@ const TopMenu = ({ changestyle, showSidebar }) => {
                     ) + "~Diastolic") > -1) {
 
                     } else {
-                      notificationValue.push({
+                      pushNotificationdata({
                         "value": patient.name + "~" + patient.userId + "~" + bp.diastolic + "~" + Moment(bp.MeasurementDateTime).format(
                           "MM-DD-YYYY hh:mm A"
                         ) + "~Diastolic", "date": bp.MeasurementDateTime
@@ -311,7 +318,7 @@ const TopMenu = ({ changestyle, showSidebar }) => {
                       "MM-DD-YYYY hh:mm A"
                     ) + "~Systolic") > -1) { }
                     else {
-                      notificationValue.push({
+                      pushNotificationdata({
                         "value": patient.name + "~" + patient.userId + "~" + bp.systolic + "~" + Moment(bp.MeasurementDateTime).format(
                           "MM-DD-YYYY hh:mm A"
                         ) + "~Systolic", "date": bp.MeasurementDateTime
@@ -357,7 +364,7 @@ const TopMenu = ({ changestyle, showSidebar }) => {
                   if (coreContext.notifications.includes(patient.name + "~" + patient.userId + "~" + bg.bloodglucosemgdl + "~" + Moment(bg.MeasurementDateTime).format(
                     "MM-DD-YYYY hh:mm A"
                   ) + "~Blood Glucose") === false) {
-                    notificationValue.push({
+                    pushNotificationdata({
                       "value": patient.name + "~" + patient.userId + "~" + bg.bloodglucosemgdl + "~" + Moment(bg.MeasurementDateTime).format(
                         "MM-DD-YYYY hh:mm A"
                       ) + "~Blood Glucose", "date": bg.MeasurementDateTime
