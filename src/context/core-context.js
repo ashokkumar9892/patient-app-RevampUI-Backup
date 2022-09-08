@@ -299,9 +299,7 @@ export const CoreContextProvider = (props) => {
           const username = localStorage.getItem("userName");
 
           setShowLoader(false);
-
-          if (userData.length === 0) window.location.assign("profile");
-          else if (url) window.location.assign(url);
+ if (url) window.location.assign(url);
 
           // if (userType === 'patient')
           // {
