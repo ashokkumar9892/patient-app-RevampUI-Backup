@@ -426,7 +426,7 @@ const PatientSummary = (props) => {
                     let value = dummycptcode;
                     value.splice(index, 1);
                     if(Object.keys(value).length >0){
-                      value[index].count= dummycptcode[index].count + 1;
+                      // value[index].count= dummycptcode[index].count + 1;
                       setDummycptcode(value)
                     }
                   

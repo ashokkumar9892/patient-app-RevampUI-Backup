@@ -16,7 +16,7 @@ const UploadImage = props => {
     //   useEffect(resetSelectedImages, [props.selectedImages]);
 
     const onDrop = picture => {
-        console.log(picture);
+        console.log(picture,"check image utkarsh ");
         setShowPreview(true);
         setPictures([...pictures, picture]);
 
