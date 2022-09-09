@@ -99,9 +99,37 @@ const MyProfile = (props) => {
     );
   };
 
-  const onImagesSelected = (pictures) => {
-    setSelectedImages(pictures);
-    console.log(pictures, "  ");
+
+  const convertBlobToBase64 = async (blob) => {
+    return await blobToBase64(blob);
+  }
+  
+  const blobToBase64 = blob => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+
+  const onImagesSelected = async(pictures) => {
+    let file = pictures[0]
+    if(file){
+    let photo= await convertBlobToBase64(file)
+      console.log(photo, "check image data ");
+      // console.log(file,"check file")
+      // let reader = new FileReader();
+      // reader.readAsDataURL(file);
+      // let photo = reader.result;
+      // setTimeout(()=>{
+      //   console.log(reader.readAsDataURL(file), "byutkarsh");
+      // },2000)
+      setSelectedImages(photo);
+    }
+   
+    
+    
+   
+    
   };
 
   const onEmailChangedHandler = (e) => {
