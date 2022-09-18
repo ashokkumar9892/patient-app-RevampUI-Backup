@@ -25,7 +25,7 @@ const PreRegisterd = () => {
         }
     }
     const BookedApptapi = async() => {
-        const url = `https://api.preview.platform.athenahealth.com/v1/24451/appointments/booked?practiceid=24451&startdate=09/19/2022&showinsurance=true&enddate=09/21/2022&departmentid=1&showpatientdetail=true`
+        const url = `https://appointmentapi.apatternclinic.com/v1/24451/appointments/booked?practiceid=24451&startdate=09/19/2022&showinsurance=true&enddate=09/21/2022&departmentid=1&showpatientdetail=true`
         axios
             .get(url, {
                 headers: {
