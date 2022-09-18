@@ -686,7 +686,9 @@ const TopMenu = ({ changestyle, showSidebar }) => {
         // </NavDropdown>
         <li className="list-inline-item mr-10">
           <div className="btn-group">
+          <Link className=" mb-1 text-white" to="/preregisted" style={{marginTop:"28px", marginRight:"16px"}}>Pre Register</Link>
             <div className="dropdown pt-4">
+            
               <Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i className="icon text-white bi-person-circle"></i> Patients
               </Link>
@@ -694,7 +696,7 @@ const TopMenu = ({ changestyle, showSidebar }) => {
               <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <Link className="dropdown-item" to="/patients"><i className="icon bi-list-ul"></i> List</Link>     
                 <Link className="dropdown-item" to="#" onClick={handleShow}><i className="icon bi-file-plus-fill"></i> Add</Link>
-                <Link className="dropdown-item" to="/preregisted">Pre Register</Link>
+                
               </div>
             </div>
           </div>

@@ -92,7 +92,7 @@ const PreRegisterd = () => {
                                             <input placeholder="Search here " style={{ width: "90%", margin: "4px", outline: "none", border: "none" }} />
                                         </div>
                                         <div>
-                                            {bookApptData.length > 0 && <BookedAppt data={bookApptData} />}
+                                             <BookedAppt data={bookApptData} />
                                             <CheckedIn />
                                             <CheckedOut />
                                             <MissedAppt />

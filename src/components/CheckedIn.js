@@ -140,7 +140,8 @@ export default function CheckedIn() {
                 backgroundColor: "#e9e9e9",
             },
             "& .MuiDataGrid-columnHeader": {
-                backgroundColor: "#666"
+                backgroundColor: "#0c71c3",
+                color:"#fafafa"
             },
             "& .MuiDataGrid-columnHeaderTitle": {
                 overflow: "visible",
