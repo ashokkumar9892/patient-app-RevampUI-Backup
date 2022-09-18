@@ -12,7 +12,7 @@ import Sidebar from "react-sidebar";
 import * as Pages from "./components";
 import { DPatients } from "./components/DPatients";
 import Testing from "./components/common/Testing";
-import {BillingPatient} from "./components/BillingPatient";
+import { BillingPatient } from "./components/BillingPatient";
 import { BloodPressureAverage } from "./components/BloodPressureAverage";
 import { BloodGlucoseAverage } from "./components/BloodGlucoseAverage";
 import ChatLink from "./components/ChatLink"
@@ -37,7 +37,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { WeightAverage } from "./components/WeightAverage";
 //import React from 'react';
-import { Widget, addResponseMessage,handleToggle } from "react-chat-widget-2";
+import { Widget, addResponseMessage, handleToggle } from "react-chat-widget-2";
 import "react-chat-widget-2/lib/styles.css";
 import { Vdeviceinfo } from "./components/Vdevice";
 import { io } from "socket.io-client";
@@ -57,7 +57,7 @@ function App() {
   const { register, errors } = useForm();
   const [enduser, setenduser] = useState();
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {setOpen(true);coreContext.fetchPatientListfromApi("doctor",localStorage.getItem("userId"))}
+  const handleOpen = () => { setOpen(true); coreContext.fetchPatientListfromApi("doctor", localStorage.getItem("userId")) }
   // const handleClose = () => setOpen(false);
   const isAuth = localStorage.getItem("app_isAuth");
   const [sidebar, setSidebar] = useState(true);
@@ -67,17 +67,17 @@ function App() {
   var userid;
   var doctorid;
   var doctorname;
-  const getenduser=(id)=>{
+  const getenduser = (id) => {
     setenduser(id)
-   
+
   }
 
   const showSidebar = () => setSidebar(!sidebar);
   useEffect(() => {
-    coreContext.userDetails(email,"")
-   // coreContext.fetchPatientListfromApi("doctor",localStorage.getItem("userId"))
-  },[])
-  
+    coreContext.userDetails(email, "")
+    // coreContext.fetchPatientListfromApi("doctor",localStorage.getItem("userId"))
+  }, [])
+
 
   // const handleNewUserMessage = (newMessage) => {
   //   console.log(`New message incoming! ${newMessage}`);
@@ -118,19 +118,19 @@ function App() {
   //     });
   //   }
   // };
-  
+
 
   //const isAuth = true;
-  
+
   const coreContext = useContext(CoreContext);
-  
-  
-    //const memo=React.useMemo(()=>{renderpatient()},[coreContext.patients])
-  
+
+
+  //const memo=React.useMemo(()=>{renderpatient()},[coreContext.patients])
+
 
   // axios.defaults.headers.common.AUTHORIZATION = 'Bearer ' + coreContext.jwt;
   // axios.defaults.headers.common.ACCEPT = "application/json, text/plain, /";
-  useEffect(() => {}, [showSidebar]);
+  useEffect(() => { }, [showSidebar]);
   const [style, setStyle] = useState("col-md-9 col-8 col-sm-8 p-0");
   const [style1, setStyle1] = useState("col-md-2 col-3 col-sm-3 mr-3");
 
@@ -146,7 +146,7 @@ function App() {
 
   let content = (
     <>
-   
+
       {" "}
       {/**/}{" "}
       {isAuth ? (
@@ -156,9 +156,9 @@ function App() {
             changestyle={changestyle}
             showSidebar={showSidebar}
           /> */}
-          
+
           {/* <Button onClick={handleOpen}>Open modal</Button> */}
-          
+
           {/* <Widget
             title={localStorage.getItem("userName")}
             handleNewUserMessage={handleNewUserMessage}
@@ -167,9 +167,9 @@ function App() {
       ) : (
         ""
       )}
-      
-        {" "}
-        {/* <Sidebar
+
+      {" "}
+      {/* <Sidebar
                               sidebar={<b>Sidebar content</b>}
                               open={sidebarOpen}
                               onSetOpen={setSidebarOpen}
@@ -178,36 +178,36 @@ function App() {
                               <button onClick={() => setSidebarOpen(true)}>
                                 Open sidebar
                               </button> */}
-                              
-                             
-        {isAuth ? (
-          <React.Fragment>
+
+
+      {isAuth ? (
+        <React.Fragment>
           <Router>
-          <TopMenu
-          isAuth={isAuth}
-          changestyle={changestyle}
-          showSidebar={showSidebar}
-        />
-          <main>
-            <Row>
-          
-            
-          
-                
-              {" "}
-              {sidebar === true ?<> <Menu getenduser={getenduser} />  </>: <Menu2 />}{" "}
-              
-           
-              <Switch>
-           
-            
+            <TopMenu
+              isAuth={isAuth}
+              changestyle={changestyle}
+              showSidebar={showSidebar}
+            />
+            <main>
+              <Row>
+
+
+
+
+                {" "}
+                {sidebar === true ? <> <Menu getenduser={getenduser} />  </> : <Menu2 />}{" "}
+
+
+                <Switch>
+
+
                   <Route exact path="/provider" component={Pages.Provider} />{" "}
                   <Route
                     exact
                     path="/care-coordinator"
                     component={Pages.CareCoordinator}
                   />{" "}
-                  
+
                   <Route exact path="/coach" component={Pages.Coach} />{" "}
                   <Route exact path="/inbox" component={Pages.Inbox} />{" "}
                   <Route exact path="/outbox" component={Pages.Outbox} />{" "}
@@ -221,6 +221,11 @@ function App() {
                     exact
                     path="/bloodpressure"
                     component={Pages.BloodPressure}
+                  />
+                  <Route
+                    exact
+                    path="/preregisted"
+                    component={Pages.PreRegisterd}
                   />
                   <Route
                     exact
@@ -276,26 +281,26 @@ function App() {
                   <Redirect exact from="/login" to="/patients" />
                   <Redirect exact from="/" to="/patients" />
                 </Switch>{" "}
-            
-           
-            
-          
-          </Row>
-          </main>
+
+
+
+
+              </Row>
+            </main>
           </Router>{" "}
-          </React.Fragment>
-        ) : (
-          <>
-            <Router>
-              <Switch>
-                <Route path="/login" component={Pages.Login} />{" "}
-                <Route path="/sign-up" component={Pages.SignUp} />{" "}
-                <Route path="/reset-password" component={Pages.ResetPassword} />{" "}
-                <Redirect exact from="/" to="/login" />
-              </Switch>{" "}
-            </Router>{" "}
-          </>
-        )}{" "}
+        </React.Fragment>
+      ) : (
+        <>
+          <Router>
+            <Switch>
+              <Route path="/login" component={Pages.Login} />{" "}
+              <Route path="/sign-up" component={Pages.SignUp} />{" "}
+              <Route path="/reset-password" component={Pages.ResetPassword} />{" "}
+              <Redirect exact from="/" to="/login" />
+            </Switch>{" "}
+          </Router>{" "}
+        </>
+      )}{" "}
       {" "}
       {/* </Sidebar> */}{" "}
     </>
@@ -306,9 +311,9 @@ function App() {
       {" "}
       <Router>
         <Switch>
-      
-      {content}{" "}
-      
+
+          {content}{" "}
+
           <Route exact path="/covid">
             <Covidform />
           </Route>{" "}
@@ -317,7 +322,7 @@ function App() {
           </Route>{" "}
         </Switch>{" "}
       </Router>{" "}
-      
+
       {/* <Modal
   open={open}
   onClose={handleClose}
@@ -341,8 +346,8 @@ function App() {
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
           </Typography> */}
-        {/* </Box>
-      </Modal> */} 
+      {/* </Box>
+      </Modal> */}
     </>
   );
 }
