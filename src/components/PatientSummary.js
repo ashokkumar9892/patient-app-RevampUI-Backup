@@ -203,6 +203,15 @@ const PatientSummary = (props) => {
 
     }
   };
+  const fetchnewbg = () => {
+    if (coreContext.patientsForPatient[0]) {
+      const patientId = coreContext.patientsForPatient[0].ehrId
+      const deviceid = coreContext.deviceDataForPatient.filter((a) => a.DeviceType == 'BG').map((b) => b.deviceID)
+
+      coreContext.fetchnewBloodGlucoseForPatient(patientId, "patient", deviceid);
+
+    }
+  };
 
   const fetchbg = () => {
     if (coreContext.patientsForPatient[0]) {
@@ -229,6 +238,7 @@ const PatientSummary = (props) => {
 
   useEffect(fetchbp, [coreContext.patientsForPatient.length]);
   useEffect(fetchnewbp, [coreContext.patientsForPatient.length, coreContext.deviceDataForPatient.length]);
+  useEffect(fetchnewbg, [coreContext.patientsForPatient.length, coreContext.deviceDataForPatient.length]);
 
   useEffect(fetchbg, [coreContext.patientsForPatient.length]);
   const fetchCareCoordinator = () => {
@@ -2055,6 +2065,600 @@ const PatientSummary = (props) => {
       );
     }
   };
+  const renderBloodGlucosenew = (index) => {
+    if (coreContext.newbloodglucoseDataForPatient.length == 0) {
+      return (
+        <div
+          style={{
+            height: 680,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px",
+            alignItems: "center",
+          }}>
+          <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+        </div>
+      );
+    }
+
+    if (
+      coreContext.newbloodglucoseDataForPatient.length > 0 &&
+      coreContext.newbloodglucoseDataForPatient[0].UserName !== "undefined"
+    ) {
+      if (slider === 100) {
+        var finalbgdata = coreContext.newbloodglucoseDataForPatient.filter(
+          (date) => date.MeasurementDateTime >= from && date.MeasurementDateTime <= to
+        );
+      } else {
+        var SliderDays;
+        if (slider === 0) {
+          SliderDays = 0;
+        }
+        if (slider === 15) {
+          SliderDays = 1;
+        }
+        if (slider === 30) {
+          SliderDays = 7;
+        }
+        if (slider === 45) {
+          SliderDays = 30;
+        }
+        if (slider === 60) {
+          SliderDays = 60;
+        }
+        if (slider === 75) {
+          SliderDays = 90;
+        }
+        if (slider === 100) {
+          SliderDays = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
+        }
+        let today = new Date();
+        today.setHours(0, 0, 0, 0)
+        let bfr = today.setDate(today.getDate() - SliderDays);
+        var finalbgdata = coreContext.newbloodglucoseDataForPatient.filter(
+          (date) => date.MeasurementDateTime >= new Date(bfr)
+        );
+      }
+      let bg = [];
+      let bgbefore = [];
+      let bgafter = [];
+      let labels = [];
+      let thrshold = [];
+      let thresholdmin = [];
+      let cdate = [];
+      let uniquedates = [];
+      let sorteddates = [];
+      let pcolorb = [];
+      let pradiusBM = [];
+      let pradiusAM = [];
+      // for graph
+      // let labelsgrap = [];
+      // let bgbeforegraph = [];
+      // let bgaftergrapph = [];
+      // let thrsholdgraph = [];
+      // let thresholdmingraph = [];
+
+      // finalbgdata.map((curr)=>{
+
+      // })
+
+      var sortData = finalbgdata.sort(function (a, b) {
+        return (
+          new Date(Moment(a.MeasurementDateTime).format("MM-DD-YYYY hh:mm A")) -
+          new Date(Moment(b.MeasurementDateTime).format("MM-DD-YYYY hh:mm A"))
+        );
+      });
+
+      finalbgdata.map((curr) => {
+        bg.push(Number(curr.bloodglucosemgdl));
+        labels.push(Moment(curr.MeasurementDateTime).format("MM-DD-YYYY hh:mm A"));
+        cdate.push(Moment(curr.MeasurementDateTime).format("MM-DD-YYYY"));
+        {
+          (tvalue !== "0") ? thrshold.push(tvalue) : thrshold.push(tadminvalue);
+          (tMinvalue !== "0") ? thresholdmin.push(tMinvalue) : thresholdmin.push(tadminMinvalue);
+        }
+
+
+        uniquedates = cdate.filter(function (item, pos) {
+          return cdate.indexOf(item) == pos;
+        });
+        sorteddates = uniquedates.sort(function (a, b) {
+          // Turn your strings into dates, and then subtract them
+          // to get a value that is either negative, positive, or zero.
+          return new Date(b) - new Date(a);
+        });
+        if (curr.meal === "Before Meal") {
+          bgbefore.push(curr.bloodglucosemgdl);
+          bgafter.push("");
+          if (
+            Number(curr.bloodglucosemgdl) < Number((tvalue !== "0") ? tvalue : tadminvalue) &&
+            Number(curr.bloodglucosemgdl) > Number((tMinvalue !== "0") ? tMinvalue : tadminMinvalue)
+          ) {
+            pcolorb.push("green");
+          } else if (Number(curr.bloodglucosemgdl) > Number((tvalue !== "0") ? tvalue : tadminvalue)) {
+            pcolorb.push("red");
+          } else {
+            pcolorb.push("blue");
+          }
+          pradiusAM.push(0);
+          pradiusBM.push(10);
+        }
+
+        if (curr.meal === "After Meal") {
+          bgafter.push(curr.bloodglucosemgdl);
+          bgbefore.push("0");
+          pcolorb.push("blue")
+          pradiusAM.push(10);
+          pradiusBM.push(0);
+
+        }
+      });
+      let avgbg = bg.reduce((a, b) => a + b, 0) / finalbgdata.length;
+      let daydfrnc;
+      if (slider === 100) {
+        daydfrnc = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
+      } else {
+        daydfrnc = SliderDays;
+      }
+      if (index === 2) {
+        //var labels =[1,2,3,4,5];
+        const data = {
+          labels: labels,
+
+          datasets: [
+            {
+              label: "Before Meal",
+              data: bgbefore,
+              backgroundColor: ["Blue"],
+              borderColor: ["Blue"],
+              fill: false,
+              pointRadius: pradiusBM,
+              pointStyle: "triangle",
+              pointBackgroundColor: pcolorb,
+            },
+            {
+              label: "After Meal",
+              data: bgafter,
+              fill: false,
+              backgroundColor: ["orange"],
+              borderColor: ["orange"],
+              pointRadius: pradiusAM,
+              pointStyle: "square",
+              pointBackgroundColor: "orange",
+            },
+            {
+              label: "Max Value",
+              data: thrshold,
+              pointRadius: 0,
+              //pointBackgroundColor:"white",
+
+              backgroundColor: ["red"],
+              borderColor: ["red"],
+              fill: false,
+              borderWidth: 6,
+            },
+            {
+              label: "Min Value",
+              data: thresholdmin,
+              pointRadius: 0,
+              //pointBackgroundColor:"white",
+
+              backgroundColor: ["#036bfc"],
+              borderColor: ["#036bfc"],
+              fill: false,
+              borderWidth: 3,
+            },
+            {
+              label: "In range Boundaries",
+              backgroundColor: ["green"],
+            },
+            {
+              label: "Above range Boundaries",
+              backgroundColor: ["red"],
+            },
+            {
+              label: "Below range Boundaries",
+              backgroundColor: ["Blue"],
+            },
+            // {
+            //   label: 'Pulse',
+            //   data: pulse,
+            //   backgroundColor:["orange"],
+            //   //borderColor:["white"],
+            // }
+          ],
+        };
+        const filterarray = [];
+
+        return (
+          <>
+            <div className="row mb-4">
+              <div className="col-xl-12">
+                <div className="card-body bg-dark text-white">Reading By Dates
+                </div>
+              </div>
+            </div>
+            <div className="row mb-4">
+              <div className="col-xl-12">
+                <Line
+                  data={data}
+                  options={{
+                    tooltips: {
+                      mode: "index",
+                    },
+
+                    legend: {
+                      display: true,
+                      position: "bottom",
+                    },
+
+                    responsive: true,
+                    scales: {
+                      xAxes: [
+                        {
+                          id: "x",
+                          //type: 'time',
+                          display: true,
+                          title: {
+                            display: true,
+                            text: "Date",
+                          },
+
+                          ticks: {
+                            // Include a dollar sign in the ticks
+                            callback: function (value, index, values) {
+                              if (
+                                filterarray.includes(
+                                  Moment(value).format("YYYY-MM-DD")
+                                ) !== true
+                              ) {
+                                filterarray.push(
+                                  Moment(value).format("YYYY-MM-DD")
+                                );
+                              } else {
+                                filterarray.push("0");
+                              }
+                              return filterarray[index] !== "0"
+                                ? Moment(value).format("MM-DD")
+                                : "";
+                            },
+                          },
+                        },
+                      ],
+                    },
+                    plugins: {
+                      autocolors: false,
+                      annotation: {
+                        annotations: {
+                          line1: {
+                            type: "line",
+                            yMin: 60,
+                            yMax: 60,
+                            borderColor: "rgb(255, 99, 132)",
+                            borderWidth: 2,
+                          },
+                        },
+                      },
+                    },
+                  }}
+                />
+              </div></div>
+          </>
+        );
+      }
+      if (index === 3) {
+        return (
+          <>
+            <div className="row">
+              <div className="col-xl-12">
+                <div className="table-responsive-sm mb-0">
+                  <table className="table table-bordered  mb-0">
+                    <thead>
+                      <tr className="bg-primary">
+                        <th width="10%" className="text-white"></th>
+                        <th width="20%" className="text-white" colspan="2">
+                          Morning<br />12AM to 10AM
+                        </th>
+                        <th width="20%" className="text-white" colspan="2">
+                          Afternoon<br /> 10AM to 3PM
+                        </th>
+                        <th width="20%" className="text-white" colspan="2">
+                          Evening<br /> 3PM to 9PM
+                        </th>
+                        <th width="20%" className="text-white" colspan="2">
+                          Night<br />9PM to 12AM
+                        </th>
+                      </tr>
+                      <tr>
+                        <td>Date</td>
+
+                        <td>Before Meal</td>
+                        <td>After Meal</td>
+                        <td>Before Meal</td>
+                        <td>After Meal</td>
+                        <td>Before Meal</td>
+                        <td>After Meal</td>
+                        <td>Before Meal</td>
+                        <td>After Meal</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sorteddates.map((curr) => {
+                        const filtereddarta = finalbgdata.filter(
+                          (item) =>
+                            Moment(item.MeasurementDateTime).format("MM-DD-YYYY") === curr
+                        );
+                        let dataBMAM = {
+                          morningbm: [],
+                          morningam: [],
+                          noonbm: [],
+                          noonam: [],
+                          eveningbm: [],
+                          eveningam: [],
+                          nightbm: [],
+                          nightam: [],
+                          morningbmtime: [],
+                          morningamtime: [],
+                          noonbmtime: [],
+                          noonamtime: [],
+                          eveningbmtime: [],
+                          eveningamtime: [],
+                          nightbmtime: [],
+                          nightamtime: [],
+                        };
+                        filtereddarta.map((curr) => {
+                          if (Number(Moment(curr.MeasurementDateTime).format("HH")) < 10) {
+                            if (curr.meal === "Before Meal") {
+                              dataBMAM.morningbm.push(curr.bloodglucosemgdl);
+                              dataBMAM.morningbmtime.push(Moment(curr.MeasurementDateTime).format("hh:mm A"))
+                             
+                            } else {
+                              dataBMAM.morningam.push(curr.bloodglucosemgdl);
+                              dataBMAM.morningamtime.push(Moment(curr.MeasurementDateTime).format("hh:mm A"))
+                            }
+                          }
+                          if (
+                            Number(Moment(curr.MeasurementDateTime).format("HH")) >= 10 &&
+                            Number(Moment(curr.MeasurementDateTime).format("HH")) < 15
+                          ) {
+                            if (curr.meal === "Before Meal") {
+                              dataBMAM.noonbm.push(curr.bloodglucosemgdl);
+                              dataBMAM.noonbmtime.push(Moment(curr.MeasurementDateTime).format("hh:mm A"))
+                            } else {
+                              dataBMAM.noonam.push(curr.bloodglucosemgdl);
+                              dataBMAM.noonamtime.push(Moment(curr.MeasurementDateTime).format("hh:mm A"))
+                            }
+                          }
+                          if (
+                            Number(Moment(curr.MeasurementDateTime).format("HH")) >= 15 &&
+                            Number(Moment(curr.MeasurementDateTime).format("HH")) < 21
+                          ) {
+                            if (curr.meal === "Before Meal") {
+                              dataBMAM.eveningbm.push(curr.bloodglucosemgdl);
+                              dataBMAM.eveningbmtime.push(Moment(curr.MeasurementDateTime).format("hh:mm A"))
+                            } else {
+                              dataBMAM.eveningam.push(curr.bloodglucosemgdl);
+                              dataBMAM.eveningamtime.push(Moment(curr.MeasurementDateTime).format("hh:mm A"));
+                            }
+                          }
+                          if (Number(Moment(curr.MeasurementDateTime).format("HH")) >= 21) {
+                            if (curr.meal === "Before Meal") {
+                              dataBMAM.nightbm.push(curr.bloodglucosemgdl);
+                              dataBMAM.nightbmtime.push(Moment(curr.MeasurementDateTime).format("hh:mm A"))
+                            } else {
+                              dataBMAM.nightam.push(curr.bloodglucosemgdl);
+                              dataBMAM.nightamtime.push(Moment(curr.MeasurementDateTime).format("hh:mm A"))
+                            }
+                          }
+                        });
+                        let colorset = (tvalue !== "0") ? tvalue : tadminvalue
+                        let colorsetmin = (tvalue !== "0") ? tvaluemin : tadminvaluemin
+                        return (
+                          <>
+                            {/* <tr>
+                        <td rowspan="2">{curr}</td>
+                        <td style={{ backgroundColor: (dataBMAM.morningbm < Number(colorset) && Number(dataBMAM.morningbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningbm !== "" && Number(dataBMAM.morningbm > Number(colorsetmin) )? "#f6a683" : "rgba(255, 0, 0, 0.2)" }}><p>{dataBMAM.morningbm}<br />{dataBMAM.morningbmtime}</p></td>
+                        <td style={{ backgroundColor: (dataBMAM.morningam < Number(colorset) && Number(dataBMAM.morningam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningam !== "" && Number(dataBMAM.morningam > Number(colorsetmin) ) ? "#f6a683" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.morningam}<br />{dataBMAM.noonamtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.noonbm < Number(colorset) && Number(dataBMAM.noonbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonbm !== "" && Number(dataBMAM.noonbm > Number(colorsetmin)) ? "#f6a683" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.noonbm}<br />{dataBMAM.noonbmtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.noonam < Number(colorset)&& Number(dataBMAM.noonam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonam !== "" && Number(dataBMAM.noonam > Number(colorsetmin)) ? "#f6a683" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.noonam}<br />{dataBMAM.noonamtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.eveningbm < Number(colorset) && Number(dataBMAM.eveningbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningbm !== "" && Number(dataBMAM.eveningbm > Number(colorsetmin) ) ? "#f6a683" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.eveningbm}<br />{dataBMAM.eveningbmtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.eveningam < Number(colorset) && Number(dataBMAM.eveningam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningam !== "" && Number(dataBMAM.eveningam > Number(colorsetmin)) ? "#f6a683" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.eveningam}<br />{dataBMAM.eveningamtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.nightbm < Number(colorset) && Number(dataBMAM.nightbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightbm !== "" && Number(dataBMAM.nightbm > Number(colorsetmin ))? "#f6a683" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.nightbm}<br />{dataBMAM.nightbmtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.nightam < Number(colorset) && Number(dataBMAM.nightam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightam !== "" && Number(dataBMAM.nightam > Number(colorsetmin) ) ? "#f6a683" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.nightam}<br />{dataBMAM.nightamtime}</td>
+                      </tr> */}
+
+                            <tr>
+                              <td rowspan="2">{curr}</td>
+                              <td style={{ backgroundColor: "white" }}>
+                                <tr>
+                                  {
+                                    dataBMAM.morningbm.map((data, index) => (
+                                      <td style={{ backgroundColor: (Number(dataBMAM.morningbm[index]) < Number(colorset) && Number(dataBMAM.morningbm[index]) > Number(colorsetmin) && Number(dataBMAM.morningbm[index]) !== "") ? "rgba(0, 255, 0, 0.15)" : "rgba(255, 0, 0, 0.2)" }}><p>{dataBMAM.morningbm[index]}<br />{dataBMAM.morningbmtime[index]}</p></td>
+
+                                    ))
+
+
+                                  }
+
+                                </tr>
+                              </td>
+                              <td style={{ backgroundColor: "white" }}>
+                                <tr >
+                                  {
+                                    dataBMAM.morningam.map((data, index) => (
+                                      <td style={{ backgroundColor: (Number(dataBMAM.morningam[index]) < Number(colorset) && Number(dataBMAM.morningam[index]) > Number(colorsetmin) && Number(dataBMAM.morningam[index]) !== "") ? "rgba(0, 255, 0, 0.15)" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.morningam[index]}<br />{dataBMAM.morningamtime[index]}</td>
+                                    ))
+
+                                  }
+
+                                </tr>
+                              </td>
+                              <td style={{ backgroundColor: "white" }}>
+                                <tr>
+                                  {
+                                    dataBMAM.noonbm.map((data, index) => (
+                                      <td style={{ backgroundColor: (Number(dataBMAM.noonbm[index]) < Number(colorset) && Number(dataBMAM.noonbm[index]) > Number(colorsetmin) && Number(dataBMAM.noonbm[index]) !== "") ? "rgba(0, 255, 0, 0.15)" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.noonbm[index]}<br />{dataBMAM.noonbmtime[index]}</td>
+                                    ))
+                                  }
+
+                                </tr>
+                              </td>
+                              <td style={{ backgroundColor: "white" }}>
+                                <tr>{
+                                  dataBMAM.noonam.map((data, index) => (
+                                    <td style={{ backgroundColor: (Number(dataBMAM.noonam[index]) < Number(colorset) && Number(dataBMAM.noonam[index]) > Number(colorsetmin) && Number(dataBMAM.noonam[index]) !== "") ? "rgba(0, 255, 0, 0.15)" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.noonam[index]}<br />{dataBMAM.noonamtime[index]}</td>
+                                  ))
+                                }
+
+                                </tr>
+                              </td>
+                              <td style={{ backgroundColor: "white" }}>
+                                <tr>
+                                  {
+                                    dataBMAM.eveningbm.map((data, index) => (
+                                      <td style={{ backgroundColor: (Number(dataBMAM.eveningbm[index]) < Number(colorset) && Number(dataBMAM.eveningbm[index]) > Number(colorsetmin) && Number(dataBMAM.eveningbm[index]) !== "") ? "rgba(0, 255, 0, 0.15)" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.eveningbm[index]}<br />{dataBMAM.eveningbmtime[index]}</td>
+                                    ))
+                                  }
+
+                                </tr>
+                              </td>
+                              <td style={{ backgroundColor: "white" }}>
+                                <tr>
+                                  {
+                                    dataBMAM.eveningam.map((data, index) => (
+                                      <td style={{ backgroundColor: (Number(dataBMAM.eveningam[index]) < Number(colorset) && Number(dataBMAM.eveningam[index]) > Number(colorsetmin) && Number(dataBMAM.eveningam[index]) !== "") ? "rgba(0, 255, 0, 0.15)" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.eveningam[index]}<br />{dataBMAM.eveningamtime[index]}</td>
+                                    ))
+                                  }
+
+                                </tr>
+                              </td>
+                              <td style={{ backgroundColor: "white" }}>
+                                <tr>{
+                                  dataBMAM.nightbm.map((data, index) => (
+                                    <td style={{ backgroundColor: (Number(dataBMAM.nightbm[index]) < Number(colorset) && Number(dataBMAM.nightbm[index]) > Number(colorsetmin) && Number(dataBMAM.nightbm[index]) !== "") ? "rgba(0, 255, 0, 0.15)" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.nightbm[index]}<br />{dataBMAM.nightbmtime[index]}</td>
+                                  ))
+                                }
+
+                                </tr>
+                              </td>
+                              <td style={{ backgroundColor: "white" }}>
+                                <tr>
+                                  {
+                                    dataBMAM.nightam.map((data, index) => (
+                                      <td style={{ backgroundColor: (Number(dataBMAM.nightam[index]) < Number(colorset) && Number(dataBMAM.nightam[index]) > Number(colorsetmin) && Number(dataBMAM.nightam[index]) !== "") ? "rgba(0, 255, 0, 0.15)" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.nightam[index]}<br />{dataBMAM.nightamtime[index]}</td>
+                                    ))
+
+                                  }
+
+                                </tr>
+                              </td >
+
+
+
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                            </tr>
+                          </>
+                        );
+                      })}
+
+                      {/* <tr>
+                  <td >sahil</td>
+                  <td >sahil</td>
+                  <td >sahil</td>
+                  <td >sahil</td>
+                  <td >sahil</td>
+                  <td >sahil</td>
+                  <td >sahil</td>
+                  <td>sahil</td>
+                    </tr> */}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </>
+        );
+      }
+      if (index === 1) {
+        return (
+          <>
+            <div className="row mb-2">
+              <div className="col-xl-6 col-8 mb-1">
+                <div className="dashboard-shape">  Total Readings</div>
+              </div>
+              <div className="col-xl-2 col-4 mb-1">
+                <div className="dashboard-shape-right-blue">{finalbgdata.length}</div>
+              </div>
+            </div>
+            <div className="row mb-2">
+              <div className="col-xl-6 col-8 mb-1">
+                <div className="dashboard-shape-1">  Average Reading per day</div>
+              </div>
+              <div className="col-xl-2 col-4 mb-1">
+                <div className="dashboard-shape-right-orange">{finalbgdata.length > 0 || daydfrnc == "undefined"
+                  ? Math.round(
+                    Math.round((finalbgdata.length / daydfrnc) * 10) / 10
+                  )
+                  : "0"}</div>
+              </div>
+            </div>
+            <div className="row mb-2">
+              <div className="col-xl-6 col-8 mb-1">
+                <div className="dashboard-shape">Average Glucose Level</div>
+              </div>
+              <div className="col-xl-2 col-4 mb-1">
+                <div className="dashboard-shape-right-blue"> {isNaN(avgbg) ? "0" : Number(Math.round(avgbg))} mg/dl</div>
+              </div>
+            </div>
+            <div className="row mb-2">
+              <div className="col-xl-6 col-8 mb-1">
+                <div className="dashboard-shape">Lowest Glucose Level</div>
+              </div>
+              <div className="col-xl-2 col-4 mb-1">
+                <div className="dashboard-shape-right-blue">{bg.length > 0 ? Number(Math.min(...bg)) : "0"} mg/dl</div>
+              </div>
+            </div>
+            <div className="row mb-2">
+              <div className="col-xl-6 col-8 mb-1">
+                <div className="dashboard-shape">Highest Glucose Level</div>
+              </div>
+              <div className="col-xl-2 col-4 mb-1">
+                <div className="dashboard-shape-right-blue"> {bg.length > 0 ? Math.max(...bg) : "0"} mg/dl</div>
+              </div>
+            </div>
+
+          </>
+
+        );
+      }
+      //coreContext.newnewbloodpressureDataForPatient  = coreContext.newnewbloodpressureDataForPatient.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
+    } else {
+      return (
+        <div
+          style={{
+            height: 60,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px",
+            alignItems: "center",
+          }}>
+          <h1>No data Found</h1>
+        </div>
+      );
+    }
+  };
 
   //useEffect(fetchPatient, [coreContext.timeLogData.length]);
 
@@ -2838,6 +3442,7 @@ const PatientSummary = (props) => {
 
                             <Tab>Threshold</Tab>
                             <Tab>New Device BP</Tab>
+                            <Tab>New Device BG</Tab>
                             <Tab>New Weight</Tab>
                           </TabList>
                           <TabPanel>
@@ -2927,6 +3532,31 @@ const PatientSummary = (props) => {
                               </TabPanel>
                             </Tabs>
                           </TabPanel>
+                          <TabPanel>
+                            <Tabs>
+                              <TabList>
+                                <Tab >Dashboard</Tab>
+                                <Tab >LogBook</Tab>
+                                <Tab >Charts</Tab>
+                              </TabList>
+                              <TabPanel>
+                                {renderDates()}
+                                {renderslider()}
+                                {renderBloodGlucosenew(1)}
+                              </TabPanel>
+                              <TabPanel>
+                                {renderDates()}
+                                {renderslider()}
+                                {renderBloodGlucosenew(3)}
+                              </TabPanel>
+                              <TabPanel>
+                                {renderDates()}
+                                {renderslider()}
+                                {renderBloodGlucosenew(2)}
+                              </TabPanel>
+                            </Tabs>
+                          </TabPanel>
+
                           <TabPanel>
                             <div className="card-body">
                               <WeightNew></WeightNew>

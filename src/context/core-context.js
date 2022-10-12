@@ -38,6 +38,9 @@ export const CoreContextProvider = (props) => {
   const [newbloodpressureDataForPatient, setnewbloodpressureDataForPatient] = useState(
     []
   );
+  const [newbloodglucoseDataForPatient, setnewbloodglucoseDataForPatient] = useState(
+    []
+  );
 
   const [
     bloodpressureDataForNotification,
@@ -1412,12 +1415,13 @@ if(weightData){
     dob,
     height,
     weight,
-    bmi
+    bmi,image
   ) => {
     console.log(patients);
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
+      
       setIsAuthenticated(true);
       setJwt(token);
       setUserId(userId);
@@ -1459,7 +1463,7 @@ if(weightData){
       mobilePhone: phone,
       notes: patient.notes,
       otp: patient.otp,
-      profileImage: patient.profileImage,
+      profileImage: image,
       reading: bmi,
       st: patient.st,
       street: patient.street,
@@ -3345,6 +3349,116 @@ if(bloodpressureData){
         setnewbloodpressureDataForPatient(dataSetbp);
       });
   };
+  const fetchnewBloodGlucoseForPatient = async (userid, usertype,deviceId) => {
+    const user = userid.split("_")[1];
+    let data = "";
+    // if(deviceId.length!==0){
+       data=deviceId.toString()
+    // }
+    // else{
+    //   data = "DEVICE_BP_" + user;
+    // }
+
+    const token = localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
+
+    
+    await axios
+      .get(
+        apiUrl2 + "bg",
+        { params: { GSI1PK: data } },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+        }
+      )
+      .then((response) => {
+        const bloodglucoseData = response.data;
+        console.log(response.data, "response.data");
+
+        const dataSetbg = [];
+        if (bloodglucoseData.length === 0) {
+          dataSetbg.push("No Data Found");
+        }
+else{
+        bloodglucoseData.forEach((bg, index) => {
+          //   console.log('p' + index, bg);
+
+          let bgdata = {};
+          bgdata.id = bg.id;
+          // if (bg.gsI1PK !== undefined) {
+          //   bgdata.gSI1PK = bg.gsI1PK;
+          //   bgdata.userId = bg.gsI1PK.split("_").pop();
+          // }
+          // if (bg.userName !== undefined) {
+          //   bgdata.UserName = bg.userName;
+          //   if (bgdata.UserName == "Dale Cadwallader") {
+          //     let test = "";
+          //   }
+          // }
+
+          // if (bg.bloodGlucosemmol !== undefined) {
+          //   bgdata.bloodglucosemmol = bg.bloodGlucosemmol;
+          // }
+
+          if (bg.bloodGlucosemgdl !== undefined) {
+            bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl;
+          }
+
+          if (bg.before_Meal !== undefined) {
+            if (bg.before_Meal == "before") {
+              bgdata.meal = "Before Meal";
+            } else {
+              bgdata.meal = "After Meal";
+            }
+          }
+
+          // if (bg.battery !== undefined) {
+          //   bgdata.battery = bg.battery;
+          // }
+          // if (bg.timeSlots !== undefined) {
+          //   bgdata.timeSlots = bg.timeSlots;
+          // }
+          if (bg.measurementDateTime !== undefined) {
+            bgdata.MeasurementDateTime = bg.measurementDateTime;
+            bgdata.MeasurementDateTime = new Date(bgdata.MeasurementDateTime);
+            bgdata.sortDateColumn = bg.measurementDateTime;
+            //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
+          }
+
+          // if (bg.createdDate !== undefined) {
+          //   bgdata.CreatedDate = bg.createdDate;
+          //   bgdata.CreatedDate = new Date(bgdata.CreatedDate);
+          //   bgdata.sortDateColumn = Moment(bg.createdDate).format(
+          //     "YYYY-MM-DD hh:mm"
+          //   );
+            // bgdata.CreatedDate =Moment(bgdata.CreatedDate);
+          // }
+
+          // if (bg.sk !== undefined) {
+          //   bgdata.readingId = bg.sk.split("_").pop();
+          // }
+
+          // if (bg.deviceId !== undefined) {
+          //   bgdata.DeviceId = bg.deviceId;
+          // }
+
+          dataSetbg.push(bgdata);
+        });
+      }
+        setnewbloodglucoseDataForPatient(dataSetbg);
+      });
+  };
   const fetchBloodPressure = async (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
@@ -3484,7 +3598,7 @@ if(bloodpressureData){
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
-
+else{
         bloodglucoseData.forEach((bg, index) => {
           //   console.log('p' + index, bg);
 
@@ -3549,7 +3663,7 @@ if(bloodpressureData){
 
           dataSetbg.push(bgdata);
         });
-
+      }
         setbloodglucoseData(dataSetbg);
       });
   };
@@ -3589,7 +3703,7 @@ if(bloodpressureData){
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
-
+else{
         bloodglucoseData.forEach((bg, index) => {
           //   console.log('p' + index, bg);
 
@@ -3654,6 +3768,7 @@ if(bloodpressureData){
 
           dataSetbg.push(bgdata);
         });
+      }
 
         setbloodglucoseDataForPatient(dataSetbg);
       });
@@ -3700,7 +3815,7 @@ if(bloodpressureData){
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
-
+else{
         bloodglucoseData.forEach((bg, index) => {
           //   console.log('p' + index, bg);
 
@@ -3765,7 +3880,7 @@ if(bloodpressureData){
 
           dataSetbg.push(bgdata);
         });
-
+      }
         setbloodglucoseDataForNotification(
           dataSetbg.filter(
             (curr) =>
@@ -4516,7 +4631,9 @@ if(bloodpressureData){
         FetchBilligCode,
         BillingCodes,
         newbloodpressureDataForPatient,
+        newbloodglucoseDataForPatient,
         fetchnewBloodPressureForPatient,
+        fetchnewBloodGlucoseForPatient,
         fetchnewWSDataForPatient,
         newweightDataForPatient
       }}
