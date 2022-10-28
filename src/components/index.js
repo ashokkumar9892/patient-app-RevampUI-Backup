@@ -9,6 +9,7 @@ export * from './Provider';
 export * from './CareCoordinator';
 export * from './Coach';
 export * from './BloodPressure';
+export * from './PreRegisterd';
 export * from './BloodGlucose';
 export * from './Weight';
 export * from './Logout';

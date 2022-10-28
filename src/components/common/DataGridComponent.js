@@ -71,8 +71,8 @@ const DataGridComponent = (props) => {
               
               rows={rows}
               columns={columns}
-              pageSize={10}
-              sortModel={sortModal}
+              pageSize={20}
+              // sortModel={sortModal}
               //             checkboxSelection
 
               // onSelectionModelChange={(selection) => {
