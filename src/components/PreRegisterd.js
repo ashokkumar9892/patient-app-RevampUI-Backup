@@ -6,9 +6,11 @@ import CheckedOut from "./CheckedOut";
 import MissedAppt from "./MissedAppt"
 import axios from "axios";
 import { getToken } from "../api/api";
+import Loader from "react-loader-spinner";
 const PreRegisterd = () => {
     const token = localStorage.getItem("app_jwt");
     const [bookApptData, setBookApptData] = useState([])
+    const [loading, setLoading] = useState(false)
 
     const findBeforeSevenDate = () => {
         var datt = new Date();
@@ -37,6 +39,7 @@ const PreRegisterd = () => {
         }
     }
     const BookedApptapi = async () => {
+        setLoading(true)
         const url = `https://appointmentapi.apatternclinic.com/v1/24451/appointments/booked?practiceid=24451&startdate=${findBeforeSevenDate()}&showinsurance=true&enddate=${currentDate()}&departmentid=1&showpatientdetail=true`
         axios
             .get(url, {
@@ -45,9 +48,7 @@ const PreRegisterd = () => {
                     Authorization: "Bearer " + await getToken(),
                 },
             }).then((response) => {
-                console.log(response.data.appointments
-                    , "check response")
-
+                setLoading(false)
                 let data = []
                 response.data.appointments && response.data.appointments.length > 0 &&
                     response.data.appointments.map((item, index) => {
@@ -104,7 +105,12 @@ const PreRegisterd = () => {
                                             <input placeholder="Search here " style={{ width: "90%", margin: "4px", outline: "none", border: "none" }} />
                                         </div> */}
                                         <div>
-                                            <BookedAppt data={bookApptData} />
+
+                                        {loading ?
+                                        <div className="d-flex justify-content-center">
+                                        <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+                                        </div>
+                                            :<BookedAppt data={bookApptData} />}
                                             {/* <CheckedIn />
                                             <CheckedOut />
                                             <MissedAppt /> */}
