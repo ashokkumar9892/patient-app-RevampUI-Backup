@@ -5,27 +5,39 @@ import BookedAppt from "./Booked";
 import CheckedOut from "./CheckedOut";
 import MissedAppt from "./MissedAppt"
 import axios from "axios";
-import {getToken} from "../api/api";
+import { getToken } from "../api/api";
 const PreRegisterd = () => {
     const token = localStorage.getItem("app_jwt");
     const [bookApptData, setBookApptData] = useState([])
+
+    const findBeforeSevenDate = () => {
+        var datt = new Date();
+        datt.setDate(datt.getDate() - 7);
+        return(((datt.getMonth() > 8) ? (datt.getMonth() + 1) : ('0' + (datt.getMonth() + 1))) + '/' + ((datt.getDate() > 9) ? datt.getDate() : ('0' + datt.getDate())) + '/' + datt.getFullYear());
+       
+    }
+
+    const currentDate=()=>{
+        let datt = new Date();
+        return(((datt.getMonth() > 8) ? (datt.getMonth() + 1) : ('0' + (datt.getMonth() + 1))) + '/' + ((datt.getDate() > 9) ? datt.getDate() : ('0' + datt.getDate())) + '/' + datt.getFullYear());
+    }
 
     const findEndDate = (startDate, duration) => {
         let tim = startDate.split(":")
         let ti = tim[0]
         let mm = tim[1]
-        if(parseInt(mm) + duration > 0 ){
-            ti = parseInt(ti) + parseInt((parseInt(mm) + duration)/60);
-            mm = parseInt((parseInt(mm) + duration)%60)
+        if (parseInt(mm) + duration > 0) {
+            ti = parseInt(ti) + parseInt((parseInt(mm) + duration) / 60);
+            mm = parseInt((parseInt(mm) + duration) % 60)
 
-            return(`${ti} : ${mm}`)
+            return (`${ti} : ${mm}`)
         }
-        else{
-            return(`${ti} : ${parseInt(mm) + duration}`)
+        else {
+            return (`${ti} : ${parseInt(mm) + duration}`)
         }
     }
-    const BookedApptapi = async() => {
-        const url = `https://appointmentapi.apatternclinic.com/v1/24451/appointments/booked?practiceid=24451&startdate=09/19/2022&showinsurance=true&enddate=09/21/2022&departmentid=1&showpatientdetail=true`
+    const BookedApptapi = async () => {
+        const url = `https://appointmentapi.apatternclinic.com/v1/24451/appointments/booked?practiceid=24451&startdate=${findBeforeSevenDate()}&showinsurance=true&enddate=${currentDate()}&departmentid=1&showpatientdetail=true`
         axios
             .get(url, {
                 headers: {
@@ -49,7 +61,7 @@ const PreRegisterd = () => {
                             ApptType: item.appointmenttype,
                             Appt: item.appointmenttypeid,
                             Pre: "-",
-                            Insurance: item.insurances?item.insurances.insuranceplanname:"_",
+                            Insurance: item.insurances ? item.insurances.insuranceplanname : "_",
                             EB: "_",
                             D: "_",
                             Copay: item.copay,
@@ -57,7 +69,7 @@ const PreRegisterd = () => {
                             Balance: item.patient.balances.balance
                         }
                         data.push(obj)
-                        console.log(obj,"check obj ")
+                        console.log(obj, "check obj ")
                     })
                 setBookApptData(data)
             })
@@ -92,7 +104,7 @@ const PreRegisterd = () => {
                                             <input placeholder="Search here " style={{ width: "90%", margin: "4px", outline: "none", border: "none" }} />
                                         </div> */}
                                         <div>
-                                             <BookedAppt data={bookApptData} />
+                                            <BookedAppt data={bookApptData} />
                                             {/* <CheckedIn />
                                             <CheckedOut />
                                             <MissedAppt /> */}
