@@ -45,7 +45,7 @@ const PreRegisterd = () => {
                             DOB: item.patient.dob,
                             Chart: "-",
                             Provider: item.hl7providerid,
-                            EndTime: findEndDate(item.starttime, item.duration),
+                            StartTime: item.starttime,
                             ApptType: item.appointmenttype,
                             Appt: item.appointmenttypeid,
                             Pre: "-",
@@ -87,15 +87,15 @@ const PreRegisterd = () => {
                             <div className="row">
                                 <div className="col-xl-12">
                                     <div className="table-responsive-sm mb-0">
-                                        <div style={{ width: "100%", border: "1px solid #c9c9c9", padding: "10px", paddingTop: "9px", borderRadius: "10px", display: "flex", flexDirection: "row", alignItems: "center" }}>
+                                        {/* <div style={{ width: "100%", border: "1px solid #c9c9c9", padding: "10px", paddingTop: "9px", borderRadius: "10px", display: "flex", flexDirection: "row", alignItems: "center" }}>
                                             <i class="bi bi-search"></i>
                                             <input placeholder="Search here " style={{ width: "90%", margin: "4px", outline: "none", border: "none" }} />
-                                        </div>
+                                        </div> */}
                                         <div>
                                              <BookedAppt data={bookApptData} />
-                                            <CheckedIn />
+                                            {/* <CheckedIn />
                                             <CheckedOut />
-                                            <MissedAppt />
+                                            <MissedAppt /> */}
                                         </div>
                                     </div>
                                 </div>

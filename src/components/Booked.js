@@ -20,12 +20,12 @@ const columns: GridColDef[] = [
     width: 150,
     editable: true,
   },
-  {
-    field: 'Chart',
-    headerName: 'Chart#',
-    width: 110,
-    editable: true,
-  },
+  // {
+  //   field: 'Chart',
+  //   headerName: 'Chart#',
+  //   width: 110,
+  //   editable: true,
+  // },
   {
     field: 'Provider',
     headerName: 'Provider',
@@ -33,8 +33,8 @@ const columns: GridColDef[] = [
    
   },
   {
-    field: 'EndTime',
-    headerName: 'End Time',
+    field: 'StartTime',
+    headerName: 'Start Time',
     width: 110,
     editable: true,
   },
@@ -44,36 +44,36 @@ const columns: GridColDef[] = [
     width: 110,
     editable: true,
   },
-  {
-    field: 'Appt.',
-    headerName: 'Appt',
-    width: 110,
-    editable: true,
-  },
-  {
-    field: 'Pre',
-    headerName: 'Pre',
-    width: 110,
-    editable: true,
-  },
-  {
-    field: 'Insurance',
-    headerName: 'Insurance',
-    width: 110,
-    editable: true,
-  },
-  {
-    field: 'EB',
-    headerName: 'E&B',
-    width: 110,
-    editable: true,
-  },
-  {
-    field: 'D',
-    headerName: 'D',
-    width: 110,
-    editable: true,
-  },
+  // {
+  //   field: 'Appt.',
+  //   headerName: 'Appt',
+  //   width: 110,
+  //   editable: true,
+  // },
+  // {
+  //   field: 'Pre',
+  //   headerName: 'Pre',
+  //   width: 110,
+  //   editable: true,
+  // },
+  // {
+  //   field: 'Insurance',
+  //   headerName: 'Insurance',
+  //   width: 110,
+  //   editable: true,
+  // },
+  // {
+  //   field: 'EB',
+  //   headerName: 'E&B',
+  //   width: 110,
+  //   editable: true,
+  // },
+  // {
+  //   field: 'D',
+  //   headerName: 'D',
+  //   width: 110,
+  //   editable: true,
+  // },
   {
     field: 'Copay',
     headerName: 'Copay',
@@ -86,12 +86,12 @@ const columns: GridColDef[] = [
     width: 110,
     editable: true,
   },
-  {
-    field: 'Balance',
-    headerName: 'Balance',
-    width: 110,
-    editable: true,
-  },
+  // {
+  //   field: 'Balance',
+  //   headerName: 'Balance',
+  //   width: 110,
+  //   editable: true,
+  // },
   
 ];
 
