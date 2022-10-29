@@ -119,7 +119,8 @@ export default function Processed(props) {
             display: "block",
             pointerEvents: "none",
             disabled: "disabled",
-            alignItems:"center"
+            alignItems:"center",
+            justifyContent:"center"
           },
           "& .MuiDataGrid-columnHeaderWrapper":{
               backgroundColor:"#0c71c3",
@@ -142,11 +143,13 @@ export default function Processed(props) {
               justifyContent:"center"
           },
           "& .MuiDataGrid-row.Mui-odd": {
-            backgroundColor: "#e9e9e9",            
+            backgroundColor: "#e9e9e9",   
+            justifyContent:"center"         
           },
           "& .MuiDataGrid-columnHeader":{
             backgroundColor: "#0c71c3",
-                color:"#fafafa"
+                color:"#fafafa",
+                justifyContent:"center"
           },
           "& .MuiDataGrid-columnHeaderTitle": {
             overflow: "visible",
@@ -163,6 +166,10 @@ export default function Processed(props) {
             textAlign:"center",
             justifyContent:"center"
             
+          },
+          
+          "& .MuiDataGrid-columnHeaderTitleContainer":{
+            justifyContent:"center"
           }
          
         },
@@ -174,7 +181,7 @@ export default function Processed(props) {
     <>
     <div>
         <p style={{marginTop:"10px" ,fontWeight:"bold"  }}>
-        Booked 
+        Booked Appointments 
         </p>
        
     </div>
