@@ -88,7 +88,12 @@ const GetProviderList = async()=>{
                         }
                         data.push(obj)
                     })
-                setBookApptData(data)
+                    if(data.length > 0){
+                        setBookApptData(data.reverse())
+                    }
+                    else{
+                        setBookApptData(data)
+                    }
                 setLoading(false)
             })
     }

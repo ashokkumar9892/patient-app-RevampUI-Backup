@@ -158,12 +158,9 @@ export default function Processed(props) {
       }));
     
       const classes = useStyles();
-      let row = props.data
+      let row = props?.data
   return (
     <>
-    {
-      console.log(props.data,"check all data ")
-    }
     <div>
         <p style={{marginTop:"10px" ,fontWeight:"bold"  }}>
         Booked 
