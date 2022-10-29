@@ -11,6 +11,7 @@ const PreRegisterd = () => {
     const token = localStorage.getItem("app_jwt");
     const [bookApptData, setBookApptData] = useState([])
     const [loading, setLoading] = useState(false)
+    const [provider , setProvider]= useState([])
 
     const findBeforeSevenDate = () => {
         var datt = new Date();
@@ -38,6 +39,23 @@ const PreRegisterd = () => {
             return (`${ti} : ${parseInt(mm) + duration}`)
         }
     }
+const GetProviderList = async()=>{
+    setLoading(true)
+    const url = `https://appointmentapi.apatternclinic.com/v1/24451/providers`
+    axios
+        .get(url, {
+            headers: {
+                Accept: "application/json",
+                Authorization: "Bearer " + await getToken(),
+            },
+        }).then((response) => {
+            setLoading(false)
+            console.log(response,"cheokjkjjbjbhbhhbhjhb")
+            setProvider(response.data.providers)
+           
+        })
+}
+
     const BookedApptapi = async () => {
         setLoading(true)
         const url = `https://appointmentapi.apatternclinic.com/v1/24451/appointments/booked?practiceid=24451&startdate=${findBeforeSevenDate()}&showinsurance=true&enddate=${currentDate()}&departmentid=1&showpatientdetail=true`
@@ -48,7 +66,6 @@ const PreRegisterd = () => {
                     Authorization: "Bearer " + await getToken(),
                 },
             }).then((response) => {
-                setLoading(false)
                 let data = []
                 response.data.appointments && response.data.appointments.length > 0 &&
                     response.data.appointments.map((item, index) => {
@@ -57,7 +74,7 @@ const PreRegisterd = () => {
                             PatientName: item.patient.firstname + item.patient.lastname,
                             DOB: item.patient.dob,
                             Chart: "-",
-                            Provider: item.hl7providerid,
+                            Provider: provider?.find((it)=> it.providerid==item.hl7providerid)?.displayname,
                             StartTime: item.starttime,
                             ApptType: item.appointmenttype,
                             Appt: item.appointmenttypeid,
@@ -70,17 +87,24 @@ const PreRegisterd = () => {
                             Balance: item.patient.balances.balance
                         }
                         data.push(obj)
-                        console.log(obj, "check obj ")
                     })
                 setBookApptData(data)
+                setLoading(false)
             })
     }
 
     useEffect(() => {
-        BookedApptapi()
+        GetProviderList()
+        // BookedApptapi()
     }, [])
+    useEffect(()=>{
+        BookedApptapi()
+    },[provider])
 
     return (<>
+    {
+        console.log(provider?.find((it)=> it.providerid== 17),"check provider by utkarsh ")
+    }
         <div className="col">
             <div className="page-title-container mb-3">
                 <div className="row">
