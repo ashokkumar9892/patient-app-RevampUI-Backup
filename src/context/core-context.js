@@ -381,10 +381,7 @@ export const CoreContextProvider = (props) => {
           }
         )
         .then((response) => {
-          // setJwt(response.data);
-          //  console.log(response.data);
           const patients = response.data;
-          console.log("i need to check the patient", patients);
           const ps = [];
           if (patients.length === 0) {
             ps.push("No data found");
@@ -533,10 +530,7 @@ export const CoreContextProvider = (props) => {
           }
         )
         .then((response) => {
-          // setJwt(response.data);
-          //  console.log(response.data);
           const patients = response.data;
-          console.log("i need to check the patient", patients);
           const ps = [];
           if (patients.length === 0) {
             ps.push("No data found");
@@ -678,10 +672,7 @@ export const CoreContextProvider = (props) => {
           }
         )
         .then((response) => {
-          // setJwt(response.data);
-          //  console.log(response.data);
           const patients = response.data;
-
           setChatLink(response.data);
         })
         .catch(() => {
@@ -814,7 +805,6 @@ export const CoreContextProvider = (props) => {
         }
 
         weightData.forEach((wt, index) => {
-          //   console.log('p' + index, bg);
           let wtdata = {};
           wtdata.id = wt.id;
           if (wt.gsI1PK !== undefined) {
@@ -897,7 +887,6 @@ export const CoreContextProvider = (props) => {
         }
 
         weightData.forEach((wt, index) => {
-          //   console.log('p' + index, bg);
           let wtdata = {};
           wtdata.id = wt.id;
           if (wt.gsI1PK !== undefined) {
@@ -976,7 +965,6 @@ export const CoreContextProvider = (props) => {
 
         if (weightData) {
           weightData.forEach((wt, index) => {
-            //   console.log('p' + index, bg);
             let wtdata = {};
             wtdata.id = wt.id;
             if (wt.deviceId !== undefined) {
@@ -1027,12 +1015,9 @@ export const CoreContextProvider = (props) => {
       )
       .then((response) => {
         const thresholdData = response.data;
-        console.log(response.data, userid, "thesolf");
-
         const dataSetthresold = [];
         if (thresholdData.length > 0) {
           thresholdData.forEach((th, index) => {
-            // console.log("p" + index, th);
             let thdata = {};
             thdata.id = th.id;
             if (th.tElements) {
@@ -1113,12 +1098,9 @@ export const CoreContextProvider = (props) => {
       )
       .then((response) => {
         const thresholdData = response.data;
-        console.log(response.data, userid, "thesolf");
-
         const dataSetthresold = [];
         {
           thresholdData.forEach((th, index) => {
-            // console.log("p" + index, th);
             let thdata = {};
             thdata.id = th.id;
 
@@ -1202,10 +1184,7 @@ export const CoreContextProvider = (props) => {
       )
       .then((response) => {
         const timelogData = response.data;
-        console.log(timelogData, "tilogdata");
-
         const dataSettimeLog = [];
-
         timelogData.forEach((tl, index) => {
           let tldata = {};
           if (tl.id) {
@@ -1751,7 +1730,6 @@ export const CoreContextProvider = (props) => {
         },
       })
       .then((response) => {
-        console.log("updated responsee", response);
         if (response.status === 200) {
           alert("Provider has been updated");
         } else {
@@ -1800,7 +1778,6 @@ export const CoreContextProvider = (props) => {
         },
       })
       .then((response) => {
-        console.log("updated responsee", response);
         if (response.status === 200) {
           alert("care coordinator has been updated");
         } else {
@@ -2207,7 +2184,6 @@ export const CoreContextProvider = (props) => {
     axios
       .delete(apiUrl2 + "timelog", { params: { id: timelog.id } })
       .then((response) => {
-        console.log(response, "delete response");
         if (response.status === 200) {
           // alert("1 Entry of TimeLog Deleted Successfully.");
           swal(
@@ -2278,7 +2254,6 @@ export const CoreContextProvider = (props) => {
     url = ""
   ) => {
     const token = localStorage.getItem("app_jwt");
-    console.log(code, userName);
     const data = {
       Username: userName,
       code: code,
@@ -2326,7 +2301,6 @@ export const CoreContextProvider = (props) => {
         },
       })
       .then((response) => {
-        console.log(response);
         if (response.data === "Registered") {
           const data = {
             sk: "DOCTOR_" + id,
@@ -2358,8 +2332,6 @@ export const CoreContextProvider = (props) => {
         },
       })
       .then((putresponse) => {
-        console.log(putresponse, "putrre");
-
         if (putresponse) {
           alert("Verification code sent to your email " + data.email);
           handleProviderModalShow();
@@ -2584,13 +2556,10 @@ export const CoreContextProvider = (props) => {
       .then((response) => {
         const deviceData = response.data;
         const dataSetdevice = [];
-        console.log(response.data, "devicedata");
         let deviceType = "";
         if (deviceData.length === 0) {
           dataSetdevice.push("no device found");
         }
-
-        //    console.log('deviceData', deviceData);
         deviceData.forEach((p, index) => {
           let devicedata = {};
           devicedata.id = p.id;
@@ -2660,13 +2629,10 @@ export const CoreContextProvider = (props) => {
       .then((response) => {
         const deviceData = response.data;
         const dataSetdevice = [];
-        console.log(response.data, "devicedata");
         let deviceType = "";
         if (deviceData.length === 0) {
           dataSetdevice.push("no device found");
         }
-
-        //    console.log('deviceData', deviceData);
         deviceData.forEach((p, index) => {
           let devicedata = {};
           devicedata.id = p.id;
@@ -2790,9 +2756,7 @@ export const CoreContextProvider = (props) => {
         const ccOptions = [{ value: "", name: "Select Coordinator" }];
 
         careCoordinatorData.forEach((p, index) => {
-          console.log("p" + index, p);
           let ccdata = {};
-
           ccdata.id = p.id;
           ccdata.name = p.userName;
           ccdata.email = p.email;
@@ -2926,8 +2890,6 @@ export const CoreContextProvider = (props) => {
     minutes = minutes < 10 ? "0" + minutes : minutes;
     var strTime =
       mm + "-" + dd + "-" + yy + " " + hours + ":" + minutes + " " + ampm;
-    //alert(strTime);
-    //console.log(strTime);
     return strTime;
   }
 
@@ -2966,26 +2928,20 @@ export const CoreContextProvider = (props) => {
       )
       .then((response) => {
         const bloodpressureData = response.data;
-        console.log(bloodpressureData, "bloodpressureData");
-
         const dataSetbp = [];
         if (bloodpressureData.length === 0) {
           dataSetbp.push("No Data Found");
         }
-
         bloodpressureData.forEach((bp, index) => {
-          //   console.log('p' + index, bg);
           let bpdata = {};
           bpdata.id = bp.id;
           if (bp.gsI1PK !== undefined) {
             bpdata.gSI1PK = bp.gsI1PK;
             bpdata.UserId = bp.gsI1PK.split("_").pop();
           }
-
           if (bp.userName !== undefined) {
             bpdata.UserName = bp.userName;
           }
-
           if (bp.irregular !== undefined) {
             bpdata.irregular = bp.irregular;
           }
@@ -3076,26 +3032,21 @@ export const CoreContextProvider = (props) => {
       )
       .then((response) => {
         const bloodpressureData = response.data;
-        console.log(bloodpressureData, "bloodpressureData");
-
         const dataSetbp = [];
         if (bloodpressureData.length === 0) {
           dataSetbp.push("No Data Found");
         }
 
         bloodpressureData.forEach((bp, index) => {
-          //   console.log('p' + index, bg);
           let bpdata = {};
           bpdata.id = bp.id;
           if (bp.gsI1PK !== undefined) {
             bpdata.gSI1PK = bp.gsI1PK;
             bpdata.UserId = bp.gsI1PK.split("_").pop();
           }
-
           if (bp.userName !== undefined) {
             bpdata.UserName = bp.userName;
           }
-
           if (bp.irregular !== undefined) {
             bpdata.irregular = bp.irregular;
           }
@@ -3188,26 +3139,20 @@ export const CoreContextProvider = (props) => {
       )
       .then((response) => {
         const bloodpressureData = response.data;
-        console.log(bloodpressureData, "bloodpressureData");
-
         const dataSetbp = [];
         if (bloodpressureData.length === 0) {
           dataSetbp.push("No Data Found");
         }
-
         bloodpressureData.forEach((bp, index) => {
-          //   console.log('p' + index, bg);
           let bpdata = {};
           bpdata.id = bp.id;
           if (bp.gsI1PK) {
             bpdata.gSI1PK = bp.gsI1PK;
             bpdata.UserId = bp.gsI1PK.split("_").pop();
           }
-
-          if (bp.userName !== undefined) {
+         if (bp.userName !== undefined) {
             bpdata.UserName = bp.userName;
           }
-
           if (bp.irregular !== undefined) {
             bpdata.irregular = bp.irregular;
           }
@@ -3229,7 +3174,6 @@ export const CoreContextProvider = (props) => {
             bpdata.sortDateColumn = bp.measurementDateTime;
             //  bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MM-DD-YYYY hh:mm A');
           }
-
           if (bp.createdDate !== undefined) {
             bpdata.CreatedDate = parseInt(bp.createdDate);
             bpdata.CreatedDate = new Date(bpdata.CreatedDate);
@@ -3238,22 +3182,17 @@ export const CoreContextProvider = (props) => {
           if (bp.deviceId !== undefined) {
             bpdata.DeviceId = bp.deviceId;
           }
-
           if (bp.IMEI !== undefined) {
             bpdata.DeviceId = bp.IMEI;
           }
-
           if (bp.sk) {
             bpdata.readingId = bp.sk.split("_").pop();
           }
-
           if (bp.actionTaken !== undefined) {
             bpdata.actionTaken = bp.actionTaken;
           }
-
           dataSetbp.push(bpdata);
         });
-
         setbloodpressureDataForPatient(dataSetbp);
       }).catch(() => {
         relogin();
@@ -3291,15 +3230,12 @@ export const CoreContextProvider = (props) => {
       )
       .then((response) => {
         const bloodpressureData = response.data;
-        console.log(bloodpressureData, "bloodpressureData");
-
         const dataSetbp = [];
         if (bloodpressureData.length === 0) {
           dataSetbp.push("No Data Found");
         }
         if (bloodpressureData) {
           bloodpressureData.forEach((bp, index) => {
-            //   console.log('p' + index, bg);
             let bpdata = {};
             bpdata.id = bp.id;
             if (bp.gsI1PK) {
@@ -3395,16 +3331,12 @@ export const CoreContextProvider = (props) => {
       )
       .then((response) => {
         const bloodglucoseData = response.data;
-        console.log(response.data, "response.data");
-
         const dataSetbg = [];
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
         else {
           bloodglucoseData.forEach((bg, index) => {
-            //   console.log('p' + index, bg);
-
             let bgdata = {};
             bgdata.id = bg.id;
             // if (bg.gsI1PK !== undefined) {
@@ -3501,15 +3433,11 @@ export const CoreContextProvider = (props) => {
       )
       .then((response) => {
         const bloodpressureData = response.data;
-        console.log(bloodpressureData, "bloodpressureData");
-
         const dataSetbp = [];
         if (bloodpressureData.length === 0) {
           dataSetbp.push("No Data Found");
         }
-
         bloodpressureData.forEach((bp, index) => {
-          //   console.log('p' + index, bg);
           let bpdata = {};
           bpdata.id = bp.id;
           if (bp.gsI1PK !== undefined) {
@@ -3698,16 +3626,12 @@ export const CoreContextProvider = (props) => {
       )
       .then((response) => {
         const bloodglucoseData = response.data;
-        console.log(response.data, "response.data");
-
         const dataSetbg = [];
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
         else {
           bloodglucoseData.forEach((bg, index) => {
-            //   console.log('p' + index, bg);
-
             let bgdata = {};
             bgdata.id = index;
             if (bg.gsI1PK !== undefined) {
@@ -3810,16 +3734,12 @@ export const CoreContextProvider = (props) => {
       )
       .then((response) => {
         const bloodglucoseData = response.data;
-        console.log(response.data, "response.data");
-
         const dataSetbg = [];
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
         else {
           bloodglucoseData.forEach((bg, index) => {
-            //   console.log('p' + index, bg);
-
             let bgdata = {};
             bgdata.id = index;
             if (bg.gsI1PK !== undefined) {
@@ -3923,16 +3843,11 @@ export const CoreContextProvider = (props) => {
       )
       .then((response) => {
         const bloodglucoseData = response.data;
-        console.log(response.data, "response.data");
-
         const dataSetbg = [];
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
-
         bloodglucoseData.forEach((bg, index) => {
-          //   console.log('p' + index, bg);
-
           let bgdata = {};
           bgdata.id = index;
           if (bg.gsI1PK !== undefined) {
@@ -3945,15 +3860,12 @@ export const CoreContextProvider = (props) => {
               let test = "";
             }
           }
-
           if (bg.bloodGlucosemmol !== undefined) {
             bgdata.bloodglucosemmol = bg.bloodGlucosemmol;
           }
-
           if (bg.bloodGlucosemgdl !== undefined) {
             bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl;
           }
-
           if (bg.before_Meal !== undefined) {
             if (bg.before_Meal == "True") {
               bgdata.meal = "Before Meal";
@@ -3961,7 +3873,6 @@ export const CoreContextProvider = (props) => {
               bgdata.meal = "After Meal";
             }
           }
-
           if (bg.battery !== undefined) {
             bgdata.battery = bg.battery;
           }
@@ -3974,7 +3885,6 @@ export const CoreContextProvider = (props) => {
             bgdata.sortDateColumn = bg.measurementDateTime;
             //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
           }
-
           if (bg.createdDate !== undefined) {
             bgdata.CreatedDate = bg.createdDate;
             bgdata.CreatedDate = new Date(bgdata.CreatedDate);
@@ -3983,15 +3893,12 @@ export const CoreContextProvider = (props) => {
             );
             // bgdata.CreatedDate =Moment(bgdata.CreatedDate);
           }
-
           if (bg.sk !== undefined) {
             bgdata.readingId = bg.sk.split("_").pop();
           }
-
           if (bg.deviceId !== undefined) {
             bgdata.DeviceId = bg.deviceId;
           }
-
           dataSetbg.push(bgdata);
         });
 
@@ -4010,7 +3917,6 @@ export const CoreContextProvider = (props) => {
   const backUpMessages = () => {
     axios.get("/backup-messages").then((response) => {
       const messages = response.data.messages;
-      // console.log(response.data);
       const inb = messages.filter((message) => message.direction === "inbound");
       let inbs = [];
       let outbs = [];
@@ -4043,7 +3949,6 @@ export const CoreContextProvider = (props) => {
   const fetchMessages = () => {
     axios.get("/messages").then((response) => {
       const messages = response.data.messages;
-      //  console.log(response.data);
       const inb = messages.filter((message) => message.direction === "inbound");
       let inbs = [];
       let outbs = [];
@@ -4091,11 +3996,8 @@ export const CoreContextProvider = (props) => {
         }
       )
       .then((response) => {
-        // setJwt(response.data);
-        console.log("bgData", response.data);
         const bgData = response.data;
         const dataSetbg = [];
-
         bgData.forEach((p) => {
           let bgdata = {};
           let meal = "";
@@ -4200,9 +4102,7 @@ export const CoreContextProvider = (props) => {
       .then((response) => {
         const weightData = response.data;
         const dataSetweight = [];
-
         weightData.forEach((wt, index) => {
-          console.log("p" + index, wt);
           let wtdata = {};
           wtdata.id = wt.id;
           // if (wt.BMI !== undefined) {
@@ -4222,13 +4122,10 @@ export const CoreContextProvider = (props) => {
           if (wt.measurementTimestamp !== undefined) {
             wtdata.measurementDateTimeStamp = wt.measurementTimestamp;
           }
-
           wtdata.username = wt.userName;
           wtdata.batteryVoltage = wt.batteryVoltage;
           wtdata.signalStrength = wt.signalStrength;
-
           dataSetweight.push(wtdata);
-          // console.log('pos', wtdata);
         });
 
         setwsChartData(dataSetweight);
@@ -4290,9 +4187,7 @@ export const CoreContextProvider = (props) => {
         },
       })
       .then((response) => {
-        console.log(response, "check response of timelog");
         if (response.status) {
-          console.log(response.data);
           swal("success", "TimeLog has been added successfully", "success");
           fetchTimeLog("PATIENT_" + patientId);
         }
@@ -4315,7 +4210,6 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log(response.data);
           swal("success", "Notification has been marked as read.", "success");
         }
       }).catch(() => {
@@ -4347,7 +4241,6 @@ export const CoreContextProvider = (props) => {
           notificationarray.push(curr.sk);
         });
         setNotifications(notificationarray);
-        console.log(notificationarray, "notificationarray");
       }).catch(() => {
         relogin();
       });
@@ -4374,7 +4267,6 @@ export const CoreContextProvider = (props) => {
         }
 
         setBillingCodes(BillingData);
-        // console.log(notificationarray,"notificationarray")
       }).catch(() => {
         relogin();
       });
@@ -4415,7 +4307,6 @@ export const CoreContextProvider = (props) => {
         },
       })
       .then((response) => {
-        console.log("updated responsee", response);
         if (response.status === 200) {
           alert("TimeLog has been updated");
         }
@@ -4441,20 +4332,15 @@ export const CoreContextProvider = (props) => {
       .then((response) => {
         const deviceData = response.data;
         const dataSetdevice = [];
-
-        //    console.log('deviceData', deviceData);
         deviceData.forEach((p, index) => {
-          console.log("p" + index, p);
           let devicedata = {};
           devicedata.id = p.id;
-
           if (p.deviceId != undefined) {
             devicedata.deviceID = p.deviceId;
           }
           if (p.deviceType != undefined) {
             devicedata.DeviceType = p.deviceType;
           }
-
           if (p.gsI1PK != undefined) {
             devicedata.patientId = p.gsI1PK;
             if (patients.length > 0) {
