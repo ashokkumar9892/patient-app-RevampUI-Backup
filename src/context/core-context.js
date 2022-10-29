@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import axios from "axios";
 import loader from "../assets/images/835.gif";
 import Moment from "moment";
@@ -178,12 +178,9 @@ export const CoreContextProvider = (props) => {
       relogin();
     }
   };
-
   // useEffect(checkLocalAuth, []); // because not required on all the pages.
-
   // capture from login page.  'yasser.sheikh@laitkor.com'  'M2n1shlko@1'
   const login = useCallback((email, password, url) => {
-    console.log(email, password, "sahil");
     setShowLoader(true);
     axios
       .post(apiUrl + "/signin", {
@@ -331,17 +328,13 @@ export const CoreContextProvider = (props) => {
 
   const getdp = (d) => {
     const token = localStorage.getItem("app_jwt");
-
     setDpatient(...dpatient, d);
-    console.log(dpatient);
   };
-  console.log(dpatient);
   // capture from patient List page.
   const fetchPatientListfromApi = async (usertype, userId, AllActive) => {
     const token = localStorage.getItem("app_jwt");
     if (token) {
       let data = "";
-
       if (usertype === "admin") {
         if (AllActive) {
           data = { DoctorId: "ADMIN", ActiveStatus: "Deactive" };
@@ -349,7 +342,6 @@ export const CoreContextProvider = (props) => {
           data = { DoctorId: "ADMIN", ActiveStatus: "Active" };
         }
       }
-
       if (usertype?.includes("doctor")) {
         if (AllActive) {
           data = { DoctorId: "DOCTOR_" + userId, ActiveStatus: "Deactive" };
@@ -357,7 +349,6 @@ export const CoreContextProvider = (props) => {
           data = { DoctorId: "DOCTOR_" + userId, ActiveStatus: "Active" };
         }
       }
-
       if (usertype === "carecoordinator") {
         data = {
           DoctorId: "CARECOORDINATOR_" + userId,
@@ -378,7 +369,6 @@ export const CoreContextProvider = (props) => {
       if (usertype === "patient") {
         data = { DoctorId: "PATIENT_" + userId, ActiveStatus: "Active" };
       }
-
       await axios
         .get(
           apiUrl2 + "patient",
@@ -528,11 +518,9 @@ export const CoreContextProvider = (props) => {
     const token = localStorage.getItem("app_jwt");
     if (token) {
       var data = {};
-
       if (usertype === "patient") {
         data = { DoctorId: "PATIENT_" + userId, ActiveStatus: "Active" };
       }
-
       await axios
         .get(
           apiUrl2 + "patient",
@@ -801,7 +789,6 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
     let data = "";
     if (usertype === "patient") {
       data = "DEVICE_WS_" + userid;
@@ -887,12 +874,10 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
     let data = "";
     if (usertype === "patient") {
       data = "DEVICE_WS_" + userid;
     }
-
     await axios
       .get(
         apiUrl2 + "weight",
@@ -972,12 +957,8 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
-
     let data = "";
-
     data = deviceId.toString();
-
     await axios
       .get(
         apiUrl2 + "weight",
@@ -1034,11 +1015,9 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
     await axios
       .get(
         apiUrl2 + "threshold",
-
         {
           headers: {
             "Content-Type": "application/json",
@@ -1122,11 +1101,9 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
     await axios
       .get(
         apiUrl2 + "threshold",
-
         {
           headers: {
             "Content-Type": "application/json",
@@ -1212,7 +1189,6 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
     await axios
       .get(
         apiUrl2 + "timelog",
@@ -1282,7 +1258,6 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
     await axios
       .get(
         apiUrl2 + "timelog",
@@ -1348,7 +1323,6 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
     const date = new Date();
     const doctorId = "";
     const config = {
@@ -1365,14 +1339,12 @@ export const CoreContextProvider = (props) => {
       alert("please enter device id");
       return;
     }
-
     const data = {
       sk: SK,
       gsI1PK: "PATIENT_" + patientId,
       deviceId: deviceId,
       deviceType: deviceType,
     };
-
     await axios
       .post(apiUrl2 + "device", data, {
         headers: {
@@ -1444,7 +1416,6 @@ export const CoreContextProvider = (props) => {
     weight,
     bmi, image
   ) => {
-    console.log(patients);
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
@@ -1455,10 +1426,8 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
     const patient = patients.filter((curr) => curr.email === email);
     const userid = localStorage.getItem("userId");
-
     let userType = localStorage.getItem("userType");
     if (userType === "") userType = "patient";
     const data = {
@@ -1506,7 +1475,6 @@ export const CoreContextProvider = (props) => {
       deviceStatus: patient.deviceStatus,
       deviceType: patient.deviceType,
     };
-
     await axios
       .put(apiUrl2 + "patient", data, {
         headers: {
@@ -1527,7 +1495,6 @@ export const CoreContextProvider = (props) => {
     const ent = array.filter((a) => a.value === id);
     return ent[0];
   };
-
   const UpdatePatient = async (
     fname,
     lname,
@@ -1551,7 +1518,6 @@ export const CoreContextProvider = (props) => {
     program
   ) => {
     let providername = fetchNameFromId(provider, providerOptions);
-
     const token = localStorage.getItem("app_jwt");
     if (!phone || !mobilePhone || !birthDate) {
       swal("error", "Please fill all necessary details", "error");
@@ -1577,16 +1543,13 @@ export const CoreContextProvider = (props) => {
         careCoordinatorOptions
       );
       let coachname = fetchNameFromId(coach, coachOptions);
-
       let gendervalue = "";
-
       if (gender == 1) {
         gendervalue = "Female";
       }
       if (gender == 0) {
         gendervalue = "Male";
       }
-
       let languagevalue = "";
       if (language == 0) {
         languagevalue = "English";
@@ -1646,7 +1609,6 @@ export const CoreContextProvider = (props) => {
         cptCodeForCCM: patient.cptcodeforccm,
         cptCodeForRPM: patient.cptcodeforrpm,
       };
-
       await axios
         .put(apiUrl2 + "patient", data, {
           headers: {
@@ -1682,14 +1644,12 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
     let providername = fetchNameFromId(provider, providerOptions);
     let carecoordinatorname = fetchNameFromId(
       coordinator,
       careCoordinatorOptions
     );
     let coachname = fetchNameFromId(coach, coachOptions);
-
     const data1 = {
       id: patient.id,
       sk: patient.sk,
@@ -1770,7 +1730,6 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
     const data = {
       id: doctor.id,
       sk: patientId,
@@ -1784,7 +1743,6 @@ export const CoreContextProvider = (props) => {
       userName: username,
       userType: "doctor",
     };
-
     await axios
       .put(apiUrl2 + "doctor", data, {
         headers: {
@@ -1820,7 +1778,6 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
     const data = {
       id: doctor.id,
       sk: patientId,
@@ -1878,7 +1835,6 @@ export const CoreContextProvider = (props) => {
       userName: username,
       userType: "coach",
     };
-
     await axios
       .put(apiUrl2 + "coach", data, {
         headers: {
@@ -1947,7 +1903,6 @@ export const CoreContextProvider = (props) => {
       program: patient.program,
       cptCode1: patient.cptcode,
     };
-
     await axios
       .put(apiUrl2 + "patient", data, {
         headers: {
@@ -2013,7 +1968,6 @@ export const CoreContextProvider = (props) => {
       cptCodeForCCM: ccm,
       cptCodeForRPM: rpm,
     };
-
     await axios
       .put(apiUrl2 + "patient", data, {
         headers: {
@@ -2043,7 +1997,6 @@ export const CoreContextProvider = (props) => {
       userName: doctor.provider,
       userType: "doctor",
     };
-
     await axios
       .put(apiUrl2 + "doctor", data1, {
         headers: {
@@ -2112,7 +2065,6 @@ export const CoreContextProvider = (props) => {
       cptCodeForCCM: patient.cptcodeforccm,
       cptCodeForRPM: patient.cptcodeforrpm,
     };
-
     await axios
       .put(apiUrl2 + "patient", data, {
         headers: {
@@ -2142,7 +2094,6 @@ export const CoreContextProvider = (props) => {
       userName: doctor.provider,
       userType: "Care Coordinator",
     };
-
     await axios
       .put(apiUrl2 + "carecoordinator", data1, {
         headers: {
@@ -2172,7 +2123,6 @@ export const CoreContextProvider = (props) => {
       userName: doctor.name,
       userType: "coach",
     };
-
     await axios
       .put(apiUrl2 + "coach", data1, {
         headers: {
@@ -2191,7 +2141,6 @@ export const CoreContextProvider = (props) => {
   };
   const ActivatePatient = async (patient) => {
     const token = localStorage.getItem("app_jwt");
-
     const data = {
       id: patient.id,
       sk: patient.sk,
@@ -2237,7 +2186,6 @@ export const CoreContextProvider = (props) => {
       deviceStatus: patient.deviceStatus,
       deviceType: patient.deviceType,
     };
-
     await axios
       .put(apiUrl2 + "patient", data, {
         headers: {
@@ -2256,7 +2204,6 @@ export const CoreContextProvider = (props) => {
 
   const DeleteTimeLog = (timelog) => {
     setTimeLogData([]);
-
     axios
       .delete(apiUrl2 + "timelog", { params: { id: timelog.id } })
       .then((response) => {
@@ -2276,7 +2223,6 @@ export const CoreContextProvider = (props) => {
 
   const DeleteCareTeam = (patientId, careTeamType, careTeamTypeMsg) => {
     const token = localStorage.getItem("app_jwt");
-
     const data = {
       TableName: userTable,
       Key: {
@@ -2286,7 +2232,6 @@ export const CoreContextProvider = (props) => {
       UpdateExpression: "SET ActiveStatus = :v_ActiveStatus",
       ExpressionAttributeValues: { ":v_ActiveStatus": { S: "Deactive" } },
     };
-
     axios
       .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
         headers: {
@@ -2307,7 +2252,6 @@ export const CoreContextProvider = (props) => {
   const DeleteDeviceData = (id, patientId, userName) => {
     setdeviceDataForPatient([]);
     const token = localStorage.getItem("app_jwt");
-
     axios
       .delete(apiUrl2 + "device", { params: { id: id.id } })
       .then((response) => {
@@ -2373,7 +2317,6 @@ export const CoreContextProvider = (props) => {
       Password: password,
       newPassword: "string",
     };
-
     axios
       .post(apiUrl + "/register", data, {
         headers: {
@@ -2506,7 +2449,6 @@ export const CoreContextProvider = (props) => {
             program: program,
             reading: "true",
             otp: "false",
-
             cptCodeForCCM: JSON.stringify(cptcodeforccm),
             cptCodeForRPM: JSON.stringify(cptcodeforrpm),
           };
@@ -2522,7 +2464,6 @@ export const CoreContextProvider = (props) => {
               if (putresponse.status === 200) {
                 alert("Verification code sent to your email " + email);
                 handlePatientConfirmationModalShow();
-
                 //window.location.replace('confirm-user-screen.html?username='+useremail);
               } else {
               }
@@ -2706,11 +2647,9 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
     await axios
       .get(
         apiUrl2 + "device",
-
         {
           headers: {
             "Content-Type": "application/json",
@@ -2773,7 +2712,6 @@ export const CoreContextProvider = (props) => {
 
   const fetchProviders = async (isactive) => {
     const token = localStorage.getItem("app_jwt");
-
     let data = "";
     if (isactive) {
       data = {
@@ -2784,7 +2722,6 @@ export const CoreContextProvider = (props) => {
         ActiveStatus: "Active",
       };
     }
-
     await axios
       .get(
         apiUrl2 + "doctor",
@@ -2882,7 +2819,6 @@ export const CoreContextProvider = (props) => {
 
   const fetchCoach = async () => {
     const token = localStorage.getItem("app_jwt");
-
     const data = {
       ActiveStatus: "Active",
     };
@@ -3239,9 +3175,6 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
-
-
     await axios
       .get(
         apiUrl2 + "bp",
@@ -3345,9 +3278,6 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
-
-
     await axios
       .get(
         apiUrl2 + "bp",
@@ -3452,9 +3382,6 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
-
-
     await axios
       .get(
         apiUrl2 + "bg",
@@ -3555,7 +3482,6 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
     let data = "";
     if (usertype === "patient") {
       data = "DEVICE_BP_" + userid;
@@ -3660,7 +3586,6 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
     let data = "";
     if (usertype === "patient") {
       data = "DEVICE_BG_PATIENT_" + userid;
@@ -3680,16 +3605,12 @@ export const CoreContextProvider = (props) => {
       )
       .then((response) => {
         const bloodglucoseData = response.data;
-        console.log(response.data, "response.data");
-
         const dataSetbg = [];
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
         else {
           bloodglucoseData.forEach((bg, index) => {
-            //   console.log('p' + index, bg);
-
             let bgdata = {};
             bgdata.id = index;
             if (bg.gsI1PK !== undefined) {
@@ -3702,15 +3623,12 @@ export const CoreContextProvider = (props) => {
                 let test = "";
               }
             }
-
             if (bg.bloodGlucosemmol !== undefined) {
               bgdata.bloodglucosemmol = bg.bloodGlucosemmol;
             }
-
             if (bg.bloodGlucosemgdl !== undefined) {
               bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl;
             }
-
             if (bg.before_Meal !== undefined) {
               if (bg.before_Meal == "True") {
                 bgdata.meal = "Before Meal";
@@ -3718,7 +3636,6 @@ export const CoreContextProvider = (props) => {
                 bgdata.meal = "After Meal";
               }
             }
-
             if (bg.battery !== undefined) {
               bgdata.battery = bg.battery;
             }
@@ -3731,7 +3648,6 @@ export const CoreContextProvider = (props) => {
               bgdata.sortDateColumn = bg.measurementDateTime;
               //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
             }
-
             if (bg.createdDate !== undefined) {
               bgdata.CreatedDate = bg.createdDate;
               bgdata.CreatedDate = new Date(bgdata.CreatedDate);
@@ -3740,15 +3656,12 @@ export const CoreContextProvider = (props) => {
               );
               // bgdata.CreatedDate =Moment(bgdata.CreatedDate);
             }
-
             if (bg.sk !== undefined) {
               bgdata.readingId = bg.sk.split("_").pop();
             }
-
             if (bg.deviceId !== undefined) {
               bgdata.DeviceId = bg.deviceId;
             }
-
             dataSetbg.push(bgdata);
           });
         }
@@ -3871,7 +3784,6 @@ export const CoreContextProvider = (props) => {
   ) => {
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
-
     if (isAuth === "yes") {
       setIsAuthenticated(true);
       setJwt(token);
@@ -3879,7 +3791,6 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
     let data = "";
     if (usertype === "patient") {
       data = "DEVICE_BG_" + userid;
@@ -4216,7 +4127,6 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
     let data = "";
     if (usertype === "patient") {
       data = "DEVICE_BP_" + userid;
@@ -4270,7 +4180,6 @@ export const CoreContextProvider = (props) => {
     } else {
       relogin();
     }
-
     let data = "";
     if (usertype === "patient") {
       data = "DEVICE_WS_" + userid;
@@ -4339,7 +4248,6 @@ export const CoreContextProvider = (props) => {
   ) => {
     setTimeLogData([]);
     const token = localStorage.getItem("app_jwt");
-    console.log("dhhgdfsghfsfs", startdate);
     const date = new Date(startdate);
     const end = new Date(startdate);
     end.setSeconds(end.getSeconds() + timeAmount);
@@ -4571,7 +4479,6 @@ export const CoreContextProvider = (props) => {
   const getTab1data = (data) => {
     setTab1data(data);
   };
-  console.log("22:27", Tab1data.FirstName);
   // if (!Tab1data){
   //     return null
   // }else{
@@ -4641,12 +4548,10 @@ export const CoreContextProvider = (props) => {
         inbox,
         fetchMessages,
         outbox,
-
         threads,
         patient,
         setPatient,
         jwt,
-
         fetchWSData,
         fetchBgChartData,
         fetchWSChartData,
@@ -4671,7 +4576,6 @@ export const CoreContextProvider = (props) => {
         UpdateThreshold,
         fetchCareCoordinator,
         fetchCoach,
-
         addCareCoordinator,
         addCoach,
         AddTimeLog,
@@ -4694,7 +4598,6 @@ export const CoreContextProvider = (props) => {
         providerOptions,
         coachOptions,
         careCoordinatorOptions,
-
         getTab1data,
         result,
         showForgotModal,
