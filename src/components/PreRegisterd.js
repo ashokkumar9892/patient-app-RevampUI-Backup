@@ -89,6 +89,7 @@ const GetProviderList = async()=>{
                             DOB: item.patient.dob,
                             Chart: "-",
                             Provider: provider?.find((it)=> it.providerid==item.hl7providerid)?.displayname,
+                            date:item.date,
                             StartTime: formatAMPM(new Date(dateTime)),
                             ApptType: item.appointmenttype,
                             Appt: item.appointmenttypeid,

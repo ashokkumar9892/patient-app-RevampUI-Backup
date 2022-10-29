@@ -33,6 +33,12 @@ const columns: GridColDef[] = [
    
   },
   {
+    field: 'date',
+    headerName: 'Date',
+    width: 110,
+    editable: true,
+  },
+  {
     field: 'StartTime',
     headerName: 'Start Time',
     width: 110,
@@ -113,6 +119,7 @@ export default function Processed(props) {
             display: "block",
             pointerEvents: "none",
             disabled: "disabled",
+            alignItems:"center"
           },
           "& .MuiDataGrid-columnHeaderWrapper":{
               backgroundColor:"#0c71c3",
@@ -122,6 +129,7 @@ export default function Processed(props) {
               whiteSpace:"normal",
               minWidth:"normal",
               textAlign:"center",
+              justifyContent:"center"
           },
           "& .MuiDataGrid-cell":{
               border: "1px solid #dfdddd",
@@ -130,7 +138,8 @@ export default function Processed(props) {
               whiteSpace:"normal",
               textAlign:"center",
               paddingTop:"1em",
-              paddingBottom:"1em"
+              paddingBottom:"1em",
+              justifyContent:"center"
           },
           "& .MuiDataGrid-row.Mui-odd": {
             backgroundColor: "#e9e9e9",            
@@ -144,6 +153,7 @@ export default function Processed(props) {
             lineHeight: "1.43rem",
             whiteSpace: "normal",
             textAlign:"center",
+            justifyContent:"center"
           },
           
           "& .MuiDataGrid-root": {
@@ -151,6 +161,7 @@ export default function Processed(props) {
             lineHeight: "1.43rem",
             whiteSpace: "normal",
             textAlign:"center",
+            justifyContent:"center"
             
           }
          
