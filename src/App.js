@@ -49,7 +49,20 @@ const Moment = require("moment");
 //   transports: ["websocket"],
 // });
 
-
+let authTime = localStorage.getItem("app_authTime");
+if(authTime) {
+  authTime = Number(authTime);
+  let currentTime = Date.now()
+  if(currentTime >= authTime) {
+    localStorage.removeItem("app_authTime")
+    window.location.href = '/logout';
+  } else {
+    setTimeout(() => {
+      localStorage.removeItem("app_authTime")
+      window.location.href = '/logout';
+    }, authTime - currentTime )
+  }
+}
 
 
 

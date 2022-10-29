@@ -508,7 +508,7 @@ const Dashboard = (props) => {
   };
 
   const fetchDevice = () => {
-    const patient = JSON.parse(localStorage.getItem("app_patient"));
+    const patient = JSON.parse(localStorage.getItem("app_patient") || '{}');
     let patientId = localStorage.getItem("userId");
     let userType = localStorage.getItem("userType");
     let userName = localStorage.getItem("userName");

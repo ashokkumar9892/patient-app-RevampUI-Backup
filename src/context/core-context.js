@@ -201,6 +201,7 @@ export const CoreContextProvider = (props) => {
           setIsAuthenticated(true);
           setMessage("");
           setUserId(email);
+          localStorage.setItem("app_authTime", (Date.now() + (20 * 60 * 1000)).toString());
           localStorage.setItem("app_isAuth", "yes");
           localStorage.setItem("app_jwt", response.data.idToken);
           localStorage.setItem("app_userId", email);
@@ -341,7 +342,7 @@ export const CoreContextProvider = (props) => {
         }
       }
 
-      if (usertype.includes("doctor")) {
+      if (usertype?.includes("doctor")) {
         if (AllActive) {
           data = { DoctorId: "DOCTOR_" + userId, ActiveStatus: "Deactive" };
         } else {
@@ -390,8 +391,7 @@ export const CoreContextProvider = (props) => {
           if (patients.length === 0) {
             ps.push("No data found");
           }
-
-          patients.forEach((p, index) => {
+          patients?.forEach((p, index) => {
             let patient = {};
 
             patient.id = p.id;
