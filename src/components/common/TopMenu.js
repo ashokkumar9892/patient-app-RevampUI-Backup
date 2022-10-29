@@ -686,7 +686,7 @@ const TopMenu = ({ changestyle, showSidebar }) => {
         // </NavDropdown>
         <li className="list-inline-item mr-10">
           <div className="btn-group">
-          <Link className=" mb-1 text-white" to="/preregisted" style={{marginTop:"28px", marginRight:"16px"}}>Pre Register</Link>
+          <Link className=" mb-1 text-white" to="/preregisted" style={{marginTop:"28px", marginRight:"16px"}}>Booked</Link>
             <div className="dropdown pt-4">
             
               <Link className="dropdown-toggle dropdown-toggle-1 mb-1 text-white" to="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

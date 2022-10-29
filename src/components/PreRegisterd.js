@@ -25,6 +25,19 @@ const PreRegisterd = () => {
         return(((datt.getMonth() > 8) ? (datt.getMonth() + 1) : ('0' + (datt.getMonth() + 1))) + '/' + ((datt.getDate() > 9) ? datt.getDate() : ('0' + datt.getDate())) + '/' + datt.getFullYear());
     }
 
+
+
+    function formatAMPM(date) {
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0'+minutes : minutes;
+        var strTime = hours + ':' + minutes + ' ' + ampm;
+        return strTime;
+      }
+
     const findEndDate = (startDate, duration) => {
         let tim = startDate.split(":")
         let ti = tim[0]
@@ -50,7 +63,6 @@ const GetProviderList = async()=>{
             },
         }).then((response) => {
             setLoading(false)
-            console.log(response,"cheokjkjjbjbhbhhbhjhb")
             setProvider(response.data.providers)
            
         })
@@ -67,15 +79,17 @@ const GetProviderList = async()=>{
                 },
             }).then((response) => {
                 let data = []
+               
                 response.data.appointments && response.data.appointments.length > 0 &&
                     response.data.appointments.map((item, index) => {
+                        let dateTime = item.date + " " + item.starttime
                         let obj = {
                             patientid: item.patientid,
                             PatientName: item.patient.firstname + item.patient.lastname,
                             DOB: item.patient.dob,
                             Chart: "-",
                             Provider: provider?.find((it)=> it.providerid==item.hl7providerid)?.displayname,
-                            StartTime: item.starttime,
+                            StartTime: formatAMPM(new Date(dateTime)),
                             ApptType: item.appointmenttype,
                             Appt: item.appointmenttypeid,
                             Pre: "-",
@@ -107,9 +121,6 @@ const GetProviderList = async()=>{
     },[provider])
 
     return (<>
-    {
-        console.log(provider?.find((it)=> it.providerid== 17),"check provider by utkarsh ")
-    }
         <div className="col">
             <div className="page-title-container mb-3">
                 <div className="row">
