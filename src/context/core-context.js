@@ -212,6 +212,8 @@ export const CoreContextProvider = (props) => {
 
           userDetails(email, url);
         }
+      }).catch(() => {
+        relogin();
       });
   });
   const ForgotPassword = (email) => {
@@ -229,6 +231,8 @@ export const CoreContextProvider = (props) => {
 
           //  window.location.assign();
         }
+      }).catch(() => {
+        relogin();
       });
   };
   const verifyForgotPassword = (email, code, newpassword) => {
@@ -247,6 +251,8 @@ export const CoreContextProvider = (props) => {
         } else {
           alert("there is some error");
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -313,6 +319,8 @@ export const CoreContextProvider = (props) => {
           //     {
           //         window.location.assign('/dashboard');
           //     }
+        }).catch(() => {
+          relogin();
         });
     }
     //let url ='';
@@ -506,8 +514,8 @@ export const CoreContextProvider = (props) => {
 
           setPatients(ps);
         })
-        .catch((error) => {
-          console.log(error, "errorlogin");
+        .catch(() => {
+          relogin();
         });
     }
   };
