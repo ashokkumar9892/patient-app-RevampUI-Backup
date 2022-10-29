@@ -303,7 +303,7 @@ export const CoreContextProvider = (props) => {
           const username = localStorage.getItem("userName");
 
           setShowLoader(false);
- if (url) window.location.assign(url);
+          if (url) window.location.assign(url);
 
           // if (userType === 'patient')
           // {
@@ -865,6 +865,8 @@ export const CoreContextProvider = (props) => {
         });
 
         setweightData(dataSetwt);
+      }).catch(() => {
+        relogin();
       });
   };
   const fetchWSDataForPatient = async (userid, usertype) => {
@@ -948,9 +950,11 @@ export const CoreContextProvider = (props) => {
         });
 
         setweightDataForPatient(dataSetwt);
+      }).catch(() => {
+        relogin();
       });
   };
-  const fetchnewWSDataForPatient = async (userid, usertype,deviceId) => {
+  const fetchnewWSDataForPatient = async (userid, usertype, deviceId) => {
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
@@ -961,11 +965,11 @@ export const CoreContextProvider = (props) => {
       relogin();
     }
 
-    
+
     let data = "";
-    
-      data = deviceId.toString();
-    
+
+    data = deviceId.toString();
+
     await axios
       .get(
         apiUrl2 + "weight",
@@ -980,32 +984,35 @@ export const CoreContextProvider = (props) => {
       .then((response) => {
         const weightData = response.data;
         const dataSetwt = [];
-       
-if(weightData){
-        weightData.forEach((wt, index) => {
-          //   console.log('p' + index, bg);
-          let wtdata = {};
-          wtdata.id = wt.id;
-          if (wt.deviceId !== undefined) {
-            wtdata.DeviceId = wt.deviceId;
-          }
-          if (wt.weight !== undefined) {
-            wtdata.weight = wt.weight;
-          }
-          if (wt.measurementDateTime !== undefined) {
-            wtdata.MeasurementDateTime = wt.measurementDateTime;
-            wtdata.MeasurementDateTime = new Date(wtdata.MeasurementDateTime);
-            wtdata.sortDateColumn = wt.measurementDateTime;
-            // wtdata.MeasurementDateTime =Moment(wtdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm:ss A');
-          }
-         
-          // bpdata.date_recorded = bp.date_recorded.s;
 
-         
-          dataSetwt.push(wtdata);
-        })};
+        if (weightData) {
+          weightData.forEach((wt, index) => {
+            //   console.log('p' + index, bg);
+            let wtdata = {};
+            wtdata.id = wt.id;
+            if (wt.deviceId !== undefined) {
+              wtdata.DeviceId = wt.deviceId;
+            }
+            if (wt.weight !== undefined) {
+              wtdata.weight = wt.weight;
+            }
+            if (wt.measurementDateTime !== undefined) {
+              wtdata.MeasurementDateTime = wt.measurementDateTime;
+              wtdata.MeasurementDateTime = new Date(wtdata.MeasurementDateTime);
+              wtdata.sortDateColumn = wt.measurementDateTime;
+              // wtdata.MeasurementDateTime =Moment(wtdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm:ss A');
+            }
+
+            // bpdata.date_recorded = bp.date_recorded.s;
+
+
+            dataSetwt.push(wtdata);
+          })
+        };
 
         setnewweightDataForPatient(dataSetwt);
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -1093,6 +1100,8 @@ if(weightData){
             dataSetthresold.filter((curr) => curr.UserId.includes(userid))
           );
         }
+      }).catch(() => {
+        relogin();
       });
   };
   const fetchadminThresold = async (userid, usertype) => {
@@ -1180,6 +1189,8 @@ if(weightData){
             "dataSetthresold.filter((curr)=>curr.userId.includes(userid))"
           );
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -1248,6 +1259,8 @@ if(weightData){
         });
 
         setTimeLogData(dataSettimeLog);
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -1311,6 +1324,8 @@ if(weightData){
         });
 
         setAllTimeLogData(dataSettimeLog);
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -1366,6 +1381,8 @@ if(weightData){
             "patient"
           );
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -1404,6 +1421,8 @@ if(weightData){
           swal("error", "Threshold did not Update.", "error");
           // alert("");
         }
+      }).catch(() => {
+        relogin();
       });
     //Update
   };
@@ -1415,13 +1434,13 @@ if(weightData){
     dob,
     height,
     weight,
-    bmi,image
+    bmi, image
   ) => {
     console.log(patients);
     const token = localStorage.getItem("app_jwt");
     const isAuth = localStorage.getItem("app_isAuth");
     if (isAuth === "yes") {
-      
+
       setIsAuthenticated(true);
       setJwt(token);
       setUserId(userId);
@@ -1491,6 +1510,8 @@ if(weightData){
         if (response.status === 200) {
           swal("success", "Patient Deleted Successfully.", "success");
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -1637,6 +1658,8 @@ if(weightData){
               "error"
             );
           }
+        }).catch(() => {
+          relogin();
         });
     }
   };
@@ -1724,6 +1747,8 @@ if(weightData){
           // alert("");
           swal("error", "Data did did not Update  Successfully.", "error");
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -1766,6 +1791,8 @@ if(weightData){
         } else {
           alert("data not updated");
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -1814,6 +1841,8 @@ if(weightData){
         } else {
           alert("data not updated");
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -1856,6 +1885,8 @@ if(weightData){
         } else {
           alert("Patient data did not Update  Successfully.");
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -1920,6 +1951,8 @@ if(weightData){
         if (response.status === 200) {
           swal("success", "Patient Deleted Successfully.", "success");
         }
+      }).catch(() => {
+        relogin();
       });
   };
   const UpdateCPT = async (patient, ccm, rpm) => {
@@ -1984,6 +2017,8 @@ if(weightData){
         if (response.status === 200) {
           swal("success", "CPT Code Added Successfully.", "success");
         }
+      }).catch(() => {
+        relogin();
       });
   };
   const DeleteDoctor = async (doctor) => {
@@ -2012,6 +2047,8 @@ if(weightData){
         if (response.status === 200) {
           swal("success", "Patient Deleted Successfully.", "success");
         }
+      }).catch(() => {
+        relogin();
       });
   };
   const UpdateNotes = async (patient, notes, otp, reading) => {
@@ -2079,6 +2116,8 @@ if(weightData){
         if (response.status === 200) {
           swal("success", "Updated Successfully.", "success");
         }
+      }).catch(() => {
+        relogin();
       });
   };
   const DeleteCareCoordinator = async (doctor) => {
@@ -2107,6 +2146,8 @@ if(weightData){
         if (response.status === 200) {
           swal("success", "Care Coordinator Deleted Successfully.", "success");
         }
+      }).catch(() => {
+        relogin();
       });
   };
   const DeleteCoach = async (doctor) => {
@@ -2136,6 +2177,8 @@ if(weightData){
           swal("success", "Coach Deleted Successfully.", "success");
           fetchCoach();
         }
+      }).catch(() => {
+        relogin();
       });
   };
   const ActivatePatient = async (patient) => {
@@ -2198,6 +2241,8 @@ if(weightData){
         if (response.status === 200) {
           swal("success", "Patient Activated Successfully.", "success");
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -2216,6 +2261,8 @@ if(weightData){
             "success"
           );
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -2244,6 +2291,8 @@ if(weightData){
         if (response.data === "Updated") {
           alert(careTeamTypeMsg + " Deleted Successfully.");
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -2265,6 +2314,8 @@ if(weightData){
         } else {
           swal("error", "Server Error", "error");
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -2299,6 +2350,8 @@ if(weightData){
 
           if (url) window.location.assign(url);
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -2340,6 +2393,8 @@ if(weightData){
         } else {
           alert(response.data);
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -2364,7 +2419,9 @@ if(weightData){
         } else {
         }
       })
-      .catch((error) => console.log(error, "api error"));
+      .catch(() => {
+        relogin();
+      });
   };
 
   const Registration = (
@@ -2467,6 +2524,8 @@ if(weightData){
             response.data = "Email already exists";
           alert(response.data);
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -2507,6 +2566,8 @@ if(weightData){
         } else {
           alert(response.data);
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -2547,6 +2608,8 @@ if(weightData){
         } else {
           alert(response.data);
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -2615,6 +2678,8 @@ if(weightData){
         }
         if (type == "Blood Glucose") {
         }
+      }).catch(() => {
+        relogin();
       });
   };
   const fetchDeviceDataForPatient = async (
@@ -2693,6 +2758,8 @@ if(weightData){
         }
         if (type == "Blood Glucose") {
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -2751,8 +2818,8 @@ if(weightData){
         setdoctorData(dataSetdoctor);
         setProviderOptions(pOptions);
       })
-      .catch((error) => {
-        console.log(error, "error");
+      .catch(() => {
+        relogin();
       });
   };
 
@@ -2800,8 +2867,8 @@ if(weightData){
         setccData(dataSetcareCoordinator);
         setCoordinatorOptions(ccOptions);
       })
-      .catch((error) => {
-        console.log(error, "sadhil");
+      .catch(() => {
+        relogin();
       });
   };
 
@@ -3031,6 +3098,8 @@ if(weightData){
               curr.CreatedDate < new Date(to)
           )
         );
+      }).catch(() => {
+        relogin();
       });
   };
   const fetchBloodPressureForDashboard = async (userid, usertype, from, to) => {
@@ -3139,16 +3208,18 @@ if(weightData){
               curr.CreatedDate < new Date(to)
           )
         );
+      }).catch(() => {
+        relogin();
       });
   };
-  const fetchBloodPressureForPatient = async (userid, usertype,deviceId) => {
+  const fetchBloodPressureForPatient = async (userid, usertype, deviceId) => {
     const user = userid.split("_")[1];
     let data = "";
     // if(deviceId.length!==0){
     //   data=deviceId.toString()
     // }
     // else{
-      data = "DEVICE_BP_" + user;
+    data = "DEVICE_BP_" + user;
     // }
 
     const token = localStorage.getItem("app_jwt");
@@ -3162,7 +3233,7 @@ if(weightData){
     }
 
 
-    
+
     await axios
       .get(
         apiUrl2 + "bp",
@@ -3243,13 +3314,15 @@ if(weightData){
         });
 
         setbloodpressureDataForPatient(dataSetbp);
+      }).catch(() => {
+        relogin();
       });
   };
-  const fetchnewBloodPressureForPatient = async (userid, usertype,deviceId) => {
+  const fetchnewBloodPressureForPatient = async (userid, usertype, deviceId) => {
     const user = userid.split("_")[1];
     let data = "";
     // if(deviceId.length!==0){
-       data=deviceId.toString()
+    data = deviceId.toString()
     // }
     // else{
     //   data = "DEVICE_BP_" + user;
@@ -3266,7 +3339,7 @@ if(weightData){
     }
 
 
-    
+
     await axios
       .get(
         apiUrl2 + "bp",
@@ -3286,74 +3359,77 @@ if(weightData){
         if (bloodpressureData.length === 0) {
           dataSetbp.push("No Data Found");
         }
-if(bloodpressureData){
-        bloodpressureData.forEach((bp, index) => {
-          //   console.log('p' + index, bg);
-          let bpdata = {};
-          bpdata.id = bp.id;
-          if (bp.gsI1PK) {
-            bpdata.gSI1PK = bp.gsI1PK;
-            bpdata.UserId = bp.gsI1PK.split("_").pop();
-          }
+        if (bloodpressureData) {
+          bloodpressureData.forEach((bp, index) => {
+            //   console.log('p' + index, bg);
+            let bpdata = {};
+            bpdata.id = bp.id;
+            if (bp.gsI1PK) {
+              bpdata.gSI1PK = bp.gsI1PK;
+              bpdata.UserId = bp.gsI1PK.split("_").pop();
+            }
 
-          if (bp.userName !== undefined) {
-            bpdata.UserName = bp.userName;
-          }
+            if (bp.userName !== undefined) {
+              bpdata.UserName = bp.userName;
+            }
 
-          if (bp.irregular !== undefined) {
-            bpdata.irregular = bp.irregular;
-          }
-          if (bp.systolic !== undefined) {
-            bpdata.systolic = parseFloat(bp.systolic).toFixed(0);
-          }
-          if (bp.diastolic !== undefined) {
-            bpdata.diastolic = parseFloat(bp.diastolic).toFixed(0);
-          }
-          if (bp.pulse !== undefined) {
-            bpdata.Pulse = bp.pulse;
-          }
-          if (bp.timeSlots !== undefined) {
-            bpdata.timeSlots = bp.timeSlots;
-          }
-          if (bp.measurementDateTime !== undefined) {
-            bpdata.MeasurementDateTime = bp.measurementDateTime;
-            bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
-            bpdata.sortDateColumn = bp.measurementDateTime;
-            //  bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MM-DD-YYYY hh:mm A');
-          }
+            if (bp.irregular !== undefined) {
+              bpdata.irregular = bp.irregular;
+            }
+            if (bp.systolic !== undefined) {
+              bpdata.systolic = parseFloat(bp.systolic).toFixed(0);
+            }
+            if (bp.diastolic !== undefined) {
+              bpdata.diastolic = parseFloat(bp.diastolic).toFixed(0);
+            }
+            if (bp.pulse !== undefined) {
+              bpdata.Pulse = bp.pulse;
+            }
+            if (bp.timeSlots !== undefined) {
+              bpdata.timeSlots = bp.timeSlots;
+            }
+            if (bp.measurementDateTime !== undefined) {
+              bpdata.MeasurementDateTime = bp.measurementDateTime;
+              bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
+              bpdata.sortDateColumn = bp.measurementDateTime;
+              //  bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MM-DD-YYYY hh:mm A');
+            }
 
-          if (bp.createdDate !== undefined) {
-            bpdata.CreatedDate = parseInt(bp.createdDate);
-            bpdata.CreatedDate = new Date(bpdata.CreatedDate);
-            //bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MM-DD-YYYY hh:mm A');
-          }
-          if (bp.deviceId !== undefined) {
-            bpdata.DeviceId = bp.deviceId;
-          }
+            if (bp.createdDate !== undefined) {
+              bpdata.CreatedDate = parseInt(bp.createdDate);
+              bpdata.CreatedDate = new Date(bpdata.CreatedDate);
+              //bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MM-DD-YYYY hh:mm A');
+            }
+            if (bp.deviceId !== undefined) {
+              bpdata.DeviceId = bp.deviceId;
+            }
 
-          if (bp.IMEI !== undefined) {
-            bpdata.DeviceId = bp.IMEI;
-          }
+            if (bp.IMEI !== undefined) {
+              bpdata.DeviceId = bp.IMEI;
+            }
 
-          if (bp.sk) {
-            bpdata.readingId = bp.sk.split("_").pop();
-          }
+            if (bp.sk) {
+              bpdata.readingId = bp.sk.split("_").pop();
+            }
 
-          if (bp.actionTaken !== undefined) {
-            bpdata.actionTaken = bp.actionTaken;
-          }
+            if (bp.actionTaken !== undefined) {
+              bpdata.actionTaken = bp.actionTaken;
+            }
 
-          dataSetbp.push(bpdata);
-        })}
+            dataSetbp.push(bpdata);
+          })
+        }
 
         setnewbloodpressureDataForPatient(dataSetbp);
+      }).catch(() => {
+        relogin();
       });
   };
-  const fetchnewBloodGlucoseForPatient = async (userid, usertype,deviceId) => {
+  const fetchnewBloodGlucoseForPatient = async (userid, usertype, deviceId) => {
     const user = userid.split("_")[1];
     let data = "";
     // if(deviceId.length!==0){
-       data=deviceId.toString()
+    data = deviceId.toString()
     // }
     // else{
     //   data = "DEVICE_BP_" + user;
@@ -3370,7 +3446,7 @@ if(bloodpressureData){
     }
 
 
-    
+
     await axios
       .get(
         apiUrl2 + "bg",
@@ -3390,73 +3466,75 @@ if(bloodpressureData){
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
-else{
-        bloodglucoseData.forEach((bg, index) => {
-          //   console.log('p' + index, bg);
+        else {
+          bloodglucoseData.forEach((bg, index) => {
+            //   console.log('p' + index, bg);
 
-          let bgdata = {};
-          bgdata.id = bg.id;
-          // if (bg.gsI1PK !== undefined) {
-          //   bgdata.gSI1PK = bg.gsI1PK;
-          //   bgdata.userId = bg.gsI1PK.split("_").pop();
-          // }
-          // if (bg.userName !== undefined) {
-          //   bgdata.UserName = bg.userName;
-          //   if (bgdata.UserName == "Dale Cadwallader") {
-          //     let test = "";
-          //   }
-          // }
+            let bgdata = {};
+            bgdata.id = bg.id;
+            // if (bg.gsI1PK !== undefined) {
+            //   bgdata.gSI1PK = bg.gsI1PK;
+            //   bgdata.userId = bg.gsI1PK.split("_").pop();
+            // }
+            // if (bg.userName !== undefined) {
+            //   bgdata.UserName = bg.userName;
+            //   if (bgdata.UserName == "Dale Cadwallader") {
+            //     let test = "";
+            //   }
+            // }
 
-          // if (bg.bloodGlucosemmol !== undefined) {
-          //   bgdata.bloodglucosemmol = bg.bloodGlucosemmol;
-          // }
+            // if (bg.bloodGlucosemmol !== undefined) {
+            //   bgdata.bloodglucosemmol = bg.bloodGlucosemmol;
+            // }
 
-          if (bg.bloodGlucosemgdl !== undefined) {
-            bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl;
-          }
-
-          if (bg.before_Meal !== undefined) {
-            if (bg.before_Meal == "before") {
-              bgdata.meal = "Before Meal";
-            } else {
-              bgdata.meal = "After Meal";
+            if (bg.bloodGlucosemgdl !== undefined) {
+              bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl;
             }
-          }
 
-          // if (bg.battery !== undefined) {
-          //   bgdata.battery = bg.battery;
-          // }
-          // if (bg.timeSlots !== undefined) {
-          //   bgdata.timeSlots = bg.timeSlots;
-          // }
-          if (bg.measurementDateTime !== undefined) {
-            bgdata.MeasurementDateTime = bg.measurementDateTime;
-            bgdata.MeasurementDateTime = new Date(bgdata.MeasurementDateTime);
-            bgdata.sortDateColumn = bg.measurementDateTime;
-            //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
-          }
+            if (bg.before_Meal !== undefined) {
+              if (bg.before_Meal == "before") {
+                bgdata.meal = "Before Meal";
+              } else {
+                bgdata.meal = "After Meal";
+              }
+            }
 
-          // if (bg.createdDate !== undefined) {
-          //   bgdata.CreatedDate = bg.createdDate;
-          //   bgdata.CreatedDate = new Date(bgdata.CreatedDate);
-          //   bgdata.sortDateColumn = Moment(bg.createdDate).format(
-          //     "YYYY-MM-DD hh:mm"
-          //   );
+            // if (bg.battery !== undefined) {
+            //   bgdata.battery = bg.battery;
+            // }
+            // if (bg.timeSlots !== undefined) {
+            //   bgdata.timeSlots = bg.timeSlots;
+            // }
+            if (bg.measurementDateTime !== undefined) {
+              bgdata.MeasurementDateTime = bg.measurementDateTime;
+              bgdata.MeasurementDateTime = new Date(bgdata.MeasurementDateTime);
+              bgdata.sortDateColumn = bg.measurementDateTime;
+              //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
+            }
+
+            // if (bg.createdDate !== undefined) {
+            //   bgdata.CreatedDate = bg.createdDate;
+            //   bgdata.CreatedDate = new Date(bgdata.CreatedDate);
+            //   bgdata.sortDateColumn = Moment(bg.createdDate).format(
+            //     "YYYY-MM-DD hh:mm"
+            //   );
             // bgdata.CreatedDate =Moment(bgdata.CreatedDate);
-          // }
+            // }
 
-          // if (bg.sk !== undefined) {
-          //   bgdata.readingId = bg.sk.split("_").pop();
-          // }
+            // if (bg.sk !== undefined) {
+            //   bgdata.readingId = bg.sk.split("_").pop();
+            // }
 
-          // if (bg.deviceId !== undefined) {
-          //   bgdata.DeviceId = bg.deviceId;
-          // }
+            // if (bg.deviceId !== undefined) {
+            //   bgdata.DeviceId = bg.deviceId;
+            // }
 
-          dataSetbg.push(bgdata);
-        });
-      }
+            dataSetbg.push(bgdata);
+          });
+        }
         setnewbloodglucoseDataForPatient(dataSetbg);
+      }).catch(() => {
+        relogin();
       });
   };
   const fetchBloodPressure = async (userid, usertype) => {
@@ -3559,6 +3637,8 @@ else{
         });
 
         setbloodpressureData(dataSetbp);
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -3598,72 +3678,72 @@ else{
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
-else{
-        bloodglucoseData.forEach((bg, index) => {
-          //   console.log('p' + index, bg);
+        else {
+          bloodglucoseData.forEach((bg, index) => {
+            //   console.log('p' + index, bg);
 
-          let bgdata = {};
-          bgdata.id = index;
-          if (bg.gsI1PK !== undefined) {
-            bgdata.gSI1PK = bg.gsI1PK;
-            bgdata.userId = bg.gsI1PK.split("_").pop();
-          }
-          if (bg.userName !== undefined) {
-            bgdata.UserName = bg.userName;
-            if (bgdata.UserName == "Dale Cadwallader") {
-              let test = "";
+            let bgdata = {};
+            bgdata.id = index;
+            if (bg.gsI1PK !== undefined) {
+              bgdata.gSI1PK = bg.gsI1PK;
+              bgdata.userId = bg.gsI1PK.split("_").pop();
             }
-          }
-
-          if (bg.bloodGlucosemmol !== undefined) {
-            bgdata.bloodglucosemmol = bg.bloodGlucosemmol;
-          }
-
-          if (bg.bloodGlucosemgdl !== undefined) {
-            bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl;
-          }
-
-          if (bg.before_Meal !== undefined) {
-            if (bg.before_Meal == "True") {
-              bgdata.meal = "Before Meal";
-            } else {
-              bgdata.meal = "After Meal";
+            if (bg.userName !== undefined) {
+              bgdata.UserName = bg.userName;
+              if (bgdata.UserName == "Dale Cadwallader") {
+                let test = "";
+              }
             }
-          }
 
-          if (bg.battery !== undefined) {
-            bgdata.battery = bg.battery;
-          }
-          if (bg.timeSlots !== undefined) {
-            bgdata.timeSlots = bg.timeSlots;
-          }
-          if (bg.measurementDateTime !== undefined) {
-            bgdata.MeasurementDateTime = bg.measurementDateTime;
-            bgdata.MeasurementDateTime = new Date(bgdata.MeasurementDateTime);
-            bgdata.sortDateColumn = bg.measurementDateTime;
-            //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
-          }
+            if (bg.bloodGlucosemmol !== undefined) {
+              bgdata.bloodglucosemmol = bg.bloodGlucosemmol;
+            }
 
-          if (bg.createdDate !== undefined) {
-            bgdata.CreatedDate = bg.createdDate;
-            bgdata.CreatedDate = new Date(bgdata.CreatedDate);
-            bgdata.sortDateColumn = Moment(bg.createdDate).format(
-              "YYYY-MM-DD hh:mm"
-            );
-            // bgdata.CreatedDate =Moment(bgdata.CreatedDate);
-          }
+            if (bg.bloodGlucosemgdl !== undefined) {
+              bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl;
+            }
 
-          if (bg.sk !== undefined) {
-            bgdata.readingId = bg.sk.split("_").pop();
-          }
+            if (bg.before_Meal !== undefined) {
+              if (bg.before_Meal == "True") {
+                bgdata.meal = "Before Meal";
+              } else {
+                bgdata.meal = "After Meal";
+              }
+            }
 
-          if (bg.deviceId !== undefined) {
-            bgdata.DeviceId = bg.deviceId;
-          }
+            if (bg.battery !== undefined) {
+              bgdata.battery = bg.battery;
+            }
+            if (bg.timeSlots !== undefined) {
+              bgdata.timeSlots = bg.timeSlots;
+            }
+            if (bg.measurementDateTime !== undefined) {
+              bgdata.MeasurementDateTime = bg.measurementDateTime;
+              bgdata.MeasurementDateTime = new Date(bgdata.MeasurementDateTime);
+              bgdata.sortDateColumn = bg.measurementDateTime;
+              //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
+            }
 
-          dataSetbg.push(bgdata);
-        });
-      }
+            if (bg.createdDate !== undefined) {
+              bgdata.CreatedDate = bg.createdDate;
+              bgdata.CreatedDate = new Date(bgdata.CreatedDate);
+              bgdata.sortDateColumn = Moment(bg.createdDate).format(
+                "YYYY-MM-DD hh:mm"
+              );
+              // bgdata.CreatedDate =Moment(bgdata.CreatedDate);
+            }
+
+            if (bg.sk !== undefined) {
+              bgdata.readingId = bg.sk.split("_").pop();
+            }
+
+            if (bg.deviceId !== undefined) {
+              bgdata.DeviceId = bg.deviceId;
+            }
+
+            dataSetbg.push(bgdata);
+          });
+        }
         setbloodglucoseData(dataSetbg);
       });
   };
@@ -3703,74 +3783,76 @@ else{
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
-else{
-        bloodglucoseData.forEach((bg, index) => {
-          //   console.log('p' + index, bg);
+        else {
+          bloodglucoseData.forEach((bg, index) => {
+            //   console.log('p' + index, bg);
 
-          let bgdata = {};
-          bgdata.id = index;
-          if (bg.gsI1PK !== undefined) {
-            bgdata.gSI1PK = bg.gsI1PK;
-            bgdata.userId = bg.gsI1PK.split("_").pop();
-          }
-          if (bg.userName !== undefined) {
-            bgdata.UserName = bg.userName;
-            if (bgdata.UserName == "Dale Cadwallader") {
-              let test = "";
+            let bgdata = {};
+            bgdata.id = index;
+            if (bg.gsI1PK !== undefined) {
+              bgdata.gSI1PK = bg.gsI1PK;
+              bgdata.userId = bg.gsI1PK.split("_").pop();
             }
-          }
-
-          if (bg.bloodGlucosemmol !== undefined) {
-            bgdata.bloodglucosemmol = bg.bloodGlucosemmol;
-          }
-
-          if (bg.bloodGlucosemgdl !== undefined) {
-            bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl;
-          }
-
-          if (bg.before_Meal !== undefined) {
-            if (bg.before_Meal == "True") {
-              bgdata.meal = "Before Meal";
-            } else {
-              bgdata.meal = "After Meal";
+            if (bg.userName !== undefined) {
+              bgdata.UserName = bg.userName;
+              if (bgdata.UserName == "Dale Cadwallader") {
+                let test = "";
+              }
             }
-          }
 
-          if (bg.battery !== undefined) {
-            bgdata.battery = bg.battery;
-          }
-          if (bg.timeSlots !== undefined) {
-            bgdata.timeSlots = bg.timeSlots;
-          }
-          if (bg.measurementDateTime !== undefined) {
-            bgdata.MeasurementDateTime = bg.measurementDateTime;
-            bgdata.MeasurementDateTime = new Date(bgdata.MeasurementDateTime);
-            bgdata.sortDateColumn = bg.measurementDateTime;
-            //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
-          }
+            if (bg.bloodGlucosemmol !== undefined) {
+              bgdata.bloodglucosemmol = bg.bloodGlucosemmol;
+            }
 
-          if (bg.createdDate !== undefined) {
-            bgdata.CreatedDate = bg.createdDate;
-            bgdata.CreatedDate = new Date(bgdata.CreatedDate);
-            bgdata.sortDateColumn = Moment(bg.createdDate).format(
-              "YYYY-MM-DD hh:mm"
-            );
-            // bgdata.CreatedDate =Moment(bgdata.CreatedDate);
-          }
+            if (bg.bloodGlucosemgdl !== undefined) {
+              bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl;
+            }
 
-          if (bg.sk !== undefined) {
-            bgdata.readingId = bg.sk.split("_").pop();
-          }
+            if (bg.before_Meal !== undefined) {
+              if (bg.before_Meal == "True") {
+                bgdata.meal = "Before Meal";
+              } else {
+                bgdata.meal = "After Meal";
+              }
+            }
 
-          if (bg.deviceId !== undefined) {
-            bgdata.DeviceId = bg.deviceId;
-          }
+            if (bg.battery !== undefined) {
+              bgdata.battery = bg.battery;
+            }
+            if (bg.timeSlots !== undefined) {
+              bgdata.timeSlots = bg.timeSlots;
+            }
+            if (bg.measurementDateTime !== undefined) {
+              bgdata.MeasurementDateTime = bg.measurementDateTime;
+              bgdata.MeasurementDateTime = new Date(bgdata.MeasurementDateTime);
+              bgdata.sortDateColumn = bg.measurementDateTime;
+              //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
+            }
 
-          dataSetbg.push(bgdata);
-        });
-      }
+            if (bg.createdDate !== undefined) {
+              bgdata.CreatedDate = bg.createdDate;
+              bgdata.CreatedDate = new Date(bgdata.CreatedDate);
+              bgdata.sortDateColumn = Moment(bg.createdDate).format(
+                "YYYY-MM-DD hh:mm"
+              );
+              // bgdata.CreatedDate =Moment(bgdata.CreatedDate);
+            }
+
+            if (bg.sk !== undefined) {
+              bgdata.readingId = bg.sk.split("_").pop();
+            }
+
+            if (bg.deviceId !== undefined) {
+              bgdata.DeviceId = bg.deviceId;
+            }
+
+            dataSetbg.push(bgdata);
+          });
+        }
 
         setbloodglucoseDataForPatient(dataSetbg);
+      }).catch(() => {
+        relogin();
       });
   };
   const fetchBloodGlucoseForNotification = async (
@@ -3815,72 +3897,72 @@ else{
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
-else{
-        bloodglucoseData.forEach((bg, index) => {
-          //   console.log('p' + index, bg);
+        else {
+          bloodglucoseData.forEach((bg, index) => {
+            //   console.log('p' + index, bg);
 
-          let bgdata = {};
-          bgdata.id = index;
-          if (bg.gsI1PK !== undefined) {
-            bgdata.gSI1PK = bg.gsI1PK;
-            bgdata.userId = bg.gsI1PK.split("_").pop();
-          }
-          if (bg.userName !== undefined) {
-            bgdata.UserName = bg.userName;
-            if (bgdata.UserName == "Dale Cadwallader") {
-              let test = "";
+            let bgdata = {};
+            bgdata.id = index;
+            if (bg.gsI1PK !== undefined) {
+              bgdata.gSI1PK = bg.gsI1PK;
+              bgdata.userId = bg.gsI1PK.split("_").pop();
             }
-          }
-
-          if (bg.bloodGlucosemmol !== undefined) {
-            bgdata.bloodglucosemmol = bg.bloodGlucosemmol;
-          }
-
-          if (bg.bloodGlucosemgdl !== undefined) {
-            bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl;
-          }
-
-          if (bg.before_Meal !== undefined) {
-            if (bg.before_Meal == "True") {
-              bgdata.meal = "Before Meal";
-            } else {
-              bgdata.meal = "After Meal";
+            if (bg.userName !== undefined) {
+              bgdata.UserName = bg.userName;
+              if (bgdata.UserName == "Dale Cadwallader") {
+                let test = "";
+              }
             }
-          }
 
-          if (bg.battery !== undefined) {
-            bgdata.battery = bg.battery;
-          }
-          if (bg.timeSlots !== undefined) {
-            bgdata.timeSlots = bg.timeSlots;
-          }
-          if (bg.measurementDateTime !== undefined) {
-            bgdata.MeasurementDateTime = bg.measurementDateTime;
-            bgdata.MeasurementDateTime = new Date(bgdata.MeasurementDateTime);
-            bgdata.sortDateColumn = bg.measurementDateTime;
-            //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
-          }
+            if (bg.bloodGlucosemmol !== undefined) {
+              bgdata.bloodglucosemmol = bg.bloodGlucosemmol;
+            }
 
-          if (bg.createdDate !== undefined) {
-            bgdata.CreatedDate = bg.createdDate;
-            bgdata.CreatedDate = new Date(bgdata.CreatedDate);
-            bgdata.sortDateColumn = Moment(bg.createdDate).format(
-              "YYYY-MM-DD hh:mm"
-            );
-            // bgdata.CreatedDate =Moment(bgdata.CreatedDate);
-          }
+            if (bg.bloodGlucosemgdl !== undefined) {
+              bgdata.bloodglucosemgdl = bg.bloodGlucosemgdl;
+            }
 
-          if (bg.sk !== undefined) {
-            bgdata.readingId = bg.sk.split("_").pop();
-          }
+            if (bg.before_Meal !== undefined) {
+              if (bg.before_Meal == "True") {
+                bgdata.meal = "Before Meal";
+              } else {
+                bgdata.meal = "After Meal";
+              }
+            }
 
-          if (bg.deviceId !== undefined) {
-            bgdata.DeviceId = bg.deviceId;
-          }
+            if (bg.battery !== undefined) {
+              bgdata.battery = bg.battery;
+            }
+            if (bg.timeSlots !== undefined) {
+              bgdata.timeSlots = bg.timeSlots;
+            }
+            if (bg.measurementDateTime !== undefined) {
+              bgdata.MeasurementDateTime = bg.measurementDateTime;
+              bgdata.MeasurementDateTime = new Date(bgdata.MeasurementDateTime);
+              bgdata.sortDateColumn = bg.measurementDateTime;
+              //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
+            }
 
-          dataSetbg.push(bgdata);
-        });
-      }
+            if (bg.createdDate !== undefined) {
+              bgdata.CreatedDate = bg.createdDate;
+              bgdata.CreatedDate = new Date(bgdata.CreatedDate);
+              bgdata.sortDateColumn = Moment(bg.createdDate).format(
+                "YYYY-MM-DD hh:mm"
+              );
+              // bgdata.CreatedDate =Moment(bgdata.CreatedDate);
+            }
+
+            if (bg.sk !== undefined) {
+              bgdata.readingId = bg.sk.split("_").pop();
+            }
+
+            if (bg.deviceId !== undefined) {
+              bgdata.DeviceId = bg.deviceId;
+            }
+
+            dataSetbg.push(bgdata);
+          });
+        }
         setbloodglucoseDataForNotification(
           dataSetbg.filter(
             (curr) =>
@@ -3888,6 +3970,8 @@ else{
               curr.CreatedDate < new Date(to)
           )
         );
+      }).catch(() => {
+        relogin();
       });
   };
   const fetchBloodGlucoseForDashboard = async (userid, usertype, from, to) => {
@@ -3999,6 +4083,8 @@ else{
               curr.CreatedDate < new Date(to)
           )
         );
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -4030,6 +4116,8 @@ else{
         }
       });
       setOutbox(outbs);
+    }).catch(() => {
+      relogin();
     });
   };
 
@@ -4105,6 +4193,8 @@ else{
         });
 
         setbgChartData(dataSetbg);
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -4157,6 +4247,8 @@ else{
         });
 
         setbpChartData(dataSetbp);
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -4223,6 +4315,8 @@ else{
         });
 
         setwsChartData(dataSetweight);
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -4286,6 +4380,8 @@ else{
           swal("success", "TimeLog has been added successfully", "success");
           fetchTimeLog("PATIENT_" + patientId);
         }
+      }).catch(() => {
+        relogin();
       });
   };
   const AddNotification = async (Notification, usertype, userid) => {
@@ -4306,6 +4402,8 @@ else{
           console.log(response.data);
           swal("success", "Notification has been marked as read.", "success");
         }
+      }).catch(() => {
+        relogin();
       });
   };
   const FetchNotification = async (userid) => {
@@ -4334,6 +4432,8 @@ else{
         });
         setNotifications(notificationarray);
         console.log(notificationarray, "notificationarray");
+      }).catch(() => {
+        relogin();
       });
   };
   const FetchBilligCode = async (userid) => {
@@ -4359,6 +4459,8 @@ else{
 
         setBillingCodes(BillingData);
         // console.log(notificationarray,"notificationarray")
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -4401,6 +4503,8 @@ else{
         if (response.status === 200) {
           alert("TimeLog has been updated");
         }
+      }).catch(() => {
+        relogin();
       });
   };
 
@@ -4451,6 +4555,8 @@ else{
         });
 
         setPatientWDevice(dataSetdevice);
+      }).catch(() => {
+        relogin();
       });
   };
 
