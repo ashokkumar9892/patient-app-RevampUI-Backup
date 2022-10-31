@@ -11,18 +11,18 @@ const PreRegisterd = () => {
     const token = localStorage.getItem("app_jwt");
     const [bookApptData, setBookApptData] = useState([])
     const [loading, setLoading] = useState(false)
-    const [provider , setProvider]= useState([])
+    const [provider, setProvider] = useState([])
 
     const findBeforeSevenDate = () => {
         var datt = new Date();
         datt.setDate(datt.getDate() - 7);
-        return(((datt.getMonth() > 8) ? (datt.getMonth() + 1) : ('0' + (datt.getMonth() + 1))) + '/' + ((datt.getDate() > 9) ? datt.getDate() : ('0' + datt.getDate())) + '/' + datt.getFullYear());
-       
+        return (((datt.getMonth() > 8) ? (datt.getMonth() + 1) : ('0' + (datt.getMonth() + 1))) + '/' + ((datt.getDate() > 9) ? datt.getDate() : ('0' + datt.getDate())) + '/' + datt.getFullYear());
+
     }
 
-    const currentDate=()=>{
+    const currentDate = () => {
         let datt = new Date();
-        return(((datt.getMonth() > 8) ? (datt.getMonth() + 1) : ('0' + (datt.getMonth() + 1))) + '/' + ((datt.getDate() > 9) ? datt.getDate() : ('0' + datt.getDate())) + '/' + datt.getFullYear());
+        return (((datt.getMonth() > 8) ? (datt.getMonth() + 1) : ('0' + (datt.getMonth() + 1))) + '/' + ((datt.getDate() > 9) ? datt.getDate() : ('0' + datt.getDate())) + '/' + datt.getFullYear());
     }
 
 
@@ -33,10 +33,10 @@ const PreRegisterd = () => {
         var ampm = hours >= 12 ? 'pm' : 'am';
         hours = hours % 12;
         hours = hours ? hours : 12; // the hour '0' should be '12'
-        minutes = minutes < 10 ? '0'+minutes : minutes;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
         var strTime = hours + ':' + minutes + ' ' + ampm;
         return strTime;
-      }
+    }
 
     const findEndDate = (startDate, duration) => {
         let tim = startDate.split(":")
@@ -52,21 +52,21 @@ const PreRegisterd = () => {
             return (`${ti} : ${parseInt(mm) + duration}`)
         }
     }
-const GetProviderList = async()=>{
-    setLoading(true)
-    const url = `https://appointmentapi.apatternclinic.com/v1/24451/providers`
-    axios
-        .get(url, {
-            headers: {
-                Accept: "application/json",
-                Authorization: "Bearer " + await getToken(),
-            },
-        }).then((response) => {
-            setLoading(false)
-            setProvider(response.data.providers)
-           
-        })
-}
+    const GetProviderList = async () => {
+        setLoading(true)
+        const url = `https://appointmentapi.apatternclinic.com/v1/24451/providers`
+        axios
+            .get(url, {
+                headers: {
+                    Accept: "application/json",
+                    Authorization: "Bearer " + await getToken(),
+                },
+            }).then((response) => {
+                setLoading(false)
+                setProvider(response.data.providers)
+
+            })
+    }
 
     const BookedApptapi = async () => {
         setLoading(true)
@@ -79,7 +79,7 @@ const GetProviderList = async()=>{
                 },
             }).then((response) => {
                 let data = []
-               
+
                 response.data.appointments && response.data.appointments.length > 0 &&
                     response.data.appointments.map((item, index) => {
                         let dateTime = item.date + " " + item.starttime
@@ -88,8 +88,8 @@ const GetProviderList = async()=>{
                             PatientName: item.patient.firstname + item.patient.lastname,
                             DOB: item.patient.dob,
                             Chart: "-",
-                            Provider: provider?.find((it)=> it.providerid==item.hl7providerid)?.displayname,
-                            date:item.date,
+                            Provider: provider?.find((it) => it.providerid == item.hl7providerid)?.displayname,
+                            date: item.date,
                             StartTime: formatAMPM(new Date(dateTime)),
                             ApptType: item.appointmenttype,
                             Appt: item.appointmenttypeid,
@@ -103,12 +103,15 @@ const GetProviderList = async()=>{
                         }
                         data.push(obj)
                     })
-                    if(data.length > 0){
-                        setBookApptData(data.reverse())
-                    }
-                    else{
-                        setBookApptData(data)
-                    }
+                if (data.length > 0) {
+                    const sortedAsc = data.sort(
+                        (objA, objB) => Number(new Date(objA.date)) - Number(new Date(objB.date)),
+                      );
+                    setBookApptData(sortedAsc.reverse())
+                }
+                else {
+                    setBookApptData(data)
+                }
                 setLoading(false)
             })
     }
@@ -117,9 +120,9 @@ const GetProviderList = async()=>{
         GetProviderList()
         // BookedApptapi()
     }, [])
-    useEffect(()=>{
+    useEffect(() => {
         BookedApptapi()
-    },[provider])
+    }, [provider])
 
     return (<>
         <div className="col">
@@ -146,12 +149,14 @@ const GetProviderList = async()=>{
                                             <input placeholder="Search here " style={{ width: "90%", margin: "4px", outline: "none", border: "none" }} />
                                         </div> */}
                                         <div>
-
-                                        {loading ?
-                                        <div className="d-flex justify-content-center">
-                                        <Loader type="Circles" color="#00BFFF" height={100} width={100} />
-                                        </div>
-                                            :<BookedAppt data={bookApptData} />}
+                                            {
+                                                console.log(bookApptData, "bookApptData")
+                                            }
+                                            {loading ?
+                                                <div className="d-flex justify-content-center">
+                                                    <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+                                                </div>
+                                                : <BookedAppt data={bookApptData} />}
                                             {/* <CheckedIn />
                                             <CheckedOut />
                                             <MissedAppt /> */}
