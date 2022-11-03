@@ -2,7 +2,8 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { makeStyles } from "@material-ui/styles";
-import DummyImg from "../assets/images/dummy.svg"
+import DummyImg from "../assets/images/dummy.svg";
+const Moment = require("moment");
 
 const columns: GridColDef[] = [
   { field: 'patientid', headerName: 'patientid', width: 90 },
@@ -37,6 +38,12 @@ const columns: GridColDef[] = [
     headerName: 'Date',
     width: 110,
     editable: true,
+    valueFormatter: (params) => {
+      const valueFormatted = Moment(params.value).format(
+        "MM-DD-YYYY"
+      );
+      return `${valueFormatted}`;
+    }
   },
   {
     field: 'StartTime',

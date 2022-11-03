@@ -19,7 +19,12 @@ const PreRegisterd = () => {
         return(((datt.getMonth() > 8) ? (datt.getMonth() + 1) : ('0' + (datt.getMonth() + 1))) + '/' + ((datt.getDate() > 9) ? datt.getDate() : ('0' + datt.getDate())) + '/' + datt.getFullYear());
        
     }
-
+    const findafterSevenDate = () => {
+        var datt = new Date();
+        datt.setDate(datt.getDate() + 7);
+        return(((datt.getMonth() > 8) ? (datt.getMonth() + 1) : ('0' + (datt.getMonth() + 1))) + '/' + ((datt.getDate() > 9) ? datt.getDate() : ('0' + datt.getDate())) + '/' + datt.getFullYear());
+       
+    }
     const currentDate=()=>{
         let datt = new Date();
         return(((datt.getMonth() > 8) ? (datt.getMonth() + 1) : ('0' + (datt.getMonth() + 1))) + '/' + ((datt.getDate() > 9) ? datt.getDate() : ('0' + datt.getDate())) + '/' + datt.getFullYear());
@@ -70,7 +75,7 @@ const GetProviderList = async()=>{
 
     const BookedApptapi = async () => {
         setLoading(true)
-        const url = `https://appointmentapi.apatternclinic.com/v1/24451/appointments/booked?practiceid=24451&startdate=${findBeforeSevenDate()}&showinsurance=true&enddate=${currentDate()}&departmentid=1&showpatientdetail=true`
+        const url = `https://appointmentapi.apatternclinic.com/v1/24451/appointments/booked?practiceid=24451&startdate=${currentDate()}&showinsurance=true&enddate=${findafterSevenDate()}&departmentid=1&showpatientdetail=true`
         axios
             .get(url, {
                 headers: {
@@ -89,7 +94,7 @@ const GetProviderList = async()=>{
                             DOB: item.patient.dob,
                             Chart: "-",
                             Provider: provider?.find((it)=> it.providerid==item.hl7providerid)?.displayname,
-                            date:item.date,
+                            date: new Date(item.date),
                             StartTime: formatAMPM(new Date(dateTime)),
                             ApptType: item.appointmenttype,
                             Appt: item.appointmenttypeid,
