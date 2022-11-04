@@ -1,213 +1,168 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { makeStyles } from "@material-ui/styles";
-import DummyImg from "../assets/images/dummy.svg";
-const Moment = require("moment");
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
+import { getToken } from "../api/api";
+import DatePicker from "react-datepicker";
+import Loader from "react-loader-spinner";
+import DataGrid from "./datagrid"
 
-const columns: GridColDef[] = [
-  { field: 'patientid', headerName: 'patientid', width: 90 },
-  {
-    field: 'PatientName',
-    headerName: 'Patient Name',
-    width: 150,
-    description: 'This column has a value getter and is not sortable.',
-    sortable: false,
-    editable: true,
-  },
-  {
-    field: 'DOB',
-    headerName: 'DOB',
-    width: 150,
-    editable: true,
-  },
-  // {
-  //   field: 'Chart',
-  //   headerName: 'Chart#',
-  //   width: 110,
-  //   editable: true,
-  // },
-  {
-    field: 'Provider',
-    headerName: 'Provider',
-    editable: true,
-   
-  },
-  {
-    field: 'date',
-    headerName: 'Date',
-    width: 110,
-    editable: true,
-    valueFormatter: (params) => {
-      const valueFormatted = Moment(params.value).format(
-        "MM-DD-YYYY"
-      );
-      return `${valueFormatted}`;
-    }
-  },
-  {
-    field: 'StartTime',
-    headerName: 'Start Time',
-    width: 110,
-    editable: true,
-  },
-  {
-    field: 'ApptType',
-    headerName: 'Appt. Type',
-    width: 110,
-    editable: true,
-  },
-  // {
-  //   field: 'Appt.',
-  //   headerName: 'Appt',
-  //   width: 110,
-  //   editable: true,
-  // },
-  // {
-  //   field: 'Pre',
-  //   headerName: 'Pre',
-  //   width: 110,
-  //   editable: true,
-  // },
-  // {
-  //   field: 'Insurance',
-  //   headerName: 'Insurance',
-  //   width: 110,
-  //   editable: true,
-  // },
-  // {
-  //   field: 'EB',
-  //   headerName: 'E&B',
-  //   width: 110,
-  //   editable: true,
-  // },
-  // {
-  //   field: 'D',
-  //   headerName: 'D',
-  //   width: 110,
-  //   editable: true,
-  // },
-  {
-    field: 'Copay',
-    headerName: 'Copay',
-    width: 110,
-    editable: true,
-  },
-  {
-    field: 'Paid',
-    headerName: 'Paid',
-    width: 110,
-    editable: true,
-  },
-  // {
-  //   field: 'Balance',
-  //   headerName: 'Balance',
-  //   width: 110,
-  //   editable: true,
-  // },
-  
-];
+const Booked = () => {
+  const [bookApptData, setBookApptData] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [provider, setProvider] = useState([])
+  const [fromDate, setFromDate] = useState(new Date())
+  const [toDate, setTodate] = useState(new Date())
 
+  const findAfterSevenDate = () => {
+    var datt = new Date();
+    datt.setDate(datt.getDate() + 7);
+    return datt;
 
+  }
+  function formatAMPM(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+  }
 
-function CustomNoRowsOverlay() {
-  return (
-      <div style={{ display: "flex", alignItems: "center", height:"100%", width: "50%", paddingLeft: "10px", flexDirection: "row" }}>
-      <img height={200} width={200} src={DummyImg} />
-      <p style={{fontWeight:"bold", fontStyle:"italic"}}> There are currently no checked-in patients for todays. </p>
-  </div>
-  );
-}
-
-export default function Processed(props) {
-    const useStyles = makeStyles((theme) => ({
-        root: {
-          "& .MuiDataGrid-columnHeaderCheckbox": {
-            display: "block",
-            pointerEvents: "none",
-            disabled: "disabled",
-            alignItems:"center",
-            justifyContent:"center"
-          },
-          "& .MuiDataGrid-columnHeaderWrapper":{
-              backgroundColor:"#0c71c3",
-              color:"white",
-              lineHeight:"unset !important",
-              maxHeight:"none !important",
-              whiteSpace:"normal",
-              minWidth:"normal",
-              textAlign:"center",
-              justifyContent:"center"
-          },
-          "& .MuiDataGrid-cell":{
-              border: "1px solid #dfdddd",
-              lineHeight:"unset !important",
-              maxHeight:"none !important",
-              whiteSpace:"normal",
-              textAlign:"center",
-              paddingTop:"1em",
-              paddingBottom:"1em",
-              justifyContent:"center"
-          },
-          "& .MuiDataGrid-row.Mui-odd": {
-            backgroundColor: "#e9e9e9",   
-            justifyContent:"center"         
-          },
-          "& .MuiDataGrid-columnHeader":{
-            backgroundColor: "#0c71c3",
-                color:"#fafafa",
-                justifyContent:"center"
-          },
-          "& .MuiDataGrid-columnHeaderTitle": {
-            overflow: "visible",
-            lineHeight: "1.43rem",
-            whiteSpace: "normal",
-            textAlign:"center",
-            justifyContent:"center"
-          },
-          
-          "& .MuiDataGrid-root": {
-            overflow: "visible",
-            lineHeight: "1.43rem",
-            whiteSpace: "normal",
-            textAlign:"center",
-            justifyContent:"center"
-            
-          },
-          
-          "& .MuiDataGrid-columnHeaderTitleContainer":{
-            justifyContent:"center"
-          }
-         
+  const GetProviderList = async () => {
+    setLoading(true)
+    const url = `https://appointmentapi.apatternclinic.com/v1/24451/providers`
+    axios
+      .get(url, {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + await getToken(),
         },
-      }));
-    
-      const classes = useStyles();
-      let row = props?.data
-  return (
-    <>
+      }).then((response) => {
+        setLoading(false)
+        setProvider(response.data.providers)
+
+      })
+  }
+
+  const BookedApptapi = async (fromdate, todate) => {
+    setLoading(true)
+    const url = `https://appointmentapi.apatternclinic.com/v1/24451/appointments/booked?practiceid=24451&startdate=${fromdate}&showinsurance=true&enddate=${todate}&departmentid=1&showpatientdetail=true`
+    axios
+      .get(url, {
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          Authorization: "Bearer " + await getToken(),
+        },
+      }).then((response) => {
+        let data = []
+
+        response.data.appointments && response.data.appointments.length > 0 &&
+          response.data.appointments.map((item, index) => {
+            let dateTime = item.date + " " + item.starttime
+            let obj = {
+              patientid: item.patientid,
+              PatientName: item.patient.firstname + item.patient.lastname,
+              DOB: item.patient.dob,
+              Chart: "-",
+              Provider: provider?.find((it) => it.providerid == item.hl7providerid)?.displayname,
+              date: item.date,
+              StartTime: formatAMPM(new Date(dateTime)),
+              ApptType: item.appointmenttype,
+              Appt: item.appointmenttypeid,
+              Pre: "-",
+              Insurance: item.insurances ? item.insurances.insuranceplanname : "_",
+              EB: "_",
+              D: "_",
+              Copay: item.copay,
+              Paid: 0,
+              Balance: item.patient.balances.balance
+            }
+            data.push(obj)
+          })
+        if (data.length > 0) {
+          const sortedAsc = data.sort(
+            (objA, objB) => Number(new Date(objA.date)) - Number(new Date(objB.date)),
+          );
+          setBookApptData(sortedAsc.reverse())
+        }
+        else {
+          setBookApptData(data)
+        }
+        setLoading(false)
+      })
+  }
+
+  const dateFormate = (date) => {
+    let datt = new Date(date);
+    return (((datt.getMonth() > 8) ? (datt.getMonth() + 1) : ('0' + (datt.getMonth() + 1))) + '/' + ((datt.getDate() > 9) ? datt.getDate() : ('0' + datt.getDate())) + '/' + datt.getFullYear());
+  }
+
+  useEffect(() => {
+    setFromDate(new Date())
+    setTodate(findAfterSevenDate())
+    GetProviderList()
+  }, [])
+
+  useEffect(() => {
+    BookedApptapi(dateFormate(fromDate), dateFormate(toDate))
+  }, [provider])
+
+  const checkToDateGreaterthanfromDate = (fromDate, toDate) => {
+    let d1 = new Date(fromDate);
+    let d2 = new Date(toDate);
+    if (d1.getTime() > d2.getTime()) {
+      alert(" To date should be greater than from date ")
+    }
+    else {
+      setTodate(toDate);
+    }
+  }
+
+  useEffect(() => {
+    BookedApptapi(dateFormate(fromDate), dateFormate(toDate))
+  }, [toDate])
+
+  return (<>
     <div>
-        <p style={{marginTop:"10px" ,fontWeight:"bold"  }}>
-        Booked Appointments 
-        </p>
-       
+      <p style={{ marginTop: "10px", fontWeight: "bold" }}>
+        Booked Appointments
+      </p>
     </div>
-    <Box className={classes.root} sx={{ height: 400, width: '100%' }}>
-   
-      <DataGrid
-      className={useStyles().root}
-        rows={row}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        getRowId={(row) => row.patientid}
-        components={{
-          NoRowsOverlay: CustomNoRowsOverlay,
-        }}
-        disableSelectionOnClick
-        experimentalFeatures={{ newEditingApi: true }}
-    
-      />
-    </Box>
-    </>);
+    <div className="row" style={{marginTop:"10px", marginBottom:"20px"}}>
+      <div className="col-xl-1">
+        <label>From:</label>
+      </div>
+      <div className="col-xl-4">
+        <DatePicker
+          selected={fromDate}
+          onChange={(e) => {
+            setFromDate(e)
+          }}
+          value={fromDate}
+        // dateFormat="MM/dd/yyyy hh:mm:ss aa"
+        />
+      </div>
+      <div className="col-xl-1">
+        <label>To:</label>
+      </div>
+      <div className="col-xl-4 ">
+        <DatePicker
+          selected={toDate}
+          onChange={(e) => {
+            checkToDateGreaterthanfromDate(fromDate, e)
+          }}
+          value={toDate}
+        />
+      </div>
+    </div>
+    {loading ?
+      <div className="d-flex justify-content-center">
+        <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+      </div>
+      : <DataGrid data={bookApptData} />}
+
+  </>)
 }
+
+export default Booked;
