@@ -11,7 +11,7 @@ const Booked = () => {
   const [provider, setProvider] = useState([])
   const [fromDate, setFromDate] = useState(new Date())
   const [toDate, setTodate] = useState(new Date())
-
+  const [sortList, setSortList] = useState("Booked_Appointments")
   const findAfterSevenDate = () => {
     var datt = new Date();
     datt.setDate(datt.getDate() + 7);
@@ -76,7 +76,8 @@ const Booked = () => {
               D: "_",
               Copay: item.copay,
               Paid: 0,
-              Balance: item.patient.balances.balance
+              Balance: item.patient.balances.balance,
+              lastmodified: item.lastmodified
             }
             data.push(obj)
           })
@@ -105,6 +106,25 @@ const Booked = () => {
   }, [])
 
   useEffect(() => {
+    if (sortList === "Booked_Appointments" && bookApptData?.length > 0) {
+      let data =[...bookApptData];
+      const sortedAsc = data.sort(
+        (objA, objB) => Number(new Date(objA.date)) - Number(new Date(objB.date)),
+      );
+      setBookApptData(sortedAsc.reverse())
+    }
+    else if (sortList === "Booked_Date" && bookApptData?.length > 0) {
+      console.log(bookApptData,"bookApptData check")
+      let data =[...bookApptData];
+      console.log(typeof(data),"check type of")
+      const sortedAsc = data.sort(
+        (objA, objB) => Number(new Date(objA.lastmodified)) - Number(new Date(objB.lastmodified)),
+      );
+      setBookApptData(sortedAsc.reverse())
+    }
+  }, [sortList])
+
+  useEffect(() => {
     BookedApptapi(dateFormate(fromDate), dateFormate(toDate))
   }, [provider])
 
@@ -129,7 +149,7 @@ const Booked = () => {
         Booked Appointments
       </p>
     </div>
-    <div className="row" style={{marginTop:"10px", marginBottom:"20px"}}>
+    <div className="row" style={{ marginTop: "10px", marginBottom: "20px" }}>
       <div className="col-xl-1">
         <label>From:</label>
       </div>
@@ -155,6 +175,13 @@ const Booked = () => {
           value={toDate}
         />
       </div>
+      <select className="col-xl-1" style={{ width: "144px", height: "28px" }}
+        value={sortList} onChange={(e) => { setSortList(e.target.value) }}
+      >
+        <option title='sort by Booked Appointments' value="Booked_Appointments">Booked Appointments</option>
+        <option title='sort by Booked Date ' value="Booked_Date">Booked Date </option>
+      </select>
+
     </div>
     {loading ?
       <div className="d-flex justify-content-center">

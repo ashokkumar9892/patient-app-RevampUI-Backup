@@ -33,7 +33,7 @@ const columns: GridColDef[] = [
     },
     {
       field: 'date',
-      headerName: 'Date',
+      headerName: 'Appointment Date',
       width: 110,
       editable: true,
     },
@@ -43,9 +43,16 @@ const columns: GridColDef[] = [
       width: 110,
       editable: true,
     },
+
     {
       field: 'ApptType',
       headerName: 'Appt. Type',
+      width: 110,
+      editable: true,
+    },
+    {
+      field: 'lastmodified',
+      headerName: 'Booked Date',
       width: 110,
       editable: true,
     },
