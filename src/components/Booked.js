@@ -3,7 +3,8 @@ import axios from "axios";
 import { getToken } from "../api/api";
 import DatePicker from "react-datepicker";
 import Loader from "react-loader-spinner";
-import DataGrid from "./datagrid"
+import DataGrid from "./datagrid";
+import "./booked.css"
 
 const Booked = () => {
   const [bookApptData, setBookApptData] = useState([])
@@ -149,11 +150,12 @@ const Booked = () => {
         Booked Appointments
       </p>
     </div>
-    <div className="row" style={{ marginTop: "10px", marginBottom: "20px" }}>
-      <div className="col-xl-1">
+    <div  className='filterDiv'>
+      <div className='datePicker'>
+      <div >
         <label>From:</label>
       </div>
-      <div className="col-xl-4">
+      <div  style={{marginLeft:"12px"}}>
         <DatePicker
           selected={fromDate}
           onChange={(e) => {
@@ -163,10 +165,10 @@ const Booked = () => {
         // dateFormat="MM/dd/yyyy hh:mm:ss aa"
         />
       </div>
-      <div className="col-xl-1">
+      <div style={{marginLeft:"12px"}} >
         <label>To:</label>
       </div>
-      <div className="col-xl-4 ">
+      <div style={{marginLeft:"12px"}} >
         <DatePicker
           selected={toDate}
           onChange={(e) => {
@@ -175,14 +177,22 @@ const Booked = () => {
           value={toDate}
         />
       </div>
-      <select className="col-xl-1" style={{ width: "144px", height: "28px" }}
+      <div >
+      </div>
+      </div>
+      <div className='filterdiv'>
+      <span style={{marginLeft:"12px"}}>Filter</span>
+      
+      <select  style={{ width: "172px", height: "28px",marginLeft:"12px" }}
         value={sortList} onChange={(e) => { setSortList(e.target.value) }}
       >
-        <option title='sort by Booked Appointments' value="Booked_Appointments">Booked Appointments</option>
+        <option title='sort by Booked Appointments' value="Booked_Appointments"> Appointment Date</option>
         <option title='sort by Booked Date ' value="Booked_Date">Booked Date </option>
       </select>
-
-    </div>
+      </div>
+      </div>
+      
+   
     {loading ?
       <div className="d-flex justify-content-center">
         <Loader type="Circles" color="#00BFFF" height={100} width={100} />
