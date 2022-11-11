@@ -8,6 +8,7 @@ import "./booked.css"
 
 const Booked = () => {
   const [bookApptData, setBookApptData] = useState([])
+  const [sortData , setSortData]= useState([])
   const [loading, setLoading] = useState(false)
   const [provider, setProvider] = useState([])
   const [fromDate, setFromDate] = useState(new Date())
@@ -100,6 +101,10 @@ const Booked = () => {
     return (((datt.getMonth() > 8) ? (datt.getMonth() + 1) : ('0' + (datt.getMonth() + 1))) + '/' + ((datt.getDate() > 9) ? datt.getDate() : ('0' + datt.getDate())) + '/' + datt.getFullYear());
   }
 
+  function filterFromDate(da) {
+    return (new Date(da.lastmodified).getTime() == new Date().getTime());
+  }
+
   useEffect(() => {
     setFromDate(new Date())
     setTodate(findAfterSevenDate())
@@ -112,18 +117,41 @@ const Booked = () => {
       const sortedAsc = data.sort(
         (objA, objB) => Number(new Date(objA.date)) - Number(new Date(objB.date)),
       );
-      setBookApptData(sortedAsc.reverse())
+      setSortData([...sortedAsc.reverse()])
     }
     else if (sortList === "Booked_Date" && bookApptData?.length > 0) {
-      console.log(bookApptData,"bookApptData check")
+
+     let  todate = new Date()
+     let fromdate = new Date()
+     fromdate.setMonth(fromdate.getMonth() + 6)
+      BookedApptapi(dateFormate(todate) , dateFormate(fromdate) )
+
+      // let data =[...bookApptData];
+      // console.log(typeof(data),"check type of")
+      // const sortedAsc = data.sort(
+      //   (objA, objB) => Number(new Date(objA.lastmodified)) - Number(new Date(objB.lastmodified)),
+      // );
+      // setBookApptData(sortedAsc.reverse())
+    }
+  }, [sortList])
+
+  useEffect(()=>{
+    if (sortList === "Booked_Appointments" && bookApptData?.length > 0) {
       let data =[...bookApptData];
-      console.log(typeof(data),"check type of")
+      const sortedAsc = data.sort(
+        (objA, objB) => Number(new Date(objA.date)) - Number(new Date(objB.date)),
+      );
+      setSortData([...sortedAsc.reverse()])
+    }
+    else if (sortList === "Booked_Date" && bookApptData?.length > 0) {
+      let data = bookApptData.filter(filterFromDate)
       const sortedAsc = data.sort(
         (objA, objB) => Number(new Date(objA.lastmodified)) - Number(new Date(objB.lastmodified)),
       );
-      setBookApptData(sortedAsc.reverse())
+      setSortData([...sortedAsc.reverse()])
     }
-  }, [sortList])
+
+  },[bookApptData])
 
   useEffect(() => {
     BookedApptapi(dateFormate(fromDate), dateFormate(toDate))
@@ -187,7 +215,7 @@ const Booked = () => {
         value={sortList} onChange={(e) => { setSortList(e.target.value) }}
       >
         <option title='sort by Booked Appointments' value="Booked_Appointments"> Appointment Date</option>
-        <option title='sort by Booked Date ' value="Booked_Date">Booked Date </option>
+        <option title='sort by Booked Date ' value="Booked_Date">Today Booked</option>
       </select>
       </div>
       </div>
@@ -197,7 +225,7 @@ const Booked = () => {
       <div className="d-flex justify-content-center">
         <Loader type="Circles" color="#00BFFF" height={100} width={100} />
       </div>
-      : <DataGrid data={bookApptData} />}
+      : <DataGrid data={sortData} />}
 
   </>)
 }
