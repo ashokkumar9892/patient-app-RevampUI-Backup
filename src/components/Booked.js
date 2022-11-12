@@ -102,7 +102,7 @@ const Booked = () => {
   }
 
   function filterFromDate(da) {
-    return (new Date(da.lastmodified).getTime() == new Date().getTime());
+    return (new Date(da.lastmodified).getDate() == new Date().getDate());
   }
 
   useEffect(() => {
