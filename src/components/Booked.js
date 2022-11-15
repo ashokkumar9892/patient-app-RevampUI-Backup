@@ -102,7 +102,10 @@ const Booked = () => {
   }
 
   function filterFromDate(da) {
-    return (new Date(da.lastmodified).getDate() == new Date().getDate());
+    fromDate.setHours(0, 0, 0, 0);
+    toDate.setHours(23, 59, 59, 999);
+    console.log(new Date(da.lastmodified),new Date(fromDate), new Date(toDate), new Date(da.lastmodified) >= new Date(fromDate) && new Date(da.lastmodified) <= new Date(toDate))
+    return (new Date(da.lastmodified) >= new Date(fromDate) && new Date(da.lastmodified) <= new Date(toDate));
   }
 
   useEffect(() => {
@@ -120,11 +123,11 @@ const Booked = () => {
       setSortData([...sortedAsc.reverse()])
     }
     else if (sortList === "Booked_Date" && bookApptData?.length > 0) {
-
-     let  todate = new Date()
-     let fromdate = new Date()
-     fromdate.setMonth(fromdate.getMonth() + 6)
-      BookedApptapi(dateFormate(todate) , dateFormate(fromdate) )
+     let  todate = new Date(toDate)
+     let fromdate = new Date(fromDate)
+     todate.setMonth(todate.getMonth() + 6)
+     fromdate.setMonth(fromdate.getMonth() - 6)
+      BookedApptapi(dateFormate(fromdate) , dateFormate(todate) )
 
       // let data =[...bookApptData];
       // console.log(typeof(data),"check type of")
@@ -145,9 +148,12 @@ const Booked = () => {
     }
     else if (sortList === "Booked_Date" && bookApptData?.length > 0) {
       let data = bookApptData.filter(filterFromDate)
+      console.log(data,"check filter data")
       const sortedAsc = data.sort(
-        (objA, objB) => Number(new Date(objA.lastmodified)) - Number(new Date(objB.lastmodified)),
+        (objA, objB) => Number(new Date(objA.lastmodified).getTime()) - Number(new Date(objB.lastmodified).getTime()),
       );
+
+      console.log(sortedAsc,data,"filter data")
       setSortData([...sortedAsc.reverse()])
     }
 
