@@ -126,7 +126,6 @@ const Booked = () => {
      let  todate = new Date(toDate)
      let fromdate = new Date(fromDate)
      todate.setMonth(todate.getMonth() + 6)
-     fromdate.setMonth(fromdate.getMonth() - 6)
       BookedApptapi(dateFormate(fromdate) , dateFormate(todate) )
 
       // let data =[...bookApptData];
@@ -176,7 +175,7 @@ const Booked = () => {
 
   useEffect(() => {
     BookedApptapi(dateFormate(fromDate), dateFormate(toDate))
-  }, [toDate])
+  }, [toDate,fromDate])
 
   return (<>
     <div>
