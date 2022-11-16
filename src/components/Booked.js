@@ -166,7 +166,7 @@ const Booked = () => {
 
   useEffect(() => {
     BookedApptapi(dateFormate(fromDate), dateFormate(toDate))
-  }, [toDate])
+  }, [toDate,fromDate])
 
   return (<>
     <div>
