@@ -7,19 +7,21 @@ import DataGrid from "./datagrid";
 import "./booked.css"
 
 const Booked = () => {
-  const [bookApptData, setBookApptData] = useState([])
-  const [sortData , setSortData]= useState([])
-  const [loading, setLoading] = useState(false)
-  const [provider, setProvider] = useState([])
-  const [fromDate, setFromDate] = useState(new Date())
-  const [toDate, setTodate] = useState(new Date())
-  const [sortList, setSortList] = useState("Booked_Appointments")
   const findAfterSevenDate = () => {
     var datt = new Date();
     datt.setDate(datt.getDate() + 7);
     return datt;
 
   }
+
+  const [bookApptData, setBookApptData] = useState([])
+  const [sortData , setSortData]= useState([])
+  const [loading, setLoading] = useState(false)
+  const [provider, setProvider] = useState([])
+  const [fromDate, setFromDate] = useState(new Date())
+  const [toDate, setTodate] = useState(findAfterSevenDate())
+  const [sortList, setSortList] = useState("Booked_Appointments")
+  
   function formatAMPM(date) {
     var hours = date.getHours();
     var minutes = date.getMinutes();
@@ -104,13 +106,12 @@ const Booked = () => {
   function filterFromDate(da) {
     fromDate.setHours(0, 0, 0, 0);
     toDate.setHours(23, 59, 59, 999);
-    console.log(new Date(da.lastmodified),new Date(fromDate), new Date(toDate), new Date(da.lastmodified) >= new Date(fromDate) && new Date(da.lastmodified) <= new Date(toDate))
     return (new Date(da.lastmodified) >= new Date(fromDate) && new Date(da.lastmodified) <= new Date(toDate));
   }
 
   useEffect(() => {
     setFromDate(new Date())
-    setTodate(findAfterSevenDate())
+    // setTodate(findAfterSevenDate())
     GetProviderList()
   }, [])
 
@@ -126,15 +127,7 @@ const Booked = () => {
      let  todate = new Date(toDate)
      let fromdate = new Date(fromDate)
      todate.setMonth(todate.getMonth() + 6)
-     fromdate.setMonth(fromdate.getMonth() - 6)
       BookedApptapi(dateFormate(fromdate) , dateFormate(todate) )
-
-      // let data =[...bookApptData];
-      // console.log(typeof(data),"check type of")
-      // const sortedAsc = data.sort(
-      //   (objA, objB) => Number(new Date(objA.lastmodified)) - Number(new Date(objB.lastmodified)),
-      // );
-      // setBookApptData(sortedAsc.reverse())
     }
   }, [sortList])
 
@@ -148,12 +141,9 @@ const Booked = () => {
     }
     else if (sortList === "Booked_Date" && bookApptData?.length > 0) {
       let data = bookApptData.filter(filterFromDate)
-      console.log(data,"check filter data")
       const sortedAsc = data.sort(
         (objA, objB) => Number(new Date(objA.lastmodified).getTime()) - Number(new Date(objB.lastmodified).getTime()),
       );
-
-      console.log(sortedAsc,data,"filter data")
       setSortData([...sortedAsc.reverse()])
     }
 
@@ -215,23 +205,23 @@ const Booked = () => {
       </div>
       </div>
       <div className='filterdiv'>
-      <span style={{marginLeft:"12px"}}>Filter</span>
+      <span style={{marginLeft:"12px"}}>Filter By</span>
       
       <select  style={{ width: "172px", height: "28px",marginLeft:"12px" }}
         value={sortList} onChange={(e) => { setSortList(e.target.value) }}
       >
         <option title='sort by Booked Appointments' value="Booked_Appointments"> Appointment Date</option>
-        <option title='sort by Booked Date ' value="Booked_Date">Today Booked</option>
+        <option title='sort by Booked Date ' value="Booked_Date">Booked Date</option>
       </select>
       </div>
       </div>
       
    
-    {loading ?
+    {(loading ) ?
       <div className="d-flex justify-content-center">
         <Loader type="Circles" color="#00BFFF" height={100} width={100} />
       </div>
-      : <DataGrid data={sortData} />}
+      : (provider?.length > 0 && <DataGrid data={sortData} />)}
 
   </>)
 }
